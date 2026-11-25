@@ -67,6 +67,6 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "seoul-sim.slnx",
+    "dotnet.defaultSolution": "itb-cau-hackathon.slnx",
     "dotnet.enableWorkspaceBasedDevelopment": false
 }
