@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: 803e4076f66a546b682cd44e671bbeb2
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Bangers
+  - Black Han Sans
+  - Noto Sans KR
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: e0852e779ded5467c9f656a024669237, type: 3}
+  - {fileID: 12800000, guid: c3e4eb23f16094a6da0160d8b90d3351, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

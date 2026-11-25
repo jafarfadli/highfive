@@ -1,0 +1,809 @@
+{
+  "id": "bank_remittance",
+  "verified": false,
+  "sources": [
+    "https://www.bok.or.kr (외국환거래규정: 외국인 거주자 증빙서류 미제출 송금, 연간 5만 달러, 거래외국환은행 지정)",
+    "https://www.fss.or.kr (금융감독원: 해외송금 이용 안내)",
+    "Bank websites (해외송금 수수료·전신료 안내)"
+  ],
+  "titleKo": "새싹은행",
+  "title": {
+    "en": "Saessak Bank",
+    "vi": "Ngân hàng Saessak",
+    "id": "Bank Saessak"
+  },
+  "briefing": {
+    "en": "Send money to your family abroad: your account, a designated bank, the recipient's details, amount, purpose, fees, PIN.",
+    "vi": "Gửi tiền cho gia đình ở nước ngoài: tài khoản, ngân hàng chỉ định, thông tin người nhận, số tiền, lý do, phí, mã PIN.",
+    "id": "Kirim uang ke keluarga di luar negeri: rekening, bank yang ditunjuk, data penerima, jumlah, tujuan, biaya, PIN."
+  },
+  "completeNote": {
+    "en": "Keep the remittance receipt: its reference number lets the bank trace the money if it hasn't arrived after 1–3 business days. Without income papers, you can send up to USD 50,000 a year through your one designated bank.",
+    "vi": "Giữ biên lai chuyển tiền: số tham chiếu trên đó giúp ngân hàng tra soát nếu sau 1–3 ngày làm việc tiền vẫn chưa đến. Không cần giấy tờ thu nhập, bạn có thể gửi tối đa 50.000 USD mỗi năm qua một ngân hàng chỉ định.",
+    "id": "Simpan bukti pengiriman: nomor referensinya membantu bank melacak uang jika belum sampai setelah 1–3 hari kerja. Tanpa dokumen penghasilan, kamu bisa mengirim sampai USD 50.000 per tahun lewat satu bank yang kamu tunjuk."
+  },
+  "blockedLesson": {
+    "en": "A remittance leaves from a Korean account, so open one first (Bank, Part 1). That account needs your ARC.",
+    "vi": "Tiền gửi ra nước ngoài được chuyển từ tài khoản Hàn Quốc, nên hãy mở tài khoản trước (Ngân hàng, Phần 1). Mở tài khoản cần thẻ ARC.",
+    "id": "Kiriman ke luar negeri berasal dari rekening Korea, jadi buka rekening dulu (Bank, Bagian 1). Rekening itu butuh ARC-mu."
+  },
+  "staff": [
+    {
+      "id": "teller3",
+      "name": "정우진 과장",
+      "role": "foreign exchange officer",
+      "roleText": {
+        "en": "Foreign exchange officer",
+        "vi": "Nhân viên ngoại hối",
+        "id": "Petugas valuta asing"
+      },
+      "macVoice": "Reed (Korean (South Korea))",
+      "macRate": 182,
+      "openaiVoice": "echo"
+    }
+  ],
+  "queue": {
+    "counter": 3,
+    "ahead": 3,
+    "interval": 6.0
+  },
+  "carry": [
+    "remit_info"
+  ],
+  "grants": [
+    "doc:remit_receipt"
+  ],
+  "phrases": [
+    {
+      "ko": "베트남에 있는 가족한테 돈을 보내려고요.",
+      "rom": "beteunam-e inneun gajokhante doneul bonaeryeogoyo",
+      "meaning": {
+        "en": "I'd like to send money to my family in Vietnam.",
+        "vi": "Tôi muốn gửi tiền cho gia đình ở Việt Nam.",
+        "id": "Saya mau kirim uang ke keluarga di Vietnam."
+      }
+    },
+    {
+      "ko": "거래외국환은행이 뭐예요?",
+      "rom": "georaeoegukhwaneunhaengi mwoyeyo?",
+      "meaning": {
+        "en": "What's a designated foreign-exchange bank?",
+        "vi": "Ngân hàng ngoại hối chỉ định là gì?",
+        "id": "Apa itu bank devisa yang ditunjuk?"
+      }
+    },
+    {
+      "ko": "네, 여기 적어 왔어요.",
+      "rom": "ne, yeogi jeogeo wasseoyo",
+      "meaning": {
+        "en": "Yes, I wrote it all down here.",
+        "vi": "Vâng, tôi đã ghi sẵn ở đây.",
+        "id": "Ya, sudah saya tulis di sini."
+      }
+    },
+    {
+      "ko": "오십만 원이요.",
+      "rom": "osimman wonieyo",
+      "meaning": {
+        "en": "500,000 won.",
+        "vi": "500.000 won.",
+        "id": "500.000 won."
+      }
+    },
+    {
+      "ko": "동생 학비예요.",
+      "rom": "dongsaeng hakbiyeyo",
+      "meaning": {
+        "en": "It's my younger sibling's school fees.",
+        "vi": "Đó là học phí của em tôi.",
+        "id": "Untuk biaya sekolah adik saya."
+      }
+    },
+    {
+      "ko": "안 들어오면 어떻게 해요?",
+      "rom": "an deureoomyeon eotteoke haeyo?",
+      "meaning": {
+        "en": "What if it doesn't arrive?",
+        "vi": "Nếu tiền không đến thì sao?",
+        "id": "Bagaimana kalau uangnya tidak sampai?"
+      }
+    }
+  ],
+  "glossary": [
+    {
+      "ko": "해외송금",
+      "rom": "haeoesonggeum",
+      "meaning": {
+        "en": "Sending money abroad",
+        "vi": "Chuyển tiền ra nước ngoài",
+        "id": "Kirim uang ke luar negeri"
+      }
+    },
+    {
+      "ko": "계좌이체",
+      "rom": "gyejwaiche",
+      "meaning": {
+        "en": "Transfer inside Korea",
+        "vi": "Chuyển khoản trong nước",
+        "id": "Transfer dalam negeri"
+      }
+    },
+    {
+      "ko": "환전",
+      "rom": "hwanjeon",
+      "meaning": {
+        "en": "Currency exchange",
+        "vi": "Đổi tiền",
+        "id": "Tukar uang"
+      }
+    },
+    {
+      "ko": "거래외국환은행",
+      "rom": "georaeoegukhwaneunhaeng",
+      "meaning": {
+        "en": "Your designated foreign-exchange bank",
+        "vi": "Ngân hàng ngoại hối được chỉ định",
+        "id": "Bank devisa pilihanmu"
+      }
+    },
+    {
+      "ko": "지정",
+      "rom": "jijeong",
+      "meaning": {
+        "en": "Designating (choosing one)",
+        "vi": "Chỉ định",
+        "id": "Penetapan"
+      }
+    },
+    {
+      "ko": "받는 분",
+      "rom": "banneun bun",
+      "meaning": {
+        "en": "Recipient",
+        "vi": "Người nhận",
+        "id": "Penerima"
+      }
+    },
+    {
+      "ko": "스위프트 코드",
+      "rom": "seuwipeuteu kodeu",
+      "meaning": {
+        "en": "SWIFT code: the bank's international code",
+        "vi": "Mã SWIFT: mã quốc tế của ngân hàng",
+        "id": "Kode SWIFT: kode internasional bank"
+      }
+    },
+    {
+      "ko": "송금 사유",
+      "rom": "songgeum sayu",
+      "meaning": {
+        "en": "Reason for sending",
+        "vi": "Lý do chuyển tiền",
+        "id": "Alasan pengiriman"
+      }
+    },
+    {
+      "ko": "수수료 · 전신료",
+      "rom": "susuryo · jeonsillyo",
+      "meaning": {
+        "en": "Fee · cable charge",
+        "vi": "Phí · phí điện tín",
+        "id": "Biaya · biaya kawat"
+      }
+    },
+    {
+      "ko": "환율",
+      "rom": "hwannyul",
+      "meaning": {
+        "en": "Exchange rate",
+        "vi": "Tỷ giá",
+        "id": "Kurs"
+      }
+    },
+    {
+      "ko": "만 원",
+      "rom": "man won",
+      "meaning": {
+        "en": "10,000 won (50만 원 = 500,000)",
+        "vi": "10.000 won (50만 원 = 500.000)",
+        "id": "10.000 won (50만 원 = 500.000)"
+      }
+    },
+    {
+      "ko": "참조번호",
+      "rom": "chamjobeonho",
+      "meaning": {
+        "en": "Reference number",
+        "vi": "Số tham chiếu",
+        "id": "Nomor referensi"
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "purpose",
+      "staff": "teller3",
+      "task": {
+        "en": "Send money at counter 3",
+        "vi": "Gửi tiền ở quầy 3",
+        "id": "Kirim uang di loket 3"
+      },
+      "npc": "어서 오세요. 어떤 업무 보시겠어요?",
+      "meaning": {
+        "en": "Welcome. What can I do for you?",
+        "vi": "Xin mời. Tôi có thể giúp gì cho bạn?",
+        "id": "Selamat datang. Ada yang bisa saya bantu?"
+      },
+      "choices": [
+        {
+          "ko": "베트남에 있는 가족한테 돈을 보내려고요.",
+          "rom": "beteunam-e inneun gajokhante doneul bonaeryeogoyo",
+          "meaning": {
+            "en": "I'd like to send money to my family in Vietnam.",
+            "vi": "Tôi muốn gửi tiền cho gia đình ở Việt Nam.",
+            "id": "Saya mau kirim uang ke keluarga di Vietnam."
+          },
+          "result": "advance",
+          "reply": "네, 해외송금이요.",
+          "replyMeaning": {
+            "en": "Right, an overseas remittance.",
+            "vi": "Vâng, chuyển tiền ra nước ngoài ạ.",
+            "id": "Baik, pengiriman uang ke luar negeri."
+          }
+        },
+        {
+          "ko": "계좌이체 해 주세요.",
+          "rom": "gyejwaiche hae juseyo",
+          "meaning": {
+            "en": "Please make an account transfer.",
+            "vi": "Chuyển khoản giúp tôi.",
+            "id": "Tolong transfer antar rekening."
+          },
+          "result": "retry",
+          "reply": "계좌이체는 국내 계좌끼리 보내는 거예요. 외국 은행으로 보내시는 거면 해외송금으로 하셔야 해요.",
+          "replyMeaning": {
+            "en": "An account transfer is between Korean accounts. To a bank abroad, it's an overseas remittance.",
+            "vi": "Chuyển khoản là giữa các tài khoản trong nước. Gửi đến ngân hàng nước ngoài thì phải làm chuyển tiền quốc tế.",
+            "id": "Transfer rekening itu antar rekening di Korea. Ke bank luar negeri harus lewat pengiriman uang internasional."
+          },
+          "note": {
+            "en": "계좌이체 moves money between Korean accounts. Sending to a bank in another country is 해외송금 (overseas remittance), with its own form and fees.",
+            "vi": "계좌이체 là chuyển tiền giữa các tài khoản ở Hàn. Gửi đến ngân hàng ở nước khác là 해외송금 (chuyển tiền quốc tế), có giấy tờ và phí riêng.",
+            "id": "계좌이체 memindahkan uang antar rekening Korea. Mengirim ke bank di negara lain disebut 해외송금 (pengiriman uang internasional), dengan formulir dan biaya sendiri."
+          }
+        },
+        {
+          "ko": "환전해 주세요.",
+          "rom": "hwanjeonhae juseyo",
+          "meaning": {
+            "en": "I'd like to exchange money.",
+            "vi": "Đổi tiền giúp tôi.",
+            "id": "Tolong tukar uang."
+          },
+          "result": "retry",
+          "reply": "환전은 현금을 바꿔 드리는 거고요, 외국으로 보내시는 건 송금이에요.",
+          "replyMeaning": {
+            "en": "Exchange is swapping cash. Sending it abroad is a remittance.",
+            "vi": "Đổi tiền là đổi tiền mặt. Gửi tiền ra nước ngoài là chuyển tiền.",
+            "id": "Tukar uang itu menukar uang tunai. Mengirim ke luar negeri itu pengiriman uang."
+          },
+          "note": {
+            "en": "환전 is swapping cash for another currency at the counter. If the money has to reach someone abroad, ask for 해외송금.",
+            "vi": "환전 là đổi tiền mặt sang ngoại tệ tại quầy. Nếu tiền cần đến tay người ở nước ngoài, hãy nói 해외송금.",
+            "id": "환전 artinya menukar uang tunai ke mata uang lain di loket. Kalau uangnya harus sampai ke orang di luar negeri, minta 해외송금."
+          }
+        }
+      ]
+    },
+    {
+      "id": "account",
+      "staff": "teller3",
+      "npc": "송금은 고객님 계좌에서 출금해서 보내 드려요. 통장이나 체크카드 있으세요?",
+      "meaning": {
+        "en": "We send it from your account. Do you have your bankbook or debit card?",
+        "vi": "Tiền sẽ được rút từ tài khoản của bạn để gửi đi. Bạn có sổ ngân hàng hoặc thẻ ghi nợ không?",
+        "id": "Uangnya kami kirim dari rekeningmu. Ada buku tabungan atau kartu debit?"
+      },
+      "choices": [
+        {
+          "ko": "네, 통장이요.",
+          "rom": "ne, tongjangiyo",
+          "meaning": {
+            "en": "Yes, here's my bankbook.",
+            "vi": "Vâng, sổ ngân hàng đây ạ.",
+            "id": "Ya, ini buku tabungannya."
+          },
+          "result": "advance",
+          "reply": "네, 확인했습니다.",
+          "replyMeaning": {
+            "en": "Thank you, checked.",
+            "vi": "Vâng, đã kiểm tra.",
+            "id": "Baik, sudah dicek."
+          },
+          "give": "bankbook",
+          "needs": "doc:bankbook"
+        },
+        {
+          "ko": "체크카드로 할게요.",
+          "rom": "chekeukadeuro halgeyo",
+          "meaning": {
+            "en": "I'll use my debit card.",
+            "vi": "Tôi dùng thẻ ghi nợ.",
+            "id": "Pakai kartu debit saya."
+          },
+          "result": "advance",
+          "reply": "네, 확인했습니다.",
+          "replyMeaning": {
+            "en": "Thank you, checked.",
+            "vi": "Vâng, đã kiểm tra.",
+            "id": "Baik, sudah dicek."
+          },
+          "give": "checkcard",
+          "needs": "doc:checkcard"
+        },
+        {
+          "ko": "아직 한국 계좌가 없어요.",
+          "rom": "ajik hanguk gyejwaga eopseoyo",
+          "meaning": {
+            "en": "I don't have a Korean account yet.",
+            "vi": "Tôi chưa có tài khoản ở Hàn.",
+            "id": "Saya belum punya rekening Korea."
+          },
+          "result": "block",
+          "reply": "해외송금은 계좌에서 출금해서 보내 드려야 해서요. 먼저 계좌부터 만드셔야 해요.",
+          "replyMeaning": {
+            "en": "A remittance has to come out of an account, so you'll need to open one first.",
+            "vi": "Chuyển tiền quốc tế phải rút từ tài khoản, nên bạn cần mở tài khoản trước.",
+            "id": "Kiriman harus diambil dari rekening, jadi kamu perlu membuka rekening dulu."
+          },
+          "unless": "doc:bankbook"
+        },
+        {
+          "ko": "해외 카드로 보내 주세요.",
+          "rom": "haeoe kadeuro bonae juseyo",
+          "meaning": {
+            "en": "Please send it with my overseas card.",
+            "vi": "Gửi bằng thẻ nước ngoài của tôi.",
+            "id": "Tolong kirim pakai kartu luar negeri saya."
+          },
+          "result": "retry",
+          "reply": "해외 카드로는 송금할 수 없어요. 한국 계좌에서 출금해야 해요.",
+          "replyMeaning": {
+            "en": "We can't send from a foreign card. It has to come out of a Korean account.",
+            "vi": "Không thể chuyển tiền bằng thẻ nước ngoài. Phải rút từ tài khoản ở Hàn.",
+            "id": "Tidak bisa mengirim pakai kartu luar negeri. Harus dari rekening Korea."
+          },
+          "note": {
+            "en": "A remittance leaves from your Korean account. Your overseas card works for paying and withdrawing cash, not for sending money abroad at the counter.",
+            "vi": "Tiền chuyển đi được rút từ tài khoản ở Hàn. Thẻ nước ngoài dùng để thanh toán và rút tiền mặt, không dùng để chuyển tiền quốc tế tại quầy.",
+            "id": "Kiriman keluar dari rekening Korea-mu. Kartu luar negeri bisa dipakai membayar dan tarik tunai, bukan untuk kirim uang ke luar negeri di loket."
+          },
+          "give": "card"
+        }
+      ]
+    },
+    {
+      "id": "designate",
+      "staff": "teller3",
+      "npc": "처음 송금하시는 거면 저희 은행을 거래외국환은행으로 지정하셔야 해요. 외국인등록증 주시겠어요?",
+      "meaning": {
+        "en": "If it's your first remittance, you need to designate us as your foreign-exchange bank. May I have your ARC?",
+        "vi": "Nếu là lần đầu chuyển tiền, bạn cần chỉ định chúng tôi làm ngân hàng ngoại hối. Cho tôi xin thẻ đăng ký người nước ngoài.",
+        "id": "Kalau ini kiriman pertamamu, kamu perlu menunjuk bank kami sebagai bank devisamu. Boleh minta ARC-nya?"
+      },
+      "choices": [
+        {
+          "ko": "네, 여기 있어요. 지정해 주세요.",
+          "rom": "ne, yeogi isseoyo. jijeonghae juseyo",
+          "meaning": {
+            "en": "Sure, here it is. Please designate it.",
+            "vi": "Vâng, đây ạ. Chỉ định giúp tôi.",
+            "id": "Ya, ini. Tolong tunjuk bank ini."
+          },
+          "result": "advance",
+          "reply": "네, 저희 은행으로 지정했습니다.",
+          "replyMeaning": {
+            "en": "Done, we're now your designated bank.",
+            "vi": "Vâng, đã chỉ định ngân hàng chúng tôi.",
+            "id": "Baik, bank kami sudah ditunjuk."
+          },
+          "give": "arc",
+          "needs": "doc:arc"
+        },
+        {
+          "ko": "거래외국환은행이 뭐예요?",
+          "rom": "georaeoegukhwaneunhaengi mwoyeyo?",
+          "meaning": {
+            "en": "What's a designated foreign-exchange bank?",
+            "vi": "Ngân hàng ngoại hối chỉ định là gì?",
+            "id": "Apa itu bank devisa yang ditunjuk?"
+          },
+          "result": "ask",
+          "reply": "해외송금에 쓸 은행을 한 곳 정해 두는 거예요. 소득 증빙 없이 보내는 송금은 그 은행에서만 하실 수 있어요.",
+          "replyMeaning": {
+            "en": "You pick one bank for sending money abroad. Remittances without proof of income can only go through that bank.",
+            "vi": "Là chọn một ngân hàng để chuyển tiền ra nước ngoài. Chuyển tiền không cần giấy tờ thu nhập chỉ làm được ở ngân hàng đó.",
+            "id": "Kamu memilih satu bank untuk kirim uang ke luar negeri. Kiriman tanpa bukti penghasilan hanya bisa lewat bank itu."
+          }
+        },
+        {
+          "ko": "외국인등록증이 아직 없어요.",
+          "rom": "oegugindeungnokjeungi ajik eopseoyo",
+          "meaning": {
+            "en": "I don't have an ARC yet.",
+            "vi": "Tôi chưa có thẻ đăng ký người nước ngoài.",
+            "id": "Saya belum punya ARC."
+          },
+          "result": "block",
+          "reply": "외국인등록증이 있어야 지정하고 송금하실 수 있어요. 먼저 외국인 등록부터 하세요.",
+          "replyMeaning": {
+            "en": "You need an ARC to designate a bank and send money. Register as a foreign resident first.",
+            "vi": "Phải có thẻ đăng ký người nước ngoài mới chỉ định ngân hàng và chuyển tiền được. Hãy đăng ký trước.",
+            "id": "Kamu perlu ARC untuk menunjuk bank dan mengirim uang. Lakukan registrasi orang asing dulu."
+          },
+          "unless": "doc:arc"
+        },
+        {
+          "ko": "[여권을 낸다]",
+          "rom": "",
+          "meaning": {
+            "en": "[Hand over the passport]",
+            "vi": "[Đưa hộ chiếu]",
+            "id": "[Serahkan paspor]"
+          },
+          "result": "retry",
+          "reply": "지정은 외국인등록번호로 해요. 외국인등록증을 주시겠어요?",
+          "replyMeaning": {
+            "en": "The designation goes on your registration number. Could I have your ARC?",
+            "vi": "Việc chỉ định làm theo số đăng ký người nước ngoài. Bạn đưa thẻ đăng ký giúp tôi nhé?",
+            "id": "Penunjukan dilakukan dengan nomor registrasi orang asing. Boleh minta ARC-nya?"
+          },
+          "note": {
+            "en": "Banks record your designated bank under your ARC number. For banking in Korea, carry the ARC, not just the passport.",
+            "vi": "Ngân hàng ghi ngân hàng chỉ định theo số thẻ ARC của bạn. Khi giao dịch ngân hàng ở Hàn, hãy mang thẻ ARC chứ không chỉ hộ chiếu.",
+            "id": "Bank mencatat bank yang ditunjuk dengan nomor ARC-mu. Untuk urusan bank di Korea, bawa ARC, bukan hanya paspor."
+          },
+          "give": "passport"
+        }
+      ]
+    },
+    {
+      "id": "recipient",
+      "staff": "teller3",
+      "npc": "받는 분 정보가 필요해요. 영문 이름, 은행 이름, 계좌번호, 스위프트 코드요.",
+      "meaning": {
+        "en": "I need the recipient's details: their name in English letters, the bank, the account number and the SWIFT code.",
+        "vi": "Tôi cần thông tin người nhận: tên bằng chữ Latinh, tên ngân hàng, số tài khoản và mã SWIFT.",
+        "id": "Saya perlu data penerima: nama dalam huruf latin, nama bank, nomor rekening, dan kode SWIFT."
+      },
+      "choices": [
+        {
+          "ko": "네, 여기 적어 왔어요.",
+          "rom": "ne, yeogi jeogeo wasseoyo",
+          "meaning": {
+            "en": "Yes, I wrote it all down here.",
+            "vi": "Vâng, tôi đã ghi sẵn ở đây.",
+            "id": "Ya, sudah saya tulis di sini."
+          },
+          "result": "advance",
+          "reply": "꼼꼼하게 잘 적어 오셨네요.",
+          "replyMeaning": {
+            "en": "You've written it all down carefully.",
+            "vi": "Bạn ghi rất cẩn thận.",
+            "id": "Lengkap dan rapi sekali catatannya."
+          },
+          "give": "remit_info"
+        },
+        {
+          "ko": "받는 사람 전화번호로 보내면 안 돼요?",
+          "rom": "banneun saram jeonhwabeonhoro bonaemyeon an dwaeyo?",
+          "meaning": {
+            "en": "Can't I send it to their phone number?",
+            "vi": "Gửi theo số điện thoại người nhận không được ạ?",
+            "id": "Tidak bisa dikirim ke nomor telepon penerima?"
+          },
+          "result": "retry",
+          "reply": "앱에서는 되는 경우도 있지만, 창구 송금은 받는 분 계좌로 보내 드려요.",
+          "replyMeaning": {
+            "en": "Some apps can do that, but a remittance at the counter goes to the recipient's account.",
+            "vi": "Một số ứng dụng làm được, nhưng chuyển tiền tại quầy thì gửi vào tài khoản người nhận.",
+            "id": "Beberapa aplikasi bisa, tapi kiriman di loket masuk ke rekening penerima."
+          },
+          "note": {
+            "en": "At the counter, a remittance goes to an account: the name exactly as on it, the account number and the bank's SWIFT code. Ask your family for them before you go.",
+            "vi": "Tại quầy, tiền được gửi vào tài khoản: tên đúng như trên tài khoản, số tài khoản và mã SWIFT của ngân hàng. Hãy hỏi gia đình trước khi đi.",
+            "id": "Di loket, kiriman masuk ke rekening: nama persis seperti di rekening, nomor rekening, dan kode SWIFT bank. Tanyakan ke keluarga sebelum berangkat."
+          }
+        },
+        {
+          "ko": "스위프트 코드가 뭐예요?",
+          "rom": "seuwipeuteu kodeuga mwoyeyo?",
+          "meaning": {
+            "en": "What's a SWIFT code?",
+            "vi": "Mã SWIFT là gì ạ?",
+            "id": "Kode SWIFT itu apa?"
+          },
+          "result": "ask",
+          "reply": "은행마다 있는 국제 은행 코드예요. 영문하고 숫자로 돼 있어요. 받는 분 은행에 물어보시면 알려 줘요.",
+          "replyMeaning": {
+            "en": "It's the international code every bank has, in letters and numbers. The recipient's bank can tell you.",
+            "vi": "Là mã quốc tế của mỗi ngân hàng, gồm chữ và số. Ngân hàng của người nhận sẽ cho bạn biết.",
+            "id": "Itu kode internasional yang dimiliki setiap bank, berupa huruf dan angka. Bank penerima bisa memberitahumu."
+          }
+        }
+      ]
+    },
+    {
+      "id": "amount",
+      "staff": "teller3",
+      "npc": "얼마 보내시겠어요?",
+      "meaning": {
+        "en": "How much would you like to send?",
+        "vi": "Bạn muốn gửi bao nhiêu?",
+        "id": "Mau kirim berapa?"
+      },
+      "choices": [
+        {
+          "ko": "오십만 원이요.",
+          "rom": "osimman wonieyo",
+          "meaning": {
+            "en": "500,000 won.",
+            "vi": "500.000 won.",
+            "id": "500.000 won."
+          },
+          "result": "advance",
+          "reply": "네, 오십만 원을 달러로 바꿔서 보내 드릴게요.",
+          "replyMeaning": {
+            "en": "Okay, we'll change 500,000 won into dollars and send it.",
+            "vi": "Vâng, chúng tôi sẽ đổi 500.000 won sang đô la rồi gửi đi.",
+            "id": "Baik, 500.000 won kami tukar ke dolar lalu kirim."
+          }
+        },
+        {
+          "ko": "오십 원이요.",
+          "rom": "osip wonieyo",
+          "meaning": {
+            "en": "Fifty won.",
+            "vi": "Năm mươi won.",
+            "id": "Lima puluh won."
+          },
+          "result": "retry",
+          "reply": "네? 오십 원이요? …아, 오십만 원 말씀이시죠?",
+          "replyMeaning": {
+            "en": "Sorry? Fifty won? …Oh, you mean 500,000 won?",
+            "vi": "Dạ? Năm mươi won ạ? …À, ý bạn là 500.000 won phải không?",
+            "id": "Ya? Lima puluh won? …Oh, maksudnya 500.000 won?"
+          },
+          "note": {
+            "en": "만 means ten thousand: 오십만 원 is 500,000 won. Drop 만 and it becomes 50 won. Big amounts in Korean are counted in 만: 십만, 오십만, 백만.",
+            "vi": "만 là mười nghìn: 오십만 원 là 500.000 won. Bỏ 만 thì chỉ còn 50 won. Số tiền lớn trong tiếng Hàn đếm theo 만: 십만, 오십만, 백만.",
+            "id": "만 artinya sepuluh ribu: 오십만 원 berarti 500.000 won. Tanpa 만 jadinya 50 won. Jumlah besar dalam bahasa Korea dihitung dengan 만: 십만, 오십만, 백만."
+          }
+        },
+        {
+          "ko": "달러로는 얼마예요?",
+          "rom": "dalleoroneun eolmayeyo?",
+          "meaning": {
+            "en": "How much is that in dollars?",
+            "vi": "Tính ra đô la là bao nhiêu?",
+            "id": "Berapa kalau dalam dolar?"
+          },
+          "result": "ask",
+          "reply": "오늘 환율로 약 360달러예요. 얼마 보내실지 원으로 말씀해 주세요.",
+          "replyMeaning": {
+            "en": "At today's rate, about 360 dollars. Tell me the amount in won, please.",
+            "vi": "Theo tỷ giá hôm nay là khoảng 360 đô la. Bạn nói số tiền bằng won giúp tôi.",
+            "id": "Dengan kurs hari ini sekitar 360 dolar. Sebutkan jumlahnya dalam won, ya."
+          }
+        }
+      ]
+    },
+    {
+      "id": "reason",
+      "staff": "teller3",
+      "npc": "송금 사유가 어떻게 되세요?",
+      "meaning": {
+        "en": "What's the purpose of the remittance?",
+        "vi": "Lý do chuyển tiền là gì?",
+        "id": "Apa tujuan pengirimannya?"
+      },
+      "choices": [
+        {
+          "ko": "동생 학비예요. 가족한테 보내는 거예요.",
+          "rom": "dongsaeng hakbiyeyo. gajokhante bonaeneun geoyeyo",
+          "meaning": {
+            "en": "It's my younger sibling's school fees. I'm sending it to my family.",
+            "vi": "Đó là học phí của em tôi. Tôi gửi cho gia đình.",
+            "id": "Untuk biaya sekolah adik saya. Saya kirim ke keluarga."
+          },
+          "result": "advance",
+          "reply": "네, 가족 학비 송금으로 처리할게요.",
+          "replyMeaning": {
+            "en": "Okay, I'll record it as school fees sent to family.",
+            "vi": "Vâng, tôi ghi là gửi học phí cho gia đình.",
+            "id": "Baik, saya catat sebagai kiriman biaya sekolah untuk keluarga."
+          }
+        },
+        {
+          "ko": "그냥이요.",
+          "rom": "geunyangiyo",
+          "meaning": {
+            "en": "No particular reason.",
+            "vi": "Không có lý do gì ạ.",
+            "id": "Tidak ada alasan khusus."
+          },
+          "result": "retry",
+          "reply": "송금 사유는 꼭 적어야 해서요. 누구한테, 무슨 돈인지만 말씀해 주세요.",
+          "replyMeaning": {
+            "en": "We have to record a purpose. Just tell me who it's for and what it's for.",
+            "vi": "Lý do chuyển tiền bắt buộc phải ghi. Bạn chỉ cần nói gửi cho ai và để làm gì.",
+            "id": "Tujuannya wajib dicatat. Cukup sebutkan untuk siapa dan untuk apa."
+          },
+          "note": {
+            "en": "Banks must record why money leaves Korea. A short answer is enough: 가족 생활비 (family living costs), 학비 (school fees).",
+            "vi": "Ngân hàng phải ghi lý do tiền được gửi ra khỏi Hàn Quốc. Trả lời ngắn là đủ: 가족 생활비 (sinh hoạt phí gia đình), 학비 (học phí).",
+            "id": "Bank wajib mencatat alasan uang keluar dari Korea. Jawaban singkat sudah cukup: 가족 생활비 (biaya hidup keluarga), 학비 (biaya sekolah)."
+          }
+        },
+        {
+          "ko": "뭐라고 말하면 돼요?",
+          "rom": "mworago malhamyeon dwaeyo?",
+          "meaning": {
+            "en": "What should I say?",
+            "vi": "Tôi nên nói thế nào ạ?",
+            "id": "Saya harus bilang apa?"
+          },
+          "result": "ask",
+          "reply": "가족 생활비나 학비처럼요. 누구한테 왜 보내시는지 말씀해 주시면 돼요.",
+          "replyMeaning": {
+            "en": "Something like family living costs or school fees. Just who it's for and why.",
+            "vi": "Kiểu như sinh hoạt phí gia đình hay học phí. Chỉ cần nói gửi cho ai và vì sao.",
+            "id": "Misalnya biaya hidup keluarga atau biaya sekolah. Cukup sebutkan untuk siapa dan kenapa."
+          }
+        }
+      ]
+    },
+    {
+      "id": "fees",
+      "staff": "teller3",
+      "npc": "송금수수료 5천 원하고 전신료 8천 원이 따로 나가요. 괜찮으세요?",
+      "meaning": {
+        "en": "There's a 5,000 won remittance fee plus an 8,000 won cable charge. Is that okay?",
+        "vi": "Có phí chuyển tiền 5.000 won và phí điện chuyển tiền 8.000 won tính riêng. Được không ạ?",
+        "id": "Ada biaya kirim 5.000 won ditambah biaya kawat 8.000 won. Tidak apa-apa?"
+      },
+      "choices": [
+        {
+          "ko": "네, 괜찮아요.",
+          "rom": "ne, gwaenchanayo",
+          "meaning": {
+            "en": "Yes, that's fine.",
+            "vi": "Vâng, được ạ.",
+            "id": "Ya, tidak apa-apa."
+          },
+          "result": "advance",
+          "reply": "네, 진행할게요.",
+          "replyMeaning": {
+            "en": "Okay, I'll go ahead.",
+            "vi": "Vâng, tôi làm tiếp nhé.",
+            "id": "Baik, saya lanjutkan."
+          }
+        },
+        {
+          "ko": "전신료가 뭐예요?",
+          "rom": "jeonsillyoga mwoyeyo?",
+          "meaning": {
+            "en": "What's a cable charge?",
+            "vi": "Phí điện chuyển tiền là gì ạ?",
+            "id": "Biaya kawat itu apa?"
+          },
+          "result": "ask",
+          "reply": "외국 은행으로 송금 전문을 보내는 비용이에요. 송금할 때마다 붙어요.",
+          "replyMeaning": {
+            "en": "It's the cost of sending the transfer message to the foreign bank. It's charged on every remittance.",
+            "vi": "Là chi phí gửi điện chuyển tiền đến ngân hàng nước ngoài. Lần chuyển nào cũng tính.",
+            "id": "Itu biaya mengirim pesan transfer ke bank luar negeri. Dikenakan setiap kali mengirim."
+          }
+        },
+        {
+          "ko": "환율은 어제 환율로 해 주세요.",
+          "rom": "hwanyureun eoje hwanyullo hae juseyo",
+          "meaning": {
+            "en": "Please use yesterday's exchange rate.",
+            "vi": "Tính theo tỷ giá hôm qua giúp tôi.",
+            "id": "Tolong pakai kurs kemarin."
+          },
+          "result": "retry",
+          "reply": "환율은 송금하는 시점 기준이라서, 오늘 환율로 적용돼요.",
+          "replyMeaning": {
+            "en": "The rate is set when you send, so today's rate applies.",
+            "vi": "Tỷ giá tính theo thời điểm chuyển tiền, nên áp dụng tỷ giá hôm nay.",
+            "id": "Kurs ditetapkan saat pengiriman, jadi berlaku kurs hari ini."
+          },
+          "note": {
+            "en": "The exchange rate is fixed at the moment you send; a bank can't apply an earlier day's rate. Compare rates before you go if it matters.",
+            "vi": "Tỷ giá được chốt ngay lúc chuyển tiền; ngân hàng không thể áp dụng tỷ giá ngày trước. Nếu quan trọng, hãy so sánh tỷ giá trước khi đi.",
+            "id": "Kurs dipatok saat uang dikirim; bank tidak bisa memakai kurs hari sebelumnya. Bandingkan kurs sebelum berangkat kalau itu penting."
+          }
+        }
+      ]
+    },
+    {
+      "id": "pin",
+      "staff": "teller3",
+      "type": "keypad",
+      "npc": "비밀번호 네 자리 눌러 주세요.",
+      "meaning": {
+        "en": "Please enter your four-digit PIN.",
+        "vi": "Vui lòng nhập mã PIN bốn số.",
+        "id": "Silakan masukkan PIN empat angka."
+      },
+      "ack": "네, 확인됐습니다."
+    },
+    {
+      "id": "arrival",
+      "staff": "teller3",
+      "npc": "송금 완료됐습니다. 받는 분 계좌에는 보통 하루에서 사흘 안에 들어가요. 영수증 드릴까요?",
+      "meaning": {
+        "en": "It's sent. It usually reaches the account within one to three days. Would you like a receipt?",
+        "vi": "Đã chuyển xong. Tiền thường vào tài khoản người nhận trong một đến ba ngày. Bạn có lấy biên lai không?",
+        "id": "Sudah terkirim. Biasanya masuk ke rekening penerima dalam satu sampai tiga hari. Mau bukti pengirimannya?"
+      },
+      "choices": [
+        {
+          "ko": "네, 영수증 주세요.",
+          "rom": "ne, yeongsujeung juseyo",
+          "meaning": {
+            "en": "Yes, a receipt, please.",
+            "vi": "Vâng, cho tôi biên lai.",
+            "id": "Ya, tolong buktinya."
+          },
+          "result": "advance",
+          "reply": "여기 있습니다. 송금 참조번호가 적혀 있어요.",
+          "replyMeaning": {
+            "en": "Here you are. The reference number is on it.",
+            "vi": "Đây ạ. Trên đó có số tham chiếu chuyển tiền.",
+            "id": "Silakan. Nomor referensi pengirimannya tertulis di situ."
+          }
+        },
+        {
+          "ko": "오늘 바로 들어가죠?",
+          "rom": "oneul baro deureogajyo?",
+          "meaning": {
+            "en": "It'll arrive today, right?",
+            "vi": "Hôm nay tiền đến luôn phải không?",
+            "id": "Hari ini langsung masuk, kan?"
+          },
+          "result": "retry",
+          "reply": "해외송금은 중간 은행을 거쳐서 가니까 하루에서 사흘 정도 걸려요.",
+          "replyMeaning": {
+            "en": "Overseas transfers pass through intermediary banks, so they take one to three days.",
+            "vi": "Chuyển tiền quốc tế phải qua ngân hàng trung gian nên mất khoảng một đến ba ngày.",
+            "id": "Kiriman ke luar negeri melewati bank perantara, jadi butuh satu sampai tiga hari."
+          },
+          "note": {
+            "en": "International transfers pass through correspondent banks and usually take 1–3 business days. Tell your family when to expect it.",
+            "vi": "Chuyển tiền quốc tế đi qua ngân hàng đại lý và thường mất 1–3 ngày làm việc. Hãy báo gia đình khi nào tiền đến.",
+            "id": "Transfer internasional melewati bank koresponden dan biasanya butuh 1–3 hari kerja. Beri tahu keluarga kapan uangnya sampai."
+          }
+        },
+        {
+          "ko": "안 들어오면 어떻게 해요?",
+          "rom": "an deureoomyeon eotteoke haeyo?",
+          "meaning": {
+            "en": "What if it doesn't arrive?",
+            "vi": "Nếu tiền không đến thì sao?",
+            "id": "Bagaimana kalau uangnya tidak sampai?"
+          },
+          "result": "ask",
+          "reply": "영수증에 있는 참조번호로 조회해 드릴 수 있어요. 영수증 꼭 챙기세요.",
+          "replyMeaning": {
+            "en": "We can trace it with the reference number on the receipt. Be sure to keep it.",
+            "vi": "Chúng tôi có thể tra soát bằng số tham chiếu trên biên lai. Nhớ giữ biên lai nhé.",
+            "id": "Kami bisa melacaknya dengan nomor referensi di bukti pengiriman. Pastikan disimpan."
+          }
+        }
+      ]
+    }
+  ]
+}

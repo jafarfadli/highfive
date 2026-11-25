@@ -1,0 +1,648 @@
+{
+  "id": "bank",
+  "verified": false,
+  "sources": [
+    "https://global.seoul.go.kr (Seoul Global Center: opening a bank account)",
+    "https://www.fss.or.kr (Financial Supervisory Service: financial transaction purpose confirmation)"
+  ],
+  "titleKo": "새싹은행",
+  "title": {
+    "en": "Saessak Bank",
+    "vi": "Ngân hàng Saessak",
+    "id": "Bank Saessak"
+  },
+  "briefing": {
+    "en": "Open an account for tuition and part-time pay.",
+    "vi": "Mở tài khoản để đóng học phí và nhận lương làm thêm.",
+    "id": "Buka rekening untuk uang kuliah dan gaji paruh waktu."
+  },
+  "completeNote": {
+    "en": "Your account is open. Pay tuition by transfer and receive part-time pay.",
+    "vi": "Tài khoản đã mở. Chuyển khoản học phí và nhận lương làm thêm.",
+    "id": "Rekening sudah dibuka. Bayar kuliah lewat transfer dan terima gaji paruh waktu."
+  },
+  "blockedLesson": {
+    "en": "Banks need your Alien Registration Card (외국인등록증). Do the immigration level first.",
+    "vi": "Ngân hàng cần thẻ đăng ký người nước ngoài (외국인등록증). Hãy làm màn xuất nhập cảnh trước.",
+    "id": "Bank butuh Kartu Registrasi Orang Asing (외국인등록증). Selesaikan level imigrasi dulu."
+  },
+  "staff": [
+    {
+      "id": "clerk",
+      "name": "최민수 대리",
+      "role": "bank teller",
+      "roleText": {
+        "en": "Bank teller",
+        "vi": "Giao dịch viên",
+        "id": "Teller bank"
+      },
+      "macVoice": "Eddy (Korean (South Korea))",
+      "macRate": 190,
+      "openaiVoice": "ash"
+    }
+  ],
+  "queue": {
+    "counter": 2,
+    "ahead": 3,
+    "interval": 6.0
+  },
+  "steps": [
+    {
+      "id": "purpose",
+      "staff": "clerk",
+      "npc": "어서 오세요, 고객님. 어떤 업무 도와드릴까요?",
+      "meaning": {
+        "en": "Welcome. How can I help you today?",
+        "vi": "Xin mời quý khách. Tôi giúp gì được ạ?",
+        "id": "Selamat datang. Ada yang bisa dibantu?"
+      },
+      "choices": [
+        {
+          "ko": "통장 만들러 왔어요.",
+          "rom": "tongjang mandeulleo wasseoyo",
+          "meaning": {
+            "en": "I'd like to open an account.",
+            "vi": "Tôi muốn mở tài khoản.",
+            "id": "Saya mau buka rekening."
+          },
+          "result": "advance",
+          "reply": "네, 신규 계좌 개설이요.",
+          "replyMeaning": {
+            "en": "Okay, a new account.",
+            "vi": "Vâng, mở tài khoản mới.",
+            "id": "Baik, rekening baru."
+          }
+        },
+        {
+          "ko": "돈 바꾸러 왔어요.",
+          "rom": "don bakkureo wasseoyo",
+          "meaning": {
+            "en": "I came to exchange money.",
+            "vi": "Tôi đến đổi tiền.",
+            "id": "Saya mau tukar uang."
+          },
+          "result": "retry",
+          "reply": "환전은 3번 창구예요. 혹시 통장 만드시려고요?",
+          "replyMeaning": {
+            "en": "Exchange is at counter 3. Or did you want to open an account?",
+            "vi": "Đổi tiền ở quầy 3. Hay bạn muốn mở tài khoản?",
+            "id": "Penukaran uang di loket 3. Atau mau buka rekening?"
+          },
+          "note": {
+            "en": "환전 = currency exchange. Opening an account = 통장 개설.",
+            "vi": "환전 = đổi tiền. Mở tài khoản = 통장 개설.",
+            "id": "환전 = tukar uang. Buka rekening = 통장 개설."
+          }
+        },
+        {
+          "ko": "체크카드 만들러 왔어요.",
+          "rom": "chekeukadeu mandeureo wasseoyo",
+          "meaning": {
+            "en": "I'm here to get a debit card.",
+            "vi": "Tôi đến làm thẻ ghi nợ.",
+            "id": "Saya mau bikin kartu debit."
+          },
+          "result": "retry",
+          "reply": "체크카드는 계좌가 먼저 있어야 해요. 통장부터 만드시겠어요?",
+          "replyMeaning": {
+            "en": "A debit card needs an account first. Shall we open the account?",
+            "vi": "Thẻ ghi nợ cần có tài khoản trước. Mở tài khoản trước nhé?",
+            "id": "Kartu debit butuh rekening dulu. Buka rekening dulu ya?"
+          },
+          "note": {
+            "en": "The account (통장) comes first; the debit card is linked to it. Ask for 통장 or 계좌 개설.",
+            "vi": "Tài khoản (통장) có trước, thẻ ghi nợ gắn với tài khoản. Hãy nói 통장 hoặc 계좌 개설.",
+            "id": "Rekening (통장) dulu, kartu debit terhubung ke rekening. Minta 통장 atau 계좌 개설."
+          }
+        }
+      ],
+      "task": {
+        "en": "Open an account at counter 2",
+        "vi": "Mở tài khoản ở quầy 2",
+        "id": "Buka rekening di loket 2"
+      }
+    },
+    {
+      "id": "id_check",
+      "staff": "clerk",
+      "npc": "신분증 주시겠어요? 외국인등록증으로 부탁드려요.",
+      "meaning": {
+        "en": "May I have your ID? Your Alien Registration Card, please.",
+        "vi": "Cho tôi xin giấy tờ. Thẻ đăng ký người nước ngoài nhé.",
+        "id": "Boleh minta kartu identitas? Kartu Registrasi Orang Asing, ya."
+      },
+      "choices": [
+        {
+          "ko": "네, 여기 있어요.",
+          "rom": "ne, yeogi isseoyo",
+          "meaning": {
+            "en": "Yes, here it is.",
+            "vi": "Vâng, đây ạ.",
+            "id": "Ya, ini dia."
+          },
+          "result": "advance",
+          "reply": "네, 확인됐습니다.",
+          "replyMeaning": {
+            "en": "All checked.",
+            "vi": "Đã xác nhận.",
+            "id": "Sudah dicek."
+          },
+          "give": "arc",
+          "needs": "doc:arc"
+        },
+        {
+          "ko": "외국인등록증이 아직 없어요.",
+          "rom": "oegugin-deungnokjeungi ajik eopseoyo",
+          "meaning": {
+            "en": "I don't have my ARC yet.",
+            "vi": "Tôi chưa có thẻ ARC.",
+            "id": "Saya belum punya ARC."
+          },
+          "result": "block",
+          "reply": "죄송하지만 외국인등록증이 없으면 계좌 개설이 어려워요. 출입국 민원센터에서 먼저 외국인 등록을 하시고 다시 오세요.",
+          "replyMeaning": {
+            "en": "Sorry, without an ARC we can't open an account. Register at the immigration office first, then come back.",
+            "vi": "Xin lỗi, không có thẻ ARC thì không mở tài khoản được. Hãy đăng ký ở xuất nhập cảnh trước rồi quay lại.",
+            "id": "Maaf, tanpa ARC rekening tidak bisa dibuka. Registrasi dulu di kantor imigrasi, lalu kembali."
+          },
+          "note": {
+            "en": "Banks need your ARC. Do immigration first: the card takes about 3 weeks.",
+            "vi": "Ngân hàng cần thẻ ARC. Hãy làm xuất nhập cảnh trước: thẻ mất khoảng 3 tuần.",
+            "id": "Bank butuh ARC. Urus imigrasi dulu: kartunya sekitar 3 minggu."
+          },
+          "unless": "doc:arc"
+        },
+        {
+          "ko": "여권 드릴게요.",
+          "rom": "yeogwon deurilgeyo",
+          "meaning": {
+            "en": "I'll give you my passport.",
+            "vi": "Tôi đưa hộ chiếu nhé.",
+            "id": "Saya kasih paspor saja."
+          },
+          "result": "retry",
+          "reply": "여권만으로는 계좌 개설이 어려워요. 외국인등록증은요?",
+          "replyMeaning": {
+            "en": "A passport alone isn't enough. What about your ARC?",
+            "vi": "Chỉ hộ chiếu thì không mở được. Còn thẻ ARC thì sao?",
+            "id": "Paspor saja tidak cukup. ARC-nya?"
+          },
+          "note": {
+            "en": "Most Korean banks need an ARC, not just a passport, for foreign residents.",
+            "vi": "Hầu hết ngân hàng Hàn cần thẻ ARC, không chỉ hộ chiếu.",
+            "id": "Kebanyakan bank Korea butuh ARC, bukan hanya paspor."
+          },
+          "give": "passport"
+        }
+      ]
+    },
+    {
+      "id": "account_purpose",
+      "staff": "clerk",
+      "npc": "통장은 어떤 용도로 쓰실 거예요?",
+      "meaning": {
+        "en": "What will you use the account for?",
+        "vi": "Bạn dùng tài khoản vào việc gì?",
+        "id": "Rekeningnya untuk apa?"
+      },
+      "choices": [
+        {
+          "ko": "생활비랑 등록금 낼 때 쓸 거예요.",
+          "rom": "saenghwalbirang deungnokgeum nael ttae sseul geoyeyo",
+          "meaning": {
+            "en": "For living costs and paying tuition.",
+            "vi": "Để chi tiêu và đóng học phí.",
+            "id": "Untuk biaya hidup dan bayar kuliah."
+          },
+          "result": "advance",
+          "reply": "네, 알겠습니다.",
+          "replyMeaning": {
+            "en": "I see.",
+            "vi": "Vâng, tôi hiểu.",
+            "id": "Baik."
+          }
+        },
+        {
+          "ko": "잘 모르겠어요. 그냥 필요해서요.",
+          "rom": "jal moreugesseoyo. geunyang piryohaeseoyo",
+          "meaning": {
+            "en": "I'm not sure. I just need one.",
+            "vi": "Tôi không rõ. Chỉ là cần thôi.",
+            "id": "Tidak tahu. Pokoknya perlu saja."
+          },
+          "result": "retry",
+          "reply": "용도를 꼭 확인해야 해서요. 생활비예요, 월급 받으실 거예요?",
+          "replyMeaning": {
+            "en": "I have to record a purpose. Living costs, or a salary?",
+            "vi": "Tôi phải ghi mục đích. Chi tiêu sinh hoạt hay nhận lương?",
+            "id": "Saya harus mencatat tujuannya. Biaya hidup atau terima gaji?"
+          },
+          "note": {
+            "en": "Banks must record why you open an account (금융거래 목적), or they may limit it. Name a real use.",
+            "vi": "Ngân hàng phải ghi mục đích mở tài khoản (금융거래 목적), nếu không có thể bị hạn chế. Hãy nói mục đích thật.",
+            "id": "Bank wajib mencatat tujuan rekening (금융거래 목적), kalau tidak bisa dibatasi. Sebutkan tujuan yang nyata."
+          }
+        },
+        {
+          "ko": "친구 돈 대신 받아 주려고요.",
+          "rom": "chingu don daesin bada juryeogoyo",
+          "meaning": {
+            "en": "To receive money for a friend.",
+            "vi": "Để nhận tiền hộ bạn.",
+            "id": "Untuk menerima uang titipan teman."
+          },
+          "result": "retry",
+          "reply": "다른 사람 돈을 대신 받는 건 안 돼요. 본인 용도로만 쓰셔야 해요.",
+          "replyMeaning": {
+            "en": "You can't receive money for someone else. It's for your own use only.",
+            "vi": "Không được nhận tiền hộ người khác. Chỉ dùng cho bản thân.",
+            "id": "Tidak boleh menerima uang orang lain. Hanya untuk dirimu sendiri."
+          },
+          "note": {
+            "en": "Lending your account to others is illegal in Korea; such accounts get used in scams.",
+            "vi": "Cho người khác mượn tài khoản là phạm pháp ở Hàn; thường bị dùng để lừa đảo.",
+            "id": "Meminjamkan rekening ke orang lain ilegal di Korea; sering dipakai penipuan."
+          }
+        }
+      ]
+    },
+    {
+      "id": "enrollment",
+      "staff": "clerk",
+      "npc": "학생이시면 재학증명서도 확인할게요.",
+      "meaning": {
+        "en": "If you're a student, I'll check your certificate of enrollment.",
+        "vi": "Nếu là sinh viên, tôi xem giấy xác nhận đang học nhé.",
+        "id": "Kalau pelajar, saya cek surat keterangan kuliahnya."
+      },
+      "choices": [
+        {
+          "ko": "네, 여기 있어요.",
+          "rom": "ne, yeogi isseoyo",
+          "meaning": {
+            "en": "Yes, here it is.",
+            "vi": "Vâng, đây ạ.",
+            "id": "Ya, ini dia."
+          },
+          "result": "advance",
+          "reply": "네, 감사합니다.",
+          "replyMeaning": {
+            "en": "Thank you.",
+            "vi": "Cảm ơn.",
+            "id": "Terima kasih."
+          },
+          "give": "enrollment"
+        },
+        {
+          "ko": "여기 있어요.",
+          "rom": "yeogi isseoyo",
+          "meaning": {
+            "en": "Here you go.",
+            "vi": "Đây ạ.",
+            "id": "Ini."
+          },
+          "result": "retry",
+          "reply": "사진은 괜찮아요. 재학증명서요.",
+          "replyMeaning": {
+            "en": "I don't need a photo. The enrollment certificate, please.",
+            "vi": "Không cần ảnh. Giấy xác nhận đang học ạ.",
+            "id": "Foto tidak perlu. Surat keterangan kuliahnya."
+          },
+          "note": {
+            "en": "Match the document to the request: 재학증명서 = certificate of enrollment.",
+            "vi": "Đưa đúng giấy được hỏi: 재학증명서 = giấy xác nhận đang học.",
+            "id": "Sesuaikan dokumen: 재학증명서 = surat keterangan kuliah."
+          },
+          "give": "photo"
+        },
+        {
+          "ko": "학생증 드릴게요.",
+          "rom": "haksaengjeung deurilgeyo",
+          "meaning": {
+            "en": "I'll give you my student ID card.",
+            "vi": "Tôi đưa thẻ sinh viên nhé.",
+            "id": "Saya kasih kartu pelajar ya."
+          },
+          "result": "retry",
+          "reply": "학생증 말고 재학증명서로 부탁드려요.",
+          "replyMeaning": {
+            "en": "Not the student ID, the certificate of enrollment, please.",
+            "vi": "Không phải thẻ sinh viên, mà là giấy xác nhận đang học.",
+            "id": "Bukan kartu pelajar, tapi surat keterangan kuliah."
+          },
+          "note": {
+            "en": "Banks check the 재학증명서 (certificate of enrollment), not the student ID card (학생증).",
+            "vi": "Ngân hàng kiểm tra 재학증명서 (giấy xác nhận đang học), không phải thẻ sinh viên (학생증).",
+            "id": "Bank memeriksa 재학증명서 (surat keterangan kuliah), bukan kartu pelajar (학생증)."
+          }
+        }
+      ]
+    },
+    {
+      "id": "phone",
+      "staff": "clerk",
+      "npc": "휴대폰 번호 불러 주시겠어요?",
+      "meaning": {
+        "en": "Could you tell me your mobile number?",
+        "vi": "Bạn đọc số điện thoại giúp tôi nhé?",
+        "id": "Boleh sebutkan nomor HP-mu?"
+      },
+      "choices": [
+        {
+          "ko": "010-1234-5678이에요.",
+          "rom": "gong-il-gong, il-i-sam-sa, o-yuk-chil-par-ieyo",
+          "meaning": {
+            "en": "It's 010-1234-5678.",
+            "vi": "Số của tôi là 010-1234-5678.",
+            "id": "Nomornya 010-1234-5678."
+          },
+          "result": "advance",
+          "reply": "네, 확인했습니다.",
+          "replyMeaning": {
+            "en": "Got it.",
+            "vi": "Đã ghi nhận.",
+            "id": "Sudah dicatat."
+          }
+        },
+        {
+          "ko": "본국 번호 알려 드릴게요.",
+          "rom": "bonguk beonho allyeo deurilgeyo",
+          "meaning": {
+            "en": "I'll give you my home-country number.",
+            "vi": "Tôi cho số ở nước tôi nhé.",
+            "id": "Saya kasih nomor negara asal."
+          },
+          "result": "retry",
+          "reply": "한국 휴대폰 번호로 부탁드려요. 본인 명의로요.",
+          "replyMeaning": {
+            "en": "A Korean mobile number in your name, please.",
+            "vi": "Số điện thoại Hàn Quốc đứng tên bạn nhé.",
+            "id": "Nomor HP Korea atas namamu, ya."
+          },
+          "note": {
+            "en": "Banks verify you with a Korean number in your own name. Get a SIM before the bank.",
+            "vi": "Ngân hàng xác minh bằng số Hàn đứng tên bạn. Hãy làm SIM trước khi đến ngân hàng.",
+            "id": "Bank memverifikasi dengan nomor Korea atas namamu. Urus SIM sebelum ke bank."
+          }
+        }
+      ]
+    },
+    {
+      "id": "pin",
+      "staff": "clerk",
+      "type": "keypad",
+      "npc": "비밀번호 네 자리 눌러 주세요.",
+      "meaning": {
+        "en": "Please enter a 4-digit PIN.",
+        "vi": "Vui lòng nhập mật khẩu 4 số.",
+        "id": "Silakan masukkan PIN 4 digit."
+      },
+      "ack": "네.",
+      "task": {
+        "en": "Set your card PIN",
+        "vi": "Đặt mã PIN thẻ",
+        "id": "Atur PIN kartu"
+      }
+    },
+    {
+      "id": "pin_confirm",
+      "staff": "clerk",
+      "type": "keypad",
+      "npc": "확인을 위해 한 번 더 눌러 주세요.",
+      "meaning": {
+        "en": "Please enter it once more to confirm.",
+        "vi": "Nhập lại một lần nữa để xác nhận.",
+        "id": "Masukkan sekali lagi untuk konfirmasi."
+      },
+      "confirmPrevious": true,
+      "ack": "네, 비밀번호 설정됐습니다."
+    },
+    {
+      "id": "checkcard",
+      "staff": "clerk",
+      "npc": "체크카드도 같이 만들어 드릴까요?",
+      "meaning": {
+        "en": "Shall I make a debit card too?",
+        "vi": "Tôi làm luôn thẻ ghi nợ nhé?",
+        "id": "Sekalian dibuatkan kartu debit?"
+      },
+      "choices": [
+        {
+          "ko": "네, 체크카드도 만들어 주세요.",
+          "rom": "ne, chekeukadeudo mandeureo juseyo",
+          "meaning": {
+            "en": "Yes, a debit card too, please.",
+            "vi": "Vâng, làm giúp tôi thẻ ghi nợ.",
+            "id": "Ya, kartu debit juga."
+          },
+          "result": "advance",
+          "reply": "네, 통장이랑 카드 여기 있습니다. 좋은 하루 보내세요!",
+          "replyMeaning": {
+            "en": "Here are your bankbook and card. Have a nice day!",
+            "vi": "Sổ và thẻ của bạn đây. Chúc một ngày tốt lành!",
+            "id": "Ini buku tabungan dan kartunya. Semoga harimu menyenangkan!"
+          },
+          "grants": [
+            "doc:checkcard"
+          ]
+        },
+        {
+          "ko": "아니요, 통장만 할게요.",
+          "rom": "aniyo, tongjangman halgeyo",
+          "meaning": {
+            "en": "No, just the account.",
+            "vi": "Không, chỉ tài khoản thôi.",
+            "id": "Tidak, rekening saja."
+          },
+          "result": "advance",
+          "reply": "네, 통장 여기 있습니다. 좋은 하루 보내세요!",
+          "replyMeaning": {
+            "en": "Here's your bankbook. Have a nice day!",
+            "vi": "Sổ của bạn đây. Chúc một ngày tốt lành!",
+            "id": "Ini buku tabungannya. Semoga harimu menyenangkan!"
+          }
+        },
+        {
+          "ko": "신용카드로 주세요.",
+          "rom": "sinyongkadeuro juseyo",
+          "meaning": {
+            "en": "A credit card, please.",
+            "vi": "Cho tôi thẻ tín dụng.",
+            "id": "Kartu kredit saja."
+          },
+          "result": "retry",
+          "reply": "신용카드는 소득 확인이 필요해서 어려워요. 체크카드는 바로 돼요.",
+          "replyMeaning": {
+            "en": "A credit card needs proof of income. A debit card is available now.",
+            "vi": "Thẻ tín dụng cần chứng minh thu nhập. Thẻ ghi nợ thì làm ngay được.",
+            "id": "Kartu kredit butuh bukti penghasilan. Kartu debit bisa langsung."
+          },
+          "note": {
+            "en": "Credit cards need income history; a debit card (체크카드) works right away.",
+            "vi": "Thẻ tín dụng cần lịch sử thu nhập; thẻ ghi nợ (체크카드) dùng được ngay.",
+            "id": "Kartu kredit butuh riwayat penghasilan; kartu debit (체크카드) langsung bisa."
+          }
+        }
+      ],
+      "grants": [
+        "doc:bankbook"
+      ],
+      "task": {
+        "en": "Finish opening the account",
+        "vi": "Hoàn tất mở tài khoản",
+        "id": "Selesaikan pembukaan rekening"
+      }
+    }
+  ],
+  "grants": [
+    "done:bank"
+  ],
+  "phrases": [
+    {
+      "ko": "통장 만들러 왔어요.",
+      "rom": "tongjang mandeulleo wasseoyo",
+      "meaning": {
+        "en": "I'd like to open an account.",
+        "vi": "Tôi muốn mở tài khoản.",
+        "id": "Saya mau buka rekening."
+      }
+    },
+    {
+      "ko": "외국인등록증 여기 있어요.",
+      "rom": "oegugin-deungnokjeung yeogi isseoyo",
+      "meaning": {
+        "en": "Here's my ARC.",
+        "vi": "Thẻ ARC của tôi đây.",
+        "id": "Ini ARC saya."
+      }
+    },
+    {
+      "ko": "생활비로 쓸 거예요.",
+      "rom": "saenghwalbiro sseul geoyeyo",
+      "meaning": {
+        "en": "It's for living costs.",
+        "vi": "Để chi tiêu sinh hoạt.",
+        "id": "Untuk biaya hidup."
+      }
+    },
+    {
+      "ko": "체크카드도 만들어 주세요.",
+      "rom": "chekeukadeudo mandeureo juseyo",
+      "meaning": {
+        "en": "A debit card too, please.",
+        "vi": "Làm giúp tôi thẻ ghi nợ nữa.",
+        "id": "Kartu debit juga, ya."
+      }
+    }
+  ],
+  "glossary": [
+    {
+      "ko": "통장",
+      "rom": "tongjang",
+      "meaning": {
+        "en": "Bankbook",
+        "vi": "Sổ ngân hàng",
+        "id": "Buku tabungan"
+      }
+    },
+    {
+      "ko": "계좌",
+      "rom": "gyejwa",
+      "meaning": {
+        "en": "Bank account",
+        "vi": "Tài khoản ngân hàng",
+        "id": "Rekening bank"
+      }
+    },
+    {
+      "ko": "통장을 만들다",
+      "rom": "tongjangeul mandeulda",
+      "meaning": {
+        "en": "To open an account",
+        "vi": "Mở tài khoản",
+        "id": "Buka rekening"
+      }
+    },
+    {
+      "ko": "신분증",
+      "rom": "sinbunjeung",
+      "meaning": {
+        "en": "ID; at a bank, your ARC",
+        "vi": "Giấy tờ tùy thân; ở ngân hàng là thẻ ARC",
+        "id": "Kartu identitas; di bank berarti ARC"
+      }
+    },
+    {
+      "ko": "외국인등록증",
+      "rom": "oegugindeungnokjeung",
+      "meaning": {
+        "en": "Alien Registration Card (ARC)",
+        "vi": "Thẻ đăng ký người nước ngoài (ARC)",
+        "id": "Kartu Registrasi Orang Asing (ARC)"
+      }
+    },
+    {
+      "ko": "용도",
+      "rom": "yongdo",
+      "meaning": {
+        "en": "What it's for",
+        "vi": "Mục đích sử dụng",
+        "id": "Tujuan penggunaan"
+      }
+    },
+    {
+      "ko": "생활비",
+      "rom": "saenghwalbi",
+      "meaning": {
+        "en": "Living costs",
+        "vi": "Chi phí sinh hoạt",
+        "id": "Biaya hidup"
+      }
+    },
+    {
+      "ko": "휴대폰 번호",
+      "rom": "hyudaepon beonho",
+      "meaning": {
+        "en": "Mobile number",
+        "vi": "Số điện thoại di động",
+        "id": "Nomor HP"
+      }
+    },
+    {
+      "ko": "비밀번호",
+      "rom": "bimilbeonho",
+      "meaning": {
+        "en": "PIN",
+        "vi": "Mã PIN",
+        "id": "PIN"
+      }
+    },
+    {
+      "ko": "체크카드",
+      "rom": "chekeukadeu",
+      "meaning": {
+        "en": "Debit card",
+        "vi": "Thẻ ghi nợ",
+        "id": "Kartu debit"
+      }
+    },
+    {
+      "ko": "신용카드",
+      "rom": "sinyongkadeu",
+      "meaning": {
+        "en": "Credit card",
+        "vi": "Thẻ tín dụng",
+        "id": "Kartu kredit"
+      }
+    },
+    {
+      "ko": "환전",
+      "rom": "hwanjeon",
+      "meaning": {
+        "en": "Currency exchange",
+        "vi": "Đổi tiền",
+        "id": "Tukar uang"
+      }
+    }
+  ]
+}

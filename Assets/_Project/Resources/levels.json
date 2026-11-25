@@ -1,0 +1,151 @@
+{
+  "places": [
+    {
+      "id": "clinic",
+      "nameKo": "튼튼내과의원",
+      "color": "#1FA37A",
+      "name": {
+        "en": "Clinic",
+        "vi": "Phòng khám",
+        "id": "Klinik"
+      },
+      "levels": [
+        {
+          "id": "clinic-1",
+          "level": 1,
+          "procedure": "clinic",
+          "scene": "Clinic",
+          "entrance": "clinic",
+          "available": true,
+          "title": {
+            "en": "See a doctor",
+            "vi": "Đi khám bác sĩ",
+            "id": "Periksa ke dokter"
+          },
+          "story": {
+            "en": "You've had a fever and a sore throat since yesterday.\nToday you're going to a clinic in Myeongdong to see a doctor.",
+            "vi": "Từ hôm qua bạn bị sốt và đau họng.\nHôm nay bạn đến một phòng khám ở Myeongdong để gặp bác sĩ.",
+            "id": "Sejak kemarin kamu demam dan sakit tenggorokan.\nHari ini kamu pergi ke klinik di Myeongdong untuk periksa ke dokter."
+          }
+        },
+        {
+          "id": "clinic-2",
+          "level": 2,
+          "procedure": "clinic_certificate",
+          "scene": "Clinic",
+          "entrance": "clinic",
+          "available": true,
+          "title": {
+            "en": "Get a medical certificate",
+            "vi": "Xin giấy khám bệnh",
+            "id": "Minta surat keterangan sakit"
+          },
+          "story": {
+            "en": "Your cold kept you home for three days, and your language school wants proof for the classes you missed.\nToday you go back to the clinic to get a medical document.",
+            "vi": "Vì bị cảm, bạn đã nghỉ ở nhà ba ngày, và trường tiếng cần giấy tờ chứng minh cho những buổi học bạn vắng.\nHôm nay bạn quay lại phòng khám để xin giấy tờ y tế.",
+            "id": "Flu membuatmu tidak masuk tiga hari, dan lembaga bahasamu minta bukti untuk kelas yang terlewat.\nHari ini kamu kembali ke klinik untuk minta surat keterangan medis."
+          }
+        }
+      ]
+    },
+    {
+      "id": "immigration",
+      "nameKo": "출입국 민원센터",
+      "color": "#2F5FD0",
+      "name": {
+        "en": "Immigration Office",
+        "vi": "Xuất nhập cảnh",
+        "id": "Kantor Imigrasi"
+      },
+      "levels": [
+        {
+          "id": "immigration-1",
+          "level": 1,
+          "procedure": "immigration",
+          "scene": "Immigration",
+          "entrance": "immigration",
+          "available": true,
+          "title": {
+            "en": "Get a residence card (ARC)",
+            "vi": "Làm thẻ cư trú (ARC)",
+            "id": "Buat kartu tinggal (ARC)"
+          },
+          "story": {
+            "en": "Anyone staying in Korea longer than 90 days needs a residence card (ARC).\nToday you apply for yours at the immigration office.",
+            "vi": "Ai ở Hàn Quốc hơn 90 ngày đều cần thẻ cư trú (ARC).\nHôm nay bạn đến văn phòng xuất nhập cảnh để làm thẻ.",
+            "id": "Siapa pun yang tinggal di Korea lebih dari 90 hari butuh kartu tinggal (ARC).\nHari ini kamu mengajukannya di kantor imigrasi."
+          }
+        },
+        {
+          "id": "immigration-2",
+          "level": 2,
+          "procedure": "immigration_extension",
+          "scene": "Immigration",
+          "entrance": "immigration",
+          "available": true,
+          "needs": "doc:arc",
+          "title": {
+            "en": "Extend your stay",
+            "vi": "Gia hạn lưu trú",
+            "id": "Perpanjang izin tinggal"
+          },
+          "story": {
+            "en": "Your permitted stay ends next month, so today you apply to extend it.\nYou booked a visit on HiKorea and brought your attendance certificate and next term's tuition receipt.",
+            "vi": "Thời hạn lưu trú của bạn hết vào tháng sau, nên hôm nay bạn đi xin gia hạn.\nBạn đã đặt lịch trên HiKorea và mang theo giấy chứng nhận chuyên cần cùng biên lai học phí kỳ sau.",
+            "id": "Masa tinggalmu habis bulan depan, jadi hari ini kamu mengajukan perpanjangan.\nKamu sudah membuat janji di HiKorea dan membawa surat keterangan kehadiran serta bukti bayar uang kuliah semester depan."
+          }
+        }
+      ]
+    },
+    {
+      "id": "bank",
+      "nameKo": "새싹은행",
+      "color": "#5BAA2E",
+      "name": {
+        "en": "Bank",
+        "vi": "Ngân hàng",
+        "id": "Bank"
+      },
+      "levels": [
+        {
+          "id": "bank-1",
+          "level": 1,
+          "procedure": "bank",
+          "scene": "Bank",
+          "entrance": "bank",
+          "available": true,
+          "needs": "doc:arc",
+          "title": {
+            "en": "Open a bank account",
+            "vi": "Mở tài khoản ngân hàng",
+            "id": "Buka rekening bank"
+          },
+          "story": {
+            "en": "You need a Korean bank account for tuition and living costs.\nToday you open one at the bank.",
+            "vi": "Bạn cần tài khoản ngân hàng Hàn Quốc để đóng học phí và chi tiêu.\nHôm nay bạn đến ngân hàng để mở tài khoản.",
+            "id": "Kamu butuh rekening bank Korea untuk uang kuliah dan biaya hidup.\nHari ini kamu membukanya di bank."
+          }
+        },
+        {
+          "id": "bank-2",
+          "level": 2,
+          "procedure": "bank_remittance",
+          "scene": "Bank",
+          "entrance": "bank",
+          "available": true,
+          "needs": "doc:bankbook",
+          "title": {
+            "en": "Send money home",
+            "vi": "Gửi tiền về nhà",
+            "id": "Kirim uang ke rumah"
+          },
+          "story": {
+            "en": "Your younger brother's school fees are due back home in Vietnam.\nToday you send 500,000 won from your Korean account, with the family's bank details written on a note.",
+            "vi": "Học phí của em trai bạn ở Việt Nam sắp đến hạn.\nHôm nay bạn gửi 500.000 won từ tài khoản ở Hàn, thông tin ngân hàng của gia đình đã ghi sẵn trên một tờ giấy.",
+            "id": "Biaya sekolah adikmu di Vietnam sudah jatuh tempo.\nHari ini kamu mengirim 500.000 won dari rekening Korea-mu, dengan data bank keluarga yang sudah dicatat di secarik kertas."
+          }
+        }
+      ]
+    }
+  ]
+}

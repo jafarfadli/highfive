@@ -1,0 +1,844 @@
+{
+  "id": "immigration",
+  "verified": false,
+  "sources": [
+    "https://www.hikorea.go.kr (Foreign resident registration: required documents and fee)",
+    "https://www.immigration.go.kr",
+    "https://global.seoul.go.kr"
+  ],
+  "titleKo": "출입국 민원센터",
+  "title": {
+    "en": "Immigration Service Center",
+    "vi": "Trung tâm Dịch vụ Xuất nhập cảnh",
+    "id": "Pusat Layanan Imigrasi"
+  },
+  "briefing": {
+    "en": "Apply for your residence card (ARC). Bring the form, passport, photo, enrollment certificate and fee.",
+    "vi": "Đăng ký thẻ cư trú (ARC). Cần đơn, hộ chiếu, ảnh, giấy xác nhận đang học và lệ phí.",
+    "id": "Ajukan kartu tinggal (ARC). Bawa formulir, paspor, foto, surat keterangan kuliah, dan biaya."
+  },
+  "completeNote": {
+    "en": "Keep the receipt (접수증). Your ARC (외국인등록증) arrives in about 3 weeks, and banks will ask for it.",
+    "vi": "Giữ giấy biên nhận (접수증). Thẻ ARC (외국인등록증) đến sau khoảng 3 tuần, ngân hàng sẽ hỏi thẻ này.",
+    "id": "Simpan tanda terima (접수증). ARC (외국인등록증) datang sekitar 3 minggu lagi, dan bank akan memintanya."
+  },
+  "staff": [
+    {
+      "id": "officer",
+      "name": "이서연 주무관",
+      "role": "immigration officer",
+      "roleText": {
+        "en": "Immigration officer",
+        "vi": "Cán bộ xuất nhập cảnh",
+        "id": "Petugas imigrasi"
+      },
+      "macVoice": "Yuna",
+      "macRate": 182,
+      "openaiVoice": "sage"
+    }
+  ],
+  "queue": {
+    "counter": 3,
+    "ahead": 4,
+    "interval": 5.5
+  },
+  "steps": [
+    {
+      "id": "purpose",
+      "staff": "officer",
+      "npc": "안녕하세요. 어떤 업무 보러 오셨어요?",
+      "meaning": {
+        "en": "Hello. What are you here to take care of?",
+        "vi": "Xin chào. Bạn đến làm thủ tục gì?",
+        "id": "Halo. Mau mengurus apa?"
+      },
+      "choices": [
+        {
+          "ko": "외국인 등록 하러 왔어요.",
+          "rom": "oegugin deungnok hareo wasseoyo",
+          "meaning": {
+            "en": "I'm here to register as a foreign resident.",
+            "vi": "Tôi đến đăng ký người nước ngoài.",
+            "id": "Saya mau registrasi orang asing."
+          },
+          "result": "advance",
+          "reply": "네, 외국인 등록이요.",
+          "replyMeaning": {
+            "en": "Okay, foreign resident registration.",
+            "vi": "Vâng, đăng ký người nước ngoài.",
+            "id": "Baik, registrasi orang asing."
+          }
+        },
+        {
+          "ko": "비자 연장하러 왔어요.",
+          "rom": "bija yeonjanghareo wasseoyo",
+          "meaning": {
+            "en": "I'm here to extend my visa.",
+            "vi": "Tôi đến gia hạn visa.",
+            "id": "Saya mau perpanjang visa."
+          },
+          "result": "retry",
+          "reply": "연장이요? 입국하신 지 얼마 안 되셨는데… 외국인 등록 아니세요?",
+          "replyMeaning": {
+            "en": "An extension? You only just arrived… isn't it registration?",
+            "vi": "Gia hạn ạ? Bạn mới nhập cảnh mà… không phải đăng ký à?",
+            "id": "Perpanjangan? Kamu baru datang… bukan registrasi?"
+          },
+          "note": {
+            "en": "Extension (연장) comes later. If you stay 90+ days, you first register (외국인 등록).",
+            "vi": "Gia hạn (연장) là chuyện sau. Ở trên 90 ngày thì phải đăng ký trước (외국인 등록).",
+            "id": "Perpanjangan (연장) nanti saja. Kalau tinggal 90+ hari, registrasi dulu (외국인 등록)."
+          }
+        },
+        {
+          "ko": "천천히 말씀해 주시겠어요?",
+          "rom": "cheoncheonhi malsseumhae jusigesseoyo",
+          "meaning": {
+            "en": "Could you speak slowly, please?",
+            "vi": "Chị nói chậm giúp tôi được không?",
+            "id": "Bisa bicara lebih pelan?"
+          },
+          "result": "ask",
+          "reply": "네. 어떤 업무로 오셨어요? 외국인 등록이세요?",
+          "replyMeaning": {
+            "en": "Sure. What are you here for? Foreign resident registration?",
+            "vi": "Vâng. Bạn đến làm việc gì? Đăng ký người nước ngoài phải không?",
+            "id": "Baik. Mau urus apa? Pendaftaran orang asing?"
+          }
+        }
+      ],
+      "task": {
+        "en": "Apply for your ARC at counter 3",
+        "vi": "Nộp hồ sơ ARC ở quầy 3",
+        "id": "Ajukan ARC di loket 3"
+      }
+    },
+    {
+      "id": "visa",
+      "staff": "officer",
+      "npc": "비자 종류가 어떻게 되세요?",
+      "meaning": {
+        "en": "What type of visa do you have?",
+        "vi": "Bạn có loại visa gì?",
+        "id": "Visamu jenis apa?"
+      },
+      "choices": [
+        {
+          "ko": "D-4 어학연수 비자예요.",
+          "rom": "di-po eohagyeonsu bijayeyo",
+          "meaning": {
+            "en": "A D-4 language-training visa.",
+            "vi": "Visa D-4 học tiếng.",
+            "id": "Visa D-4 kursus bahasa."
+          },
+          "result": "advance",
+          "reply": "네, D-4 비자네요.",
+          "replyMeaning": {
+            "en": "Okay, a D-4 visa.",
+            "vi": "Vâng, visa D-4.",
+            "id": "Baik, visa D-4."
+          }
+        },
+        {
+          "ko": "유학 비자예요.",
+          "rom": "yuhak bijayeyo",
+          "meaning": {
+            "en": "A study-abroad visa.",
+            "vi": "Visa du học.",
+            "id": "Visa belajar."
+          },
+          "result": "retry",
+          "reply": "유학 비자는 D-2인데요, 어학연수 오신 거면 D-4 아니세요?",
+          "replyMeaning": {
+            "en": "A study visa is D-2. If you're on a language course, isn't yours D-4?",
+            "vi": "Visa du học là D-2. Nếu bạn học tiếng thì là D-4 phải không?",
+            "id": "Visa belajar itu D-2. Kalau kursus bahasa, bukannya D-4?"
+          },
+          "note": {
+            "en": "Language-course students hold D-4 (어학연수). D-2 (유학) is for degree students. Check the sticker in your passport.",
+            "vi": "Học viên khóa tiếng có visa D-4 (어학연수). D-2 (유학) dành cho sinh viên chính quy. Xem nhãn visa trong hộ chiếu.",
+            "id": "Siswa kursus bahasa memegang D-4 (어학연수). D-2 (유학) untuk mahasiswa gelar. Cek stiker visa di paspor."
+          }
+        },
+        {
+          "ko": "잘 모르겠어요.",
+          "rom": "jal moreugesseoyo",
+          "meaning": {
+            "en": "I'm not sure.",
+            "vi": "Tôi không rõ.",
+            "id": "Saya kurang tahu."
+          },
+          "result": "ask",
+          "reply": "여권에 붙은 비자 보면 나와요. D-4 맞으세요?",
+          "replyMeaning": {
+            "en": "It's printed on the visa in your passport. Is it D-4?",
+            "vi": "Có ghi trên visa trong hộ chiếu. D-4 phải không?",
+            "id": "Tertulis di visa di paspormu. D-4, kan?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "passport_form",
+      "staff": "officer",
+      "npc": "여권하고 신청서 주시겠어요?",
+      "meaning": {
+        "en": "May I have your passport and the application form?",
+        "vi": "Cho tôi hộ chiếu và đơn đăng ký nhé?",
+        "id": "Boleh minta paspor dan formulirnya?"
+      },
+      "choices": [
+        {
+          "ko": "네, 여기 있어요.",
+          "rom": "ne, yeogi isseoyo",
+          "meaning": {
+            "en": "Yes, here they are.",
+            "vi": "Vâng, đây ạ.",
+            "id": "Ya, ini dia."
+          },
+          "result": "advance",
+          "reply": "네, 확인했습니다.",
+          "replyMeaning": {
+            "en": "Checked, thank you.",
+            "vi": "Đã kiểm tra.",
+            "id": "Sudah dicek."
+          },
+          "give": "arc_form",
+          "needs": "doc:arc_form"
+        },
+        {
+          "ko": "신청서는 아직 없어요.",
+          "rom": "sincheongseoneun ajik eopseoyo",
+          "meaning": {
+            "en": "I don't have the form yet.",
+            "vi": "Tôi chưa có đơn.",
+            "id": "Saya belum punya formulirnya."
+          },
+          "result": "fetch",
+          "reply": "저쪽 작성대에서 통합신청서를 작성해서 다시 오세요.",
+          "replyMeaning": {
+            "en": "Fill in the application form at the table over there and come back.",
+            "vi": "Hãy điền đơn ở bàn bên kia rồi quay lại.",
+            "id": "Isi formulir di meja sebelah sana, lalu kembali."
+          },
+          "give": "passport",
+          "unless": "doc:arc_form"
+        },
+        {
+          "ko": "여기 있어요.",
+          "rom": "yeogi isseoyo",
+          "meaning": {
+            "en": "Here you go.",
+            "vi": "Đây ạ.",
+            "id": "Ini."
+          },
+          "result": "retry",
+          "reply": "이건 재학증명서네요. 이건 나중에 주세요. 여권하고 신청서요.",
+          "replyMeaning": {
+            "en": "That's the enrollment certificate, later please. Passport and form first.",
+            "vi": "Đây là giấy xác nhận đang học, lát nữa nhé. Hộ chiếu và đơn trước.",
+            "id": "Itu surat keterangan kuliah, nanti saja. Paspor dan formulir dulu."
+          },
+          "note": {
+            "en": "Hand over what they asked for, in order: passport and form.",
+            "vi": "Đưa đúng thứ họ yêu cầu, theo thứ tự: hộ chiếu và đơn.",
+            "id": "Serahkan yang diminta, berurutan: paspor dan formulir."
+          },
+          "give": "enrollment"
+        }
+      ],
+      "fetch": {
+        "document": "arc_form",
+        "station": "FormTable",
+        "objective": {
+          "en": "Fill in the application form (통합신청서) at the form table",
+          "vi": "Điền đơn (통합신청서) ở bàn viết đơn",
+          "id": "Isi formulir (통합신청서) di meja tulis"
+        }
+      },
+      "takes": [
+        "arc_form"
+      ]
+    },
+    {
+      "id": "photo",
+      "staff": "officer",
+      "npc": "사진도 한 장 필요해요. 3.5 곱하기 4.5 센티 증명사진이요.",
+      "meaning": {
+        "en": "I also need one 3.5 × 4.5 cm ID photo.",
+        "vi": "Tôi cần thêm một ảnh thẻ 3,5 × 4,5 cm.",
+        "id": "Saya juga butuh satu pas foto 3,5 × 4,5 cm."
+      },
+      "choices": [
+        {
+          "ko": "네, 여기 있어요.",
+          "rom": "ne, yeogi isseoyo",
+          "meaning": {
+            "en": "Yes, here it is.",
+            "vi": "Vâng, đây ạ.",
+            "id": "Ya, ini dia."
+          },
+          "result": "advance",
+          "reply": "네, 좋습니다.",
+          "replyMeaning": {
+            "en": "Good.",
+            "vi": "Tốt.",
+            "id": "Baik."
+          },
+          "give": "photo"
+        },
+        {
+          "ko": "휴대폰 사진도 돼요?",
+          "rom": "hyudaepon sajindo dwaeyo?",
+          "meaning": {
+            "en": "Is a photo on my phone okay?",
+            "vi": "Ảnh trong điện thoại được không?",
+            "id": "Foto di HP boleh?"
+          },
+          "result": "retry",
+          "reply": "아니요, 인쇄된 증명사진이 필요해요.",
+          "replyMeaning": {
+            "en": "No, it has to be a printed ID photo.",
+            "vi": "Không, phải là ảnh thẻ đã in.",
+            "id": "Tidak, harus pas foto cetak."
+          },
+          "note": {
+            "en": "Bring a printed 3.5 × 4.5 cm photo. Photo booths near the office make them.",
+            "vi": "Mang ảnh in 3,5 × 4,5 cm. Gần văn phòng có máy chụp ảnh.",
+            "id": "Bawa foto cetak 3,5 × 4,5 cm. Ada photo booth di dekat kantor."
+          }
+        },
+        {
+          "ko": "여권 사진 쓰세요.",
+          "rom": "yeogwon sajin sseuseyo",
+          "meaning": {
+            "en": "Please use my passport photo.",
+            "vi": "Hãy dùng ảnh trong hộ chiếu.",
+            "id": "Pakai foto di paspor saja."
+          },
+          "result": "retry",
+          "reply": "여권 사진 말고, 따로 한 장 필요해요.",
+          "replyMeaning": {
+            "en": "Not the passport one, a separate photo is needed.",
+            "vi": "Không phải ảnh hộ chiếu, cần một tấm riêng.",
+            "id": "Bukan foto paspor, perlu satu foto terpisah."
+          },
+          "note": {
+            "en": "The card needs its own photo. Always carry spare ID photos.",
+            "vi": "Thẻ cần ảnh riêng. Luôn mang ảnh thẻ dự phòng.",
+            "id": "Kartu butuh foto sendiri. Selalu bawa pas foto cadangan."
+          }
+        }
+      ]
+    },
+    {
+      "id": "enrollment",
+      "staff": "officer",
+      "npc": "학생이시니까 재학증명서도 주세요.",
+      "meaning": {
+        "en": "Since you're a student, your certificate of enrollment too, please.",
+        "vi": "Bạn là sinh viên nên đưa thêm giấy xác nhận đang học nhé.",
+        "id": "Karena pelajar, surat keterangan kuliahnya juga ya."
+      },
+      "choices": [
+        {
+          "ko": "네, 여기 있어요.",
+          "rom": "ne, yeogi isseoyo",
+          "meaning": {
+            "en": "Yes, here it is.",
+            "vi": "Vâng, đây ạ.",
+            "id": "Ya, ini dia."
+          },
+          "result": "advance",
+          "reply": "네, 됐어요.",
+          "replyMeaning": {
+            "en": "Okay, that's everything.",
+            "vi": "Vâng, xong rồi.",
+            "id": "Baik, sudah."
+          },
+          "give": "enrollment"
+        },
+        {
+          "ko": "재학증명서가 뭐예요?",
+          "rom": "jaehakjeungmyeongseoga mwoyeyo?",
+          "meaning": {
+            "en": "What's a 재학증명서?",
+            "vi": "재학증명서 là gì ạ?",
+            "id": "재학증명서 itu apa?"
+          },
+          "result": "ask",
+          "reply": "학교에서 발급받는 재학 증명 서류예요. 가져오셨죠?",
+          "replyMeaning": {
+            "en": "It's the school's letter proving you're enrolled. You brought it, right?",
+            "vi": "Là giấy trường cấp chứng nhận bạn đang học. Bạn có mang chứ?",
+            "id": "Surat dari sekolah yang membuktikan kamu terdaftar. Dibawa, kan?"
+          }
+        },
+        {
+          "ko": "학생증 드릴게요.",
+          "rom": "haksaengjeung deurilgeyo",
+          "meaning": {
+            "en": "I'll give you my student ID card.",
+            "vi": "Tôi đưa thẻ sinh viên nhé.",
+            "id": "Saya kasih kartu pelajar ya."
+          },
+          "result": "retry",
+          "reply": "학생증 말고 재학증명서요. 학교에서 발급받은 서류요.",
+          "replyMeaning": {
+            "en": "Not the student ID, the certificate of enrollment, the paper from your school.",
+            "vi": "Không phải thẻ sinh viên, là giấy xác nhận đang học do trường cấp.",
+            "id": "Bukan kartu pelajar, tapi surat keterangan kuliah dari sekolah."
+          },
+          "note": {
+            "en": "A student ID card (학생증) isn't enough. Immigration needs the 재학증명서, issued by your school office.",
+            "vi": "Thẻ sinh viên (학생증) là không đủ. Xuất nhập cảnh cần 재학증명서 do phòng giáo vụ cấp.",
+            "id": "Kartu pelajar (학생증) tidak cukup. Imigrasi butuh 재학증명서 dari kantor sekolah."
+          }
+        }
+      ]
+    },
+    {
+      "id": "address",
+      "staff": "officer",
+      "npc": "한국 주소가 어떻게 되세요?",
+      "meaning": {
+        "en": "What is your address in Korea?",
+        "vi": "Địa chỉ của bạn ở Hàn Quốc là gì?",
+        "id": "Alamatmu di Korea di mana?"
+      },
+      "choices": [
+        {
+          "ko": "동작구 흑석로 84, 기숙사예요.",
+          "rom": "dongjak-gu heukseok-ro palsipsa, gisuksayeyo",
+          "meaning": {
+            "en": "The dormitory at 84 Heukseok-ro, Dongjak-gu.",
+            "vi": "Ký túc xá ở số 84 Heukseok-ro, quận Dongjak.",
+            "id": "Asrama di Heukseok-ro 84, Dongjak-gu."
+          },
+          "result": "advance",
+          "reply": "네, 확인했습니다.",
+          "replyMeaning": {
+            "en": "Noted.",
+            "vi": "Đã ghi nhận.",
+            "id": "Sudah dicatat."
+          }
+        },
+        {
+          "ko": "제 나라 주소 말씀드릴까요?",
+          "rom": "je nara juso malsseumdeurilkkayo?",
+          "meaning": {
+            "en": "Shall I give my home-country address?",
+            "vi": "Tôi nói địa chỉ ở nước tôi nhé?",
+            "id": "Perlu alamat di negara saya?"
+          },
+          "result": "retry",
+          "reply": "아니요, 한국에서 사시는 주소요.",
+          "replyMeaning": {
+            "en": "No, the address where you live in Korea.",
+            "vi": "Không, địa chỉ bạn đang sống ở Hàn Quốc.",
+            "id": "Bukan, alamat tempat tinggalmu di Korea."
+          },
+          "note": {
+            "en": "The card needs your Korean address. Report it within 14 days if you move.",
+            "vi": "Thẻ cần địa chỉ ở Hàn. Nếu chuyển nhà phải khai báo trong 14 ngày.",
+            "id": "Kartu butuh alamat di Korea. Kalau pindah, lapor dalam 14 hari."
+          }
+        },
+        {
+          "ko": "아직 집이 없어요.",
+          "rom": "ajik jibi eopseoyo",
+          "meaning": {
+            "en": "I don't have a place yet.",
+            "vi": "Tôi chưa có nhà.",
+            "id": "Saya belum punya tempat tinggal."
+          },
+          "result": "retry",
+          "reply": "기숙사도 괜찮아요. 지금 지내시는 곳이요.",
+          "replyMeaning": {
+            "en": "A dormitory is fine. Wherever you're staying now.",
+            "vi": "Ký túc xá cũng được. Nơi bạn đang ở.",
+            "id": "Asrama juga boleh. Tempat tinggalmu sekarang."
+          },
+          "note": {
+            "en": "Any place you actually live counts, like your dormitory.",
+            "vi": "Nơi bạn thực sự ở đều được tính, như ký túc xá.",
+            "id": "Tempat tinggal apa pun dihitung, seperti asrama."
+          }
+        }
+      ]
+    },
+    {
+      "id": "fingerprint",
+      "staff": "officer",
+      "npc": "지문 등록할게요. 오른손 검지를 스캐너에 올려 주세요.",
+      "meaning": {
+        "en": "We'll take your fingerprints. Put your right index finger on the scanner.",
+        "vi": "Tôi sẽ lấy vân tay. Đặt ngón trỏ phải lên máy quét.",
+        "id": "Kami rekam sidik jari. Letakkan telunjuk kanan di pemindai."
+      },
+      "choices": [
+        {
+          "ko": "[오른손 검지를 올린다]",
+          "meaning": {
+            "en": "Put your right index finger on the scanner.",
+            "vi": "Đặt ngón trỏ phải lên máy quét.",
+            "id": "Letakkan telunjuk kanan di pemindai."
+          },
+          "result": "advance",
+          "reply": "네, 잘 됐어요. 손 떼셔도 돼요.",
+          "replyMeaning": {
+            "en": "Got it. You can lift your hand.",
+            "vi": "Được rồi. Bạn nhấc tay ra nhé.",
+            "id": "Sudah. Tangannya boleh diangkat."
+          }
+        },
+        {
+          "ko": "[손바닥 전체를 올린다]",
+          "meaning": {
+            "en": "Put your whole palm on it.",
+            "vi": "Đặt cả bàn tay lên.",
+            "id": "Letakkan seluruh telapak tangan."
+          },
+          "result": "retry",
+          "reply": "검지 하나만요. 두 번째 손가락이요.",
+          "replyMeaning": {
+            "en": "Just the index finger, the second finger.",
+            "vi": "Chỉ ngón trỏ thôi, ngón thứ hai.",
+            "id": "Telunjuk saja, jari kedua."
+          },
+          "note": {
+            "en": "검지 = index finger.",
+            "vi": "검지 = ngón trỏ.",
+            "id": "검지 = jari telunjuk."
+          }
+        },
+        {
+          "ko": "[왼손 엄지를 올린다]",
+          "meaning": {
+            "en": "Put your left thumb on it.",
+            "vi": "Đặt ngón cái trái lên.",
+            "id": "Letakkan jempol kiri."
+          },
+          "result": "retry",
+          "reply": "오른손 검지예요.",
+          "replyMeaning": {
+            "en": "Right hand, index finger.",
+            "vi": "Tay phải, ngón trỏ.",
+            "id": "Tangan kanan, telunjuk."
+          },
+          "note": {
+            "en": "오른손 = right hand, 왼손 = left hand, 엄지 = thumb.",
+            "vi": "오른손 = tay phải, 왼손 = tay trái, 엄지 = ngón cái.",
+            "id": "오른손 = tangan kanan, 왼손 = tangan kiri, 엄지 = jempol."
+          }
+        }
+      ],
+      "task": {
+        "en": "Register your fingerprint",
+        "vi": "Đăng ký vân tay",
+        "id": "Rekam sidik jari"
+      }
+    },
+    {
+      "id": "fee",
+      "staff": "officer",
+      "npc": "수수료는 3만 원이에요. 카드로 결제하시겠어요?",
+      "meaning": {
+        "en": "The fee is 30,000 won. Will you pay by card?",
+        "vi": "Lệ phí là 30.000 won. Bạn trả bằng thẻ nhé?",
+        "id": "Biayanya 30.000 won. Bayar pakai kartu?"
+      },
+      "choices": [
+        {
+          "ko": "네, 카드로 할게요.",
+          "rom": "ne, kadeuro halgeyo",
+          "meaning": {
+            "en": "Yes, by card.",
+            "vi": "Vâng, bằng thẻ.",
+            "id": "Ya, pakai kartu."
+          },
+          "result": "advance",
+          "reply": "네, 결제됐습니다.",
+          "replyMeaning": {
+            "en": "Payment done.",
+            "vi": "Đã thanh toán.",
+            "id": "Pembayaran selesai."
+          },
+          "give": "card"
+        },
+        {
+          "ko": "현금으로 낼게요.",
+          "rom": "hyeongeumeuro naelgeyo",
+          "meaning": {
+            "en": "I'll pay in cash.",
+            "vi": "Tôi trả tiền mặt.",
+            "id": "Saya bayar tunai."
+          },
+          "result": "advance",
+          "reply": "네, 3만 원 받았습니다.",
+          "replyMeaning": {
+            "en": "30,000 won received.",
+            "vi": "Đã nhận 30.000 won.",
+            "id": "30.000 won diterima."
+          },
+          "give": "cash"
+        },
+        {
+          "ko": "3천 원이죠?",
+          "rom": "samcheon wonijyo?",
+          "meaning": {
+            "en": "It's 3,000 won, right?",
+            "vi": "3.000 won phải không?",
+            "id": "3.000 won, kan?"
+          },
+          "result": "retry",
+          "reply": "아니요, 3만 원이에요. 삼만 원.",
+          "replyMeaning": {
+            "en": "No, 30,000 won. Sam-man won.",
+            "vi": "Không, 30.000 won. Sam-man won.",
+            "id": "Bukan, 30.000 won. Sam-man won."
+          },
+          "note": {
+            "en": "만 = 10,000, so 3만 원 = 30,000 won. 천 = 1,000.",
+            "vi": "만 = 10.000, nên 3만 원 = 30.000 won. 천 = 1.000.",
+            "id": "만 = 10.000, jadi 3만 원 = 30.000 won. 천 = 1.000."
+          }
+        }
+      ],
+      "task": {
+        "en": "Pay the fee and choose pickup",
+        "vi": "Trả lệ phí và chọn cách nhận thẻ",
+        "id": "Bayar biaya dan pilih cara ambil kartu"
+      }
+    },
+    {
+      "id": "pickup",
+      "staff": "officer",
+      "npc": "카드 나오는 데 3주 정도 걸려요. 우편으로 받으시겠어요, 직접 찾으러 오시겠어요?",
+      "meaning": {
+        "en": "The card takes about 3 weeks. By mail, or will you pick it up?",
+        "vi": "Thẻ mất khoảng 3 tuần. Nhận qua bưu điện hay tự đến lấy?",
+        "id": "Kartunya jadi sekitar 3 minggu. Lewat pos atau diambil sendiri?"
+      },
+      "choices": [
+        {
+          "ko": "우편으로 받을게요.",
+          "rom": "upyeoneuro badeulgeyo",
+          "meaning": {
+            "en": "By mail, please.",
+            "vi": "Tôi nhận qua bưu điện.",
+            "id": "Lewat pos saja."
+          },
+          "result": "advance",
+          "reply": "네, 접수 끝났습니다. 이 접수증 잘 보관하세요.",
+          "replyMeaning": {
+            "en": "Done. Keep this receipt safe.",
+            "vi": "Xong rồi. Giữ kỹ giấy biên nhận này nhé.",
+            "id": "Selesai. Simpan tanda terima ini baik-baik."
+          }
+        },
+        {
+          "ko": "직접 찾으러 올게요.",
+          "rom": "jikjeop chajeureo olgeyo",
+          "meaning": {
+            "en": "I'll come and pick it up.",
+            "vi": "Tôi sẽ tự đến lấy.",
+            "id": "Saya ambil sendiri."
+          },
+          "result": "advance",
+          "reply": "네, 3주 뒤에 이 접수증 가지고 오세요.",
+          "replyMeaning": {
+            "en": "Okay, come back in 3 weeks with this receipt.",
+            "vi": "Vâng, 3 tuần sau mang giấy biên nhận này đến nhé.",
+            "id": "Baik, datang lagi 3 minggu lagi dengan tanda terima ini."
+          }
+        },
+        {
+          "ko": "오늘 받을 수 있어요?",
+          "rom": "oneul badeul su isseoyo?",
+          "meaning": {
+            "en": "Can I get it today?",
+            "vi": "Hôm nay nhận được không?",
+            "id": "Bisa diambil hari ini?"
+          },
+          "result": "retry",
+          "reply": "오늘은 안 되고, 3주 정도 걸려요.",
+          "replyMeaning": {
+            "en": "Not today. It takes about 3 weeks.",
+            "vi": "Hôm nay không được, mất khoảng 3 tuần.",
+            "id": "Tidak hari ini, sekitar 3 minggu."
+          },
+          "note": {
+            "en": "Cards are made centrally and take about 3 weeks. Plan bank visits after that.",
+            "vi": "Thẻ được làm tập trung, mất khoảng 3 tuần. Hãy tính việc đi ngân hàng sau đó.",
+            "id": "Kartu dibuat terpusat, sekitar 3 minggu. Rencanakan ke bank setelahnya."
+          }
+        }
+      ],
+      "grants": [
+        "doc:arc_receipt"
+      ]
+    }
+  ],
+  "grants": [
+    "done:immigration",
+    "doc:arc"
+  ],
+  "phrases": [
+    {
+      "ko": "외국인 등록 하러 왔어요.",
+      "rom": "oegugin deungnok hareo wasseoyo",
+      "meaning": {
+        "en": "I'm here for resident registration.",
+        "vi": "Tôi đến đăng ký người nước ngoài.",
+        "id": "Saya mau registrasi orang asing."
+      }
+    },
+    {
+      "ko": "D-4 비자예요.",
+      "rom": "di-po bijayeyo",
+      "meaning": {
+        "en": "I have a D-4 visa.",
+        "vi": "Tôi có visa D-4.",
+        "id": "Visa saya D-4."
+      }
+    },
+    {
+      "ko": "신청서는 아직 없어요.",
+      "rom": "sincheongseoneun ajik eopseoyo",
+      "meaning": {
+        "en": "I don't have the form yet.",
+        "vi": "Tôi chưa có đơn.",
+        "id": "Saya belum punya formulir."
+      }
+    },
+    {
+      "ko": "기숙사에 살아요.",
+      "rom": "gisuksae sarayo",
+      "meaning": {
+        "en": "I live in the dormitory.",
+        "vi": "Tôi sống ở ký túc xá.",
+        "id": "Saya tinggal di asrama."
+      }
+    },
+    {
+      "ko": "우편으로 받을게요.",
+      "rom": "upyeoneuro badeulgeyo",
+      "meaning": {
+        "en": "I'll receive it by mail.",
+        "vi": "Tôi nhận qua bưu điện.",
+        "id": "Saya terima lewat pos."
+      }
+    }
+  ],
+  "glossary": [
+    {
+      "ko": "외국인 등록",
+      "rom": "oegugin deungnok",
+      "meaning": {
+        "en": "Registering as a foreign resident",
+        "vi": "Đăng ký người nước ngoài",
+        "id": "Registrasi orang asing"
+      }
+    },
+    {
+      "ko": "외국인등록증",
+      "rom": "oegugindeungnokjeung",
+      "meaning": {
+        "en": "Alien Registration Card (ARC)",
+        "vi": "Thẻ đăng ký người nước ngoài (ARC)",
+        "id": "Kartu Registrasi Orang Asing (ARC)"
+      }
+    },
+    {
+      "ko": "비자 종류",
+      "rom": "bija jongnyu",
+      "meaning": {
+        "en": "Type of visa",
+        "vi": "Loại visa",
+        "id": "Jenis visa"
+      }
+    },
+    {
+      "ko": "어학연수",
+      "rom": "eohagyeonsu",
+      "meaning": {
+        "en": "Language course",
+        "vi": "Khóa học tiếng",
+        "id": "Kursus bahasa"
+      }
+    },
+    {
+      "ko": "통합신청서",
+      "rom": "tonghapsincheongseo",
+      "meaning": {
+        "en": "Integrated application form",
+        "vi": "Đơn đăng ký tổng hợp",
+        "id": "Formulir permohonan terpadu"
+      }
+    },
+    {
+      "ko": "증명사진",
+      "rom": "jeungmyeongsajin",
+      "meaning": {
+        "en": "ID photo, 3.5 × 4.5 cm",
+        "vi": "Ảnh thẻ 3,5 × 4,5 cm",
+        "id": "Pas foto 3,5 × 4,5 cm"
+      }
+    },
+    {
+      "ko": "재학증명서",
+      "rom": "jaehakjeungmyeongseo",
+      "meaning": {
+        "en": "Certificate of enrollment",
+        "vi": "Giấy chứng nhận đang học",
+        "id": "Surat keterangan aktif kuliah"
+      }
+    },
+    {
+      "ko": "지문",
+      "rom": "jimun",
+      "meaning": {
+        "en": "Fingerprint",
+        "vi": "Vân tay",
+        "id": "Sidik jari"
+      }
+    },
+    {
+      "ko": "검지",
+      "rom": "geomji",
+      "meaning": {
+        "en": "Index finger",
+        "vi": "Ngón trỏ",
+        "id": "Jari telunjuk"
+      }
+    },
+    {
+      "ko": "수수료",
+      "rom": "susuryo",
+      "meaning": {
+        "en": "Fee",
+        "vi": "Lệ phí",
+        "id": "Biaya"
+      }
+    },
+    {
+      "ko": "우편",
+      "rom": "upyeon",
+      "meaning": {
+        "en": "By mail",
+        "vi": "Qua bưu điện",
+        "id": "Lewat pos"
+      }
+    },
+    {
+      "ko": "접수증",
+      "rom": "jeopsujeung",
+      "meaning": {
+        "en": "Application receipt",
+        "vi": "Giấy biên nhận hồ sơ",
+        "id": "Tanda terima permohonan"
+      }
+    }
+  ]
+}

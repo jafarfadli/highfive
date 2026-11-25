@@ -1,0 +1,968 @@
+{
+  "id": "clinic_certificate",
+  "verified": false,
+  "sources": [
+    "https://www.law.go.kr (의료법 제17조 진단서 등, 제21조 기록 열람)",
+    "https://www.mohw.go.kr (의료기관의 제증명수수료 항목 및 금액에 관한 기준: 일반진단서 2만 원, 진료확인서 3천 원, 사본 1천 원)",
+    "https://global.seoul.go.kr (Seoul Global Center: using clinics and hospitals)"
+  ],
+  "titleKo": "튼튼내과의원",
+  "title": {
+    "en": "Teunteun Internal Medicine Clinic",
+    "vi": "Phòng khám Nội khoa Teunteun",
+    "id": "Klinik Penyakit Dalam Teunteun"
+  },
+  "briefing": {
+    "en": "Get a document for the three days of class you missed: ask at counter 2, see the doctor, pay.",
+    "vi": "Xin giấy tờ cho ba ngày nghỉ học: hỏi ở quầy 2, gặp bác sĩ, thanh toán.",
+    "id": "Minta dokumen untuk tiga hari tidak masuk kelas: tanya di loket 2, temui dokter, bayar."
+  },
+  "completeNote": {
+    "en": "Hand the medical certificate (진단서) to your school office (행정실) this week. Excused absences keep your attendance rate up, and immigration checks that rate when you extend your stay.",
+    "vi": "Nộp giấy chẩn đoán (진단서) cho văn phòng trường (행정실) trong tuần này. Nghỉ có phép giúp giữ tỷ lệ chuyên cần, và cục xuất nhập cảnh xem tỷ lệ này khi bạn gia hạn lưu trú.",
+    "id": "Serahkan surat keterangan dokter (진단서) ke kantor administrasi sekolah (행정실) minggu ini. Absen yang diizinkan menjaga tingkat kehadiranmu, dan imigrasi memeriksanya saat kamu memperpanjang izin tinggal."
+  },
+  "staff": [
+    {
+      "id": "nurse2",
+      "name": "이수진",
+      "role": "reception nurse",
+      "roleText": {
+        "en": "Reception nurse",
+        "vi": "Y tá lễ tân",
+        "id": "Perawat resepsionis"
+      },
+      "macVoice": "Yuna",
+      "macRate": 190,
+      "openaiVoice": "shimmer"
+    },
+    {
+      "id": "doctor",
+      "name": "박준호 원장",
+      "role": "doctor",
+      "roleText": {
+        "en": "Doctor",
+        "vi": "Bác sĩ",
+        "id": "Dokter"
+      },
+      "macVoice": "Reed (Korean (South Korea))",
+      "macRate": 178,
+      "openaiVoice": "onyx"
+    }
+  ],
+  "queue": {
+    "mode": "walkin",
+    "counter": 2,
+    "names": ["정미경", "김태준"],
+    "interval": 6.0
+  },
+  "grants": [
+    "doc:medcert"
+  ],
+  "phrases": [
+    {
+      "ko": "학교에 낼 서류 떼러 왔어요.",
+      "rom": "hakgyoe nael seoryu tteoreo wasseoyo",
+      "meaning": {
+        "en": "I'm here to get a document for my school.",
+        "vi": "Tôi đến xin giấy tờ để nộp cho trường.",
+        "id": "Saya mau minta dokumen untuk sekolah."
+      }
+    },
+    {
+      "ko": "진단서가 필요해요.",
+      "rom": "jindanseoga piryohaeyo",
+      "meaning": {
+        "en": "I need a medical certificate.",
+        "vi": "Tôi cần giấy chẩn đoán.",
+        "id": "Saya perlu surat keterangan dokter."
+      }
+    },
+    {
+      "ko": "둘이 뭐가 달라요?",
+      "rom": "duri mwoga dallayo?",
+      "meaning": {
+        "en": "What's the difference?",
+        "vi": "Hai loại khác nhau thế nào?",
+        "id": "Apa bedanya?"
+      }
+    },
+    {
+      "ko": "네, 많이 좋아졌어요.",
+      "rom": "ne, mani joajyeosseoyo",
+      "meaning": {
+        "en": "Yes, I'm much better.",
+        "vi": "Vâng, tôi đỡ nhiều rồi.",
+        "id": "Ya, sudah jauh lebih baik."
+      }
+    },
+    {
+      "ko": "월요일부터 수요일까지, 삼 일이요.",
+      "rom": "woryoilbuteo suyoilkkaji, sam iriyo",
+      "meaning": {
+        "en": "Three days, Monday to Wednesday.",
+        "vi": "Ba ngày, từ thứ Hai đến thứ Tư.",
+        "id": "Tiga hari, Senin sampai Rabu."
+      }
+    },
+    {
+      "ko": "한글로 주세요.",
+      "rom": "hangeullo juseyo",
+      "meaning": {
+        "en": "In Korean, please.",
+        "vi": "Cho tôi bản tiếng Hàn.",
+        "id": "Bahasa Korea saja."
+      }
+    }
+  ],
+  "glossary": [
+    {
+      "ko": "서류를 떼다",
+      "rom": "seoryureul tteda",
+      "meaning": {
+        "en": "To get a document issued",
+        "vi": "Xin cấp giấy tờ",
+        "id": "Minta dokumen resmi"
+      }
+    },
+    {
+      "ko": "진단서",
+      "rom": "jindanseo",
+      "meaning": {
+        "en": "Medical certificate, with the diagnosis",
+        "vi": "Giấy chẩn đoán, có ghi bệnh",
+        "id": "Surat keterangan dokter, dengan diagnosis"
+      }
+    },
+    {
+      "ko": "진료확인서",
+      "rom": "jillyohwaginseo",
+      "meaning": {
+        "en": "Proof of visit: dates only",
+        "vi": "Giấy xác nhận khám: chỉ ghi ngày",
+        "id": "Surat keterangan berobat: hanya tanggal"
+      }
+    },
+    {
+      "ko": "결석",
+      "rom": "gyeolseok",
+      "meaning": {
+        "en": "Absence from class",
+        "vi": "Nghỉ học (vắng mặt)",
+        "id": "Absen (tidak masuk kelas)"
+      }
+    },
+    {
+      "ko": "본인 확인",
+      "rom": "bonin hwagin",
+      "meaning": {
+        "en": "Identity check in person",
+        "vi": "Xác minh chính chủ",
+        "id": "Verifikasi identitas diri"
+      }
+    },
+    {
+      "ko": "원장님",
+      "rom": "wonjangnim",
+      "meaning": {
+        "en": "The head doctor",
+        "vi": "Bác sĩ trưởng",
+        "id": "Dokter kepala"
+      }
+    },
+    {
+      "ko": "한글 · 영문",
+      "rom": "hangeul · yeongmun",
+      "meaning": {
+        "en": "In Korean · in English",
+        "vi": "Bản tiếng Hàn · bản tiếng Anh",
+        "id": "Versi Korea · versi Inggris"
+      }
+    },
+    {
+      "ko": "발급",
+      "rom": "balgeup",
+      "meaning": {
+        "en": "Issuing a document",
+        "vi": "Cấp giấy tờ",
+        "id": "Penerbitan dokumen"
+      }
+    },
+    {
+      "ko": "수수료",
+      "rom": "susuryo",
+      "meaning": {
+        "en": "Fee",
+        "vi": "Lệ phí",
+        "id": "Biaya"
+      }
+    },
+    {
+      "ko": "한 부",
+      "rom": "han bu",
+      "meaning": {
+        "en": "One copy",
+        "vi": "Một bản",
+        "id": "Satu rangkap"
+      }
+    },
+    {
+      "ko": "제출용",
+      "rom": "jechullyong",
+      "meaning": {
+        "en": "For handing in",
+        "vi": "Để nộp",
+        "id": "Untuk diserahkan"
+      }
+    },
+    {
+      "ko": "행정실",
+      "rom": "haengjeongsil",
+      "meaning": {
+        "en": "School office",
+        "vi": "Phòng hành chính của trường",
+        "id": "Kantor administrasi sekolah"
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "purpose",
+      "staff": "nurse2",
+      "task": {
+        "en": "Ask for a document at counter 2",
+        "vi": "Hỏi xin giấy tờ ở quầy 2",
+        "id": "Minta dokumen di loket 2"
+      },
+      "npc": "안녕하세요. 어떻게 오셨어요?",
+      "meaning": {
+        "en": "Hello. How can I help you?",
+        "vi": "Xin chào. Bạn đến có việc gì ạ?",
+        "id": "Halo. Ada yang bisa dibantu?"
+      },
+      "choices": [
+        {
+          "ko": "학교에 낼 서류 떼러 왔어요.",
+          "rom": "hakgyoe nael seoryu tteoreo wasseoyo",
+          "meaning": {
+            "en": "I'm here to get a document for my school.",
+            "vi": "Tôi đến xin giấy tờ để nộp cho trường.",
+            "id": "Saya mau minta dokumen untuk sekolah."
+          },
+          "result": "advance",
+          "reply": "네, 서류 발급이요.",
+          "replyMeaning": {
+            "en": "Sure, a document.",
+            "vi": "Vâng, cấp giấy tờ ạ.",
+            "id": "Baik, penerbitan dokumen."
+          }
+        },
+        {
+          "ko": "진료 받으러 왔어요.",
+          "rom": "jillyo badeureo wasseoyo",
+          "meaning": {
+            "en": "I'm here to see the doctor.",
+            "vi": "Tôi đến khám bệnh.",
+            "id": "Saya mau berobat."
+          },
+          "result": "retry",
+          "reply": "진료 접수는 1번 창구예요. 혹시 다 나으셨으면, 서류 때문에 오신 거예요?",
+          "replyMeaning": {
+            "en": "Appointments are at counter 1. If you're better now, are you here for a document?",
+            "vi": "Đăng ký khám ở quầy 1. Nếu bạn khỏi rồi thì bạn đến lấy giấy tờ phải không?",
+            "id": "Pendaftaran berobat di loket 1. Kalau sudah sembuh, kamu datang untuk dokumen?"
+          },
+          "note": {
+            "en": "진료 means seeing the doctor, and you register for it at counter 1. For paperwork, say 서류 떼러 왔어요 (I came to get a document issued).",
+            "vi": "진료 là khám bệnh, đăng ký ở quầy 1. Muốn xin giấy tờ thì nói 서류 떼러 왔어요 (tôi đến xin cấp giấy tờ).",
+            "id": "진료 artinya diperiksa dokter, daftarnya di loket 1. Untuk urusan dokumen, katakan 서류 떼러 왔어요 (saya mau minta dokumen)."
+          }
+        },
+        {
+          "ko": "학교 결석 확인해 주세요.",
+          "rom": "hakgyo gyeolseok hwagin hae juseyo",
+          "meaning": {
+            "en": "Please confirm my absence from school.",
+            "vi": "Xin xác nhận việc tôi nghỉ học.",
+            "id": "Tolong konfirmasi absen sekolah saya."
+          },
+          "result": "retry",
+          "reply": "결석은 학교에서 확인하는 거라서요. 저희는 진료받으신 내용만 서류로 드릴 수 있어요.",
+          "replyMeaning": {
+            "en": "Absences are for your school to confirm. We can only give you a document about your treatment.",
+            "vi": "Việc nghỉ học là do trường xác nhận. Chúng tôi chỉ cấp giấy tờ về việc khám bệnh thôi ạ.",
+            "id": "Absen itu urusan sekolah. Kami hanya bisa memberi dokumen tentang pengobatanmu."
+          },
+          "note": {
+            "en": "A clinic certifies your illness and treatment, not your absence. Ask for a document (서류) and say it's for school.",
+            "vi": "Phòng khám xác nhận bệnh và việc điều trị, không xác nhận việc nghỉ học. Hãy xin giấy tờ (서류) và nói là để nộp cho trường.",
+            "id": "Klinik menerangkan sakit dan pengobatanmu, bukan absenmu. Minta dokumen (서류) dan bilang untuk sekolah."
+          }
+        }
+      ]
+    },
+    {
+      "id": "which_document",
+      "staff": "nurse2",
+      "npc": "진단서가 필요하세요, 진료확인서가 필요하세요?",
+      "meaning": {
+        "en": "Do you need a medical certificate (진단서) or a confirmation of treatment (진료확인서)?",
+        "vi": "Bạn cần giấy chẩn đoán (진단서) hay giấy xác nhận khám bệnh (진료확인서)?",
+        "id": "Kamu perlu surat keterangan dokter (진단서) atau surat keterangan berobat (진료확인서)?"
+      },
+      "choices": [
+        {
+          "ko": "둘이 뭐가 달라요?",
+          "rom": "duri mwoga dallayo?",
+          "meaning": {
+            "en": "What's the difference?",
+            "vi": "Hai loại khác nhau thế nào?",
+            "id": "Apa bedanya?"
+          },
+          "result": "ask",
+          "reply": "진료확인서는 언제 진료받으셨는지만 나와요. 진단서는 원장님이 병명하고 며칠 쉬어야 하는지까지 써 주시는 거예요.",
+          "replyMeaning": {
+            "en": "A confirmation only shows when you came in. A medical certificate is written by the doctor, with the diagnosis and how many days you needed to rest.",
+            "vi": "Giấy xác nhận chỉ ghi ngày bạn đi khám. Giấy chẩn đoán do bác sĩ viết, có tên bệnh và số ngày cần nghỉ.",
+            "id": "Surat keterangan berobat hanya mencantumkan tanggal kamu datang. Surat keterangan dokter ditulis dokter, lengkap dengan diagnosis dan berapa hari kamu perlu istirahat."
+          }
+        },
+        {
+          "ko": "진단서요. 결석한 삼 일을 다 증명해야 해서요.",
+          "rom": "jindanseoyo. gyeolseokan sam ireul da jeungmyeonghaeya haeseoyo",
+          "meaning": {
+            "en": "A medical certificate. I have to account for all three days I missed.",
+            "vi": "Giấy chẩn đoán ạ. Tôi phải chứng minh đủ ba ngày đã nghỉ.",
+            "id": "Surat keterangan dokter. Saya harus membuktikan ketiga hari saya absen."
+          },
+          "result": "advance",
+          "reply": "네, 그럼 진단서로 해 드릴게요.",
+          "replyMeaning": {
+            "en": "Okay, a medical certificate then.",
+            "vi": "Vâng, vậy chúng tôi làm giấy chẩn đoán cho bạn.",
+            "id": "Baik, surat keterangan dokter ya."
+          }
+        },
+        {
+          "ko": "진료확인서요. 그게 더 싸니까요.",
+          "rom": "jillyohwaginseoyo. geuge deo ssanikkayo",
+          "meaning": {
+            "en": "The confirmation of treatment. It's cheaper.",
+            "vi": "Giấy xác nhận khám bệnh ạ. Loại đó rẻ hơn.",
+            "id": "Surat keterangan berobat saja. Lebih murah."
+          },
+          "result": "retry",
+          "reply": "진료확인서에는 진료받으신 날 하루만 나와요. 결석하신 삼 일을 다 증명하시려면 진단서가 필요해요.",
+          "replyMeaning": {
+            "en": "A confirmation shows only the one day you came in. To cover all three days you need a medical certificate.",
+            "vi": "Giấy xác nhận chỉ ghi đúng một ngày bạn đi khám. Muốn chứng minh cả ba ngày nghỉ thì cần giấy chẩn đoán.",
+            "id": "Surat keterangan berobat hanya mencantumkan satu hari kamu datang. Untuk ketiga hari itu kamu perlu surat keterangan dokter."
+          },
+          "note": {
+            "en": "A 진료확인서 (about 3,000 won) only proves the day you visited. A 진단서 is written by the doctor and can state how many days you had to rest, so it covers the whole absence.",
+            "vi": "진료확인서 (khoảng 3.000 won) chỉ chứng minh ngày bạn đi khám. 진단서 do bác sĩ viết và ghi được số ngày cần nghỉ, nên chứng minh được cả thời gian nghỉ học.",
+            "id": "진료확인서 (sekitar 3.000 won) hanya membuktikan hari kamu berobat. 진단서 ditulis dokter dan bisa mencantumkan berapa hari kamu harus istirahat, jadi seluruh absenmu tercakup."
+          }
+        },
+        {
+          "ko": "처방전 한 장 더 주세요.",
+          "rom": "cheobangjeon han jang deo juseyo",
+          "meaning": {
+            "en": "Please give me one more copy of the prescription.",
+            "vi": "Cho tôi thêm một tờ đơn thuốc.",
+            "id": "Tolong beri satu lembar resep lagi."
+          },
+          "result": "retry",
+          "reply": "처방전은 약국에서 약 받을 때 쓰는 거예요. 학교에 내실 거면 진단서나 진료확인서를 떼셔야 해요.",
+          "replyMeaning": {
+            "en": "A prescription is for getting medicine at the pharmacy. For school you need a medical certificate or a confirmation of treatment.",
+            "vi": "Đơn thuốc là để lấy thuốc ở nhà thuốc. Muốn nộp cho trường thì phải xin giấy chẩn đoán hoặc giấy xác nhận khám bệnh.",
+            "id": "Resep itu untuk ambil obat di apotek. Untuk sekolah, kamu perlu surat keterangan dokter atau surat keterangan berobat."
+          },
+          "note": {
+            "en": "A prescription (처방전) is for the pharmacy, and it doesn't show how long you were ill. Schools want a 진단서 or a 진료확인서.",
+            "vi": "Đơn thuốc (처방전) dùng ở nhà thuốc và không cho biết bạn ốm bao lâu. Trường cần 진단서 hoặc 진료확인서.",
+            "id": "Resep (처방전) untuk apotek dan tidak menunjukkan berapa lama kamu sakit. Sekolah butuh 진단서 atau 진료확인서."
+          }
+        }
+      ]
+    },
+    {
+      "id": "identity",
+      "staff": "nurse2",
+      "npc": "진단서는 본인 확인을 해야 돼요. 신분증 주시겠어요?",
+      "meaning": {
+        "en": "For a medical certificate we have to check it's really you. May I see your ID?",
+        "vi": "Giấy chẩn đoán phải xác minh đúng là bạn. Cho tôi xem giấy tờ tùy thân được không?",
+        "id": "Untuk surat keterangan dokter, kami harus memastikan itu memang kamu. Boleh lihat kartu identitasnya?"
+      },
+      "choices": [
+        {
+          "ko": "네, 외국인등록증이요.",
+          "rom": "ne, oegugindeungnokjeungiyo",
+          "meaning": {
+            "en": "Sure, here's my ARC.",
+            "vi": "Vâng, thẻ đăng ký người nước ngoài đây ạ.",
+            "id": "Ya, ini kartu registrasi orang asing saya."
+          },
+          "result": "advance",
+          "reply": "네, 확인됐습니다.",
+          "replyMeaning": {
+            "en": "Thank you, that's confirmed.",
+            "vi": "Vâng, đã xác nhận xong.",
+            "id": "Baik, sudah dikonfirmasi."
+          },
+          "give": "arc",
+          "needs": "doc:arc"
+        },
+        {
+          "ko": "여권도 되죠? 여기 있어요.",
+          "rom": "yeogwondo doejyo? yeogi isseoyo",
+          "meaning": {
+            "en": "A passport's fine too, right? Here it is.",
+            "vi": "Hộ chiếu cũng được phải không ạ? Đây ạ.",
+            "id": "Paspor juga bisa, kan? Ini."
+          },
+          "result": "advance",
+          "reply": "네, 여권도 괜찮아요. 확인됐습니다.",
+          "replyMeaning": {
+            "en": "Yes, a passport's fine. That's confirmed.",
+            "vi": "Vâng, hộ chiếu cũng được. Đã xác nhận xong.",
+            "id": "Ya, paspor juga bisa. Sudah dikonfirmasi."
+          },
+          "give": "passport"
+        },
+        {
+          "ko": "친구가 대신 받으러 와도 돼요?",
+          "rom": "chinguga daesin badeureo wado dwaeyo?",
+          "meaning": {
+            "en": "Can a friend come and pick it up for me?",
+            "vi": "Bạn tôi đến lấy thay có được không?",
+            "id": "Boleh teman saya yang ambilkan?"
+          },
+          "result": "retry",
+          "reply": "진단서는 본인이나 가족만 받을 수 있어요. 지금 오셨으니까 신분증만 주시면 돼요.",
+          "replyMeaning": {
+            "en": "Only the patient or their family can receive a medical certificate. You're here now, so just your ID, please.",
+            "vi": "Giấy chẩn đoán chỉ bệnh nhân hoặc người nhà mới nhận được. Bạn đang ở đây rồi, chỉ cần đưa giấy tờ tùy thân thôi ạ.",
+            "id": "Surat keterangan dokter hanya bisa diambil pasien sendiri atau keluarganya. Kamu sudah di sini, jadi cukup tunjukkan identitasmu."
+          },
+          "note": {
+            "en": "Medical documents are private: clinics issue them to the patient, or to family with proof and a signed consent. Bring your own ID and collect it yourself.",
+            "vi": "Giấy tờ y tế là thông tin riêng tư: phòng khám chỉ cấp cho chính bệnh nhân, hoặc người nhà có giấy tờ chứng minh và giấy đồng ý. Hãy tự mang giấy tờ tùy thân và tự đến nhận.",
+            "id": "Dokumen medis bersifat pribadi: klinik memberikannya kepada pasien, atau keluarga dengan bukti dan surat persetujuan. Bawa identitasmu sendiri dan ambil sendiri."
+          }
+        }
+      ]
+    },
+    {
+      "id": "visit_date",
+      "staff": "nurse2",
+      "npc": "진료받으신 날이 언제예요? 기록 찾아볼게요.",
+      "meaning": {
+        "en": "When did you see the doctor? I'll look up your record.",
+        "vi": "Bạn đi khám ngày nào? Tôi sẽ tìm hồ sơ.",
+        "id": "Kapan kamu berobat? Saya cari catatannya."
+      },
+      "choices": [
+        {
+          "ko": "지난주 월요일에 왔어요.",
+          "rom": "jinanju woryoire wasseoyo",
+          "meaning": {
+            "en": "I came last Monday.",
+            "vi": "Tôi đến vào thứ Hai tuần trước.",
+            "id": "Saya datang Senin minggu lalu."
+          },
+          "result": "advance",
+          "reply": "네, 지난주 월요일에 감기로 진료받으셨네요.",
+          "replyMeaning": {
+            "en": "Yes, last Monday, for a cold.",
+            "vi": "Vâng, thứ Hai tuần trước, bạn khám vì bị cảm.",
+            "id": "Ya, Senin lalu, karena flu."
+          }
+        },
+        {
+          "ko": "월요일부터 수요일까지 아팠어요.",
+          "rom": "woryoilbuteo suyoilkkaji apasseoyo",
+          "meaning": {
+            "en": "I was sick from Monday to Wednesday.",
+            "vi": "Tôi bị ốm từ thứ Hai đến thứ Tư.",
+            "id": "Saya sakit dari Senin sampai Rabu."
+          },
+          "result": "retry",
+          "reply": "그건 아프셨던 기간이고요. 병원에 오신 날은 언제예요?",
+          "replyMeaning": {
+            "en": "That's how long you were ill. Which day did you come to the clinic?",
+            "vi": "Đó là thời gian bạn bị ốm. Còn ngày bạn đến phòng khám là ngày nào?",
+            "id": "Itu lamanya kamu sakit. Hari apa kamu datang ke klinik?"
+          },
+          "note": {
+            "en": "진료받은 날 is the day you came in, not how long you were ill. Answer with the visit day: 지난주 월요일에 왔어요.",
+            "vi": "진료받은 날 là ngày bạn đến khám, không phải thời gian bị ốm. Trả lời bằng ngày đi khám: 지난주 월요일에 왔어요.",
+            "id": "진료받은 날 adalah hari kamu datang berobat, bukan lamanya sakit. Jawab dengan hari datang: 지난주 월요일에 왔어요."
+          }
+        },
+        {
+          "ko": "날짜가 기억이 안 나요.",
+          "rom": "naljjaga gieogi an nayo",
+          "meaning": {
+            "en": "I don't remember the date.",
+            "vi": "Tôi không nhớ ngày.",
+            "id": "Saya tidak ingat tanggalnya."
+          },
+          "result": "ask",
+          "reply": "괜찮아요. 요일은 기억나세요? 이번 주였어요, 지난주였어요?",
+          "replyMeaning": {
+            "en": "That's fine. Do you remember the day of the week? This week or last week?",
+            "vi": "Không sao ạ. Bạn có nhớ thứ mấy không? Tuần này hay tuần trước?",
+            "id": "Tidak apa-apa. Ingat harinya? Minggu ini atau minggu lalu?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "doctor_needed",
+      "staff": "nurse2",
+      "npc": "진단서는 원장님이 직접 쓰셔야 해서, 잠깐 진료실에 들어가셔야 돼요.",
+      "meaning": {
+        "en": "A medical certificate has to be written by the doctor himself, so you'll need to pop into the consulting room.",
+        "vi": "Giấy chẩn đoán phải do bác sĩ trực tiếp viết, nên bạn cần vào phòng khám một chút.",
+        "id": "Surat keterangan dokter harus ditulis langsung oleh dokter, jadi kamu perlu masuk sebentar ke ruang periksa."
+      },
+      "after": "앉아서 기다리시면 불러 드릴게요.",
+      "afterMeaning": {
+        "en": "Have a seat and we'll call you.",
+        "vi": "Bạn ngồi đợi, chúng tôi sẽ gọi.",
+        "id": "Silakan duduk, nanti kami panggil."
+      },
+      "choices": [
+        {
+          "ko": "네, 기다릴게요.",
+          "rom": "ne, gidarilgeyo",
+          "meaning": {
+            "en": "Okay, I'll wait.",
+            "vi": "Vâng, tôi sẽ đợi.",
+            "id": "Baik, saya tunggu."
+          },
+          "result": "advance",
+          "reply": "네.",
+          "replyMeaning": {
+            "en": "Okay.",
+            "vi": "Vâng.",
+            "id": "Baik."
+          }
+        },
+        {
+          "ko": "간호사님이 써 주시면 안 돼요?",
+          "rom": "ganhosanimi sseo jusimyeon an dwaeyo?",
+          "meaning": {
+            "en": "Couldn't you write it for me?",
+            "vi": "Chị viết giúp tôi được không ạ?",
+            "id": "Tidak bisa Suster saja yang menulis?"
+          },
+          "result": "retry",
+          "reply": "진단서는 의사만 쓸 수 있어요. 오래 안 걸리니까 조금만 기다려 주세요.",
+          "replyMeaning": {
+            "en": "Only a doctor can write a medical certificate. It won't take long, so please wait a little.",
+            "vi": "Chỉ bác sĩ mới được viết giấy chẩn đoán. Không lâu đâu, bạn chờ một chút nhé.",
+            "id": "Hanya dokter yang boleh menulis surat keterangan dokter. Tidak lama kok, tunggu sebentar ya."
+          },
+          "note": {
+            "en": "By law only a doctor can issue a 진단서, after checking your record. A short wait for the consulting room is part of it.",
+            "vi": "Theo luật, chỉ bác sĩ mới được cấp 진단서 sau khi xem hồ sơ của bạn. Chờ vào phòng khám một chút là bình thường.",
+            "id": "Menurut hukum, hanya dokter yang boleh menerbitkan 진단서 setelah memeriksa catatanmu. Menunggu sebentar untuk ruang periksa itu bagian dari prosesnya."
+          }
+        },
+        {
+          "ko": "그럼 그냥 진료확인서 주세요.",
+          "rom": "geureom geunyang jillyohwaginseo juseyo",
+          "meaning": {
+            "en": "Then just give me the confirmation of treatment.",
+            "vi": "Vậy cho tôi giấy xác nhận khám bệnh thôi.",
+            "id": "Kalau begitu, surat keterangan berobat saja."
+          },
+          "result": "retry",
+          "reply": "그러면 하루만 증명돼요. 삼 일이 필요하시다고 하셨죠?",
+          "replyMeaning": {
+            "en": "Then it would only cover one day. You said you need all three, right?",
+            "vi": "Như vậy thì chỉ chứng minh được một ngày. Bạn nói cần đủ ba ngày mà?",
+            "id": "Kalau begitu hanya satu hari yang terbukti. Katamu perlu tiga hari, kan?"
+          },
+          "note": {
+            "en": "Switching to the 진료확인서 saves a few minutes but only proves one day. Wait for the doctor.",
+            "vi": "Đổi sang 진료확인서 tiết kiệm vài phút nhưng chỉ chứng minh được một ngày. Hãy đợi bác sĩ.",
+            "id": "Ganti ke 진료확인서 memang lebih cepat, tapi hanya membuktikan satu hari. Tunggu dokternya."
+          }
+        }
+      ]
+    },
+    {
+      "id": "feeling",
+      "staff": "doctor",
+      "location": "doctor",
+      "announce": "{0} 님, 1번 진료실로 들어오세요.",
+      "task": {
+        "en": "See the doctor in room 1",
+        "vi": "Gặp bác sĩ ở phòng khám số 1",
+        "id": "Temui dokter di ruang periksa 1"
+      },
+      "npc": "다시 오셨네요. 이제 좀 괜찮으세요?",
+      "meaning": {
+        "en": "You're back. Are you feeling better now?",
+        "vi": "Bạn quay lại rồi. Giờ bạn thấy đỡ hơn chưa?",
+        "id": "Kamu datang lagi. Sudah lebih baik sekarang?"
+      },
+      "choices": [
+        {
+          "ko": "네, 많이 좋아졌어요.",
+          "rom": "ne, mani joajyeosseoyo",
+          "meaning": {
+            "en": "Yes, much better.",
+            "vi": "Vâng, tôi đỡ nhiều rồi.",
+            "id": "Ya, sudah jauh lebih baik."
+          },
+          "result": "advance",
+          "reply": "다행이네요.",
+          "replyMeaning": {
+            "en": "Glad to hear it.",
+            "vi": "May quá.",
+            "id": "Syukurlah."
+          }
+        },
+        {
+          "ko": "아니요, 괜찮아요.",
+          "rom": "aniyo, gwaenchanayo",
+          "meaning": {
+            "en": "No, I'm fine.",
+            "vi": "Không, tôi ổn ạ.",
+            "id": "Tidak, saya baik-baik saja."
+          },
+          "result": "retry",
+          "reply": "네? 아직 안 좋으세요, 괜찮으세요?",
+          "replyMeaning": {
+            "en": "Sorry? Are you still unwell, or are you fine?",
+            "vi": "Dạ? Bạn vẫn chưa khỏe hay đã ổn rồi?",
+            "id": "Ya? Masih kurang enak badan atau sudah baik?"
+          },
+          "note": {
+            "en": "아니요, 괜찮아요 is how you turn down an offer ('no thanks'). 괜찮으세요? asks if you're okay, so answer with 네: 네, 많이 좋아졌어요.",
+            "vi": "아니요, 괜찮아요 dùng để từ chối lời mời ('không, cảm ơn'). 괜찮으세요? là hỏi bạn có ổn không, nên trả lời bằng 네: 네, 많이 좋아졌어요.",
+            "id": "아니요, 괜찮아요 dipakai untuk menolak tawaran ('tidak, terima kasih'). 괜찮으세요? menanyakan apakah kamu baik-baik saja, jadi jawab dengan 네: 네, 많이 좋아졌어요."
+          }
+        },
+        {
+          "ko": "천천히 말씀해 주시겠어요?",
+          "rom": "cheoncheonhi malsseumhae jusigesseoyo?",
+          "meaning": {
+            "en": "Could you say that slowly, please?",
+            "vi": "Bác sĩ nói chậm lại được không ạ?",
+            "id": "Bisa bicara lebih pelan?"
+          },
+          "result": "ask",
+          "reply": "네. 이제, 좀, 괜찮으세요? 몸이 나았는지 여쭤본 거예요.",
+          "replyMeaning": {
+            "en": "Sure. Are you... feeling... better now? I asked whether you've recovered.",
+            "vi": "Vâng. Giờ bạn đã... đỡ hơn chưa? Tôi hỏi bạn đã khỏe lại chưa.",
+            "id": "Baik. Sekarang... sudah... lebih baik? Saya tanya apakah kamu sudah pulih."
+          }
+        }
+      ]
+    },
+    {
+      "id": "absence_days",
+      "staff": "doctor",
+      "location": "doctor",
+      "npc": "학교 제출용이죠? 며칠 동안 결석하셨어요?",
+      "meaning": {
+        "en": "It's for school, right? How many days were you absent?",
+        "vi": "Để nộp cho trường phải không? Bạn đã nghỉ học mấy ngày?",
+        "id": "Untuk sekolah, ya? Berapa hari kamu absen?"
+      },
+      "choices": [
+        {
+          "ko": "월요일부터 수요일까지, 삼 일이요.",
+          "rom": "woryoilbuteo suyoilkkaji, sam iriyo",
+          "meaning": {
+            "en": "Three days, Monday to Wednesday.",
+            "vi": "Ba ngày, từ thứ Hai đến thứ Tư.",
+            "id": "Tiga hari, Senin sampai Rabu."
+          },
+          "result": "advance",
+          "reply": "네, 그 정도면 감기로 쉬셔야 했던 기간이 맞아요.",
+          "replyMeaning": {
+            "en": "Right, that matches the rest you needed for the cold.",
+            "vi": "Vâng, khoảng đó đúng là thời gian cần nghỉ vì cảm.",
+            "id": "Ya, itu sesuai dengan waktu istirahat yang kamu perlukan karena flu."
+          }
+        },
+        {
+          "ko": "삼 일 후에 학교 가요.",
+          "rom": "sam il hue hakgyo gayo",
+          "meaning": {
+            "en": "I'll go back to school in three days.",
+            "vi": "Ba ngày nữa tôi đi học.",
+            "id": "Tiga hari lagi saya ke sekolah."
+          },
+          "result": "retry",
+          "reply": "아, 결석하신 날을 여쭤본 거예요. 학교를 며칠 빠지셨어요?",
+          "replyMeaning": {
+            "en": "Ah, I meant the days you were absent. How many days did you miss school?",
+            "vi": "À, tôi hỏi những ngày bạn nghỉ học. Bạn đã nghỉ mấy ngày?",
+            "id": "Oh, maksud saya hari-hari kamu absen. Berapa hari kamu tidak sekolah?"
+          },
+          "note": {
+            "en": "며칠 동안 asks 'for how many days'; 후에 means 'later, after'. Answer with the days you missed: 월요일부터 수요일까지, 삼 일이요.",
+            "vi": "며칠 동안 hỏi 'trong mấy ngày'; 후에 nghĩa là 'sau này'. Trả lời số ngày đã nghỉ: 월요일부터 수요일까지, 삼 일이요.",
+            "id": "며칠 동안 artinya 'selama berapa hari'; 후에 artinya 'nanti, setelah'. Jawab dengan hari yang kamu lewatkan: 월요일부터 수요일까지, 삼 일이요."
+          }
+        },
+        {
+          "ko": "결석이 뭐예요?",
+          "rom": "gyeolseogi mwoyeyo?",
+          "meaning": {
+            "en": "What does 결석 mean?",
+            "vi": "결석 là gì ạ?",
+            "id": "결석 itu apa?"
+          },
+          "result": "ask",
+          "reply": "학교에 못 가신 거요. 수업에 빠진 날이 며칠이에요?",
+          "replyMeaning": {
+            "en": "Not going to school. How many days of class did you miss?",
+            "vi": "Là không đi học được ạ. Bạn đã nghỉ học mấy ngày?",
+            "id": "Tidak masuk sekolah. Berapa hari kamu tidak ikut kelas?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "language",
+      "staff": "doctor",
+      "location": "doctor",
+      "npc": "한글로 써 드릴까요, 영문으로 써 드릴까요?",
+      "meaning": {
+        "en": "Shall I write it in Korean or in English?",
+        "vi": "Tôi viết bằng tiếng Hàn hay tiếng Anh cho bạn?",
+        "id": "Mau saya tulis dalam bahasa Korea atau bahasa Inggris?"
+      },
+      "after": "그럼 삼 일간 안정이 필요했다고 써 드릴게요. 밖에서 수납하시고 받아 가세요.",
+      "afterMeaning": {
+        "en": "Then I'll write that you needed three days of rest. Pay outside and collect it.",
+        "vi": "Vậy tôi sẽ ghi là bạn cần nghỉ ngơi ba ngày. Bạn thanh toán ở ngoài rồi nhận giấy nhé.",
+        "id": "Kalau begitu saya tulis kamu perlu istirahat tiga hari. Bayar di luar lalu ambil suratnya."
+      },
+      "choices": [
+        {
+          "ko": "한글로 주세요. 한국 학교에 낼 거예요.",
+          "rom": "hangeullo juseyo. hanguk hakgyoe nael geoyeyo",
+          "meaning": {
+            "en": "In Korean, please. It's for a Korean school.",
+            "vi": "Bằng tiếng Hàn ạ. Tôi nộp cho trường ở Hàn Quốc.",
+            "id": "Bahasa Korea saja. Untuk sekolah di Korea."
+          },
+          "result": "advance",
+          "reply": "네, 한글로 할게요.",
+          "replyMeaning": {
+            "en": "Korean it is.",
+            "vi": "Vâng, tôi viết bằng tiếng Hàn.",
+            "id": "Baik, bahasa Korea."
+          }
+        },
+        {
+          "ko": "베트남어로 써 주실 수 있어요?",
+          "rom": "beteunameoro sseo jusil su isseoyo?",
+          "meaning": {
+            "en": "Could you write it in Vietnamese?",
+            "vi": "Bác sĩ viết bằng tiếng Việt được không ạ?",
+            "id": "Bisa ditulis dalam bahasa Vietnam?"
+          },
+          "result": "retry",
+          "reply": "베트남어로는 안 돼요. 한글이나 영문으로만 발급할 수 있어요.",
+          "replyMeaning": {
+            "en": "Not in Vietnamese. We can only issue it in Korean or English.",
+            "vi": "Tiếng Việt thì không được. Chúng tôi chỉ cấp bằng tiếng Hàn hoặc tiếng Anh.",
+            "id": "Bahasa Vietnam tidak bisa. Kami hanya bisa menerbitkan dalam bahasa Korea atau Inggris."
+          },
+          "note": {
+            "en": "Korean clinics issue certificates in Korean or English. A Korean school reads the Korean one; an English one (영문 진단서) is for use abroad and can cost more.",
+            "vi": "Phòng khám ở Hàn chỉ cấp giấy bằng tiếng Hàn hoặc tiếng Anh. Trường ở Hàn đọc bản tiếng Hàn; bản tiếng Anh (영문 진단서) dùng ở nước ngoài và có thể đắt hơn.",
+            "id": "Klinik di Korea menerbitkan surat dalam bahasa Korea atau Inggris. Sekolah di Korea membaca versi Korea; versi Inggris (영문 진단서) untuk luar negeri dan bisa lebih mahal."
+          }
+        },
+        {
+          "ko": "학교에 내는 건데, 어느 쪽이 좋아요?",
+          "rom": "hakgyoe naeneun geonde, eoneu jjogi joayo?",
+          "meaning": {
+            "en": "It's for school. Which one is better?",
+            "vi": "Để nộp cho trường, loại nào tốt hơn ạ?",
+            "id": "Ini untuk sekolah. Mana yang lebih baik?"
+          },
+          "result": "ask",
+          "reply": "한국 학교에 내시는 거면 한글로 충분해요. 영문은 외국에 내실 때 필요해요.",
+          "replyMeaning": {
+            "en": "For a Korean school, Korean is all you need. English is for use abroad.",
+            "vi": "Nộp cho trường ở Hàn thì tiếng Hàn là đủ. Bản tiếng Anh cần khi nộp ở nước ngoài.",
+            "id": "Untuk sekolah di Korea, bahasa Korea sudah cukup. Bahasa Inggris untuk dipakai di luar negeri."
+          }
+        }
+      ]
+    },
+    {
+      "id": "payment",
+      "staff": "nurse2",
+      "location": "counter",
+      "task": {
+        "en": "Pay at counter 2",
+        "vi": "Thanh toán ở quầy 2",
+        "id": "Bayar di loket 2"
+      },
+      "npc": "진단서 발급 수수료는 2만 원입니다. 어떻게 결제하시겠어요?",
+      "meaning": {
+        "en": "The fee for a medical certificate is 20,000 won. How would you like to pay?",
+        "vi": "Phí cấp giấy chẩn đoán là 20.000 won. Bạn muốn thanh toán bằng gì?",
+        "id": "Biaya penerbitan surat keterangan dokter 20.000 won. Mau bayar pakai apa?"
+      },
+      "choices": [
+        {
+          "ko": "체크카드로 할게요.",
+          "rom": "chekeukadeuro halgeyo",
+          "meaning": {
+            "en": "By debit card, please.",
+            "vi": "Tôi trả bằng thẻ ghi nợ.",
+            "id": "Pakai kartu debit."
+          },
+          "result": "advance",
+          "reply": "네, 결제됐습니다.",
+          "replyMeaning": {
+            "en": "Done, it's paid.",
+            "vi": "Vâng, đã thanh toán xong.",
+            "id": "Baik, sudah dibayar."
+          },
+          "give": "checkcard",
+          "needs": "doc:checkcard"
+        },
+        {
+          "ko": "카드로 할게요.",
+          "rom": "kadeuro halgeyo",
+          "meaning": {
+            "en": "By card, please.",
+            "vi": "Tôi trả bằng thẻ.",
+            "id": "Pakai kartu."
+          },
+          "result": "advance",
+          "reply": "네, 결제됐습니다.",
+          "replyMeaning": {
+            "en": "Done, it's paid.",
+            "vi": "Vâng, đã thanh toán xong.",
+            "id": "Baik, sudah dibayar."
+          },
+          "give": "card",
+          "unless": "doc:checkcard"
+        },
+        {
+          "ko": "현금으로 할게요.",
+          "rom": "hyeongeumeuro halgeyo",
+          "meaning": {
+            "en": "In cash, please.",
+            "vi": "Tôi trả bằng tiền mặt.",
+            "id": "Pakai uang tunai."
+          },
+          "result": "advance",
+          "reply": "네, 2만 원 받았습니다.",
+          "replyMeaning": {
+            "en": "Thank you, 20,000 won received.",
+            "vi": "Vâng, đã nhận 20.000 won.",
+            "id": "Baik, 20.000 won diterima."
+          },
+          "give": "cash"
+        },
+        {
+          "ko": "보험 처리돼요?",
+          "rom": "boheom cheoridwaeyo?",
+          "meaning": {
+            "en": "Does insurance cover it?",
+            "vi": "Có được bảo hiểm chi trả không?",
+            "id": "Bisa ditanggung asuransi?"
+          },
+          "result": "retry",
+          "reply": "진단서 같은 서류 발급비는 보험이 안 돼요. 전액 내셔야 해요.",
+          "replyMeaning": {
+            "en": "Insurance doesn't cover document fees like this. You pay the full amount.",
+            "vi": "Phí cấp giấy tờ như giấy chẩn đoán không được bảo hiểm chi trả. Bạn phải trả toàn bộ.",
+            "id": "Biaya dokumen seperti ini tidak ditanggung asuransi. Harus bayar penuh."
+          },
+          "note": {
+            "en": "Health insurance pays for treatment, not for paperwork. Certificate fees (제증명 수수료) are paid in full; a clinic may charge up to 20,000 won for a 진단서.",
+            "vi": "Bảo hiểm y tế trả cho việc chữa bệnh, không trả cho giấy tờ. Phí cấp giấy (제증명 수수료) phải trả đủ; phòng khám có thể thu tối đa 20.000 won cho 진단서.",
+            "id": "Asuransi kesehatan membayar pengobatan, bukan dokumen. Biaya surat (제증명 수수료) dibayar penuh; klinik boleh menarik sampai 20.000 won untuk 진단서."
+          }
+        }
+      ]
+    },
+    {
+      "id": "hand_over",
+      "staff": "nurse2",
+      "location": "counter",
+      "npc": "여기 진단서 나왔습니다. 혹시 한 부 더 필요하세요?",
+      "meaning": {
+        "en": "Here's your medical certificate. Do you need an extra copy?",
+        "vi": "Giấy chẩn đoán của bạn đây ạ. Bạn có cần thêm một bản không?",
+        "id": "Ini surat keterangan dokternya. Perlu satu salinan lagi?"
+      },
+      "choices": [
+        {
+          "ko": "아니요, 한 부면 돼요.",
+          "rom": "aniyo, han bumyeon dwaeyo",
+          "meaning": {
+            "en": "No, one is enough.",
+            "vi": "Không, một bản là đủ ạ.",
+            "id": "Tidak, satu saja cukup."
+          },
+          "result": "advance",
+          "reply": "네, 몸조리 잘하세요.",
+          "replyMeaning": {
+            "en": "Okay. Take good care of yourself.",
+            "vi": "Vâng, bạn giữ gìn sức khỏe nhé.",
+            "id": "Baik. Jaga kesehatan ya."
+          }
+        },
+        {
+          "ko": "네, 한 부 더 주세요.",
+          "rom": "ne, han bu deo juseyo",
+          "meaning": {
+            "en": "Yes, one more, please.",
+            "vi": "Vâng, cho tôi thêm một bản.",
+            "id": "Ya, tolong satu lagi."
+          },
+          "result": "advance",
+          "reply": "추가 한 부는 천 원이에요. 여기 있습니다.",
+          "replyMeaning": {
+            "en": "An extra copy is 1,000 won. Here you go.",
+            "vi": "Thêm một bản là 1.000 won. Đây ạ.",
+            "id": "Salinan tambahan 1.000 won. Silakan."
+          }
+        },
+        {
+          "ko": "학교로 바로 보내 주세요.",
+          "rom": "hakgyoro baro bonae juseyo",
+          "meaning": {
+            "en": "Please send it straight to my school.",
+            "vi": "Gửi thẳng đến trường giúp tôi.",
+            "id": "Tolong kirim langsung ke sekolah saya."
+          },
+          "result": "retry",
+          "reply": "병원에서 학교로 직접 보내 드리지는 않아요. 본인이 제출하셔야 해요.",
+          "replyMeaning": {
+            "en": "We don't send documents to schools. You need to hand it in yourself.",
+            "vi": "Phòng khám không gửi giấy trực tiếp đến trường. Bạn phải tự nộp.",
+            "id": "Klinik tidak mengirim dokumen langsung ke sekolah. Kamu harus menyerahkannya sendiri."
+          },
+          "note": {
+            "en": "Clinics give medical documents only to you. Take it to your school office (행정실) yourself, and keep a photo of it.",
+            "vi": "Phòng khám chỉ đưa giấy tờ y tế cho chính bạn. Hãy tự mang đến văn phòng trường (행정실) và chụp lại một bản để giữ.",
+            "id": "Klinik hanya memberikan dokumen medis kepadamu. Bawa sendiri ke kantor administrasi sekolah (행정실) dan simpan fotonya."
+          }
+        }
+      ]
+    }
+  ]
+}

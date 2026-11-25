@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_Project/Scenes/Home.unity
+    guid: 66c8afadbf6af45b09330109aefe7580
+  - enabled: 1
+    path: Assets/_Project/Scenes/Select.unity
+    guid: 6b6e97ec3503745cdbea5efe1f30a2f4
+  - enabled: 1
+    path: Assets/_Project/Scenes/Hub.unity
+    guid: 2a1f5d46698654ab39f5e6b4aae3da88
+  - enabled: 1
+    path: Assets/_Project/Scenes/Clinic.unity
+    guid: 8627d0502d8c241cb9b9169084f5b282
+  - enabled: 1
+    path: Assets/_Project/Scenes/Immigration.unity
+    guid: 586d9749915894788b3e92f159c5ec80
+  - enabled: 1
+    path: Assets/_Project/Scenes/Bank.unity
+    guid: da9948454f3f9435c9197cfaccf9c160
+  - enabled: 1
+    path: Assets/_Project/Scenes/Results.unity
+    guid: c1f62b258e5ff47c69c9ecce270b7c0a
+  m_configObjects:
+    com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

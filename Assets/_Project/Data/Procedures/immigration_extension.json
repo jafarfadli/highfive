@@ -1,0 +1,875 @@
+{
+  "id": "immigration_extension",
+  "verified": false,
+  "sources": [
+    "https://www.hikorea.go.kr (체류기간 연장허가: 신청 시기, 방문 예약, 제출 서류, 수수료 6만 원)",
+    "https://www.immigration.go.kr (출입국관리법 제25조 체류기간 연장허가)",
+    "https://www.law.go.kr (출입국관리법 시행규칙: 수수료)"
+  ],
+  "titleKo": "출입국 민원센터",
+  "title": {
+    "en": "Immigration Service Center",
+    "vi": "Trung tâm dịch vụ xuất nhập cảnh",
+    "id": "Pusat Layanan Imigrasi"
+  },
+  "briefing": {
+    "en": "Extend your stay before it runs out: reservation, ARC, form, school papers, fee.",
+    "vi": "Gia hạn lưu trú trước khi hết hạn: lịch hẹn, thẻ ARC, đơn, giấy tờ của trường, lệ phí.",
+    "id": "Perpanjang izin tinggal sebelum habis: janji temu, ARC, formulir, dokumen sekolah, biaya."
+  },
+  "completeNote": {
+    "en": "Keep the receipt (접수증) until the result arrives by text, then bring your ARC back for the sticker with your new expiry date. Apply before your stay ends: a late application means a fine.",
+    "vi": "Giữ giấy biên nhận (접수증) cho đến khi có tin nhắn báo kết quả, rồi mang thẻ ARC quay lại để dán tem hạn lưu trú mới. Hãy nộp đơn trước khi hết hạn: nộp muộn sẽ bị phạt.",
+    "id": "Simpan tanda terima (접수증) sampai hasilnya dikirim lewat SMS, lalu bawa ARC-mu lagi untuk ditempeli stiker masa tinggal baru. Ajukan sebelum masa tinggal habis: terlambat berarti kena denda."
+  },
+  "blockedLesson": {
+    "en": "An extension comes after registration: without your ARC (외국인 등록) there is nothing to extend yet. Do Part 1 first.",
+    "vi": "Gia hạn làm sau khi đăng ký: chưa có thẻ ARC (외국인 등록) thì chưa có gì để gia hạn. Hãy làm Phần 1 trước.",
+    "id": "Perpanjangan dilakukan setelah registrasi: tanpa ARC (외국인 등록) belum ada yang bisa diperpanjang. Selesaikan Bagian 1 dulu."
+  },
+  "staff": [
+    {
+      "id": "clerk2",
+      "name": "한지민 주무관",
+      "role": "immigration officer",
+      "roleText": {
+        "en": "Immigration officer",
+        "vi": "Cán bộ xuất nhập cảnh",
+        "id": "Petugas imigrasi"
+      },
+      "macVoice": "Yuna",
+      "macRate": 182,
+      "openaiVoice": "sage"
+    }
+  ],
+  "queue": {
+    "counter": 2,
+    "ahead": 4,
+    "interval": 5.5
+  },
+  "carry": [
+    "attendance",
+    "tuition"
+  ],
+  "grants": [
+    "doc:ext_receipt"
+  ],
+  "phrases": [
+    {
+      "ko": "체류기간 연장하러 왔어요.",
+      "rom": "cheryugigan yeonjanghareo wasseoyo",
+      "meaning": {
+        "en": "I'm here to extend my period of stay.",
+        "vi": "Tôi đến để gia hạn thời gian lưu trú.",
+        "id": "Saya mau memperpanjang masa tinggal."
+      }
+    },
+    {
+      "ko": "네, 하이코리아에서 예약했어요.",
+      "rom": "ne, haikoriaeseo yeyakaesseoyo",
+      "meaning": {
+        "en": "Yes, I booked on HiKorea.",
+        "vi": "Vâng, tôi đã đặt lịch trên HiKorea.",
+        "id": "Ya, saya sudah pesan di HiKorea."
+      }
+    },
+    {
+      "ko": "신청서는 아직 안 썼어요.",
+      "rom": "sincheongseoneun ajik an sseosseoyo",
+      "meaning": {
+        "en": "I haven't filled in the form yet.",
+        "vi": "Tôi chưa điền đơn.",
+        "id": "Saya belum mengisi formulirnya."
+      }
+    },
+    {
+      "ko": "감기에 걸려서 삼 일 쉬었어요.",
+      "rom": "gamgie geollyeoseo sam il swieosseoyo",
+      "meaning": {
+        "en": "I caught a cold and rested for three days.",
+        "vi": "Tôi bị cảm nên nghỉ ba ngày.",
+        "id": "Saya kena flu, jadi istirahat tiga hari."
+      }
+    },
+    {
+      "ko": "등록금이요? 수수료 말씀이세요?",
+      "rom": "deungnokgeumiyo? susuryo malsseumiseyo?",
+      "meaning": {
+        "en": "Tuition? Do you mean the fee?",
+        "vi": "Học phí ạ? Hay ý chị là lệ phí?",
+        "id": "Uang kuliah? Maksudnya biaya layanan?"
+      }
+    },
+    {
+      "ko": "결과는 어디서 확인해요?",
+      "rom": "gyeolgwaneun eodiseo hwaginhaeyo?",
+      "meaning": {
+        "en": "Where do I check the result?",
+        "vi": "Tôi xem kết quả ở đâu?",
+        "id": "Hasilnya dicek di mana?"
+      }
+    }
+  ],
+  "glossary": [
+    {
+      "ko": "체류기간 연장",
+      "rom": "cheryugigan yeonjang",
+      "meaning": {
+        "en": "Extending your stay",
+        "vi": "Gia hạn thời gian lưu trú",
+        "id": "Perpanjangan masa tinggal"
+      }
+    },
+    {
+      "ko": "방문 예약",
+      "rom": "bangmun yeyak",
+      "meaning": {
+        "en": "Visit appointment",
+        "vi": "Đặt lịch hẹn đến",
+        "id": "Reservasi kunjungan"
+      }
+    },
+    {
+      "ko": "하이코리아",
+      "rom": "haikoria",
+      "meaning": {
+        "en": "HiKorea, the immigration website",
+        "vi": "HiKorea, trang web xuất nhập cảnh",
+        "id": "HiKorea, situs imigrasi"
+      }
+    },
+    {
+      "ko": "통합신청서",
+      "rom": "tonghapsincheongseo",
+      "meaning": {
+        "en": "Integrated application form",
+        "vi": "Đơn đăng ký tổng hợp",
+        "id": "Formulir permohonan terpadu"
+      }
+    },
+    {
+      "ko": "출석증명서",
+      "rom": "chulseokjeungmyeongseo",
+      "meaning": {
+        "en": "Attendance certificate",
+        "vi": "Giấy chứng nhận chuyên cần",
+        "id": "Surat keterangan kehadiran"
+      }
+    },
+    {
+      "ko": "출석률",
+      "rom": "chulseongnyul",
+      "meaning": {
+        "en": "Attendance rate",
+        "vi": "Tỷ lệ chuyên cần",
+        "id": "Tingkat kehadiran"
+      }
+    },
+    {
+      "ko": "수업에 빠지다",
+      "rom": "sueobe ppajida",
+      "meaning": {
+        "en": "To miss class",
+        "vi": "Nghỉ buổi học",
+        "id": "Tidak masuk kelas"
+      }
+    },
+    {
+      "ko": "등록금",
+      "rom": "deungnokgeum",
+      "meaning": {
+        "en": "Tuition",
+        "vi": "Học phí",
+        "id": "Uang kuliah"
+      }
+    },
+    {
+      "ko": "납입증명서",
+      "rom": "nabipjeungmyeongseo",
+      "meaning": {
+        "en": "Proof of payment",
+        "vi": "Giấy xác nhận đã nộp tiền",
+        "id": "Bukti pembayaran"
+      }
+    },
+    {
+      "ko": "수수료",
+      "rom": "susuryo",
+      "meaning": {
+        "en": "Fee",
+        "vi": "Lệ phí",
+        "id": "Biaya"
+      }
+    },
+    {
+      "ko": "심사",
+      "rom": "simsa",
+      "meaning": {
+        "en": "Review of your application",
+        "vi": "Xét duyệt hồ sơ",
+        "id": "Pemeriksaan permohonan"
+      }
+    },
+    {
+      "ko": "문자",
+      "rom": "munja",
+      "meaning": {
+        "en": "Text message",
+        "vi": "Tin nhắn",
+        "id": "SMS"
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "purpose",
+      "staff": "clerk2",
+      "task": {
+        "en": "Apply to extend at counter 2",
+        "vi": "Nộp đơn gia hạn ở quầy 2",
+        "id": "Ajukan perpanjangan di loket 2"
+      },
+      "npc": "안녕하세요. 어떤 업무 보러 오셨어요?",
+      "meaning": {
+        "en": "Hello. What are you here to take care of?",
+        "vi": "Xin chào. Bạn đến làm thủ tục gì?",
+        "id": "Halo. Mau mengurus apa?"
+      },
+      "choices": [
+        {
+          "ko": "체류기간 연장하러 왔어요.",
+          "rom": "cheryugigan yeonjanghareo wasseoyo",
+          "meaning": {
+            "en": "I'm here to extend my period of stay.",
+            "vi": "Tôi đến để gia hạn thời gian lưu trú.",
+            "id": "Saya mau memperpanjang masa tinggal."
+          },
+          "result": "advance",
+          "reply": "네, 체류기간 연장이요.",
+          "replyMeaning": {
+            "en": "Right, an extension of stay.",
+            "vi": "Vâng, gia hạn lưu trú ạ.",
+            "id": "Baik, perpanjangan masa tinggal."
+          }
+        },
+        {
+          "ko": "비자 연장하러 왔어요.",
+          "rom": "bija yeonjanghareo wasseoyo",
+          "meaning": {
+            "en": "I'm here to extend my visa.",
+            "vi": "Tôi đến để gia hạn visa.",
+            "id": "Saya mau memperpanjang visa."
+          },
+          "result": "advance",
+          "reply": "네, 체류기간 연장 말씀이시죠?",
+          "replyMeaning": {
+            "en": "Right, you mean extending your period of stay?",
+            "vi": "Vâng, ý bạn là gia hạn thời gian lưu trú phải không?",
+            "id": "Ya, maksudnya perpanjangan masa tinggal, kan?"
+          }
+        },
+        {
+          "ko": "외국인 등록 하러 왔어요.",
+          "rom": "oegugin deungnok hareo wasseoyo",
+          "meaning": {
+            "en": "I'm here to register as a foreign resident.",
+            "vi": "Tôi đến để đăng ký người nước ngoài.",
+            "id": "Saya mau registrasi orang asing."
+          },
+          "result": "retry",
+          "reply": "외국인 등록은 이미 하셨을 거예요. 더 계시려는 거면 연장 신청이에요.",
+          "replyMeaning": {
+            "en": "You'll have registered already. If you want to stay longer, that's an extension.",
+            "vi": "Chắc bạn đã đăng ký rồi. Nếu muốn ở lâu hơn thì là xin gia hạn.",
+            "id": "Kamu pasti sudah registrasi. Kalau mau tinggal lebih lama, itu permohonan perpanjangan."
+          },
+          "note": {
+            "en": "Registration (외국인 등록) is done once, and you already have your ARC. Staying longer is an extension: 체류기간 연장 (people also say 비자 연장).",
+            "vi": "Đăng ký (외국인 등록) chỉ làm một lần, và bạn đã có thẻ ARC. Ở lâu hơn là gia hạn: 체류기간 연장 (người ta cũng nói 비자 연장).",
+            "id": "Registrasi (외국인 등록) hanya sekali, dan kamu sudah punya ARC. Tinggal lebih lama itu perpanjangan: 체류기간 연장 (orang juga bilang 비자 연장)."
+          }
+        }
+      ]
+    },
+    {
+      "id": "reservation",
+      "staff": "clerk2",
+      "npc": "방문 예약하고 오셨어요?",
+      "meaning": {
+        "en": "Did you book a visit?",
+        "vi": "Bạn có đặt lịch hẹn trước không?",
+        "id": "Sudah buat janji kunjungan?"
+      },
+      "choices": [
+        {
+          "ko": "네, 하이코리아에서 예약했어요.",
+          "rom": "ne, haikoriaeseo yeyakaesseoyo",
+          "meaning": {
+            "en": "Yes, I booked on HiKorea.",
+            "vi": "Vâng, tôi đã đặt lịch trên HiKorea.",
+            "id": "Ya, saya sudah pesan di HiKorea."
+          },
+          "result": "advance",
+          "reply": "네, 예약 확인됐습니다.",
+          "replyMeaning": {
+            "en": "Yes, your reservation is confirmed.",
+            "vi": "Vâng, lịch hẹn đã được xác nhận.",
+            "id": "Ya, janjinya sudah dikonfirmasi."
+          }
+        },
+        {
+          "ko": "[번호표를 보여 준다]",
+          "rom": "",
+          "meaning": {
+            "en": "[Show the queue ticket]",
+            "vi": "[Đưa phiếu số thứ tự]",
+            "id": "[Tunjukkan nomor antrean]"
+          },
+          "result": "retry",
+          "reply": "번호표 말고요, 하이코리아 방문 예약이요. 예약 확인 문자 있으시죠?",
+          "replyMeaning": {
+            "en": "Not the queue ticket: your HiKorea visit reservation. You have the confirmation text, right?",
+            "vi": "Không phải phiếu số thứ tự đâu ạ, là lịch hẹn trên HiKorea. Bạn có tin nhắn xác nhận chứ?",
+            "id": "Bukan nomor antrean, tapi janji kunjungan HiKorea. Ada SMS konfirmasinya, kan?"
+          },
+          "note": {
+            "en": "The queue ticket (번호표) only gives your turn today. For an extension, most offices want a visit reservation (방문 예약) made on HiKorea beforehand.",
+            "vi": "Phiếu số thứ tự (번호표) chỉ cho biết lượt của bạn hôm nay. Gia hạn thì phần lớn văn phòng yêu cầu đặt lịch hẹn (방문 예약) trước trên HiKorea.",
+            "id": "Nomor antrean (번호표) hanya menunjukkan giliranmu hari ini. Untuk perpanjangan, kebanyakan kantor meminta janji kunjungan (방문 예약) lewat HiKorea terlebih dahulu."
+          }
+        },
+        {
+          "ko": "예약이요? 무슨 예약이요?",
+          "rom": "yeyagiyo? museun yeyagiyo?",
+          "meaning": {
+            "en": "A booking? What booking?",
+            "vi": "Đặt lịch? Đặt lịch gì ạ?",
+            "id": "Janji? Janji apa?"
+          },
+          "result": "ask",
+          "reply": "하이코리아 방문 예약이요. 연장은 예약하고 오셔야 돼요. 예약하셨으면 확인 문자를 받으셨을 거예요.",
+          "replyMeaning": {
+            "en": "The HiKorea visit reservation. For an extension you book first; if you did, you'll have had a confirmation text.",
+            "vi": "Lịch hẹn trên HiKorea ạ. Gia hạn phải đặt lịch trước; nếu đã đặt thì bạn sẽ có tin nhắn xác nhận.",
+            "id": "Janji kunjungan HiKorea. Untuk perpanjangan harus pesan dulu; kalau sudah, kamu pasti dapat SMS konfirmasi."
+          }
+        }
+      ]
+    },
+    {
+      "id": "arc_check",
+      "staff": "clerk2",
+      "npc": "외국인등록증 먼저 확인할게요.",
+      "meaning": {
+        "en": "Let me check your ARC first.",
+        "vi": "Tôi kiểm tra thẻ đăng ký người nước ngoài trước nhé.",
+        "id": "Saya periksa ARC-mu dulu."
+      },
+      "choices": [
+        {
+          "ko": "네, 여기 있어요.",
+          "rom": "ne, yeogi isseoyo",
+          "meaning": {
+            "en": "Sure, here it is.",
+            "vi": "Vâng, đây ạ.",
+            "id": "Ya, ini."
+          },
+          "result": "advance",
+          "reply": "네, 확인했습니다.",
+          "replyMeaning": {
+            "en": "Thank you, checked.",
+            "vi": "Vâng, đã kiểm tra.",
+            "id": "Baik, sudah diperiksa."
+          },
+          "give": "arc",
+          "needs": "doc:arc"
+        },
+        {
+          "ko": "[외국인등록증 대신 접수증을 낸다]",
+          "rom": "",
+          "meaning": {
+            "en": "[Hand over the old receipt instead of the card]",
+            "vi": "[Đưa giấy biên nhận cũ thay cho thẻ]",
+            "id": "[Serahkan tanda terima lama, bukan kartunya]"
+          },
+          "result": "retry",
+          "reply": "이건 등록하실 때 받은 접수증이에요. 이제는 외국인등록증을 주셔야 해요.",
+          "replyMeaning": {
+            "en": "That's the receipt from your registration. Now we need the card itself.",
+            "vi": "Đây là giấy biên nhận lúc bạn đăng ký. Giờ phải đưa thẻ đăng ký người nước ngoài ạ.",
+            "id": "Itu tanda terima waktu registrasi. Sekarang kami perlu kartunya."
+          },
+          "note": {
+            "en": "The receipt (접수증) only stood in for your card while it was being made. Now bring the ARC: it's your ID for every procedure in Korea.",
+            "vi": "Giấy biên nhận (접수증) chỉ thay cho thẻ trong lúc thẻ đang được làm. Giờ hãy mang thẻ ARC: đó là giấy tờ tùy thân cho mọi thủ tục ở Hàn.",
+            "id": "Tanda terima (접수증) hanya pengganti kartu selama kartu dibuat. Sekarang bawa ARC-nya: itu identitasmu untuk semua urusan di Korea."
+          },
+          "give": "arc_receipt",
+          "needs": "doc:arc_receipt"
+        },
+        {
+          "ko": "외국인등록증이 아직 없어요.",
+          "rom": "oegugindeungnokjeungi ajik eopseoyo",
+          "meaning": {
+            "en": "I don't have an ARC yet.",
+            "vi": "Tôi chưa có thẻ đăng ký người nước ngoài.",
+            "id": "Saya belum punya ARC."
+          },
+          "result": "block",
+          "reply": "연장은 외국인 등록을 하신 다음에 할 수 있어요. 먼저 외국인 등록부터 하셔야 돼요.",
+          "replyMeaning": {
+            "en": "An extension comes after registration. You need to register as a foreign resident first.",
+            "vi": "Gia hạn chỉ làm được sau khi đăng ký người nước ngoài. Bạn cần đăng ký trước đã.",
+            "id": "Perpanjangan baru bisa setelah registrasi orang asing. Kamu harus registrasi dulu."
+          },
+          "unless": "doc:arc"
+        }
+      ]
+    },
+    {
+      "id": "passport_form",
+      "staff": "clerk2",
+      "npc": "여권하고 통합신청서도 주시겠어요?",
+      "meaning": {
+        "en": "May I also have your passport and the application form?",
+        "vi": "Cho tôi xin cả hộ chiếu và đơn đăng ký nữa.",
+        "id": "Boleh minta paspor dan formulir permohonannya juga?"
+      },
+      "fetch": {
+        "document": "arc_form",
+        "station": "FormTable",
+        "objective": {
+          "en": "Fill in the application form (통합신청서) at the form table; tick 체류기간 연장",
+          "vi": "Điền đơn (통합신청서) ở bàn viết đơn; đánh dấu 체류기간 연장",
+          "id": "Isi formulir (통합신청서) di meja tulis; centang 체류기간 연장"
+        }
+      },
+      "takes": [
+        "arc_form"
+      ],
+      "choices": [
+        {
+          "ko": "네, 여기 있어요.",
+          "rom": "ne, yeogi isseoyo",
+          "meaning": {
+            "en": "Sure, here they are.",
+            "vi": "Vâng, đây ạ.",
+            "id": "Ya, ini."
+          },
+          "result": "advance",
+          "reply": "네, 받았습니다.",
+          "replyMeaning": {
+            "en": "Thank you, got them.",
+            "vi": "Vâng, tôi đã nhận.",
+            "id": "Baik, sudah saya terima."
+          },
+          "give": "arc_form",
+          "needs": "doc:arc_form"
+        },
+        {
+          "ko": "신청서는 아직 안 썼어요.",
+          "rom": "sincheongseoneun ajik an sseosseoyo",
+          "meaning": {
+            "en": "I haven't filled in the form yet.",
+            "vi": "Tôi chưa điền đơn.",
+            "id": "Saya belum mengisi formulirnya."
+          },
+          "result": "fetch",
+          "reply": "저쪽 작성대에서 쓰시고 다시 오세요. 연장이니까 '체류기간 연장허가'에 체크하시면 돼요.",
+          "replyMeaning": {
+            "en": "Fill it in at the table over there and come back. Tick 'extension of stay'.",
+            "vi": "Bạn điền ở bàn viết đơn đằng kia rồi quay lại. Đánh dấu vào 'gia hạn lưu trú' nhé.",
+            "id": "Isi di meja tulis di sana lalu kembali. Centang 'perpanjangan masa tinggal'."
+          },
+          "give": "passport",
+          "unless": "doc:arc_form"
+        },
+        {
+          "ko": "여권은 지난번에 보여 드렸잖아요.",
+          "rom": "yeogwoneun jinanbeone boyeo deuryeotjanayo",
+          "meaning": {
+            "en": "I showed you my passport last time, didn't I?",
+            "vi": "Lần trước tôi đã cho xem hộ chiếu rồi mà.",
+            "id": "Kan paspor sudah saya tunjukkan waktu itu."
+          },
+          "result": "retry",
+          "reply": "신청할 때마다 여권을 확인해야 해요. 같이 주시겠어요?",
+          "replyMeaning": {
+            "en": "We check the passport with every application. Could you hand it over with the form?",
+            "vi": "Mỗi lần nộp đơn đều phải kiểm tra hộ chiếu. Bạn đưa kèm luôn nhé?",
+            "id": "Paspor diperiksa setiap kali mengajukan permohonan. Bisa diserahkan sekalian?"
+          },
+          "note": {
+            "en": "Every application is checked on its own. Bring your passport each time, even if they saw it when you registered.",
+            "vi": "Mỗi đơn đều được xét riêng. Lần nào cũng mang hộ chiếu, dù họ đã xem khi bạn đăng ký.",
+            "id": "Setiap permohonan diperiksa sendiri-sendiri. Bawa paspor setiap kali, walau sudah dilihat waktu registrasi."
+          }
+        }
+      ]
+    },
+    {
+      "id": "attendance",
+      "staff": "clerk2",
+      "npc": "어학원 출석증명서 주시겠어요?",
+      "meaning": {
+        "en": "May I have the attendance certificate from your language school?",
+        "vi": "Cho tôi xin giấy chứng nhận chuyên cần của trường tiếng.",
+        "id": "Boleh minta surat keterangan kehadiran dari lembaga bahasamu?"
+      },
+      "choices": [
+        {
+          "ko": "네, 여기 있어요.",
+          "rom": "ne, yeogi isseoyo",
+          "meaning": {
+            "en": "Sure, here it is.",
+            "vi": "Vâng, đây ạ.",
+            "id": "Ya, ini."
+          },
+          "result": "advance",
+          "reply": "네, 한번 볼게요.",
+          "replyMeaning": {
+            "en": "Thank you, let me have a look.",
+            "vi": "Vâng, để tôi xem.",
+            "id": "Baik, saya lihat dulu."
+          },
+          "give": "attendance"
+        },
+        {
+          "ko": "재학증명서 드릴게요.",
+          "rom": "jaehakjeungmyeongseo deurilgeyo",
+          "meaning": {
+            "en": "I'll give you my certificate of enrollment.",
+            "vi": "Tôi đưa giấy chứng nhận đang học nhé.",
+            "id": "Saya berikan surat keterangan kuliah."
+          },
+          "result": "retry",
+          "reply": "재학증명서는 학생이라는 것만 보여 줘요. 연장할 때는 출석률이 나온 출석증명서가 필요해요.",
+          "replyMeaning": {
+            "en": "An enrollment certificate only shows you're a student. For an extension we need the attendance certificate with your rate on it.",
+            "vi": "Giấy chứng nhận đang học chỉ cho thấy bạn là học sinh. Gia hạn thì cần giấy chứng nhận chuyên cần có ghi tỷ lệ đi học.",
+            "id": "Surat keterangan kuliah hanya menunjukkan kamu pelajar. Untuk perpanjangan kami perlu surat keterangan kehadiran yang mencantumkan persentasenya."
+          },
+          "note": {
+            "en": "An extension depends on how you studied, not just that you're enrolled. Ask your school office for a 출석증명서 (with your attendance rate) before you come.",
+            "vi": "Gia hạn phụ thuộc vào việc bạn học thế nào, không chỉ là đang học. Hãy xin văn phòng trường 출석증명서 (có tỷ lệ chuyên cần) trước khi đến.",
+            "id": "Perpanjangan bergantung pada caramu belajar, bukan sekadar terdaftar. Minta 출석증명서 (dengan persentase kehadiran) ke kantor sekolah sebelum datang."
+          },
+          "give": "enrollment"
+        },
+        {
+          "ko": "진단서 드릴게요.",
+          "rom": "jindanseo deurilgeyo",
+          "meaning": {
+            "en": "I'll give you my medical certificate.",
+            "vi": "Tôi đưa giấy chẩn đoán nhé.",
+            "id": "Saya berikan surat keterangan dokter."
+          },
+          "result": "retry",
+          "reply": "진단서는 학교에 내시는 서류예요. 여기서는 학교에서 발급한 출석증명서를 봐요.",
+          "replyMeaning": {
+            "en": "The medical certificate is for your school. Here we look at the attendance certificate the school issues.",
+            "vi": "Giấy chẩn đoán là giấy nộp cho trường. Ở đây chúng tôi xem giấy chứng nhận chuyên cần do trường cấp.",
+            "id": "Surat keterangan dokter itu untuk sekolah. Di sini kami melihat surat keterangan kehadiran dari sekolah."
+          },
+          "note": {
+            "en": "The medical certificate goes to your school, which excuses the absences. Immigration then reads your attendance rate on the school's 출석증명서.",
+            "vi": "Giấy chẩn đoán nộp cho trường để được nghỉ có phép. Cục xuất nhập cảnh xem tỷ lệ chuyên cần trên 출석증명서 của trường.",
+            "id": "Surat keterangan dokter diserahkan ke sekolah agar absenmu diizinkan. Imigrasi lalu melihat persentase kehadiran di 출석증명서 dari sekolah."
+          },
+          "give": "medcert",
+          "needs": "doc:medcert"
+        }
+      ]
+    },
+    {
+      "id": "absence",
+      "staff": "clerk2",
+      "npc": "출석률이 92퍼센트네요. 결석이 조금 있는데, 수업에 왜 빠지셨어요?",
+      "meaning": {
+        "en": "Your attendance is 92%. You missed a few days: why were you absent from class?",
+        "vi": "Tỷ lệ chuyên cần là 92%. Bạn có nghỉ vài buổi, sao bạn nghỉ học vậy?",
+        "id": "Kehadiranmu 92%. Ada beberapa absen; kenapa kamu tidak masuk kelas?"
+      },
+      "choices": [
+        {
+          "ko": "감기에 걸려서 삼 일 쉬었어요.",
+          "rom": "gamgie geollyeoseo sam il swieosseoyo",
+          "meaning": {
+            "en": "I caught a cold and rested for three days.",
+            "vi": "Tôi bị cảm nên nghỉ ba ngày.",
+            "id": "Saya kena flu, jadi istirahat tiga hari."
+          },
+          "result": "advance",
+          "reply": "네, 그 정도면 괜찮습니다.",
+          "replyMeaning": {
+            "en": "Okay, that's fine.",
+            "vi": "Vâng, như vậy thì không sao.",
+            "id": "Baik, itu tidak masalah."
+          }
+        },
+        {
+          "ko": "네, 살이 좀 빠졌어요.",
+          "rom": "ne, sari jom ppajyeosseoyo",
+          "meaning": {
+            "en": "Yes, I've lost a bit of weight.",
+            "vi": "Vâng, tôi sụt cân một chút.",
+            "id": "Ya, berat badan saya turun sedikit."
+          },
+          "result": "retry",
+          "reply": "아, 살 얘기가 아니라요. 수업에 빠지신 이유를 여쭤본 거예요.",
+          "replyMeaning": {
+            "en": "Not your weight. I asked why you missed class.",
+            "vi": "Không phải chuyện cân nặng đâu ạ. Tôi hỏi lý do bạn nghỉ học.",
+            "id": "Bukan soal berat badan. Saya tanya kenapa kamu tidak masuk kelas."
+          },
+          "note": {
+            "en": "빠지다 has several meanings: 살이 빠지다 is losing weight, 수업에 빠지다 is missing class. The officer asked about class.",
+            "vi": "빠지다 có nhiều nghĩa: 살이 빠지다 là sụt cân, 수업에 빠지다 là nghỉ học. Cán bộ hỏi về việc nghỉ học.",
+            "id": "빠지다 punya beberapa arti: 살이 빠지다 berarti berat badan turun, 수업에 빠지다 berarti tidak masuk kelas. Petugas bertanya soal kelas."
+          }
+        },
+        {
+          "ko": "빠졌다는 게 무슨 뜻이에요?",
+          "rom": "ppajyeotdaneun ge museun tteusieyo?",
+          "meaning": {
+            "en": "What does 빠지다 mean here?",
+            "vi": "빠지다 ở đây nghĩa là gì ạ?",
+            "id": "빠지다 di sini artinya apa?"
+          },
+          "result": "ask",
+          "reply": "수업에 안 나오셨다는 뜻이에요. 결석하신 이유가 뭐예요?",
+          "replyMeaning": {
+            "en": "It means you didn't come to class. What was the reason?",
+            "vi": "Nghĩa là bạn không đến lớp. Lý do bạn nghỉ là gì?",
+            "id": "Artinya kamu tidak datang ke kelas. Apa alasannya?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tuition",
+      "staff": "clerk2",
+      "npc": "다음 학기 등록금은 내셨어요?",
+      "meaning": {
+        "en": "Have you paid next term's tuition?",
+        "vi": "Bạn đã đóng học phí kỳ sau chưa?",
+        "id": "Sudah bayar uang kuliah semester depan?"
+      },
+      "choices": [
+        {
+          "ko": "네, 여기 등록금 납입증명서요.",
+          "rom": "ne, yeogi deungnokgeum nabipjeungmyeongseoyo",
+          "meaning": {
+            "en": "Yes, here's the tuition payment certificate.",
+            "vi": "Vâng, giấy xác nhận đã đóng học phí đây ạ.",
+            "id": "Ya, ini bukti pembayaran uang kuliahnya."
+          },
+          "result": "advance",
+          "reply": "네, 그럼 다음 학기까지 연장되겠네요.",
+          "replyMeaning": {
+            "en": "Good, then it can be extended through next term.",
+            "vi": "Vâng, vậy sẽ được gia hạn đến hết kỳ sau.",
+            "id": "Baik, berarti bisa diperpanjang sampai semester depan."
+          },
+          "give": "tuition"
+        },
+        {
+          "ko": "등록금이요? 수수료 말씀이세요?",
+          "rom": "deungnokgeumiyo? susuryo malsseumiseyo?",
+          "meaning": {
+            "en": "Tuition? Do you mean the fee?",
+            "vi": "Học phí ạ? Hay ý chị là lệ phí?",
+            "id": "Uang kuliah? Maksudnya biaya layanan?"
+          },
+          "result": "ask",
+          "reply": "아니요, 학교 등록금이요. 수수료는 이따 따로 내시면 돼요.",
+          "replyMeaning": {
+            "en": "No, your school tuition. The application fee comes separately in a moment.",
+            "vi": "Không, là học phí của trường. Lệ phí thì lát nữa đóng riêng.",
+            "id": "Bukan, uang kuliah sekolah. Biaya permohonan dibayar terpisah nanti."
+          }
+        },
+        {
+          "ko": "[통장을 보여 준다]",
+          "rom": "",
+          "meaning": {
+            "en": "[Show the bankbook]",
+            "vi": "[Đưa sổ ngân hàng]",
+            "id": "[Tunjukkan buku tabungan]"
+          },
+          "result": "retry",
+          "reply": "통장은 잔고를 보여 주는 거고요, 등록금을 냈다는 증명은 학교에서 발급해 줘요.",
+          "replyMeaning": {
+            "en": "A bankbook shows your balance. Proof that you paid tuition is issued by your school.",
+            "vi": "Sổ ngân hàng cho thấy số dư. Giấy chứng minh đã đóng học phí là do trường cấp.",
+            "id": "Buku tabungan menunjukkan saldo. Bukti bayar uang kuliah diterbitkan sekolah."
+          },
+          "note": {
+            "en": "D-4 stays are extended term by term, so immigration wants the school's 등록금 납입증명서 for the next term. A bankbook only shows your balance.",
+            "vi": "Lưu trú D-4 được gia hạn theo từng kỳ, nên cục xuất nhập cảnh cần 등록금 납입증명서 của trường cho kỳ sau. Sổ ngân hàng chỉ cho thấy số dư.",
+            "id": "Izin tinggal D-4 diperpanjang per semester, jadi imigrasi minta 등록금 납입증명서 dari sekolah untuk semester depan. Buku tabungan hanya menunjukkan saldo."
+          },
+          "give": "bankbook",
+          "needs": "doc:bankbook"
+        }
+      ]
+    },
+    {
+      "id": "fee",
+      "staff": "clerk2",
+      "npc": "수수료는 6만 원입니다. 결제는 어떻게 하시겠어요?",
+      "meaning": {
+        "en": "The fee is 60,000 won. How would you like to pay?",
+        "vi": "Lệ phí là 60.000 won. Bạn muốn thanh toán bằng gì?",
+        "id": "Biayanya 60.000 won. Mau bayar pakai apa?"
+      },
+      "choices": [
+        {
+          "ko": "체크카드로 할게요.",
+          "rom": "chekeukadeuro halgeyo",
+          "meaning": {
+            "en": "By debit card, please.",
+            "vi": "Tôi trả bằng thẻ ghi nợ.",
+            "id": "Pakai kartu debit."
+          },
+          "result": "advance",
+          "reply": "네, 결제됐습니다.",
+          "replyMeaning": {
+            "en": "Done, it's paid.",
+            "vi": "Vâng, đã thanh toán xong.",
+            "id": "Baik, sudah dibayar."
+          },
+          "give": "checkcard",
+          "needs": "doc:checkcard"
+        },
+        {
+          "ko": "카드로 할게요.",
+          "rom": "kadeuro halgeyo",
+          "meaning": {
+            "en": "By card, please.",
+            "vi": "Tôi trả bằng thẻ.",
+            "id": "Pakai kartu."
+          },
+          "result": "advance",
+          "reply": "네, 결제됐습니다.",
+          "replyMeaning": {
+            "en": "Done, it's paid.",
+            "vi": "Vâng, đã thanh toán xong.",
+            "id": "Baik, sudah dibayar."
+          },
+          "give": "card",
+          "unless": "doc:checkcard"
+        },
+        {
+          "ko": "현금으로 낼게요.",
+          "rom": "hyeongeumeuro naelgeyo",
+          "meaning": {
+            "en": "I'll pay in cash.",
+            "vi": "Tôi trả bằng tiền mặt.",
+            "id": "Saya bayar tunai."
+          },
+          "result": "advance",
+          "reply": "네, 6만 원 받았습니다.",
+          "replyMeaning": {
+            "en": "Thank you, 60,000 won received.",
+            "vi": "Vâng, đã nhận 60.000 won.",
+            "id": "Baik, 60.000 won diterima."
+          },
+          "give": "cash"
+        },
+        {
+          "ko": "지난번처럼 3만 원 아니에요?",
+          "rom": "jinanbeoncheoreom sammanwon anieyo?",
+          "meaning": {
+            "en": "Isn't it 30,000 won like last time?",
+            "vi": "Không phải 30.000 won như lần trước sao?",
+            "id": "Bukannya 30.000 won seperti waktu itu?"
+          },
+          "result": "retry",
+          "reply": "등록은 3만 원이었고요, 연장은 6만 원이에요.",
+          "replyMeaning": {
+            "en": "Registration was 30,000 won; an extension is 60,000.",
+            "vi": "Đăng ký là 30.000 won, còn gia hạn là 60.000 won.",
+            "id": "Registrasi 30.000 won; perpanjangan 60.000 won."
+          },
+          "note": {
+            "en": "Fees depend on the application: registering is 30,000 won, extending your stay is 60,000 won. The fee table is on HiKorea.",
+            "vi": "Lệ phí tùy loại hồ sơ: đăng ký 30.000 won, gia hạn lưu trú 60.000 won. Bảng lệ phí có trên HiKorea.",
+            "id": "Biaya tergantung jenis permohonan: registrasi 30.000 won, perpanjangan masa tinggal 60.000 won. Daftar biayanya ada di HiKorea."
+          }
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "staff": "clerk2",
+      "npc": "심사 결과는 2주 안에 문자로 알려 드려요. 010-1234-5678, 이 번호로 보내 드리면 되죠?",
+      "meaning": {
+        "en": "We'll text you the result within two weeks. Is 010-1234-5678 the right number?",
+        "vi": "Chúng tôi sẽ nhắn tin kết quả trong vòng hai tuần. Gửi đến số 010-1234-5678 được chứ?",
+        "id": "Hasilnya kami kirim lewat SMS dalam dua minggu. Nomornya 010-1234-5678, kan?"
+      },
+      "after": "접수증 드릴게요. 결과 나오면 외국인등록증 가지고 오세요. 뒷면에 새 체류기간 스티커 붙여 드려요.",
+      "afterMeaning": {
+        "en": "Here's your receipt. When the result comes, bring your ARC and we'll put the sticker with your new period on the back.",
+        "vi": "Đây là giấy biên nhận. Khi có kết quả, bạn mang thẻ ARC đến để chúng tôi dán tem thời hạn mới ở mặt sau.",
+        "id": "Ini tanda terimanya. Kalau hasilnya keluar, bawa ARC-mu dan kami tempelkan stiker masa tinggal baru di baliknya."
+      },
+      "choices": [
+        {
+          "ko": "네, 맞아요.",
+          "rom": "ne, majayo",
+          "meaning": {
+            "en": "Yes, that's right.",
+            "vi": "Vâng, đúng rồi.",
+            "id": "Ya, benar."
+          },
+          "result": "advance",
+          "reply": "네.",
+          "replyMeaning": {
+            "en": "Okay.",
+            "vi": "Vâng.",
+            "id": "Baik."
+          }
+        },
+        {
+          "ko": "본국 번호로 보내 주세요.",
+          "rom": "bonguk beonhoro bonae juseyo",
+          "meaning": {
+            "en": "Please send it to my number back home.",
+            "vi": "Gửi đến số điện thoại ở nước tôi giúp tôi.",
+            "id": "Tolong kirim ke nomor di negara asal saya."
+          },
+          "result": "retry",
+          "reply": "문자는 한국 번호로만 보내 드릴 수 있어요.",
+          "replyMeaning": {
+            "en": "We can only text Korean numbers.",
+            "vi": "Chúng tôi chỉ nhắn được đến số Hàn Quốc.",
+            "id": "Kami hanya bisa mengirim SMS ke nomor Korea."
+          },
+          "note": {
+            "en": "Immigration texts results to Korean numbers, so keep your Korean phone number up to date on your record.",
+            "vi": "Cục xuất nhập cảnh chỉ nhắn kết quả đến số Hàn Quốc, nên hãy cập nhật số điện thoại Hàn của bạn trong hồ sơ.",
+            "id": "Imigrasi mengirim hasil ke nomor Korea, jadi pastikan nomor ponsel Korea-mu di data selalu terbaru."
+          }
+        },
+        {
+          "ko": "결과는 어디서 확인해요?",
+          "rom": "gyeolgwaneun eodiseo hwaginhaeyo?",
+          "meaning": {
+            "en": "Where do I check the result?",
+            "vi": "Tôi xem kết quả ở đâu?",
+            "id": "Hasilnya dicek di mana?"
+          },
+          "result": "ask",
+          "reply": "문자로 가고, 하이코리아에서도 확인하실 수 있어요.",
+          "replyMeaning": {
+            "en": "We'll text you, and you can also check on HiKorea.",
+            "vi": "Chúng tôi sẽ nhắn tin, bạn cũng có thể xem trên HiKorea.",
+            "id": "Kami kirim SMS, dan kamu juga bisa mengeceknya di HiKorea."
+          }
+        }
+      ]
+    }
+  ]
+}

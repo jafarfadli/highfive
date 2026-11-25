@@ -1,0 +1,606 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-18T04:29:42+00:00",
+  "title": "Design System: Ready Set Seoul",
+  "extensions": {
+    "units": "Canvas pixels on the 1920x1080 uGUI reference canvas (CanvasScaler ScaleWithScreenSize, match 0.5); not CSS pixels. Hex values are sRGB; UI blends in linear space.",
+    "palette": {
+      "name": "Persimmon (Retro Ink)",
+      "hueBand": "warm, brick to marigold",
+      "themes": 1,
+      "scope": "Colours the UI only; the 3D world keeps its own approved colours."
+    },
+    "colorMeta": {
+      "brush": {
+        "role": "primary",
+        "displayName": "Persimmon Orange",
+        "canonical": "#EE5A24",
+        "themeRole": "Brush",
+        "tonalRamp": [
+          "#220000",
+          "#480D00",
+          "#722508",
+          "#A73605",
+          "#DD4908",
+          "#FD784C",
+          "#FEB59D",
+          "#FEEAE3"
+        ]
+      },
+      "brush-deep": {
+        "role": "primary",
+        "displayName": "Rust",
+        "canonical": "#B0381A",
+        "themeRole": "Brush Deep",
+        "tonalRamp": [
+          "#230000",
+          "#490A00",
+          "#781C03",
+          "#A93112",
+          "#D05639",
+          "#F97B5C",
+          "#FBB6A4",
+          "#FEE9E4"
+        ]
+      },
+      "on-brush": {
+        "role": "primary",
+        "displayName": "Ink on Orange",
+        "canonical": "#1E0F0A",
+        "themeRole": "On Brush",
+        "tonalRamp": [
+          "#150704",
+          "#31211B",
+          "#4F3D37",
+          "#705C56",
+          "#927D76",
+          "#B5A098",
+          "#DAC4BC",
+          "#FEE9E2"
+        ]
+      },
+      "glow": {
+        "role": "secondary",
+        "displayName": "Marigold",
+        "canonical": "#FFC23A",
+        "themeRole": "Glow",
+        "tonalRamp": [
+          "#140900",
+          "#322200",
+          "#553D04",
+          "#7B5B14",
+          "#A47B1E",
+          "#D09B1C",
+          "#FBBE34",
+          "#FFECCA"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1E0F0A",
+        "themeRole": "Ink",
+        "tonalRamp": [
+          "#150704",
+          "#31211B",
+          "#4F3D37",
+          "#705C56",
+          "#927D76",
+          "#B5A098",
+          "#DAC4BC",
+          "#FEE9E2"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Umber",
+        "canonical": "#4A2618",
+        "themeRole": "Ink Soft",
+        "tonalRamp": [
+          "#1E0100",
+          "#3C1A0C",
+          "#5D3728",
+          "#7E5647",
+          "#A27767",
+          "#C69988",
+          "#ECBDAC",
+          "#FFE9E1"
+        ]
+      },
+      "night": {
+        "role": "neutral",
+        "displayName": "Night",
+        "canonical": "#2B1610",
+        "themeRole": "Night",
+        "tonalRamp": [
+          "#180502",
+          "#341F18",
+          "#533B34",
+          "#745A53",
+          "#977B73",
+          "#BA9E95",
+          "#DFC2B9",
+          "#FEE9E3"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Cream",
+        "canonical": "#FCEBCB",
+        "themeRole": "Paper",
+        "tonalRamp": [
+          "#140800",
+          "#302307",
+          "#4E4025",
+          "#6E5F43",
+          "#908063",
+          "#B3A385",
+          "#D8C7A8",
+          "#FEEDCC"
+        ]
+      },
+      "paper-deep": {
+        "role": "neutral",
+        "displayName": "Kraft",
+        "canonical": "#F2C47E",
+        "themeRole": "Paper Deep (Kraft)",
+        "tonalRamp": [
+          "#150800",
+          "#342101",
+          "#583C07",
+          "#815802",
+          "#A47A33",
+          "#C99D57",
+          "#EFC17B",
+          "#FEECD2"
+        ]
+      },
+      "balloon": {
+        "role": "neutral",
+        "displayName": "Balloon Cream",
+        "canonical": "#FFF8EA",
+        "themeRole": "Balloon",
+        "tonalRamp": [
+          "#0F0A03",
+          "#2A241A",
+          "#474136",
+          "#666155",
+          "#888275",
+          "#ABA497",
+          "#CFC8BB",
+          "#F5EEE0"
+        ]
+      },
+      "ground": {
+        "role": "neutral",
+        "displayName": "Ground",
+        "canonical": "#F2C47E",
+        "themeRole": "Ground",
+        "tonalRamp": [
+          "#150800",
+          "#342101",
+          "#583C07",
+          "#815802",
+          "#A47A33",
+          "#C99D57",
+          "#EFC17B",
+          "#FEECD2"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The READY SET / SEOUL! logo only: extruded block letters, 136 / 236px."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Lettered titles on orange bands, banners and outcomes, 58-84px."
+      },
+      "headline-ko": {
+        "displayName": "Headline Korean",
+        "purpose": "Black Han Sans for signboards, place names, stamps and 번호표, 32-62px (queue number 104)."
+      },
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Results stats."
+      },
+      "title": {
+        "displayName": "Staff Line",
+        "purpose": "The Korean staff line in the speech balloon."
+      },
+      "answer": {
+        "displayName": "Answer",
+        "purpose": "The Korean of each answer strip."
+      },
+      "body": {
+        "displayName": "Body Bold",
+        "purpose": "Romanization, hints, labels, notes, to-dos, chips; solid, at least 22px."
+      },
+      "translation": {
+        "displayName": "Translation",
+        "purpose": "Noto Sans KR Regular, only for the translation under a bold Korean line."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Keycap labels and button words, 18-36px, upper case."
+      }
+    },
+    "shadows": [
+      {
+        "name": "default",
+        "value": "8px 9px 0 #1E0F0A",
+        "purpose": "InkShape default: solid ink, every card and signboard. Canvas px; uGUI y is up, so (8,-9) means right and down."
+      },
+      {
+        "name": "balloon",
+        "value": "9px 10px 0 #1E0F0A",
+        "purpose": "Speech balloons."
+      },
+      {
+        "name": "note",
+        "value": "7px 8px 0 #1E0F0A",
+        "purpose": "Sticky notes, the Home 서울 첫 주 tag."
+      },
+      {
+        "name": "button",
+        "value": "6px 7px 0 #1E0F0A",
+        "purpose": "Every InkButton style."
+      },
+      {
+        "name": "keycap",
+        "value": "0 calc(0.18 * label-size) 0 #1E0F0A",
+        "purpose": "Solid ink base straight under a keycap (min 3px)."
+      },
+      {
+        "name": "sun",
+        "value": "12px 14px 0 #1E0F0A",
+        "purpose": "The Home poster's glow sun."
+      },
+      {
+        "name": "slider-handle",
+        "value": "2px 3px 0 #1E0F0A",
+        "purpose": "The cream blob handle of InkSlider."
+      },
+      {
+        "name": "lettering",
+        "value": "0.055em 0.065em 0 ink (brush under dark letters)",
+        "purpose": "Hard shadow under lettered display type; light letters also get an ink outline of 0.05em (min 2px)."
+      },
+      {
+        "name": "extrude",
+        "value": "block 18-26px deep along (0.55,-0.85) in brush-deep, ink outline 0.055em",
+        "purpose": "InkText.extrude: retro block lettering for the logo."
+      },
+      {
+        "name": "hover-lift",
+        "value": "shadow x1.6, tilt -1.5deg, scale 1.04",
+        "purpose": "InkHover on hover or keyboard focus (answer strips: tilt -0.6deg, scale 1.015)."
+      },
+      {
+        "name": "pressed",
+        "value": "shadow -> 0, body moves 0.8 x shadow offset, scale 0.985",
+        "purpose": "Pressed: the piece slams flat onto its shadow."
+      }
+    ],
+    "motion": [
+      {
+        "name": "frame-step",
+        "value": "12 fps (Motion.Fps)",
+        "purpose": "Shape changes (draw-on, print, scene cut) step like hand-drawn animation."
+      },
+      {
+        "name": "boil",
+        "value": "8 fps, 3 wobble frames",
+        "purpose": "Line boil where a shape asks for it; off under Calm animation."
+      },
+      {
+        "name": "slap",
+        "value": "0.26 s; scale 1.18 -> 0.95 -> 1, rotation rest-7deg -> rest+0.8 -> rest; own opacity ramps over first 25%",
+        "purpose": "Cards, balloons, notes arrive; staggered 0.06-0.08 s."
+      },
+      {
+        "name": "draw",
+        "value": "0.32 s default (0.25-0.35 at call sites), stepped",
+        "purpose": "Rings, strokes, arrows and strips draw on via InkShape.reveal."
+      },
+      {
+        "name": "stamp",
+        "value": "0.3 s; scale 2.3 -> 0.88 -> 1, angle +10deg -> rest; then shake",
+        "purpose": "완료, the results stamp, and the SEOUL! logo landing."
+      },
+      {
+        "name": "shake",
+        "value": "0.2 s, 4 stepped jolts, 7px decaying",
+        "purpose": "The page jolts after a stamp."
+      },
+      {
+        "name": "peel",
+        "value": "0.42 s; drifts right, drops 160px, turns +16deg, own opacity falls over last 65%",
+        "purpose": "Unpicked answers, toasts, notes and finished banners leave."
+      },
+      {
+        "name": "print",
+        "value": "0.5 s, stepped",
+        "purpose": "The queue ticket feeds out of its slot."
+      },
+      {
+        "name": "pop",
+        "value": "0.22 s, peak 1.25 (Home sun 0.3 s, 1.12)",
+        "purpose": "Numbers, marks, the sun."
+      },
+      {
+        "name": "slide-in",
+        "value": "0.24-0.28 s, back-out 1.6",
+        "purpose": "Banners, answer strips (from -40px, 40 ms stagger), Home cards from below."
+      },
+      {
+        "name": "breathe",
+        "value": "scale 1 +/- 2.5%, sin(3.4 t)",
+        "purpose": "The Home start bar; stops under Calm animation."
+      },
+      {
+        "name": "hover",
+        "value": "MoveTowards 18/s in, x0.7 out",
+        "purpose": "InkHover approach speed; 100/s under Calm animation."
+      },
+      {
+        "name": "scene-cut",
+        "value": "0.28-0.5 s, stepped; ink sheet at -8deg with a torn brush edge",
+        "purpose": "Overlay.FadeTo: every scene change."
+      },
+      {
+        "name": "reduced",
+        "value": "Settings.ReducedMotion",
+        "purpose": "Calm animation: tweens jump to end; boil, shakes and breathing stop."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "reference",
+        "value": "1920x1080",
+        "purpose": "Single reference canvas scaled to any desktop resolution; no breakpoints."
+      }
+    ],
+    "inkShape": {
+      "purpose": "Firmness constants and defaults the token schema cannot hold.",
+      "scaling": {
+        "wobble": 0.35,
+        "ragged": 0.15,
+        "grain": 0.2,
+        "dry": 0.3,
+        "note": "InkShape keeps this fraction of the rough, tear, grain and dry a shape asks for."
+      },
+      "defaults": {
+        "line": "4px",
+        "shadow": "(8,-9) ink, alpha 1",
+        "radius": "7px"
+      },
+      "paperPanel": {
+        "line": "4.5px"
+      },
+      "balloon": {
+        "line": "4.5px",
+        "radius": "30px",
+        "shadow": "(9,-10)"
+      },
+      "stickyNote": {
+        "line": "4px",
+        "radius": "4px",
+        "shadow": "(7,-8)"
+      },
+      "keycap": {
+        "line": "max(3, 0.13 x size)",
+        "radius": "0.32 x size"
+      },
+      "button": {
+        "line": "4px (paper)",
+        "shadow": "(6,-7)"
+      },
+      "highlight": {
+        "dry": 0.2
+      },
+      "rays": {
+        "count": "16 on Home",
+        "alpha": 0.82
+      },
+      "scrim": {
+        "inkAlpha": 0.62,
+        "halftone": 0.35
+      }
+    },
+    "world3d": {
+      "celTones": [
+        0,
+        0.36,
+        0.8
+      ],
+      "halftone": "7px pitch at 1080p, in shade 25-60 m",
+      "hatching": "5px apart, darkest shade, 6-18 m",
+      "outline": {
+        "silhouetteHalfWidth": "2.2px near, 1px a side by 20 m",
+        "crease": "1px",
+        "fade": "30-110 m"
+      },
+      "street": {
+        "sun": "rotation (50, 22), intensity 2.0, #FFC88A, shadow strength 0.92",
+        "ambient": "trilight #8C9ED2 / #C2A690 / #5F5049",
+        "fog": "#ECCBA9, warm haze",
+        "grade": "exposure +0.1, contrast 20, saturation 18, temperature +12, bloom 0.75 above 0.95, vignette 0.28"
+      },
+      "menu": {
+        "grade": "exposure +0.1, contrast 18, saturation 14, temperature +12, bloom 0.7 above 0.95, vignette 0.32, Gaussian DoF 14-70 m"
+      },
+      "interior": {
+        "grade": "exposure +0.3, contrast 14, saturation 8, temperature +3, bloom 0.45, vignette 0.2"
+      },
+      "sky": {
+        "shader": "SeoulFirstWeek/Sky Toon",
+        "zenith": "(0.18,0.39,0.75)",
+        "horizon": "(0.97,0.79,0.6)",
+        "clouds": "two flat tones with warm rim, halftone in shade, ink line 2.2px, drift 0.006"
+      }
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Orange brush bar, one per screen.",
+      "html": "<button class=\"ds-btn-primary\">SCENARIOS →</button>",
+      "css": ".ds-btn-primary{background:#EE5A24;color:#1E0F0A;font-family:Bangers,Impact,sans-serif;font-size:34px;padding:14px 48px;border:none;border-radius:12px 18px 14px 20px;box-shadow:6px 7px 0 #1E0F0A;cursor:pointer;transition:transform .06s steps(2),box-shadow .06s steps(2)}.ds-btn-primary:hover,.ds-btn-primary:focus-visible{transform:rotate(-1.5deg) scale(1.04);box-shadow:9.6px 11.2px 0 #1E0F0A;outline:none}.ds-btn-primary:active{transform:translate(5px,6px) scale(.985);box-shadow:none}"
+    },
+    {
+      "name": "Paper Button",
+      "kind": "button",
+      "refersTo": "button-paper",
+      "description": "Cream card with a 4px ink line; secondary actions.",
+      "html": "<button class=\"ds-btn-paper\">RETRY</button>",
+      "css": ".ds-btn-paper{background:#FCEBCB;color:#1E0F0A;font-family:Bangers,Impact,sans-serif;font-size:30px;padding:16px 40px;border:4px solid #1E0F0A;border-radius:6px;box-shadow:6px 7px 0 #1E0F0A;cursor:pointer;transition:transform .06s steps(2),box-shadow .06s steps(2)}.ds-btn-paper:hover,.ds-btn-paper:focus-visible{transform:rotate(-1.5deg) scale(1.04);box-shadow:9.6px 11.2px 0 #1E0F0A;outline:none}.ds-btn-paper:active{transform:translate(5px,6px) scale(.985);box-shadow:none}"
+    },
+    {
+      "name": "Language Chooser",
+      "kind": "chip",
+      "refersTo": "button-paper-chosen",
+      "description": "Paper cards; the chosen one is lit glow and ticked.",
+      "html": "<button class=\"ds-choice ds-choice-on\">✓  English</button><button class=\"ds-choice\">Tiếng Việt</button>",
+      "css": ".ds-choice{margin-right:22px;height:68px;padding:0 35px;background:#FCEBCB;color:#1E0F0A;font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:26px;border:4px solid #1E0F0A;border-radius:6px;box-shadow:6px 7px 0 #1E0F0A;transform:rotate(1deg);cursor:pointer}.ds-choice-on{background:#FFC23A;transform:rotate(-1.5deg)}.ds-choice:hover,.ds-choice:focus-visible{transform:rotate(-1.5deg) scale(1.04);outline:none}"
+    },
+    {
+      "name": "Answer Strip",
+      "kind": "custom",
+      "refersTo": "answer-strip",
+      "description": "Night bar with keycap, bold Korean, romanization · translation, and a glow hand-over chip; lights orange on hover.",
+      "html": "<button class=\"ds-answer\"><kbd class=\"ds-key\">1</kbd><span class=\"ds-answer-text\"><span class=\"ds-answer-ko\">네, 여기 있어요.</span><span class=\"ds-answer-sub\">ne, yeogi isseoyo  ·  Yes, here it is.</span></span><span class=\"ds-chip\"><svg width=\"20\" height=\"26\" viewBox=\"0 0 20 26\"><path d=\"M1.5 1.5h11l6 6v17h-17z\" fill=\"#FFF8EA\" stroke=\"#1E0F0A\" stroke-width=\"2.5\"/><path d=\"M12.5 1.5v6h6M5 12h10M5 16.5h10M5 21h6\" fill=\"none\" stroke=\"#1E0F0A\" stroke-width=\"2\"/></svg>Hand over: 여권 · Passport</span></button>",
+      "css": ".ds-key{display:inline-grid;place-items:center;min-width:42px;height:42px;padding:0 8px;background:#FCEBCB;color:#1E0F0A;font-family:Bangers,Impact,sans-serif;font-size:24px;border:3.2px solid #1E0F0A;border-radius:8px;box-shadow:0 4px 0 #1E0F0A}.ds-answer{display:flex;align-items:center;gap:28px;width:100%;height:92px;padding:0 30px 0 44px;background:#2B1610;color:#FCEBCB;border:none;border-radius:14px 30px 12px 26px;text-align:left;cursor:pointer}.ds-answer-text{display:flex;flex-direction:column;flex:1}.ds-answer-ko{font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:30px}.ds-answer-sub{font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:22px}.ds-chip{display:flex;align-items:center;gap:10px;padding:8px 16px;background:#FFC23A;color:#1E0F0A;font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:22px;border:3.5px solid #1E0F0A;border-radius:4px;box-shadow:5px 6px 0 #1E0F0A;transform:rotate(-1deg)}.ds-answer:hover,.ds-answer:focus-visible{background:#EE5A24;color:#1E0F0A;transform:rotate(-.6deg) scale(1.015);outline:none}"
+    },
+    {
+      "name": "Tried Answer",
+      "kind": "custom",
+      "refersTo": "answer-strip-tried",
+      "description": "Set aside but opaque: umber bar, kraft lettering, × keycap, orange slash.",
+      "html": "<div class=\"ds-tried\"><kbd class=\"ds-key ds-key-kraft\">×</kbd><span class=\"ds-tried-ko\">의사 선생님 만나고 싶어.</span></div>",
+      "css": ".ds-key{display:inline-grid;place-items:center;min-width:42px;height:42px;padding:0 8px;background:#FCEBCB;color:#1E0F0A;font-family:Bangers,Impact,sans-serif;font-size:24px;border:3.2px solid #1E0F0A;border-radius:8px;box-shadow:0 4px 0 #1E0F0A}.ds-key-kraft{background:#F2C47E}.ds-tried{display:flex;align-items:center;gap:28px;height:92px;padding:0 44px;background:#4A2618;color:#F2C47E;border-radius:14px 30px 12px 26px}.ds-tried-ko{font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:30px;text-decoration:line-through;text-decoration-color:#EE5A24;text-decoration-thickness:6px}"
+    },
+    {
+      "name": "Speech Balloon",
+      "kind": "card",
+      "refersTo": "speech-balloon",
+      "description": "Balloon cream, 4.5px ink line, solid shadow, a tail pointing at the speaker; used on Home over the cast (the nurse asks \"어디가 불편하세요?\" with its translation). The counter conversation uses the dialogue box along the bottom and the answer column on the right instead.",
+      "html": "<div class=\"ds-balloon\"><span class=\"ds-balloon-name\">김지은 · Reception nurse</span><p class=\"ds-balloon-ko\">신분증 좀 보여 주시겠어요?</p><p class=\"ds-balloon-tr\">Could you show me your ID?</p></div>",
+      "css": ".ds-balloon{position:relative;max-width:1180px;padding:52px 46px 30px;background:#FFF8EA;color:#1E0F0A;border:4.5px solid #1E0F0A;border-radius:30px;box-shadow:9px 10px 0 #1E0F0A}.ds-balloon-name{position:absolute;top:-24px;left:34px;padding:10px 26px;background:#2B1610;color:#FCEBCB;font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:22px;border-radius:14px 22px 12px 20px}.ds-balloon-ko{margin:0;font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:36px}.ds-balloon-tr{margin:6px 0 0;font-family:'Noto Sans KR',sans-serif;font-weight:400;font-size:22px}"
+    },
+    {
+      "name": "Quest Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "HUD quest card: title on an orange band, place · part, brush progress, the to-do on a glow highlighter.",
+      "html": "<div class=\"ds-quest\"><h3 class=\"ds-band\">SEE A DOCTOR</h3><p class=\"ds-sub\">튼튼내과의원 · Part 1</p><div class=\"ds-progress\"><i></i><b>33%</b></div><p class=\"ds-todo\"><span>→</span> Register at the reception</p></div>",
+      "css": ".ds-quest{width:470px;padding:18px 20px 22px;background:#FCEBCB;color:#1E0F0A;border:4.5px solid #1E0F0A;border-radius:7px;box-shadow:8px 9px 0 #1E0F0A}.ds-band{margin:0 0 12px;padding:6px 18px;background:#EE5A24;color:#1E0F0A;font-family:Bangers,Impact,sans-serif;font-weight:400;font-size:36px;border-radius:10px 26px 12px 22px}.ds-sub,.ds-todo{margin:0;font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:24px}.ds-progress{display:flex;align-items:center;gap:14px;margin:12px 0}.ds-progress i{flex:1;height:16px;background:linear-gradient(90deg,#EE5A24 33%,transparent 33%),linear-gradient(#4A2618,#4A2618) center/100% 2px no-repeat;border-radius:8px}.ds-progress b{font-family:'Noto Sans KR',sans-serif;font-size:24px}.ds-todo{padding:8px 16px;background:#FFC23A;border-radius:10px 22px 12px 20px}.ds-todo span{color:#EE5A24}"
+    },
+    {
+      "name": "Sticky Note",
+      "kind": "card",
+      "refersTo": "sticky-note",
+      "description": "Glow note with an ink line and a solid shadow: lessons, warnings, missing documents.",
+      "html": "<div class=\"ds-note\">Without -요 at the end this is 반말, casual speech. Say 진료 받으러 왔어요.</div>",
+      "css": ".ds-note{max-width:420px;padding:26px;background:#FFC23A;color:#1E0F0A;font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:22px;line-height:1.12;border:4px solid #1E0F0A;border-radius:4px;box-shadow:7px 8px 0 #1E0F0A;transform:rotate(3.5deg)}"
+    },
+    {
+      "name": "Keycap",
+      "kind": "chip",
+      "refersTo": "keycap",
+      "description": "Inked key for every key the player can press.",
+      "html": "<kbd class=\"ds-key\">E</kbd>",
+      "css": ".ds-key{display:inline-grid;place-items:center;min-width:42px;height:42px;padding:0 8px;background:#FCEBCB;color:#1E0F0A;font-family:Bangers,Impact,sans-serif;font-size:24px;border:3.2px solid #1E0F0A;border-radius:8px;box-shadow:0 4px 0 #1E0F0A}"
+    },
+    {
+      "name": "Night Plate",
+      "kind": "custom",
+      "refersTo": "night-plate",
+      "description": "Dark bar under any text that sits on the 3D scene.",
+      "html": "<span class=\"ds-plate\">Your language</span>",
+      "css": ".ds-plate{display:inline-block;padding:10px 40px;background:#2B1610;color:#FCEBCB;font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:26px;border-radius:14px 30px 12px 26px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Retro Comic Print",
+    "overview": "**Creative North Star: \"The Retro Comic Print\"**\n\nEvery screen is a page from a retro comic print about a student's first week in Seoul. Surfaces are flat colour with a thick ink outline and a solid ink shadow offset down-right, the way a cheap four-colour print registers a panel. Seoul's own paperwork and signage are the furniture: queue tickets, application forms, stamps, notes, projecting signboards. The Home screen is one page of key art: the people of the game standing in 명동길, a nurse asking her question in a balloon, and the title in extruded block letters on a fading halftone field. The 3D Myeongdong street behind the UI is drawn in the same ink (cel tones, ink outlines, halftone) under a toon sky, so the print never floats over a different world.\n\nThe system is built in code, not from sprites. Every shape is a procedural mesh (`InkShape`) that keeps only a trace of the hand-inked origin: 35 % of the wobble, 15 % of the raggedness, 20 % of the grain and 30 % of the dry brush a shape asks for. This revision is firmer and less papery than its hand-inked predecessor. Tape, torn edges and paper texture are gone, and there is one palette. Highlights do the pointing: titles sit on orange bands, the current to-do on a glow highlighter, and whatever an answer hands over on a glow chip. State is carried by a drawn mark as well as by colour.\n\nDensity is low and the focus is single: one balloon, up to four strips, one to-do. The world rejects the flat translucent dark-glass HUD and the capsule menus of every sim, and it rejects thin or handwritten reading text.\n\nAll sizes are canvas pixels on the 1920 × 1080 reference canvas (uGUI `CanvasScaler`, scale with screen size, match 0.5), not CSS pixels.",
+    "keyCharacteristics": [
+      "Flat fill, 4–5px ink outline, solid ink shadow down-right on every card, balloon, keycap, ticket and note.",
+      "One warm palette, Persimmon, from brick to marigold, with near-black ink and cream.",
+      "Orange bands, glow highlighters and glow chips point at what matters.",
+      "Korean is the largest line in every exchange; small text is Noto Sans KR Bold, solid, at least 22px.",
+      "Shape changes step at 12 fps; transforms snap with a hard overshoot; states and screens never cross-fade."
+    ],
+    "rules": [
+      {
+        "name": "The One Brush Rule",
+        "body": "At most one element per screen region is lit orange at a time; hover moves the brush, it never adds a second one.",
+        "section": "colors"
+      },
+      {
+        "name": "The Roles Only Rule",
+        "body": "Code never writes a literal colour into the UI; graphics take a `Role` (`Themed`, `InkShape.fillRole`, `UIKit.Words`).",
+        "section": "colors"
+      },
+      {
+        "name": "The Highlight Points Rule",
+        "body": "Orange bands mark titles and glow marks what to do or hand over; nothing else uses a highlighter.",
+        "section": "colors"
+      },
+      {
+        "name": "The Korean First Rule",
+        "body": "In any conversation element the Korean line is the largest text; romanization and translation sit directly beneath it, smaller, in solid ink.",
+        "section": "typography"
+      },
+      {
+        "name": "The Solid Small Text Rule",
+        "body": "Text below headline size is Noto Sans KR, alpha 1, at least 22px: ink on light fills, paper on night. Text over the 3D scene sits on a night plate.",
+        "section": "typography"
+      },
+      {
+        "name": "The Lettering Rule",
+        "body": "Display type is lettered: light letters get an ink outline of 5 % of the size, dark and brush letters none; the hard shadow sits 5.5 % right and 6.5 % down, in ink, or in brush under dark letters.",
+        "section": "typography"
+      },
+      {
+        "name": "The One To-Do Rule",
+        "body": "The HUD shows a title on an orange band, place · part, one brush progress bar and one current to-do on a highlighter. No compass, markers, checklists, counters or scores.",
+        "section": "layout"
+      },
+      {
+        "name": "The Solid Shadow Rule",
+        "body": "Shadows have offset, full opacity and no blur. A soft or translucent shadow has left the world.",
+        "section": "elevation"
+      },
+      {
+        "name": "The No Pill Rule",
+        "body": "No capsule buttons, no soft rounded rectangles; every surface is an `InkShape` with an ink line.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "**Do** take every colour from a `Role`.",
+      "**Do** build surfaces from the kit (`PaperPanel`, `BrushStrip`, `SpeechBalloon`, `StickyNote`, `Highlight`, `Rays`, `DocIcon`, `Keycap`, `StampMark`, `InkButton`).",
+      "**Do** keep small text Noto Sans KR Bold, solid and at least 22px; use Regular only for a translation under a bold Korean line.",
+      "**Do** put text that sits on the 3D scene on a night plate.",
+      "**Do** point with highlights: orange title bands, glow highlighters and glow chips.",
+      "**Do** mark state with a drawn ring, slash, stamp or note as well as colour, and show a softer state with an opaque softer fill.",
+      "**Do** step shape changes at 12 fps and snap transforms with overshoot (`Slap` 0.26 s, `Stamp` 0.3 s, `Peel` 0.42 s); honour Calm animation.",
+      "**Do** draw standalone icons with the kit's strokes (`Arrow`, `CircleMark`, `PenStroke`, `DocIcon`)."
+    ],
+    "donts": [
+      "**Don't** bring back paper texture, torn edges or tape.",
+      "**Don't** use translucent shadows or translucent text, or show state with CanvasGroup alpha.",
+      "**Don't** add a second theme or literal colours.",
+      "**Don't** use a thin or handwritten face for reading text.",
+      "**Don't** add a compass, checklists, counters or scores to the HUD.",
+      "**Don't** cross-fade states or screens; scene changes are the ink sheet.",
+      "**Don't** let a dark translucent wash do a card's job (UI blends in linear space, so a 60 % ink wash barely darkens).",
+      "**Don't** put a small label above a title; a part number is a keycap beside it.",
+      "**Don't** use emoji; the fonts cannot draw them."
+    ]
+  }
+}
