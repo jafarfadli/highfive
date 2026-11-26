@@ -390,7 +390,11 @@ namespace SeoulFirstWeek.UI
             UIKit.VStack(text, 3, null, TextAnchor.UpperLeft, false);
             text.Layout(0, -1, 1).minWidth = 0;
             a.Korean = UIKit.Words(text, c.Korean, 28, Role.Paper, Face.ReadBold);
-            var sub = string.Join("  ·  ", new[] { c.Romanization, c.Meaning }.Where(s => !string.IsNullOrEmpty(s)));
+            // an answer in [brackets] is something the player does, not a line to say, so it has no
+            // romanization: the tag says so in its place
+            bool action = c.Korean != null && c.Korean.TrimStart().StartsWith("[");
+            string tag = c.Tried ? $"▶ {Loc.T("answer_action")}" : $"<color={Theme.Html(Role.Glow)}>▶ {Loc.T("answer_action")}</color>";
+            var sub = string.Join("  ·  ", new[] { action ? tag : c.Romanization, c.Meaning }.Where(s => !string.IsNullOrEmpty(s)));
             a.Sub = UIKit.Words(text, sub, 22, Role.Paper, Face.ReadBold);
             a.Sub.lineSpacing = 1.05f;
             if (!string.IsNullOrEmpty(c.DocKorean)) DocChip(text, c.DocKorean, c.DocLocal, ChoicesWidth - 24f - 52f - 42f - 18f);

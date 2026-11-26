@@ -142,6 +142,7 @@ namespace SeoulFirstWeek.Core
             ["tab_talk"] = new[] { "Conversation", "Hội thoại", "Percakapan" },
             ["announcement"] = new[] { "Announcement", "Thông báo", "Pengumuman" },
             ["hand_over"] = new[] { "Hand over: {0}", "Đưa: {0}", "Serahkan: {0}" },
+            ["answer_action"] = new[] { "Action", "Hành động", "Tindakan" },
             ["enter_pin"] = new[] { "Enter a 4-digit PIN on the keypad", "Nhập mã PIN 4 số trên bàn phím", "Masukkan PIN 4 digit di keypad" },
             ["enter_pin_again"] = new[] { "Enter the same PIN again", "Nhập lại đúng mã PIN đó", "Masukkan PIN yang sama sekali lagi" },
             ["pay_card_cash"] = new[] { "Card or cash", "Thẻ hoặc tiền mặt", "Kartu atau tunai" },

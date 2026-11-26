@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using SeoulFirstWeek.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,7 +13,7 @@ namespace SeoulFirstWeek.Player
     [RequireComponent(typeof(FirstPersonController))]
     public class PlayerInteractor : MonoBehaviour
     {
-        public float reach = 3.4f;
+        public float reach = 3.6f;
 
         FirstPersonController fps;
         InputAction interact;
@@ -39,6 +40,14 @@ namespace SeoulFirstWeek.Player
             if (current && (interact.WasPressedThisFrame() || fps.ClickedThisFrame)) current.Interact(this);
         }
 
+        static readonly RaycastHit[] Hits = new RaycastHit[32];
+        static readonly IComparer<RaycastHit> ByDistance = Comparer<RaycastHit>.Create((a, b) => a.distance.CompareTo(b.distance));
+
+        /// <summary>
+        /// The nearest thing along the pointer that can be used. Standing right at it counts (a cast never sees a
+        /// collider it starts inside, so the counter's or the door's box used to vanish when the player stepped
+        /// up close); people and triggers that can't be used don't stand in the way; walls and furniture do.
+        /// </summary>
         Interactable Find()
         {
             var cam = fps.Camera;
@@ -50,11 +59,26 @@ namespace SeoulFirstWeek.Player
                 if (EventSystem.current && EventSystem.current.IsPointerOverGameObject()) return null;
                 ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
             }
-            // the invisible street barriers sit on Ignore Raycast
-            if (Physics.SphereCast(ray, 0.12f, out var hit, reach, ~(1 << 2), QueryTriggerInteraction.Collide))
+            // the invisible street barriers and walk-through boxes sit on Ignore Raycast
+            int n = Physics.SphereCastNonAlloc(ray, 0.2f, Hits, reach, ~(1 << 2), QueryTriggerInteraction.Collide);
+            System.Array.Sort(Hits, 0, n, ByDistance);
+            var flatDir = new Vector3(ray.direction.x, 0, ray.direction.z).normalized;
+            for (int i = 0; i < n; i++)
             {
-                var it = hit.collider.GetComponentInParent<Interactable>();
-                if (it && it.CanInteract) return it;
+                var h = Hits[i];
+                var it = h.collider.GetComponentInParent<Interactable>();
+                if (it && it.CanInteract)
+                {
+                    if (h.distance > 0f) return it;
+                    // already inside its box (distance 0): it counts while the player faces its way
+                    var to = h.collider.bounds.center - ray.origin;
+                    to.y = 0;
+                    if (to.sqrMagnitude < 0.04f || Vector3.Dot(to.normalized, flatDir) > -0.05f) return it;
+                    continue;
+                }
+                // started inside it (the player's own capsule), a trigger, or a person: look past it
+                if (h.distance <= 0f || h.collider.isTrigger || h.collider.GetComponentInParent<World.HumanRig>()) continue;
+                break;
             }
             return null;
         }
