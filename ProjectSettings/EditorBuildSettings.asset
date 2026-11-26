@@ -7,10 +7,10 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/_Project/Scenes/Home.unity
-    guid: 66c8afadbf6af45b09330109aefe7580
+    guid: cd6f57e43aa824c9b866bbab17031f1c
   - enabled: 1
     path: Assets/_Project/Scenes/Select.unity
-    guid: 6b6e97ec3503745cdbea5efe1f30a2f4
+    guid: 75c1efdec2426472b886ddef6bdc286e
   - enabled: 1
     path: Assets/_Project/Scenes/Hub.unity
     guid: 2a1f5d46698654ab39f5e6b4aae3da88
@@ -23,6 +23,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Project/Scenes/Bank.unity
     guid: da9948454f3f9435c9197cfaccf9c160
+  - enabled: 1
+    path: Assets/_Project/Scenes/Airport.unity
+    guid: 3312ac853c762444eae85fa5f09c0701
+  - enabled: 1
+    path: Assets/_Project/Scenes/Subway.unity
+    guid: 832edb89218db411580be02b5c250e49
+  - enabled: 1
+    path: Assets/_Project/Scenes/Street119.unity
+    guid: dda3db090acda479a866c139d354beca
+  - enabled: 1
+    path: Assets/_Project/Scenes/ER.unity
+    guid: c28cb4545f0804dab8961d3903dc59dd
   - enabled: 1
     path: Assets/_Project/Scenes/Results.unity
     guid: c1f62b258e5ff47c69c9ecce270b7c0a
