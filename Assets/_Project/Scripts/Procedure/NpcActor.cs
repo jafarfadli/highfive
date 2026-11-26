@@ -12,13 +12,19 @@ using UnityEngine.UI;
 
 namespace SeoulFirstWeek.Procedure
 {
-    /// <summary>A staff member: body, voice, and a thinking bubble.</summary>
+    /// <summary>
+    /// A staff member: body, voice, and a thinking bubble. A voice on the phone (the 119 dispatcher) has no body:
+    /// no rig, its <see cref="face"/> is whatever the player should look at while talking, and its voice is
+    /// band-limited like a phone line.
+    /// </summary>
     public class NpcActor : MonoBehaviour
     {
         public string staffId;
         public HumanRig rig;
         public Transform bubble;
         public Transform face;
+        [Tooltip("A voice on the phone: fully 2D and filtered to the telephone band.")]
+        public bool phone;
         AudioSource source;
         bool stopped;
 
@@ -32,14 +38,20 @@ namespace SeoulFirstWeek.Procedure
             source = gameObject.AddComponent<AudioSource>();
             source.playOnAwake = false;
             // mostly 2D so the line stays loud and clear at the counter; a little 3D keeps it coming from the staff member
-            source.spatialBlend = 0.12f;
+            source.spatialBlend = phone ? 0f : 0.12f;
             source.minDistance = 6f;
+            if (phone)
+            {
+                // roughly 300–3400 Hz, the band a phone line carries
+                gameObject.AddComponent<AudioHighPassFilter>().cutoffFrequency = 320f;
+                gameObject.AddComponent<AudioLowPassFilter>().cutoffFrequency = 3400f;
+            }
             if (bubble) bubble.gameObject.SetActive(false);
         }
 
         public async Task PlayAsync(AudioClip clip, string text, CancellationToken ct)
         {
-            rig.talking = true;
+            if (rig) rig.talking = true;
             Speaking++;
             try
             {
@@ -76,7 +88,7 @@ namespace SeoulFirstWeek.Procedure
 
         public void SetThinking(bool on)
         {
-            rig.thinking = on;
+            if (rig) rig.thinking = on;
             if (bubble) bubble.gameObject.SetActive(on);
         }
     }

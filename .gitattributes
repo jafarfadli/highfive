@@ -169,3 +169,5 @@ Packages/packages-lock.json linguist-generated
 
 # Exceptions for .asset files such as lightning pre-baking
 LightingData.asset     binary
+# NavMesh data is saved binary even in Force Text mode; as unity-yaml its CRLF bytes were rewritten to LF on commit
+*NavMesh*.asset        binary

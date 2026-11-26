@@ -1,0 +1,683 @@
+{
+  "id": "emergency_119",
+  "verified": false,
+  "sources": [
+    "https://www.mois.go.kr/chd/sub/a06/rescue/screen.do (Ministry of the Interior and Safety, credited to the National Fire Agency: the reporting order and the dispatcher's example lines)",
+    "https://www.korea.kr/news/policyNewsView.do?newsId=148929801 (korea.kr, 2024-06-05: reporting to 119 by text, the 119 app and video)",
+    "https://mediahub.seoul.go.kr/archives/814173 (Seoul mediahub, 2014: Seoul 119 interprets for foreign callers)",
+    "https://news.seoul.go.kr/safe/archives/500473 (Seoul safety: 119 video reporting)",
+    "https://www.koreancenter.or.kr/news/articleView.html?idxno=1429305 (Korean Center news, 2026: 112 is the police line)"
+  ],
+  "titleKo": "119 신고",
+  "title": {
+    "en": "119 emergency call",
+    "vi": "Cuộc gọi khẩn cấp 119",
+    "id": "Panggilan darurat 119"
+  },
+  "briefing": {
+    "en": "A man has fallen on Myeongdong-gil. Call 119, answer the dispatcher and stay on the line.",
+    "vi": "Một người đàn ông bị ngã trên phố Myeongdong. Gọi 119, trả lời tổng đài viên và đừng cúp máy.",
+    "id": "Seorang bapak jatuh di Myeongdong-gil. Telepon 119, jawab petugas, dan jangan tutup telepon."
+  },
+  "completeNote": {
+    "en": "Report in this order: what happened, the exact place (a shop or building you can see), whether the person is conscious and breathing, your name and number. Then stay on the line. You can also reach 119 by text or the 119 app, and in Seoul an interpreter can join the call.",
+    "vi": "Báo theo thứ tự: chuyện gì xảy ra, vị trí chính xác (cửa hàng hay tòa nhà bạn nhìn thấy), người đó còn tỉnh và còn thở không, tên và số điện thoại của bạn. Sau đó đừng cúp máy. Bạn cũng có thể nhắn tin cho 119 hoặc dùng ứng dụng 119, và ở Seoul, phiên dịch viên có thể tham gia cuộc gọi.",
+    "id": "Laporkan berurutan: apa yang terjadi, lokasi persisnya (toko atau gedung yang terlihat), apakah orangnya sadar dan bernapas, lalu nama dan nomormu. Setelah itu jangan tutup telepon. Kamu juga bisa menghubungi 119 lewat SMS atau aplikasi 119, dan di Seoul penerjemah bisa ikut dalam panggilan."
+  },
+  "staff": [
+    {
+      "id": "dispatcher",
+      "name": "119 상황실",
+      "role": "119 dispatcher",
+      "roleText": {
+        "en": "119 dispatcher",
+        "vi": "Tổng đài viên 119",
+        "id": "Petugas 119"
+      },
+      "macVoice": "Yuna",
+      "macRate": 185,
+      "openaiVoice": "nova"
+    }
+  ],
+  "queue": {
+    "mode": "none"
+  },
+  "steps": [
+    {
+      "id": "to_patient",
+      "type": "go",
+      "staff": "dispatcher",
+      "target": "patient",
+      "task": {
+        "en": "Go to the man and call 119",
+        "vi": "Đến chỗ người đàn ông và gọi 119",
+        "id": "Hampiri bapak itu dan telepon 119"
+      }
+    },
+    {
+      "id": "dial",
+      "staff": "dispatcher",
+      "location": "phone",
+      "type": "keypad",
+      "npc": "",
+      "expect": "119",
+      "prompt": {
+        "en": "Dial 119",
+        "vi": "Bấm số 119",
+        "id": "Tekan 119"
+      },
+      "expectNote": {
+        "en": "119 is for fire and ambulance. 112 is the police.",
+        "vi": "119 là số cứu hỏa và cấp cứu. 112 là cảnh sát.",
+        "id": "119 untuk pemadam kebakaran dan ambulans. 112 untuk polisi."
+      },
+      "task": {
+        "en": "Call 119",
+        "vi": "Gọi 119",
+        "id": "Telepon 119"
+      }
+    },
+    {
+      "id": "what",
+      "staff": "dispatcher",
+      "location": "phone",
+      "npc": "119입니다. 무슨 일이세요?",
+      "meaning": {
+        "en": "This is 119. What's happening?",
+        "vi": "119 xin nghe. Có chuyện gì vậy?",
+        "id": "Ini 119. Ada kejadian apa?"
+      },
+      "choices": [
+        {
+          "ko": "사람이 쓰러졌어요.",
+          "rom": "sarami sseureojyeosseoyo",
+          "meaning": {
+            "en": "Someone has fallen down.",
+            "vi": "Có người bị ngã.",
+            "id": "Ada orang jatuh."
+          },
+          "result": "advance",
+          "reply": "네, 알겠습니다.",
+          "replyMeaning": {
+            "en": "Okay.",
+            "vi": "Vâng, tôi hiểu rồi.",
+            "id": "Baik."
+          }
+        },
+        {
+          "ko": "환자가 있어요.",
+          "rom": "hwanjaga isseoyo",
+          "meaning": {
+            "en": "There's a patient.",
+            "vi": "Có bệnh nhân ở đây.",
+            "id": "Ada pasien."
+          },
+          "result": "advance",
+          "reply": "네, 알겠습니다.",
+          "replyMeaning": {
+            "en": "Okay.",
+            "vi": "Vâng, tôi hiểu rồi.",
+            "id": "Baik."
+          }
+        },
+        {
+          "ko": "도와주세요!",
+          "rom": "dowajuseyo!",
+          "meaning": {
+            "en": "Help!",
+            "vi": "Giúp tôi với!",
+            "id": "Tolong!"
+          },
+          "result": "retry",
+          "reply": "네, 도와드릴게요. 무슨 일이세요? 환자가 있어요?",
+          "replyMeaning": {
+            "en": "Yes, we'll help. What's happening? Is there a patient?",
+            "vi": "Vâng, chúng tôi sẽ giúp. Có chuyện gì vậy? Có bệnh nhân không?",
+            "id": "Ya, kami bantu. Ada apa? Ada pasien?"
+          },
+          "note": {
+            "en": "도와주세요 alone doesn't tell them what happened. Say that first: 사람이 쓰러졌어요 or 환자가 있어요.",
+            "vi": "Chỉ nói 도와주세요 thì họ không biết chuyện gì xảy ra. Hãy nói điều đó trước: 사람이 쓰러졌어요 hoặc 환자가 있어요.",
+            "id": "도와주세요 saja tidak memberi tahu apa yang terjadi. Katakan itu dulu: 사람이 쓰러졌어요 atau 환자가 있어요."
+          }
+        }
+      ],
+      "task": {
+        "en": "Answer the 119 dispatcher",
+        "vi": "Trả lời tổng đài viên 119",
+        "id": "Jawab petugas 119"
+      }
+    },
+    {
+      "id": "where",
+      "staff": "dispatcher",
+      "location": "phone",
+      "npc": "환자가 있는 주소를 말씀해 주세요.",
+      "meaning": {
+        "en": "Tell me the address where the patient is.",
+        "vi": "Hãy cho tôi biết địa chỉ nơi bệnh nhân đang ở.",
+        "id": "Sebutkan alamat tempat pasien berada."
+      },
+      "choices": [
+        {
+          "ko": "명동길 별빛화장품 앞이에요.",
+          "rom": "myeongdong-gil byeolbit hwajangpum apieyo",
+          "meaning": {
+            "en": "In front of Byeolbit Cosmetics on Myeongdong-gil.",
+            "vi": "Trước cửa hàng mỹ phẩm Byeolbit trên đường Myeongdong-gil.",
+            "id": "Di depan toko kosmetik Byeolbit di Myeongdong-gil."
+          },
+          "result": "advance",
+          "reply": "명동길 별빛화장품 앞이요. 확인했습니다.",
+          "replyMeaning": {
+            "en": "In front of Byeolbit Cosmetics on Myeongdong-gil. Got it.",
+            "vi": "Trước cửa hàng mỹ phẩm Byeolbit trên đường Myeongdong-gil. Tôi đã ghi lại.",
+            "id": "Di depan Kosmetik Byeolbit di Myeongdong-gil. Baik, sudah dicatat."
+          }
+        },
+        {
+          "ko": "명동이에요.",
+          "rom": "myeongdongieyo",
+          "meaning": {
+            "en": "It's Myeongdong.",
+            "vi": "Ở Myeongdong.",
+            "id": "Di Myeongdong."
+          },
+          "result": "retry",
+          "reply": "명동 어디쯤이에요? 근처에 보이는 가게나 건물 이름을 말씀해 주세요.",
+          "replyMeaning": {
+            "en": "Where in Myeongdong? Tell me the name of a shop or building you can see.",
+            "vi": "Chỗ nào ở Myeongdong? Hãy nói tên cửa hàng hay tòa nhà bạn thấy gần đó.",
+            "id": "Myeongdong sebelah mana? Sebutkan nama toko atau gedung yang kamu lihat di dekatmu."
+          },
+          "note": {
+            "en": "Myeongdong is a whole district. Give the street and a shop you can see: 명동길 별빛화장품 앞이에요.",
+            "vi": "Myeongdong là cả một khu. Hãy nói tên đường và một cửa hàng bạn thấy: 명동길 별빛화장품 앞이에요.",
+            "id": "Myeongdong itu satu kawasan luas. Sebut nama jalan dan toko yang kamu lihat: 명동길 별빛화장품 앞이에요."
+          }
+        },
+        {
+          "ko": "동작구 흑석로 84예요.",
+          "rom": "dongjak-gu heukseok-ro palsipsayeyo",
+          "meaning": {
+            "en": "It's 84 Heukseok-ro, Dongjak-gu.",
+            "vi": "Số 84 Heukseok-ro, quận Dongjak.",
+            "id": "Heukseok-ro 84, Dongjak-gu."
+          },
+          "result": "retry",
+          "reply": "그건 사시는 곳 주소죠? 지금 환자가 있는 곳이요.",
+          "replyMeaning": {
+            "en": "That's where you live, isn't it? I need where the patient is now.",
+            "vi": "Đó là địa chỉ nhà bạn phải không? Tôi cần nơi bệnh nhân đang ở.",
+            "id": "Itu alamat rumahmu, kan? Yang saya perlu, tempat pasien sekarang."
+          },
+          "note": {
+            "en": "They need the place where the patient is now, not your home address. Look around: 명동길 별빛화장품 앞이에요.",
+            "vi": "Họ cần nơi bệnh nhân đang ở, không phải địa chỉ nhà bạn. Hãy nhìn xung quanh: 명동길 별빛화장품 앞이에요.",
+            "id": "Mereka butuh lokasi pasien sekarang, bukan alamat rumahmu. Lihat sekeliling: 명동길 별빛화장품 앞이에요."
+          }
+        },
+        {
+          "ko": "주소를 몰라요. 어떻게 해요?",
+          "rom": "jusoreul mollayo. eotteoke haeyo?",
+          "meaning": {
+            "en": "I don't know the address. What do I do?",
+            "vi": "Tôi không biết địa chỉ. Tôi phải làm sao?",
+            "id": "Saya tidak tahu alamatnya. Harus bagaimana?"
+          },
+          "result": "ask",
+          "reply": "근처에 보이는 큰 건물이나 가게 이름을 말씀해 주세요. 전봇대에 적힌 번호도 괜찮아요.",
+          "replyMeaning": {
+            "en": "Tell me the name of a big building or shop you can see. The number on a utility pole works too.",
+            "vi": "Hãy nói tên tòa nhà lớn hay cửa hàng bạn thấy gần đó. Số ghi trên cột điện cũng được.",
+            "id": "Sebutkan nama gedung besar atau toko yang kamu lihat. Nomor di tiang listrik juga boleh."
+          }
+        }
+      ]
+    },
+    {
+      "id": "state",
+      "staff": "dispatcher",
+      "location": "phone",
+      "npc": "환자가 의식이 있고, 숨은 쉬고 있나요?",
+      "meaning": {
+        "en": "Is the patient conscious, and breathing?",
+        "vi": "Bệnh nhân còn tỉnh không, có thở không?",
+        "id": "Apakah pasien sadar dan bernapas?"
+      },
+      "choices": [
+        {
+          "ko": "네, 의식 있고 숨도 쉬어요. 다리가 아프대요.",
+          "rom": "ne, uisik itgo sumdo swieoyo. dariga apeudaeyo",
+          "meaning": {
+            "en": "Yes, he's conscious and breathing. He says his leg hurts.",
+            "vi": "Vâng, ông ấy còn tỉnh và vẫn thở. Ông ấy nói bị đau chân.",
+            "id": "Ya, dia sadar dan bernapas. Katanya kakinya sakit."
+          },
+          "result": "advance",
+          "reply": "네, 알겠습니다.",
+          "replyMeaning": {
+            "en": "Okay.",
+            "vi": "Vâng, tôi hiểu rồi.",
+            "id": "Baik."
+          }
+        },
+        {
+          "ko": "의사는 없어요.",
+          "rom": "uisaneun eopseoyo",
+          "meaning": {
+            "en": "There's no doctor.",
+            "vi": "Không có bác sĩ.",
+            "id": "Tidak ada dokter."
+          },
+          "result": "retry",
+          "reply": "의사 말고 의식이요. 환자가 말을 하거나 눈을 뜨고 있어요?",
+          "replyMeaning": {
+            "en": "Not a doctor, consciousness. Is he talking, or are his eyes open?",
+            "vi": "Không phải bác sĩ, là ý thức. Ông ấy có nói chuyện hay mở mắt không?",
+            "id": "Bukan dokter, kesadaran. Apakah dia bicara atau matanya terbuka?"
+          },
+          "note": {
+            "en": "의식 = consciousness, 의사 = doctor. He's awake and talking: 의식 있어요.",
+            "vi": "의식 là ý thức (còn tỉnh hay không), 의사 là bác sĩ. Ông ấy tỉnh và nói chuyện được: 의식 있어요.",
+            "id": "의식 = kesadaran, 의사 = dokter. Dia sadar dan bisa bicara: 의식 있어요."
+          }
+        },
+        {
+          "ko": "의식이 뭐예요?",
+          "rom": "uisigi mwoyeyo?",
+          "meaning": {
+            "en": "What does 의식 mean?",
+            "vi": "의식 là gì ạ?",
+            "id": "의식 itu apa?"
+          },
+          "result": "ask",
+          "reply": "깨어 있는 거요. 환자가 말을 하거나 눈을 뜨고 있어요?",
+          "replyMeaning": {
+            "en": "Being awake. Is he talking, or are his eyes open?",
+            "vi": "Là còn tỉnh. Ông ấy có nói chuyện hay mở mắt không?",
+            "id": "Artinya sadar. Apakah dia bicara atau matanya terbuka?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "staff": "dispatcher",
+      "location": "phone",
+      "npc": "환자의 나이와 평소에 지병이 있으면 말씀해 주세요.",
+      "meaning": {
+        "en": "Tell me the patient's age, and any long-term illness he has.",
+        "vi": "Hãy cho tôi biết tuổi của bệnh nhân và bệnh nền nếu có.",
+        "id": "Sebutkan usia pasien dan penyakit menahunnya kalau ada."
+      },
+      "choices": [
+        {
+          "ko": "모르는 분이에요. 60대쯤 돼 보여요.",
+          "rom": "moreuneun bunieyo. yuksipdaejjeum dwae boyeoyo",
+          "meaning": {
+            "en": "I don't know him. He looks to be in his sixties.",
+            "vi": "Tôi không quen ông ấy. Trông ông ấy khoảng sáu mươi mấy tuổi.",
+            "id": "Saya tidak kenal bapak itu. Kelihatannya usia enam puluhan."
+          },
+          "result": "advance",
+          "reply": "네, 60대 남성이요.",
+          "replyMeaning": {
+            "en": "Okay, a man in his sixties.",
+            "vi": "Vâng, nam giới khoảng sáu mươi mấy tuổi.",
+            "id": "Baik, laki-laki usia enam puluhan."
+          }
+        },
+        {
+          "ko": "지병은 없어요.",
+          "rom": "jibyeongeun eopseoyo",
+          "meaning": {
+            "en": "He has no long-term illness.",
+            "vi": "Ông ấy không có bệnh nền.",
+            "id": "Dia tidak punya penyakit menahun."
+          },
+          "result": "retry",
+          "reply": "환자분을 아세요? 모르시면 모른다고 하셔도 돼요.",
+          "replyMeaning": {
+            "en": "Do you know him? If you don't, it's fine to say so.",
+            "vi": "Bạn có quen ông ấy không? Không biết thì cứ nói là không biết.",
+            "id": "Kamu kenal bapak itu? Kalau tidak tahu, bilang saja tidak tahu."
+          },
+          "note": {
+            "en": "Don't guess. If you don't know, say so: 모르는 분이에요 (I don't know him). Then say what you can see: 60대쯤 돼 보여요.",
+            "vi": "Đừng đoán. Không biết thì nói: 모르는 분이에요 (tôi không quen ông ấy). Rồi nói điều bạn thấy: 60대쯤 돼 보여요.",
+            "id": "Jangan menebak. Kalau tidak tahu, katakan: 모르는 분이에요 (saya tidak kenal bapak itu). Lalu sebut yang terlihat: 60대쯤 돼 보여요."
+          }
+        },
+        {
+          "ko": "지병이 뭐예요?",
+          "rom": "jibyeongi mwoyeyo?",
+          "meaning": {
+            "en": "What does 지병 mean?",
+            "vi": "지병 là gì ạ?",
+            "id": "지병 itu apa?"
+          },
+          "result": "ask",
+          "reply": "평소에 앓고 있는 병이요. 환자분을 아세요?",
+          "replyMeaning": {
+            "en": "An illness he's had for a long time. Do you know him?",
+            "vi": "Là bệnh ông ấy mắc từ lâu. Bạn có quen ông ấy không?",
+            "id": "Penyakit yang sudah lama diderita. Kamu kenal bapak itu?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "caller",
+      "staff": "dispatcher",
+      "location": "phone",
+      "npc": "전화하신 분 이름과 연락처를 알려 주세요.",
+      "meaning": {
+        "en": "Tell me your name and a contact number.",
+        "vi": "Hãy cho tôi biết tên và số liên lạc của bạn.",
+        "id": "Sebutkan nama dan nomor kontakmu."
+      },
+      "choices": [
+        {
+          "ko": "민이에요. 010-1234-5678이에요.",
+          "rom": "minieyo. gong-il-gong, il-i-sam-sa, o-yuk-chil-par-ieyo",
+          "meaning": {
+            "en": "I'm Minh. It's 010-1234-5678.",
+            "vi": "Tôi là Minh. Số của tôi là 010-1234-5678.",
+            "id": "Saya Minh. Nomor saya 010-1234-5678."
+          },
+          "result": "advance",
+          "reply": "네, 민 님. 확인했습니다.",
+          "replyMeaning": {
+            "en": "Thank you, Minh. Noted.",
+            "vi": "Vâng, Minh. Tôi đã ghi lại.",
+            "id": "Baik, Minh. Sudah dicatat."
+          }
+        },
+        {
+          "ko": "민이에요.",
+          "rom": "minieyo",
+          "meaning": {
+            "en": "I'm Minh.",
+            "vi": "Tôi là Minh.",
+            "id": "Saya Minh."
+          },
+          "result": "retry",
+          "reply": "연락처도 알려 주세요. 휴대폰 번호요.",
+          "replyMeaning": {
+            "en": "Your contact number too, please. Your mobile number.",
+            "vi": "Cho tôi cả số liên lạc nữa. Số điện thoại di động ấy.",
+            "id": "Nomor kontaknya juga. Nomor HP-mu."
+          },
+          "note": {
+            "en": "연락처 means a number to reach you. They asked for both: 민이에요. 010-1234-5678이에요.",
+            "vi": "연락처 là số để liên lạc với bạn. Họ hỏi cả hai: 민이에요. 010-1234-5678이에요.",
+            "id": "연락처 artinya nomor untuk menghubungimu. Mereka minta keduanya: 민이에요. 010-1234-5678이에요."
+          }
+        },
+        {
+          "ko": "연락처가 뭐예요?",
+          "rom": "yeollakcheoga mwoyeyo?",
+          "meaning": {
+            "en": "What does 연락처 mean?",
+            "vi": "연락처 là gì ạ?",
+            "id": "연락처 itu apa?"
+          },
+          "result": "ask",
+          "reply": "연락받으실 수 있는 전화번호요.",
+          "replyMeaning": {
+            "en": "A phone number where we can reach you.",
+            "vi": "Là số điện thoại để liên lạc với bạn.",
+            "id": "Nomor telepon yang bisa dihubungi."
+          }
+        }
+      ]
+    },
+    {
+      "id": "hold",
+      "staff": "dispatcher",
+      "location": "phone",
+      "npc": "구급차가 가고 있어요. 전화 끊지 마세요.",
+      "meaning": {
+        "en": "The ambulance is on its way. Don't hang up.",
+        "vi": "Xe cứu thương đang đến. Đừng cúp máy.",
+        "id": "Ambulans sedang dalam perjalanan. Jangan tutup teleponnya."
+      },
+      "choices": [
+        {
+          "ko": "네, 안 끊고 기다릴게요.",
+          "rom": "ne, an kkeunko gidarilgeyo",
+          "meaning": {
+            "en": "Okay, I'll stay on the line.",
+            "vi": "Vâng, tôi sẽ giữ máy chờ.",
+            "id": "Baik, saya tetap di telepon dan menunggu."
+          },
+          "result": "advance",
+          "reply": "네, 그렇게 해 주세요.",
+          "replyMeaning": {
+            "en": "Yes, please do.",
+            "vi": "Vâng, bạn cứ làm vậy nhé.",
+            "id": "Ya, tolong begitu."
+          }
+        },
+        {
+          "ko": "네, 끊을게요.",
+          "rom": "ne, kkeuneulgeyo",
+          "meaning": {
+            "en": "Okay, I'll hang up.",
+            "vi": "Vâng, tôi cúp máy nhé.",
+            "id": "Baik, saya tutup teleponnya."
+          },
+          "result": "retry",
+          "reply": "아니요, 끊지 마세요. 구급차가 도착할 때까지 통화 유지해 주세요.",
+          "replyMeaning": {
+            "en": "No, don't hang up. Stay on the call until the ambulance arrives.",
+            "vi": "Không, đừng cúp máy. Hãy giữ máy cho đến khi xe cứu thương tới.",
+            "id": "Jangan ditutup. Tetap tersambung sampai ambulans tiba."
+          },
+          "note": {
+            "en": "끊다 = to hang up. Stay on the line until help arrives: 안 끊고 기다릴게요.",
+            "vi": "끊다 = cúp máy. Hãy giữ máy cho đến khi có người đến giúp: 안 끊고 기다릴게요.",
+            "id": "끊다 = menutup telepon. Tetap tersambung sampai bantuan datang: 안 끊고 기다릴게요."
+          }
+        },
+        {
+          "ko": "네? 다시 한번만 말씀해 주세요.",
+          "rom": "ne? dasi hanbeonman malsseumhae juseyo",
+          "meaning": {
+            "en": "Sorry? Could you say that once more?",
+            "vi": "Dạ? Chị nói lại giúp tôi được không?",
+            "id": "Maaf? Bisa diulang sekali lagi?"
+          },
+          "result": "ask",
+          "reply": "구급차가 가고 있어요. 전화 끊지 말고 기다려 주세요.",
+          "replyMeaning": {
+            "en": "The ambulance is coming. Don't hang up; wait on the line.",
+            "vi": "Xe cứu thương đang đến. Đừng cúp máy, hãy chờ nhé.",
+            "id": "Ambulans sedang menuju ke sana. Jangan tutup teleponnya, tunggu saja."
+          }
+        }
+      ]
+    },
+    {
+      "id": "wait_ambulance",
+      "type": "go",
+      "staff": "dispatcher",
+      "target": "ambulance",
+      "task": {
+        "en": "Stay with him until the ambulance arrives",
+        "vi": "Ở bên ông ấy cho đến khi xe cứu thương tới",
+        "id": "Temani bapak itu sampai ambulans datang"
+      }
+    }
+  ],
+  "grants": [
+    "done:emergency_119"
+  ],
+  "phrases": [
+    {
+      "ko": "환자가 있어요.",
+      "rom": "hwanjaga isseoyo",
+      "meaning": {
+        "en": "There's a patient.",
+        "vi": "Có bệnh nhân ở đây.",
+        "id": "Ada pasien."
+      }
+    },
+    {
+      "ko": "사람이 쓰러졌어요.",
+      "rom": "sarami sseureojyeosseoyo",
+      "meaning": {
+        "en": "Someone has fallen down.",
+        "vi": "Có người bị ngã.",
+        "id": "Ada orang jatuh."
+      }
+    },
+    {
+      "ko": "명동길 별빛화장품 앞이에요.",
+      "rom": "myeongdong-gil byeolbit hwajangpum apieyo",
+      "meaning": {
+        "en": "In front of Byeolbit Cosmetics on Myeongdong-gil.",
+        "vi": "Trước cửa hàng mỹ phẩm Byeolbit trên đường Myeongdong-gil.",
+        "id": "Di depan toko kosmetik Byeolbit di Myeongdong-gil."
+      }
+    },
+    {
+      "ko": "의식 있고 숨도 쉬어요.",
+      "rom": "uisik itgo sumdo swieoyo",
+      "meaning": {
+        "en": "He's conscious and breathing.",
+        "vi": "Ông ấy còn tỉnh và vẫn thở.",
+        "id": "Dia sadar dan bernapas."
+      }
+    },
+    {
+      "ko": "모르는 분이에요.",
+      "rom": "moreuneun bunieyo",
+      "meaning": {
+        "en": "I don't know him.",
+        "vi": "Tôi không quen người này.",
+        "id": "Saya tidak kenal orang ini."
+      }
+    },
+    {
+      "ko": "안 끊고 기다릴게요.",
+      "rom": "an kkeunko gidarilgeyo",
+      "meaning": {
+        "en": "I'll stay on the line.",
+        "vi": "Tôi sẽ giữ máy chờ.",
+        "id": "Saya tetap di telepon."
+      }
+    }
+  ],
+  "glossary": [
+    {
+      "ko": "환자",
+      "rom": "hwanja",
+      "meaning": {
+        "en": "Patient",
+        "vi": "Bệnh nhân",
+        "id": "Pasien"
+      }
+    },
+    {
+      "ko": "쓰러지다",
+      "rom": "sseureojida",
+      "meaning": {
+        "en": "To fall down, collapse",
+        "vi": "Ngã xuống, ngã quỵ",
+        "id": "Jatuh, roboh"
+      }
+    },
+    {
+      "ko": "주소",
+      "rom": "juso",
+      "meaning": {
+        "en": "Address",
+        "vi": "Địa chỉ",
+        "id": "Alamat"
+      }
+    },
+    {
+      "ko": "앞",
+      "rom": "ap",
+      "meaning": {
+        "en": "In front of",
+        "vi": "Phía trước",
+        "id": "Di depan"
+      }
+    },
+    {
+      "ko": "전봇대",
+      "rom": "jeonbotdae",
+      "meaning": {
+        "en": "Utility pole (it carries a number)",
+        "vi": "Cột điện (có ghi số)",
+        "id": "Tiang listrik (ada nomornya)"
+      }
+    },
+    {
+      "ko": "의식 · 의사",
+      "rom": "uisik · uisa",
+      "meaning": {
+        "en": "Consciousness · doctor",
+        "vi": "Ý thức (còn tỉnh) · bác sĩ",
+        "id": "Kesadaran · dokter"
+      }
+    },
+    {
+      "ko": "숨을 쉬다",
+      "rom": "sumeul swida",
+      "meaning": {
+        "en": "To breathe",
+        "vi": "Thở",
+        "id": "Bernapas"
+      }
+    },
+    {
+      "ko": "지병",
+      "rom": "jibyeong",
+      "meaning": {
+        "en": "Long-term illness",
+        "vi": "Bệnh nền",
+        "id": "Penyakit menahun"
+      }
+    },
+    {
+      "ko": "60대",
+      "rom": "yuksipdae",
+      "meaning": {
+        "en": "In one's sixties",
+        "vi": "Độ tuổi sáu mươi",
+        "id": "Usia enam puluhan"
+      }
+    },
+    {
+      "ko": "연락처",
+      "rom": "yeollakcheo",
+      "meaning": {
+        "en": "Contact number",
+        "vi": "Số liên lạc",
+        "id": "Nomor kontak"
+      }
+    },
+    {
+      "ko": "전화를 끊다",
+      "rom": "jeonhwareul kkeunta",
+      "meaning": {
+        "en": "To hang up",
+        "vi": "Cúp máy",
+        "id": "Menutup telepon"
+      }
+    },
+    {
+      "ko": "구급차",
+      "rom": "gugeupcha",
+      "meaning": {
+        "en": "Ambulance",
+        "vi": "Xe cứu thương",
+        "id": "Ambulans"
+      }
+    }
+  ]
+}

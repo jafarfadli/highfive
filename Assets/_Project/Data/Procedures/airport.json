@@ -1,0 +1,961 @@
+{
+  "id": "airport",
+  "verified": false,
+  "sources": [
+    "https://www.airport.kr/ap_ko/921/subview.do (Incheon Airport, 유인입국심사: Koreans on the blue line, foreigners on the red line; passport, arrival card, fingerprints and a face image)",
+    "https://moj.go.kr/moj/2433/subview.do (Ministry of Justice, FBIS: both index fingers and a face photo at entry)",
+    "https://www.immigration.go.kr/immigration/1514/subview.do (Korea Immigration Service: entry inspection and biometrics)",
+    "https://elaw.klri.re.kr/eng_service/lawViewContent.do?hseq=46316 (Immigration Act, Articles 12 and 12-2: the purpose of entry must match the status of stay)",
+    "https://www.110.go.kr/data/counselView.do?num=A01_691573 (MOIS Q&A, 2026-01-15: who submits the e-Arrival Card)",
+    "https://www.studyinkorea.go.kr/en/life/immigration.do (Study in Korea: baggage claim; register within 90 days of arrival)",
+    "https://www.airport.kr/ap_ko/918/subview.do (Incheon Airport, 세관신고: the 신고있음 and 신고없음 lanes; meat, dairy and fruit must be declared; customs may still check people in the 신고없음 lane at random)",
+    "https://www.mafra.go.kr/bbs/home/792/578526/artclView.do (MAFRA, 2026-07-23: quarantine checks on farm products on Vietnam routes; fines of up to 10 million won for farm products brought in illegally; fruit and sausages named)",
+    "https://www.korea.kr/news/policyNewsView.do?newsId=148928947 (Korea Customs Service via korea.kr: since 1 May 2023 a traveller with nothing to declare fills in no customs form)"
+  ],
+  "titleKo": "입국심사",
+  "title": {
+    "en": "Immigration Check",
+    "vi": "Kiểm soát nhập cảnh",
+    "id": "Pemeriksaan Imigrasi"
+  },
+  "briefing": {
+    "en": "Just landed on a D-4 visa. Pass immigration, collect your suitcase, clear customs.",
+    "vi": "Vừa hạ cánh với visa D-4. Làm thủ tục nhập cảnh, lấy vali, qua hải quan.",
+    "id": "Baru mendarat dengan visa D-4. Lewati imigrasi, ambil koper, lewati bea cukai."
+  },
+  "completeNote": {
+    "en": "You're staying a year, so apply for your residence card (ARC, 외국인등록증) at an immigration office within 90 days of arrival.",
+    "vi": "Bạn sẽ ở Hàn một năm, nên hãy làm thẻ cư trú (ARC, 외국인등록증) tại văn phòng xuất nhập cảnh trong vòng 90 ngày kể từ ngày nhập cảnh.",
+    "id": "Kamu tinggal setahun, jadi ajukan kartu tinggal (ARC, 외국인등록증) di kantor imigrasi dalam 90 hari sejak tiba."
+  },
+  "notes": [
+    {
+      "needs": "sit:nothing",
+      "note": {
+        "en": "With nothing to declare, walk straight through 신고없음: there's no customs form to fill in. Customs may still check a bag at random.",
+        "vi": "Không có hàng cần khai báo thì cứ đi thẳng qua lối 신고없음: không phải điền tờ khai hải quan. Hải quan vẫn có thể kiểm tra ngẫu nhiên một số hành lý.",
+        "id": "Kalau tidak ada barang yang perlu dilaporkan, langsung lewat jalur 신고없음: tidak ada formulir bea cukai yang perlu diisi. Petugas tetap bisa memeriksa tas secara acak."
+      }
+    },
+    {
+      "needs": "sit:food",
+      "note": {
+        "en": "Meat, fruit and dairy from home must be declared (신고): walk through 신고있음 and tell the officer what you have. If you don't declare meat or other farm products, you can be fined up to 10 million won.",
+        "vi": "Thịt, trái cây và sản phẩm từ sữa mang từ nhà đều phải khai báo (신고): hãy đi lối 신고있음 và nói cho cán bộ biết bạn mang gì. Nếu không khai báo thịt hay nông sản, bạn có thể bị phạt đến 10 triệu won.",
+        "id": "Daging, buah, dan produk susu dari rumah wajib dilaporkan (신고): lewat jalur 신고있음 dan beri tahu petugas apa yang kamu bawa. Kalau tidak melaporkan daging atau hasil pertanian, kamu bisa didenda hingga 10 juta won."
+      }
+    }
+  ],
+  "staff": [
+    {
+      "id": "inspector",
+      "name": "정해준 심사관",
+      "role": "immigration inspector",
+      "roleText": {
+        "en": "Immigration inspector",
+        "vi": "Cán bộ kiểm soát nhập cảnh",
+        "id": "Petugas pemeriksa imigrasi"
+      },
+      "macVoice": "Reed (Korean (South Korea))",
+      "macRate": 180,
+      "openaiVoice": "onyx"
+    },
+    {
+      "id": "guide",
+      "name": "윤소희",
+      "role": "airport guide",
+      "roleText": {
+        "en": "Airport guide",
+        "vi": "Nhân viên hướng dẫn",
+        "id": "Petugas pemandu"
+      },
+      "macVoice": "Yuna",
+      "macRate": 190,
+      "openaiVoice": "shimmer"
+    },
+    {
+      "id": "customs",
+      "name": "강민재 주무관",
+      "role": "customs officer",
+      "roleText": {
+        "en": "Customs officer",
+        "vi": "Cán bộ hải quan",
+        "id": "Petugas bea cukai"
+      },
+      "macVoice": "Eddy (Korean (South Korea))",
+      "macRate": 185,
+      "openaiVoice": "echo"
+    }
+  ],
+  "queue": {
+    "mode": "walkin",
+    "counter": 3,
+    "names": []
+  },
+  "steps": [
+    {
+      "id": "lane",
+      "type": "go",
+      "staff": "guide",
+      "target": "lane_foreign",
+      "task": {
+        "en": "Queue in the foreigners' line",
+        "vi": "Xếp hàng ở làn dành cho người nước ngoài",
+        "id": "Antre di jalur untuk orang asing"
+      },
+      "wrong": [
+        {
+          "station": "lane_korean",
+          "line": "여기는 내국인 줄이에요. 외국인은 빨간 선 쪽으로 가세요.",
+          "lineMeaning": {
+            "en": "This line is for Korean citizens. Foreigners, please go to the red line.",
+            "vi": "Hàng này dành cho công dân Hàn Quốc. Người nước ngoài vui lòng đi về phía vạch đỏ.",
+            "id": "Antrean ini untuk warga Korea. Orang asing silakan ke garis merah."
+          },
+          "note": {
+            "en": "내국인 means Korean citizens, who queue on the blue line. 외국인 means foreigners: you queue on the red line.",
+            "vi": "내국인 là công dân Hàn Quốc, xếp hàng ở vạch xanh dương. 외국인 là người nước ngoài: bạn xếp hàng ở vạch đỏ.",
+            "id": "내국인 artinya warga Korea, yang antre di garis biru. 외국인 artinya orang asing: kamu antre di garis merah."
+          }
+        }
+      ]
+    },
+    {
+      "id": "passport",
+      "staff": "inspector",
+      "location": "counter",
+      "npc": "안녕하세요. 여권 주시겠어요?",
+      "meaning": {
+        "en": "Hello. May I have your passport?",
+        "vi": "Xin chào. Cho tôi xem hộ chiếu được không?",
+        "id": "Halo. Boleh minta paspornya?"
+      },
+      "choices": [
+        {
+          "ko": "네, 여기 있어요.",
+          "rom": "ne, yeogi isseoyo",
+          "meaning": {
+            "en": "Yes, here it is.",
+            "vi": "Vâng, đây ạ.",
+            "id": "Ya, ini dia."
+          },
+          "result": "advance",
+          "reply": "네, 확인하겠습니다.",
+          "replyMeaning": {
+            "en": "Thank you. Let me check it.",
+            "vi": "Vâng, để tôi kiểm tra.",
+            "id": "Baik, saya periksa dulu."
+          },
+          "give": "passport"
+        },
+        {
+          "ko": "여기 있어요.",
+          "rom": "yeogi isseoyo",
+          "meaning": {
+            "en": "Here you go.",
+            "vi": "Đây ạ.",
+            "id": "Ini."
+          },
+          "result": "retry",
+          "reply": "이건 재학증명서네요. 여권 주시겠어요?",
+          "replyMeaning": {
+            "en": "That's a certificate of enrollment. May I have your passport?",
+            "vi": "Đây là giấy xác nhận đang học. Cho tôi xem hộ chiếu nhé?",
+            "id": "Ini surat keterangan kuliah. Boleh minta paspornya?"
+          },
+          "note": {
+            "en": "The officer asked for your 여권 (passport), which holds your visa. Hand over what was asked for.",
+            "vi": "Cán bộ hỏi 여권 (hộ chiếu), trong đó có visa của bạn. Hãy đưa đúng giấy tờ được yêu cầu.",
+            "id": "Petugas meminta 여권 (paspor), yang berisi visamu. Serahkan yang diminta."
+          },
+          "give": "enrollment"
+        },
+        {
+          "ko": "네? 다시 한번만 말씀해 주세요.",
+          "rom": "ne? dasi hanbeonman malsseumhae juseyo",
+          "meaning": {
+            "en": "Sorry? Could you say that once more?",
+            "vi": "Dạ? Anh nói lại giúp tôi được không?",
+            "id": "Maaf? Bisa diulang sekali lagi?"
+          },
+          "result": "ask",
+          "reply": "여권이요. 여권 주시겠어요?",
+          "replyMeaning": {
+            "en": "Your passport. May I have your passport?",
+            "vi": "Hộ chiếu. Cho tôi xem hộ chiếu nhé?",
+            "id": "Paspor. Boleh minta paspornya?"
+          }
+        }
+      ],
+      "task": {
+        "en": "Pass the immigration check at counter 3",
+        "vi": "Làm thủ tục nhập cảnh ở quầy số 3",
+        "id": "Jalani pemeriksaan imigrasi di loket 3"
+      }
+    },
+    {
+      "id": "fingerprints",
+      "staff": "inspector",
+      "location": "counter",
+      "npc": "지문 확인하겠습니다. 양손 검지를 스캐너에 올려 주세요.",
+      "meaning": {
+        "en": "We'll check your fingerprints. Put both index fingers on the scanner.",
+        "vi": "Tôi sẽ kiểm tra vân tay. Bạn đặt hai ngón trỏ lên máy quét.",
+        "id": "Kami periksa sidik jari. Letakkan kedua jari telunjuk di pemindai."
+      },
+      "choices": [
+        {
+          "ko": "[양손 검지를 올린다]",
+          "meaning": {
+            "en": "Put both index fingers on the scanner.",
+            "vi": "Đặt hai ngón trỏ lên máy quét.",
+            "id": "Letakkan kedua jari telunjuk di pemindai."
+          },
+          "result": "advance",
+          "reply": "네, 손 떼셔도 돼요.",
+          "replyMeaning": {
+            "en": "Okay, you can lift your fingers.",
+            "vi": "Được rồi, bạn nhấc tay ra nhé.",
+            "id": "Baik, jarinya boleh diangkat."
+          }
+        },
+        {
+          "ko": "[양손 엄지를 올린다]",
+          "meaning": {
+            "en": "Put both thumbs on it.",
+            "vi": "Đặt hai ngón cái lên.",
+            "id": "Letakkan kedua jempol."
+          },
+          "result": "retry",
+          "reply": "엄지 말고 검지요. 두 번째 손가락이요.",
+          "replyMeaning": {
+            "en": "Not your thumbs, your index fingers. The second finger.",
+            "vi": "Không phải ngón cái, là ngón trỏ. Ngón thứ hai.",
+            "id": "Bukan jempol, telunjuk. Jari kedua."
+          },
+          "note": {
+            "en": "검지 = index finger, 엄지 = thumb. Put both index fingers on the scanner.",
+            "vi": "검지 = ngón trỏ, 엄지 = ngón cái. Hãy đặt cả hai ngón trỏ lên máy quét.",
+            "id": "검지 = jari telunjuk, 엄지 = jempol. Letakkan kedua telunjuk di pemindai."
+          }
+        },
+        {
+          "ko": "검지가 뭐예요?",
+          "rom": "geomjiga mwoyeyo?",
+          "meaning": {
+            "en": "What's 검지?",
+            "vi": "검지 là gì ạ?",
+            "id": "검지 itu apa?"
+          },
+          "result": "ask",
+          "reply": "검지는 두 번째 손가락이에요. 양손 검지를 올려 주세요.",
+          "replyMeaning": {
+            "en": "검지 is your second finger. Put both of them on, please.",
+            "vi": "검지 là ngón thứ hai. Bạn đặt hai ngón trỏ lên nhé.",
+            "id": "검지 itu jari kedua. Letakkan kedua telunjuk, ya."
+          }
+        }
+      ]
+    },
+    {
+      "id": "face_photo",
+      "staff": "inspector",
+      "location": "counter",
+      "npc": "정면에 있는 카메라를 봐 주세요.",
+      "meaning": {
+        "en": "Please look at the camera in front of you.",
+        "vi": "Hãy nhìn vào camera phía trước.",
+        "id": "Silakan lihat kamera di depanmu."
+      },
+      "choices": [
+        {
+          "ko": "[정면 카메라를 똑바로 본다]",
+          "meaning": {
+            "en": "Look straight into the camera in front of you.",
+            "vi": "Nhìn thẳng vào camera phía trước.",
+            "id": "Tatap lurus kamera di depanmu."
+          },
+          "result": "advance",
+          "reply": "네, 좋습니다.",
+          "replyMeaning": {
+            "en": "Good.",
+            "vi": "Tốt.",
+            "id": "Bagus."
+          }
+        },
+        {
+          "ko": "[심사관 얼굴을 본다]",
+          "meaning": {
+            "en": "Look at the officer's face.",
+            "vi": "Nhìn vào mặt cán bộ.",
+            "id": "Menatap wajah petugas."
+          },
+          "result": "retry",
+          "reply": "저 말고 앞에 있는 카메라를 봐 주세요.",
+          "replyMeaning": {
+            "en": "Not at me. Look at the camera in front of you.",
+            "vi": "Đừng nhìn tôi, hãy nhìn camera phía trước.",
+            "id": "Bukan ke saya. Lihat kamera di depanmu."
+          },
+          "note": {
+            "en": "정면 means straight ahead. Look into the camera in front of you, not at the officer, so it can take your face photo.",
+            "vi": "정면 là phía trước mặt. Hãy nhìn vào camera phía trước, đừng nhìn cán bộ, để máy chụp được khuôn mặt bạn.",
+            "id": "정면 artinya lurus ke depan. Tatap kamera di depanmu, bukan petugas, supaya wajahmu bisa difoto."
+          }
+        },
+        {
+          "ko": "카메라가 어디 있어요?",
+          "rom": "kameraga eodi isseoyo?",
+          "meaning": {
+            "en": "Where's the camera?",
+            "vi": "Camera ở đâu ạ?",
+            "id": "Kameranya di mana?"
+          },
+          "result": "ask",
+          "reply": "바로 앞에 있는 카메라요. 거기를 봐 주세요.",
+          "replyMeaning": {
+            "en": "The one right in front of you. Look there, please.",
+            "vi": "Cái ngay trước mặt bạn. Hãy nhìn vào đó.",
+            "id": "Yang tepat di depanmu. Lihat ke sana, ya."
+          }
+        }
+      ]
+    },
+    {
+      "id": "purpose",
+      "staff": "inspector",
+      "location": "counter",
+      "npc": "한국에 무슨 일로 오셨어요?",
+      "meaning": {
+        "en": "What brings you to Korea?",
+        "vi": "Bạn đến Hàn Quốc có việc gì?",
+        "id": "Ada keperluan apa ke Korea?"
+      },
+      "choices": [
+        {
+          "ko": "한국어 공부하러 왔어요. 어학연수예요.",
+          "rom": "hangugeo gongbuhareo wasseoyo. eohagyeonsuyeyo",
+          "meaning": {
+            "en": "I came to study Korean. It's a language course.",
+            "vi": "Tôi đến để học tiếng Hàn, theo khóa học tiếng.",
+            "id": "Saya datang untuk belajar bahasa Korea. Ikut kursus bahasa."
+          },
+          "result": "advance",
+          "reply": "네, 어학연수요.",
+          "replyMeaning": {
+            "en": "I see, a language course.",
+            "vi": "Vâng, học tiếng.",
+            "id": "Baik, kursus bahasa."
+          }
+        },
+        {
+          "ko": "여행하러 왔어요.",
+          "rom": "yeohaenghareo wasseoyo",
+          "meaning": {
+            "en": "I came to travel.",
+            "vi": "Tôi đến để du lịch.",
+            "id": "Saya datang untuk jalan-jalan."
+          },
+          "result": "retry",
+          "reply": "학생 비자인데요. 공부하러 오신 거 아니에요?",
+          "replyMeaning": {
+            "en": "You have a student visa. Didn't you come to study?",
+            "vi": "Visa của bạn là visa sinh viên mà. Bạn không đến để học sao?",
+            "id": "Visamu visa pelajar. Bukannya kamu datang untuk belajar?"
+          },
+          "note": {
+            "en": "Your purpose must match your visa, and D-4 is for language study. Say 한국어 공부하러 왔어요.",
+            "vi": "Mục đích phải khớp với visa, mà D-4 là visa học tiếng. Hãy nói 한국어 공부하러 왔어요.",
+            "id": "Tujuanmu harus sesuai visa, dan D-4 untuk belajar bahasa. Katakan 한국어 공부하러 왔어요."
+          }
+        },
+        {
+          "ko": "공부하러 왔어.",
+          "rom": "gongbuhareo wasseo",
+          "meaning": {
+            "en": "I came to study.",
+            "vi": "Tôi đến để học.",
+            "id": "Aku datang buat belajar."
+          },
+          "result": "retry",
+          "reply": "…네? 공부하러 오셨어요?",
+          "replyMeaning": {
+            "en": "…Sorry? You came to study?",
+            "vi": "…Dạ? Bạn đến để học à?",
+            "id": "…Ya? Datang untuk belajar?"
+          },
+          "note": {
+            "en": "Without -요 at the end this is 반말, casual speech. It sounds rude to an officer. Say 공부하러 왔어요.",
+            "vi": "Không có -요 ở cuối là 반말 (nói trống không), nghe bất lịch sự với cán bộ. Hãy nói 공부하러 왔어요.",
+            "id": "Tanpa -요 di akhir kalimat itu 반말 (bahasa santai) dan terdengar tidak sopan ke petugas. Katakan 공부하러 왔어요."
+          }
+        },
+        {
+          "ko": "천천히 말씀해 주시겠어요?",
+          "rom": "cheoncheonhi malsseumhae jusigesseoyo?",
+          "meaning": {
+            "en": "Could you speak slowly, please?",
+            "vi": "Anh nói chậm giúp tôi được không?",
+            "id": "Bisa bicara lebih pelan?"
+          },
+          "result": "ask",
+          "reply": "네. 한국에 왜 오셨어요? 입국 목적이요.",
+          "replyMeaning": {
+            "en": "Sure. Why did you come to Korea? Your purpose of entry.",
+            "vi": "Vâng. Bạn đến Hàn Quốc để làm gì? Tức là mục đích nhập cảnh.",
+            "id": "Baik. Kenapa kamu datang ke Korea? Maksudnya tujuan masuk."
+          }
+        }
+      ]
+    },
+    {
+      "id": "address",
+      "staff": "inspector",
+      "location": "counter",
+      "npc": "한국에서는 어디에서 지내실 거예요?",
+      "meaning": {
+        "en": "Where will you be staying in Korea?",
+        "vi": "Ở Hàn Quốc bạn sẽ ở đâu?",
+        "id": "Di Korea kamu akan tinggal di mana?"
+      },
+      "choices": [
+        {
+          "ko": "학교 기숙사요. 동작구 흑석로 84예요.",
+          "rom": "hakgyo gisuksayo. dongjak-gu heukseok-ro palsipsayeyo",
+          "meaning": {
+            "en": "The school dormitory, at 84 Heukseok-ro, Dongjak-gu.",
+            "vi": "Ký túc xá của trường, số 84 Heukseok-ro, quận Dongjak.",
+            "id": "Asrama sekolah, di Heukseok-ro 84, Dongjak-gu."
+          },
+          "result": "advance",
+          "reply": "네, 기숙사요. 알겠습니다.",
+          "replyMeaning": {
+            "en": "The dormitory. Got it.",
+            "vi": "Vâng, ký túc xá. Tôi hiểu rồi.",
+            "id": "Baik, asrama. Saya mengerti."
+          }
+        },
+        {
+          "ko": "아직 몰라요.",
+          "rom": "ajik mollayo",
+          "meaning": {
+            "en": "I don't know yet.",
+            "vi": "Tôi chưa biết.",
+            "id": "Saya belum tahu."
+          },
+          "result": "retry",
+          "reply": "한국 주소를 모르세요? 어디에서 지내실 거예요?",
+          "replyMeaning": {
+            "en": "You don't know your Korean address? Where will you stay?",
+            "vi": "Bạn không biết địa chỉ ở Hàn à? Bạn sẽ ở đâu?",
+            "id": "Kamu tidak tahu alamatmu di Korea? Kamu akan tinggal di mana?"
+          },
+          "note": {
+            "en": "Have your Korean address ready before you land. Yours is the school dormitory: 동작구 흑석로 84.",
+            "vi": "Hãy chuẩn bị sẵn địa chỉ ở Hàn trước khi hạ cánh. Địa chỉ của bạn là ký túc xá của trường: 동작구 흑석로 84.",
+            "id": "Siapkan alamatmu di Korea sebelum mendarat. Alamatmu asrama sekolah: 동작구 흑석로 84."
+          }
+        },
+        {
+          "ko": "한국 주소요?",
+          "rom": "hanguk jusoyo?",
+          "meaning": {
+            "en": "My address in Korea?",
+            "vi": "Địa chỉ ở Hàn ạ?",
+            "id": "Alamat di Korea?"
+          },
+          "result": "ask",
+          "reply": "네, 한국에서 지내실 곳 주소요.",
+          "replyMeaning": {
+            "en": "Yes, the address where you'll stay in Korea.",
+            "vi": "Vâng, địa chỉ nơi bạn sẽ ở tại Hàn Quốc.",
+            "id": "Ya, alamat tempat kamu tinggal di Korea."
+          }
+        }
+      ]
+    },
+    {
+      "id": "stay_length",
+      "staff": "inspector",
+      "location": "counter",
+      "npc": "한국에 얼마나 계실 거예요?",
+      "meaning": {
+        "en": "How long will you stay in Korea?",
+        "vi": "Bạn sẽ ở Hàn Quốc bao lâu?",
+        "id": "Berapa lama kamu akan tinggal di Korea?"
+      },
+      "choices": [
+        {
+          "ko": "일 년이요.",
+          "rom": "il nyeoniyo",
+          "meaning": {
+            "en": "One year.",
+            "vi": "Một năm.",
+            "id": "Satu tahun."
+          },
+          "result": "advance",
+          "reply": "네, 알겠습니다.",
+          "replyMeaning": {
+            "en": "Okay.",
+            "vi": "Vâng, tôi hiểu rồi.",
+            "id": "Baik."
+          }
+        },
+        {
+          "ko": "일주일이요.",
+          "rom": "iljuiriyo",
+          "meaning": {
+            "en": "One week.",
+            "vi": "Một tuần.",
+            "id": "Satu minggu."
+          },
+          "result": "retry",
+          "reply": "일주일만 계세요? 어학연수라고 하셨는데요.",
+          "replyMeaning": {
+            "en": "Only a week? You said it's a language course.",
+            "vi": "Chỉ một tuần thôi à? Bạn nói là đi học tiếng mà.",
+            "id": "Cuma seminggu? Katanya kursus bahasa."
+          },
+          "note": {
+            "en": "일 년 = one year, 일주일 = one week. Your course is one year: 일 년이요.",
+            "vi": "일 년 = một năm, 일주일 = một tuần. Khóa học của bạn là một năm: 일 년이요.",
+            "id": "일 년 = satu tahun, 일주일 = satu minggu. Kursusmu satu tahun: 일 년이요."
+          }
+        },
+        {
+          "ko": "오래 있을 거예요.",
+          "rom": "orae isseul geoyeyo",
+          "meaning": {
+            "en": "I'll stay a long time.",
+            "vi": "Tôi sẽ ở lâu.",
+            "id": "Saya akan tinggal lama."
+          },
+          "result": "retry",
+          "reply": "얼마나요? 몇 개월이에요, 몇 년이에요?",
+          "replyMeaning": {
+            "en": "How long? How many months, or years?",
+            "vi": "Bao lâu ạ? Mấy tháng hay mấy năm?",
+            "id": "Berapa lama? Berapa bulan, atau berapa tahun?"
+          },
+          "note": {
+            "en": "Give a specific length, not just 'a long time'. Your course is one year: 일 년이요.",
+            "vi": "Hãy nói thời gian cụ thể, không chỉ là 'lâu'. Khóa học của bạn là một năm: 일 년이요.",
+            "id": "Sebutkan berapa lama dengan jelas, bukan cuma 'lama'. Kursusmu satu tahun: 일 년이요."
+          }
+        }
+      ],
+      "after": "네, 됐습니다. 여권 받으세요.",
+      "afterMeaning": {
+        "en": "All done. Here's your passport.",
+        "vi": "Xong rồi. Hộ chiếu của bạn đây.",
+        "id": "Sudah selesai. Ini paspornya."
+      }
+    },
+    {
+      "id": "carousel",
+      "type": "go",
+      "target": "carousel",
+      "task": {
+        "en": "Pick up your suitcase at the baggage carousel",
+        "vi": "Lấy vali ở băng chuyền hành lý",
+        "id": "Ambil kopermu di ban berjalan bagasi"
+      }
+    },
+    {
+      "id": "customs",
+      "needs": "sit:nothing",
+      "type": "go",
+      "staff": "customs",
+      "target": "customs_none",
+      "task": {
+        "en": "Go through customs: you have nothing to declare",
+        "vi": "Đi qua hải quan: bạn không có gì cần khai báo",
+        "id": "Lewati bea cukai: tidak ada barang yang perlu kamu laporkan"
+      },
+      "wrong": [
+        {
+          "station": "customs_declare",
+          "line": "신고할 물건 있으세요? 없으시면 신고없음 쪽으로 가세요.",
+          "lineMeaning": {
+            "en": "Do you have anything to declare? If not, please use the 'nothing to declare' side.",
+            "vi": "Bạn có hàng cần khai báo không? Nếu không, hãy đi lối 'không có hàng khai báo'.",
+            "id": "Ada barang yang perlu dilaporkan? Kalau tidak, silakan lewat jalur 'tidak ada barang dilaporkan'."
+          },
+          "note": {
+            "en": "신고있음 = something to declare, 신고없음 = nothing to declare. Meat, fruit and dairy from home must be declared; you carry none, so use 신고없음.",
+            "vi": "신고있음 = có hàng cần khai báo, 신고없음 = không có hàng cần khai báo. Thịt, trái cây và sản phẩm từ sữa mang từ quê nhà phải khai báo; bạn không mang những thứ đó, nên đi lối 신고없음.",
+            "id": "신고있음 = ada barang yang dilaporkan, 신고없음 = tidak ada. Daging, buah, dan produk susu dari rumah wajib dilaporkan; kamu tidak membawanya, jadi lewat 신고없음."
+          }
+        }
+      ]
+    },
+    {
+      "id": "customs_food",
+      "needs": "sit:food",
+      "type": "go",
+      "staff": "customs",
+      "target": "customs_declare",
+      "task": {
+        "en": "Go through customs: you have homemade sausages",
+        "vi": "Đi qua hải quan: bạn có xúc xích nhà làm",
+        "id": "Lewati bea cukai: kamu membawa sosis buatan sendiri"
+      },
+      "wrong": [
+        {
+          "station": "customs_none",
+          "line": "잠시만요. 가방에 고기나 과일 있으세요? 있으시면 신고있음 쪽으로 가셔야 돼요.",
+          "lineMeaning": {
+            "en": "Excuse me, one moment. Do you have any meat or fruit in your bag? If you do, you need to use the 'goods to declare' side.",
+            "vi": "Xin chờ một chút. Trong vali của bạn có thịt hay trái cây không? Nếu có thì bạn phải đi lối 'có hàng khai báo'.",
+            "id": "Tunggu sebentar. Ada daging atau buah di kopermu? Kalau ada, kamu harus lewat jalur 'ada barang dilaporkan'."
+          },
+          "note": {
+            "en": "Sausages are meat, and meat, fruit and dairy must be declared: use 신고있음. If you don't declare meat or other farm products, you can be fined up to 10 million won.",
+            "vi": "Xúc xích là thịt, mà thịt, trái cây và sản phẩm từ sữa đều phải khai báo: hãy đi lối 신고있음. Nếu không khai báo thịt hay nông sản, bạn có thể bị phạt đến 10 triệu won.",
+            "id": "Sosis itu daging, dan daging, buah, serta produk susu wajib dilaporkan: lewat jalur 신고있음. Kalau tidak melaporkan daging atau hasil pertanian, kamu bisa didenda hingga 10 juta won."
+          }
+        }
+      ]
+    },
+    {
+      "id": "declare",
+      "needs": "sit:food",
+      "staff": "customs",
+      "location": "customs",
+      "npc": "신고할 물건 있으세요?",
+      "meaning": {
+        "en": "Do you have anything to declare?",
+        "vi": "Bạn có hàng gì cần khai báo không?",
+        "id": "Ada barang yang perlu dilaporkan?"
+      },
+      "choices": [
+        {
+          "ko": "네, 소시지가 있어요.",
+          "rom": "ne, sosijiga isseoyo",
+          "meaning": {
+            "en": "Yes, I have sausages.",
+            "vi": "Vâng, tôi có xúc xích.",
+            "id": "Ya, saya bawa sosis."
+          },
+          "result": "advance",
+          "reply": "네, 소시지요. 알겠습니다.",
+          "replyMeaning": {
+            "en": "Sausages. All right.",
+            "vi": "Vâng, xúc xích. Tôi hiểu rồi.",
+            "id": "Baik, sosis. Saya mengerti."
+          }
+        },
+        {
+          "ko": "아니요, 없어요.",
+          "rom": "aniyo, eopseoyo",
+          "meaning": {
+            "en": "No, nothing.",
+            "vi": "Không, không có ạ.",
+            "id": "Tidak, tidak ada."
+          },
+          "result": "retry",
+          "reply": "가방에 고기나 과일 같은 거 없으세요? 그런 건 꼭 신고하셔야 돼요.",
+          "replyMeaning": {
+            "en": "Nothing like meat or fruit in your bag? Those must be declared.",
+            "vi": "Trong vali không có thịt hay trái cây gì sao? Mấy thứ đó nhất định phải khai báo.",
+            "id": "Tidak ada daging atau buah di kopermu? Barang seperti itu wajib dilaporkan."
+          },
+          "note": {
+            "en": "The sausages are in your suitcase, and meat must be declared: if you don't declare it, you can be fined up to 10 million won. Say 네, 소시지가 있어요.",
+            "vi": "Xúc xích đang ở trong vali của bạn, mà thịt thì phải khai báo: nếu không khai báo, bạn có thể bị phạt đến 10 triệu won. Hãy nói 네, 소시지가 있어요.",
+            "id": "Sosisnya ada di kopermu, dan daging wajib dilaporkan: kalau tidak melapor, kamu bisa didenda hingga 10 juta won. Katakan 네, 소시지가 있어요."
+          }
+        },
+        {
+          "ko": "응, 소시지 있어.",
+          "rom": "eung, sosiji isseo",
+          "meaning": {
+            "en": "Yeah, I've got sausages.",
+            "vi": "Ừ, có xúc xích.",
+            "id": "Iya, aku bawa sosis."
+          },
+          "result": "retry",
+          "reply": "…네? 소시지가 있으세요?",
+          "replyMeaning": {
+            "en": "…Sorry? You have sausages?",
+            "vi": "…Dạ? Bạn có xúc xích à?",
+            "id": "…Ya? Kamu bawa sosis?"
+          },
+          "note": {
+            "en": "응 and an ending without -요 are 반말, casual speech. It sounds rude to an officer. Say 네, 소시지가 있어요.",
+            "vi": "응 và câu không có -요 ở cuối là 반말 (nói trống không), nghe bất lịch sự với cán bộ. Hãy nói 네, 소시지가 있어요.",
+            "id": "응 dan kalimat tanpa -요 di akhir itu 반말 (bahasa santai) dan terdengar tidak sopan ke petugas. Katakan 네, 소시지가 있어요."
+          }
+        },
+        {
+          "ko": "선물이에요.",
+          "rom": "seonmurieyo",
+          "meaning": {
+            "en": "It's a gift.",
+            "vi": "Đây là quà ạ.",
+            "id": "Ini hadiah."
+          },
+          "result": "retry",
+          "reply": "선물이어도 고기나 과일은 신고하셔야 돼요. 어떤 거예요?",
+          "replyMeaning": {
+            "en": "Even if it's a gift, meat and fruit have to be declared. What is it?",
+            "vi": "Dù là quà thì thịt hay trái cây vẫn phải khai báo. Đó là gì vậy?",
+            "id": "Biarpun hadiah, daging atau buah tetap harus dilaporkan. Isinya apa?"
+          },
+          "note": {
+            "en": "Being a gift changes nothing: meat, fruit and dairy must be declared all the same. Say what it is: 네, 소시지가 있어요.",
+            "vi": "Là quà cũng không khác gì: thịt, trái cây và sản phẩm từ sữa vẫn phải khai báo. Hãy nói rõ đó là gì: 네, 소시지가 있어요.",
+            "id": "Hadiah atau bukan, sama saja: daging, buah, dan produk susu tetap wajib dilaporkan. Sebutkan barangnya: 네, 소시지가 있어요."
+          }
+        }
+      ],
+      "task": {
+        "en": "Answer the customs officer's questions",
+        "vi": "Trả lời câu hỏi của cán bộ hải quan",
+        "id": "Jawab pertanyaan petugas bea cukai"
+      }
+    },
+    {
+      "id": "open_bag",
+      "needs": "sit:food",
+      "staff": "customs",
+      "location": "customs",
+      "npc": "가방 좀 열어 주시겠어요?",
+      "meaning": {
+        "en": "Could you open your bag, please?",
+        "vi": "Bạn mở vali ra giúp tôi được không?",
+        "id": "Bisa tolong buka kopernya?"
+      },
+      "choices": [
+        {
+          "ko": "[가방을 열어 소시지를 보여 준다]",
+          "meaning": {
+            "en": "Open the bag and show the sausages.",
+            "vi": "Mở vali và cho xem xúc xích.",
+            "id": "Buka koper dan tunjukkan sosisnya."
+          },
+          "result": "advance",
+          "reply": "잠시만요. 좀 볼게요.",
+          "replyMeaning": {
+            "en": "One moment. Let me have a look.",
+            "vi": "Chờ một chút. Để tôi xem.",
+            "id": "Sebentar. Saya lihat dulu."
+          }
+        },
+        {
+          "ko": "[가방을 열지 않고 건넨다]",
+          "meaning": {
+            "en": "Hand the bag over without opening it.",
+            "vi": "Đưa vali cho cán bộ mà không mở.",
+            "id": "Serahkan koper tanpa membukanya."
+          },
+          "result": "retry",
+          "reply": "열어서 보여 주시겠어요? 소시지 좀 볼게요.",
+          "replyMeaning": {
+            "en": "Could you open it and show me? I'll have a look at the sausages.",
+            "vi": "Bạn mở ra cho tôi xem được không? Để tôi xem xúc xích một chút.",
+            "id": "Bisa dibuka dan ditunjukkan? Saya mau lihat sosisnya."
+          },
+          "note": {
+            "en": "열어 주시겠어요 means 'could you open it' (열다 = to open), not 'could you give it' as in 여권 주시겠어요. Open your bag and show the sausages.",
+            "vi": "열어 주시겠어요 nghĩa là 'mở ra giúp tôi' (열다 = mở), không phải 'đưa cho tôi' như trong 여권 주시겠어요. Hãy mở vali và cho xem xúc xích.",
+            "id": "열어 주시겠어요 artinya 'tolong dibuka' (열다 = membuka), bukan 'tolong berikan' seperti 여권 주시겠어요. Buka kopermu dan tunjukkan sosisnya."
+          }
+        },
+        {
+          "ko": "네? 다시 한번만 말씀해 주세요.",
+          "rom": "ne? dasi hanbeonman malsseumhae juseyo",
+          "meaning": {
+            "en": "Sorry? Could you say that once more?",
+            "vi": "Dạ? Anh nói lại giúp tôi được không?",
+            "id": "Maaf? Bisa diulang sekali lagi?"
+          },
+          "result": "ask",
+          "reply": "가방이요. 가방을 열어서 소시지를 보여 주세요.",
+          "replyMeaning": {
+            "en": "Your bag. Please open it and show me the sausages.",
+            "vi": "Vali ạ. Bạn mở vali ra rồi cho tôi xem xúc xích nhé.",
+            "id": "Kopernya. Tolong buka dan tunjukkan sosisnya."
+          }
+        }
+      ],
+      "after": "네, 확인했습니다. 신고해 주셔서 감사합니다.",
+      "afterMeaning": {
+        "en": "All right, I've checked it. Thank you for declaring it.",
+        "vi": "Vâng, tôi đã kiểm tra xong. Cảm ơn bạn đã khai báo.",
+        "id": "Baik, sudah saya periksa. Terima kasih sudah melapor."
+      }
+    }
+  ],
+  "grants": [
+    "done:airport"
+  ],
+  "phrases": [
+    {
+      "ko": "여권 여기 있어요.",
+      "rom": "yeogwon yeogi isseoyo",
+      "meaning": {
+        "en": "Here's my passport.",
+        "vi": "Hộ chiếu của tôi đây.",
+        "id": "Ini paspor saya."
+      }
+    },
+    {
+      "ko": "한국어 공부하러 왔어요.",
+      "rom": "hangugeo gongbuhareo wasseoyo",
+      "meaning": {
+        "en": "I came to study Korean.",
+        "vi": "Tôi đến để học tiếng Hàn.",
+        "id": "Saya datang untuk belajar bahasa Korea."
+      }
+    },
+    {
+      "ko": "학교 기숙사에서 일 년 동안 지낼 거예요.",
+      "rom": "hakgyo gisuksaeseo il nyeon dongan jinael geoyeyo",
+      "meaning": {
+        "en": "I'll stay in the school dormitory for a year.",
+        "vi": "Tôi sẽ ở ký túc xá của trường trong một năm.",
+        "id": "Saya akan tinggal di asrama sekolah selama satu tahun."
+      }
+    },
+    {
+      "ko": "신고할 물건 없어요.",
+      "rom": "singohal mulgeon eopseoyo",
+      "meaning": {
+        "en": "I have nothing to declare.",
+        "vi": "Tôi không có hàng cần khai báo.",
+        "id": "Saya tidak membawa barang yang perlu dilaporkan."
+      },
+      "needs": "sit:nothing"
+    },
+    {
+      "ko": "신고할 물건 있어요.",
+      "rom": "singohal mulgeon isseoyo",
+      "meaning": {
+        "en": "I have something to declare.",
+        "vi": "Tôi có hàng cần khai báo.",
+        "id": "Saya membawa barang yang perlu dilaporkan."
+      },
+      "needs": "sit:food"
+    },
+    {
+      "ko": "천천히 말씀해 주시겠어요?",
+      "rom": "cheoncheonhi malsseumhae jusigesseoyo?",
+      "meaning": {
+        "en": "Could you speak slowly, please?",
+        "vi": "Xin nói chậm giúp tôi được không?",
+        "id": "Bisa bicara lebih pelan?"
+      }
+    }
+  ],
+  "glossary": [
+    {
+      "ko": "외국인 · 내국인",
+      "rom": "oegugin · naegugin",
+      "meaning": {
+        "en": "Foreigner · Korean citizen",
+        "vi": "Người nước ngoài · công dân Hàn Quốc",
+        "id": "Orang asing · warga Korea"
+      }
+    },
+    {
+      "ko": "여권",
+      "rom": "yeogwon",
+      "meaning": {
+        "en": "Passport",
+        "vi": "Hộ chiếu",
+        "id": "Paspor"
+      }
+    },
+    {
+      "ko": "지문",
+      "rom": "jimun",
+      "meaning": {
+        "en": "Fingerprint",
+        "vi": "Vân tay",
+        "id": "Sidik jari"
+      }
+    },
+    {
+      "ko": "검지 · 엄지",
+      "rom": "geomji · eomji",
+      "meaning": {
+        "en": "Index finger · thumb",
+        "vi": "Ngón trỏ · ngón cái",
+        "id": "Jari telunjuk · jempol"
+      }
+    },
+    {
+      "ko": "양손",
+      "rom": "yangson",
+      "meaning": {
+        "en": "Both hands",
+        "vi": "Hai tay",
+        "id": "Kedua tangan"
+      }
+    },
+    {
+      "ko": "정면",
+      "rom": "jeongmyeon",
+      "meaning": {
+        "en": "Straight ahead, in front",
+        "vi": "Phía trước mặt",
+        "id": "Lurus ke depan"
+      }
+    },
+    {
+      "ko": "무슨 일로 오셨어요?",
+      "rom": "museun illo osyeosseoyo?",
+      "meaning": {
+        "en": "What brings you here?",
+        "vi": "Bạn đến có việc gì?",
+        "id": "Ada keperluan apa?"
+      }
+    },
+    {
+      "ko": "어학연수",
+      "rom": "eohagyeonsu",
+      "meaning": {
+        "en": "Language course",
+        "vi": "Khóa học tiếng",
+        "id": "Kursus bahasa"
+      }
+    },
+    {
+      "ko": "기숙사",
+      "rom": "gisuksa",
+      "meaning": {
+        "en": "Dormitory",
+        "vi": "Ký túc xá",
+        "id": "Asrama"
+      }
+    },
+    {
+      "ko": "지내다",
+      "rom": "jinaeda",
+      "meaning": {
+        "en": "To stay, to live (somewhere)",
+        "vi": "Ở, sống (ở đâu đó)",
+        "id": "Tinggal (di suatu tempat)"
+      }
+    },
+    {
+      "ko": "일 년 · 일주일",
+      "rom": "il nyeon · iljuil",
+      "meaning": {
+        "en": "One year · one week",
+        "vi": "Một năm · một tuần",
+        "id": "Satu tahun · satu minggu"
+      }
+    },
+    {
+      "ko": "신고있음 · 신고없음",
+      "rom": "singoisseum · singoeopseum",
+      "meaning": {
+        "en": "Something to declare · nothing to declare",
+        "vi": "Có hàng khai báo · không có hàng khai báo",
+        "id": "Ada barang dilaporkan · tidak ada barang dilaporkan"
+      }
+    }
+  ]
+}

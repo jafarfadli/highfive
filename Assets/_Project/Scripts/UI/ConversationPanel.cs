@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using SeoulFirstWeek.Audio;
+using SeoulFirstWeek.Conversation;
 using SeoulFirstWeek.Core;
 using SeoulFirstWeek.Player;
 using UnityEngine;
@@ -40,7 +41,18 @@ namespace SeoulFirstWeek.UI
         const float DialogWidth = 1300f, DialogBottom = 30f, ChoicesWidth = 660f, ChoicesBottom = 296f, Margin = 40f;
 
         FirstPersonController player;
-        InputAction pickAction, replayAction;
+        InputAction pickAction, replayAction, talkAction;
+
+        // answering by voice: hold Space (or the keycap) and say the line
+        RectTransform speak;
+        Text speakLabel;
+        InkShape speakRing;
+        bool talking;
+
+        /// <summary>Whether the last answer was said out loud, how well it came across, and what was heard.</summary>
+        public bool LastPickSpoken { get; private set; }
+        public float LastPickScore { get; private set; }
+        public string LastHeard { get; private set; }
 
         CanvasGroup group;
         RectTransform dialog, choicesBox, feedbackBox, keypad;
@@ -53,6 +65,8 @@ namespace SeoulFirstWeek.UI
         TaskCompletionSource<int> pendingChoice;
         TaskCompletionSource<string> pendingPin;
         string keypadCode = "";
+        int keypadLength = 4;
+        Text keypadTitle;
 
         class Answer
         {
@@ -77,6 +91,7 @@ namespace SeoulFirstWeek.UI
             group = root.Group();
             pickAction = player.Map.FindAction("Document", true);
             replayAction = player.Map.FindAction("Repeat", true);
+            talkAction = player.Map.FindAction("PushToTalk", true);
 
             // the dialogue box along the bottom: what the staff member said
             dialog = UIKit.Rect("Dialog", root);
@@ -112,6 +127,24 @@ namespace SeoulFirstWeek.UI
             rKey.GetComponentInChildren<InkShape>().raycastTarget = true;
             UIKit.Words(again, Loc.T("hear_again"), 22, Role.Paper, Face.ReadBold).Layout(130, 40);
 
+            // say it: hold Space (or this keycap) and say the answer; a ring swells with the voice while listening
+            speak = UIKit.Rect("Speak", dialog);
+            speak.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+            speak.Place(new Vector2(1, 1), new Vector2(-34, -86), new Vector2(220, 48));
+            var sh = UIKit.HStack(speak, 10, null, TextAnchor.MiddleRight);
+            sh.childForceExpandHeight = false;
+            var spaceKey = UIKit.Keycap(speak, "SPACE", 18);
+            spaceKey.GetComponentInChildren<InkShape>().raycastTarget = true;
+            var hold = spaceKey.gameObject.AddComponent<HoldButton>();
+            hold.Pressed += StartTalk;
+            hold.Released += () => { if (Speech.Listening) _ = EndTalk(); };
+            speakRing = UIKit.CircleMark(spaceKey, Role.Glow, 4f);
+            speakRing.rectTransform.Stretch(-12, -12, -12, -12);
+            speakRing.gameObject.SetActive(false);
+            speakLabel = UIKit.Words(speak, Loc.T("say_it"), 22, Role.Paper, Face.ReadBold);
+            speakLabel.Layout(112, 40);
+            speak.gameObject.SetActive(false);
+
             npcText = UIKit.Words(dialog, "", 34, Role.Paper, Face.ReadBold);
             npcText.lineSpacing = 1.1f;
             npcMeaningText = UIKit.Words(dialog, "", 24, Role.Glow, Face.Read);
@@ -145,8 +178,8 @@ namespace SeoulFirstWeek.UI
             var paper = UIKit.PaperPanel(keypad, "Paper", Role.Balloon, 3.5f);
             paper.rectTransform.Stretch();
             paper.radius = 22f;
-            UIKit.Words(keypad, Loc.T("keypad_title"), 26, Role.Ink, Face.ReadBold, TextAnchor.MiddleCenter).rectTransform
-                .Place(new Vector2(0.5f, 1), new Vector2(0, -32), new Vector2(300, 40));
+            keypadTitle = UIKit.Words(keypad, Loc.T("keypad_title"), 26, Role.Ink, Face.ReadBold, TextAnchor.MiddleCenter);
+            keypadTitle.rectTransform.Place(new Vector2(0.5f, 1), new Vector2(0, -32), new Vector2(300, 40));
             pinDots.Clear();
             for (int i = 0; i < 4; i++)
             {
@@ -194,6 +227,12 @@ namespace SeoulFirstWeek.UI
 
         public void SetSpeaker(string name, string role) => speakerText.text = $"{name} · {role}";
 
+        /// <summary>Shows or hides the dialogue box alone (a phone that is still ringing has no one speaking yet).</summary>
+        public void ShowDialog(bool on)
+        {
+            if (dialog) dialog.gameObject.SetActive(on);
+        }
+
         public void ShowNpcLine(string korean, string meaning)
         {
             bool changed = npcText.text != korean;
@@ -223,6 +262,78 @@ namespace SeoulFirstWeek.UI
         {
             foreach (Transform c in choicesBox) Destroy(c.gameObject);
             answers.Clear();
+            if (Speech.Listening) Speech.Cancel();
+        }
+
+        // ---------------------------------------------------------------- answering by voice
+
+        bool CanSpeak => pendingChoice != null && Speech.Enabled && shown.Any(c => !c.Tried && KoreanMatch.Speakable(c.Korean));
+
+        void StartTalk()
+        {
+            if (talking || !CanSpeak) return;
+            if (!Speech.Begin()) return;
+            talking = true;
+            Music.DuckFor(8f);
+            speakLabel.text = Loc.T("listening");
+            speakRing.gameObject.SetActive(true);
+            _ = Motion.Draw(speakRing, 0.2f);
+        }
+
+        async Task EndTalk()
+        {
+            speakLabel.text = "…";
+            var prompt = string.Join(" ", shown.Where(c => !c.Tried && KoreanMatch.Speakable(c.Korean)).Select(c => c.Korean));
+            string heard = null;
+            try
+            {
+                heard = await Speech.EndAsync(prompt);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+            if (!this) return;
+            talking = false;
+            speakRing.gameObject.SetActive(false);
+            speakLabel.text = Loc.T("say_it");
+            Heard(heard);
+        }
+
+        /// <summary>
+        /// What was heard picks the answer it matches, with how well it came across; otherwise the player is told what
+        /// was heard and may try again or click. Public so play-tests can feed a transcript.
+        /// </summary>
+        public void Heard(string heard)
+        {
+            if (pendingChoice == null) return;
+            if (string.IsNullOrWhiteSpace(heard))
+            {
+                ShowFeedback(Loc.T("say_nothing"));
+                return;
+            }
+            var candidates = shown.Select(c => c.Tried ? null : c.Korean).ToList();
+            var m = KoreanMatch.Pick(heard, candidates);
+            if (m.Index < 0)
+            {
+                Sfx.Play(ProceduralAudio.Soft, 0.5f);
+                ShowFeedback(Loc.T("say_unclear", heard));
+                return;
+            }
+            ClearFeedback();
+            var missed = KoreanMatch.Missed(heard, shown[m.Index].Korean);
+            SaidLine(answers[m.Index], heard, m.Score, missed);
+            Resolve(m.Index, true, m.Score, heard);
+        }
+
+        /// <summary>Under the answer that was said: what was heard, how well it came across, and what didn't.</summary>
+        static void SaidLine(Answer a, string heard, float score, List<string> missed)
+        {
+            if (a == null || !a.Korean) return;
+            var text = $"{Loc.T("you_said")} {heard}  ·  {Mathf.RoundToInt(score * 100)}%";
+            if (missed.Count > 0 && missed.Count <= 4) text += $"  ·  {Loc.T("say_missed")} {string.Join(" ", missed)}";
+            var line = UIKit.Words(a.Korean.transform.parent, text, 22, Role.Glow, Face.ReadBold);
+            line.lineSpacing = 1.05f;
         }
 
         /// <summary>Shows the answers and waits for one. Returns its index in <paramref name="choices"/>.</summary>
@@ -295,7 +406,8 @@ namespace SeoulFirstWeek.UI
                 a.Strip.fillRole = Role.InkSoft;
                 a.Korean.GetComponent<Themed>().Set(Role.PaperDeep);
                 a.Sub.GetComponent<Themed>().Set(Role.PaperDeep);
-                var slash = UIKit.PenStroke(a.Korean.transform, Role.Brush, 5f, new Vector2(0f, 0.42f), new Vector2(0.55f, 0.6f), new Vector2(1f, 0.5f));
+                // the slash in the glow of the lesson note, so it stands out on the ink-soft bar
+                var slash = UIKit.PenStroke(a.Korean.transform, Role.Glow, 5f, new Vector2(0f, 0.42f), new Vector2(0.55f, 0.6f), new Vector2(1f, 0.5f));
                 slash.rectTransform.anchorMin = new Vector2(0, 0.5f);
                 slash.rectTransform.anchorMax = new Vector2(0, 0.5f);
                 slash.rectTransform.pivot = new Vector2(0, 0.5f);
@@ -371,10 +483,21 @@ namespace SeoulFirstWeek.UI
             }
         }
 
-        public async Task<string> Keypad(CancellationToken ct)
+        /// <summary>
+        /// The pad: a 4-digit PIN by default, or a phone's dial pad (<paramref name="length"/> digits, e.g. 119)
+        /// with its own <paramref name="title"/>.
+        /// </summary>
+        public async Task<string> Keypad(CancellationToken ct, int length = 4, string title = null)
         {
             HideChoices();
             keypadCode = "";
+            keypadLength = Mathf.Clamp(length, 1, pinDots.Count);
+            keypadTitle.text = string.IsNullOrEmpty(title) ? Loc.T("keypad_title") : title;
+            for (int i = 0; i < pinDots.Count; i++)
+            {
+                pinDots[i].gameObject.SetActive(i < keypadLength);
+                pinDots[i].rectTransform.anchoredPosition = new Vector2((i - (keypadLength - 1) / 2f) * 50f, -96);
+            }
             UpdateKeypadDots();
             keypad.gameObject.SetActive(true);
             _ = Motion.Slap(keypad, 1.5f);
@@ -400,9 +523,16 @@ namespace SeoulFirstWeek.UI
         public IReadOnlyList<ChoiceView> CurrentChoices => shown;
         public void EnterPin(string pin) => pendingPin?.TrySetResult(pin);
 
-        public void Pick(int index)
+        public void Pick(int index) => Resolve(index, false, 0f, null);
+
+        void Resolve(int index, bool spoken, float score, string heard)
         {
             if (pendingChoice == null || index < 0 || index >= shown.Count || shown[index].Tried) return;
+            if (Speech.Listening) Speech.Cancel();
+            talking = false;
+            LastPickSpoken = spoken;
+            LastPickScore = score;
+            LastHeard = heard;
             Sfx.Play(ProceduralAudio.Blip, 0.6f);
             pendingChoice.TrySetResult(index);
         }
@@ -411,6 +541,17 @@ namespace SeoulFirstWeek.UI
         {
             if (group.alpha <= 0) return;
             if (replayAction.WasPressedThisFrame()) ReplayRequested?.Invoke();
+
+            // say it: shown while there is an answer that can be said; held Space records, letting go hears it
+            bool canSpeak = CanSpeak;
+            if (speak.gameObject.activeSelf != (canSpeak || talking)) speak.gameObject.SetActive(canSpeak || talking);
+            if (canSpeak && !talking && talkAction.WasPressedThisFrame()) StartTalk();
+            if (Speech.Listening && talkAction.WasReleasedThisFrame()) _ = EndTalk();
+            if (Speech.Listening)
+            {
+                float k = 1f + Speech.Level() * 0.35f;
+                speakRing.rectTransform.localScale = Vector3.Lerp(speakRing.rectTransform.localScale, new Vector3(k, k, 1), 0.4f);
+            }
 
             if (pendingChoice != null && pickAction.WasPressedThisFrame() && pickAction.activeControl != null &&
                 int.TryParse(pickAction.activeControl.name, out var n))
@@ -436,9 +577,9 @@ namespace SeoulFirstWeek.UI
             {
                 if (keypadCode.Length > 0) keypadCode = keypadCode.Substring(0, keypadCode.Length - 1);
             }
-            else if (key != "OK" && keypadCode.Length < 4) keypadCode += key;
+            else if (key != "OK" && keypadCode.Length < keypadLength) keypadCode += key;
             UpdateKeypadDots();
-            if (keypadCode.Length == 4 && key != "←") pendingPin.TrySetResult(keypadCode);
+            if (keypadCode.Length == keypadLength && key != "←") pendingPin.TrySetResult(keypadCode);
         }
 
         void UpdateKeypadDots()

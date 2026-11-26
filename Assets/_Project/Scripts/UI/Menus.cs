@@ -242,6 +242,7 @@ namespace SeoulFirstWeek.UI
             }, v => $"{Mathf.RoundToInt(v * 100)}%");
             Row(parent, Loc.T("sensitivity"), 0.25f, 2.5f, Settings.Sensitivity, v => Settings.Sensitivity = v, v => $"{v:0.00}×");
             Choices(parent, Loc.T("reduced_motion"), new[] { Loc.T("off"), Loc.T("on") }, Settings.ReducedMotion ? 1 : 0, i => Settings.ReducedMotion = i == 1);
+            Choices(parent, Loc.T("speak_setting"), new[] { Loc.T("off"), Loc.T("on") }, Settings.SpeakAnswers ? 1 : 0, i => Settings.SpeakAnswers = i == 1);
         }
 
         static void Row(Transform parent, string label, float min, float max, float value, Action<float> set, Func<float, string> format)
@@ -355,9 +356,7 @@ namespace SeoulFirstWeek.UI
                         tick.gameObject.SetActive(true);
                         _ = Motion.Draw(tick, 0.25f);
                         Sfx.Play(ProceduralAudio.Blip);
-                        sign.interactable = true;
-                        sign.GetComponentInChildren<InkShape>().fillAlpha = 1f;
-                        sign.GetComponentInChildren<InkShape>().SetVerticesDirty();
+                        SetSignable(sign, true);
                     }
                     else
                     {
@@ -367,11 +366,11 @@ namespace SeoulFirstWeek.UI
                 });
             }
 
+            // Minh is the Vietnamese student of every story; only the Indonesian hints make the player Indonesian
             string nationality = s.Language switch
             {
-                HintLanguage.Vietnamese => "VIET NAM",
                 HintLanguage.Indonesian => "INDONESIA",
-                _ => "—",
+                _ => "VIET NAM",
             };
             UIKit.Words(paper,
                 $"<b>성명 Name</b>  {s.PlayerName.ToUpperInvariant()}      <b>국적 Nationality</b>  {nationality}\n<b>체류자격 Status</b>  D-4      <b>주소 Address in Korea</b>  서울특별시 동작구 흑석로 84",
@@ -385,11 +384,25 @@ namespace SeoulFirstWeek.UI
                 onDone?.Invoke();
             }, ButtonStyle.Primary, 32);
             sign.Layout(-1, 80);
-            sign.interactable = false;
-            var signBody = sign.GetComponentInChildren<InkShape>();
-            signBody.fillAlpha = 0.45f;
+            SetSignable(sign, false);
             _ = Motion.Slap(paper, 0.8f);
             Sfx.Play(ProceduralAudio.Paper, 0.5f);
+        }
+
+        /// <summary>
+        /// Before a box is ticked the sign button is set aside, never see-through: an opaque kraft bar with
+        /// soft-ink lettering. Ticking the right box turns it into the brush bar.
+        /// </summary>
+        static void SetSignable(Button sign, bool on)
+        {
+            sign.interactable = on;
+            var body = sign.GetComponentInChildren<InkShape>();
+            body.fillRole = on ? Role.Brush : Role.PaperDeep;
+            body.fillAlpha = 1f;
+            body.SetVerticesDirty();
+            var label = sign.GetComponentInChildren<Text>().GetComponent<Themed>();
+            if (label) label.Set(on ? Role.OnBrush : Role.InkSoft);
+            if (on) _ = Motion.Pop((RectTransform)sign.transform, 1.06f, 0.2f);
         }
     }
 }

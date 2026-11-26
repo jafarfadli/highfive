@@ -37,6 +37,8 @@ namespace SeoulFirstWeek.Procedure
         public RoomEntrance[] rooms;
         [Tooltip("Walk-in places: the waiting monitor that lists names (진료 대기 현황).")]
         public WaitingBoard waitingBoard;
+        [Tooltip("The places `go` steps send the player to (gates, stairs, lanes, the carousel, bus stops).")]
+        public Waypoint[] waypoints;
 
         public bool Finished { get; private set; }
 
@@ -46,9 +48,14 @@ namespace SeoulFirstWeek.Procedure
         /// <summary>The answers on screen, in display order (for editor play-tests).</summary>
         public List<ChoiceDef> ShownChoices { get; private set; } = new();
 
+        /// <summary>The waypoint the current `go` step wants, its wrong turns, and a phone number to dial (play-tests).</summary>
+        public string CurrentTarget { get; private set; }
+        public string[] CurrentWrong { get; private set; } = new string[0];
+        public string CurrentExpect { get; private set; }
+
         // Stages before the conversation: reach the building (done on arrival), take a number (not at a
-        // walk-in place), reach the counter.
-        int LeadStages => proc.queue.WalkIn ? 2 : 3;
+        // walk-in place), reach the counter (not when there is no counter: a phone call).
+        int LeadStages => proc.queue.None ? 1 : proc.queue.WalkIn ? 2 : 3;
 
         static readonly VoiceSpec AnnouncerVoice = new() { Id = "pa", OpenAiVoice = "alloy", MacVoice = "Yuna", MacRate = 170 };
         static readonly VoiceSpec PlayerVoice = new() { Id = "player", OpenAiVoice = "nova", MacVoice = "Flo (Korean (South Korea))", MacRate = 175 };
@@ -63,6 +70,8 @@ namespace SeoulFirstWeek.Procedure
         AudioSource announcer, playerMouth;
 
         int progress = 1, mistakes;
+        int spokenCount;
+        float spokenScore;
         int stepIndex;
         Color accent;
         float startTime;
@@ -110,8 +119,8 @@ namespace SeoulFirstWeek.Procedure
             var json = procedures.FirstOrDefault(p => p && p.name == wanted) ?? procedures[0];
             proc = ProcedureDef.Parse(json.text);
             level = session.EnsureLevel(proc.id);
-            counter = counters.FirstOrDefault(c => c && c.counterNumber == proc.queue.counter) ?? counters[0];
-            if (counter.chair)
+            counter = counters?.FirstOrDefault(c => c && c.counterNumber == proc.queue.counter) ?? counters?.FirstOrDefault();
+            if (counter && counter.chair)
                 foreach (var c in counter.chair.GetComponentsInChildren<Collider>()) c.enabled = false;
             interactor = player.GetComponent<PlayerInteractor>();
             announcer = gameObject.AddComponent<AudioSource>();
@@ -133,6 +142,8 @@ namespace SeoulFirstWeek.Procedure
 
             hud = Hud.Create();
             panel = ConversationPanel.Create(hud, player);
+            // the speech model loads in the background while the player walks up to the counter
+            if (Speech.Enabled) Speech.Warm();
             panel.ReplayRequested += Replay;
             PauseMenu.Create(player);
             CursorState.Gameplay(true);
@@ -145,28 +156,93 @@ namespace SeoulFirstWeek.Procedure
             panel.Accent = accent;
             hud.SetQuest(level.title.Get(), $"{proc.titleKo} · {Loc.T("part_n", level.level)}", accent);
             UpdateProgress();
+            // a part that starts somewhere else in the scene (on the platform, in the arrivals hall)
+            if (!string.IsNullOrEmpty(level.start))
+            {
+                var spot = Anchor("Start_" + level.start);
+                if (spot) player.Teleport(spot.position, spot.eulerAngles.y);
+                else Debug.LogError($"[Procedure] No start anchor 'Start_{level.start}' in this scene");
+            }
+            // a level that starts in here (no walk down the street first) opens on its story card
+            var story = level.story?.Get();
+            if (level.StartsInside && !string.IsNullOrEmpty(story))
+            {
+                var begun = new TaskCompletionSource<bool>();
+                StoryCard.Show(player, story, () => begun.TrySetResult(true));
+                using (ct.Register(() => begun.TrySetCanceled())) await begun.Task;
+            }
+            // a personalised visit: the steps that don't fit the player's situation are left out
+            session.EnsureSituation(level);
+            proc.steps = proc.steps.Where(s => Fits(s.needs, s.unless)).ToList();
+            // what the player has with them in this case (an empty transport card), like a procedure's carry
+            foreach (var question in level.situations ?? new List<SituationQuestion>())
+                foreach (var doc in session.Picked(question.id)?.carry ?? new List<string>())
+                    if (!session.HasDocument(doc))
+                    {
+                        session.GiveDocument(doc, false, false);
+                        carried.Add(doc);
+                    }
+            UpdateProgress();
             hud.ShowHelp(Loc.T("controls"), 12f);
             hud.Banner(proc.titleKo, level.FullTitle, 2.6f);
-            if (proc.carry.Count > 0)
-                Toasts.Show(Loc.T("brought"), string.Join(" · ", proc.carry.Select(Documents.Korean)), 6f);
+            // everything brought from home for this visit: the procedure's and the case's (an empty card, the ARC)
+            var brought = proc.carry
+                .Concat((level.situations ?? new List<SituationQuestion>())
+                    .SelectMany(question => session.Picked(question.id)?.carry ?? new List<string>()))
+                .Distinct().ToList();
+            if (brought.Count > 0)
+                Toasts.Show(Loc.T("brought"), string.Join(" · ", brought.Select(Documents.Korean)), 6f);
             if (!proc.verified) Debug.Log($"[Procedure] '{proc.id}' is a draft (verified: false). Check it against: {string.Join(", ", proc.sources)}");
 
             var q = proc.queue;
-            if (q.WalkIn) await WalkUp();
-            else await TakeNumber();
-
-            // 4. the conversation
-            await EnterConversation(proc.steps[0].location, false);
+            // errands in the world before the first conversation (look at the car–door number, pick a lane)
+            int first = 0;
+            while (first < proc.steps.Count && proc.steps[first].IsGo)
+            {
+                stepIndex = first;
+                hud.SetTask(TaskFor(first));
+                await RunGo(proc.steps[first]);
+                Advance();
+                foreach (var g in proc.steps[first].grants) session.Grant(g);
+                first++;
+            }
+            if (first < proc.steps.Count)
+            {
+                if (q.None) { }
+                else if (q.WalkIn) await WalkUp(first);
+                else await TakeNumber(first);
+                // 4. the conversation
+                await EnterConversation(proc.steps[first].location, false);
+            }
             var carry = new List<(string, string)>();
-            for (stepIndex = 0; stepIndex < proc.steps.Count; stepIndex++)
+            for (stepIndex = first; stepIndex < proc.steps.Count; stepIndex++)
             {
                 var step = proc.steps[stepIndex];
                 hud.SetTask(TaskFor(stepIndex));
+                if (step.IsGo)
+                {
+                    // out into the world: whatever the staff member said last is said first
+                    await Say(carry);
+                    carry.Clear();
+                    await ExitConversation();
+                    location = "world";
+                    await RunGo(step);
+                    Advance();
+                    foreach (var g in step.grants) session.Grant(g);
+                    continue;
+                }
                 if (step.location != location)
                 {
                     await Say(carry);
                     carry.Clear();
-                    if (q.WalkIn) await WalkTo(step);
+                    if (location == "world" && step.location == "counter" && counter)
+                    {
+                        // back from an errand: walk up to the counter again
+                        hud.SetTask(TaskFor(stepIndex));
+                        await counter.WaitAsync(ct);
+                        await EnterConversation(step.location, false);
+                    }
+                    else if (q.WalkIn) await WalkTo(step);
                     else await MoveTo(step);
                 }
                 if (stepIndex + 1 < proc.steps.Count) Prefetch(proc.steps[stepIndex + 1]);
@@ -188,7 +264,7 @@ namespace SeoulFirstWeek.Procedure
         }
 
         /// <summary>A bank or public office: take a number, wait for the board and the PA, walk to the counter.</summary>
-        async Task TakeNumber()
+        async Task TakeNumber(int first)
         {
             var q = proc.queue;
             // 1. queue number
@@ -200,7 +276,7 @@ namespace SeoulFirstWeek.Procedure
             int mine = serving + q.ahead + 1;
             foreach (var b in boards) b.Show(serving, 1);
             hud.ShowTicket(mine, serving);
-            Prefetch(proc.steps[0]);
+            Prefetch(proc.steps[first]);
 
             // 2. wait for the number board
             while (serving < mine - 1)
@@ -222,7 +298,7 @@ namespace SeoulFirstWeek.Procedure
 
             // 3. walk to the counter
             hud.SetTask(Loc.T("obj_go_counter", q.counter));
-            counter.staffName = proc.Staff(proc.steps[0].staff).name;
+            counter.staffName = proc.Staff(proc.steps[first].staff).name;
             counter.counterNumber = q.counter;
             await counter.WaitAsync(ct);
             hud.HideTicket();
@@ -233,15 +309,15 @@ namespace SeoulFirstWeek.Procedure
         /// A neighbourhood clinic: no ticket and no number board. The player walks straight up to the
         /// reception; other patients register at the other counter and wait in the seats.
         /// </summary>
-        async Task WalkUp()
+        async Task WalkUp(int first)
         {
             var q = proc.queue;
-            hud.SetTask(TaskFor(0));
-            counter.staffName = proc.Staff(proc.steps[0].staff).name;
+            hud.SetTask(TaskFor(first));
+            counter.staffName = proc.Staff(proc.steps[first].staff).name;
             counter.counterNumber = q.counter;
             if (crowd) crowd.reception = Spot(OtherCounter(q.counter));
             if (waitingBoard) waitingBoard.Queue(q.names);
-            Prefetch(proc.steps[0]);
+            Prefetch(proc.steps[first]);
             await counter.WaitAsync(ct);
             Advance();
         }
@@ -336,6 +412,9 @@ namespace SeoulFirstWeek.Procedure
             public List<(string, string)> Reaction;
         }
 
+        bool Fits(string needs, string unless) =>
+            (string.IsNullOrEmpty(needs) || session.Has(needs)) && (string.IsNullOrEmpty(unless) || !session.Has(unless));
+
         bool Offered(ChoiceDef c) =>
             (string.IsNullOrEmpty(c.needs) || session.Has(c.needs)) &&
             (string.IsNullOrEmpty(c.unless) || !session.Has(c.unless));
@@ -368,7 +447,14 @@ namespace SeoulFirstWeek.Procedure
                 var pick = choices[await panel.Choose(views, ct)];
                 panel.ClearFeedback();
                 if (!string.IsNullOrEmpty(pick.give)) Sfx.Play(ProceduralAudio.Paper, 0.7f);
-                await SpeakAsPlayer(pick.ko);
+                if (panel.LastPickSpoken)
+                {
+                    // the player said it themselves: no need to read it back
+                    spokenCount++;
+                    spokenScore += panel.LastPickScore;
+                    await Awaitable.WaitForSecondsAsync(0.9f, ct);
+                }
+                else await SpeakAsPlayer(pick.ko);
 
                 switch (pick.result)
                 {
@@ -413,9 +499,31 @@ namespace SeoulFirstWeek.Procedure
 
         async Task<StepOutcome> RunKeypad(StepDef step)
         {
+            CurrentExpect = step.expect;
+            // dialling: nobody is on the line yet, so the dialogue box stays away until the call connects
+            bool dialling = !string.IsNullOrEmpty(step.expect);
+            if (dialling) panel.ShowDialog(false);
+            try
+            {
             while (true)
             {
-                var code = await panel.Keypad(ct);
+                var code = await panel.Keypad(ct, string.IsNullOrEmpty(step.expect) ? 4 : step.expect.Length,
+                    step.prompt?.Get() ?? (string.IsNullOrEmpty(step.expect) ? null : Loc.T("dial_title")));
+                if (!string.IsNullOrEmpty(step.expect))
+                {
+                    // a phone: only the right number gets through
+                    if (code == step.expect)
+                    {
+                        Sfx.Play(ProceduralAudio.Blip, 0.5f);
+                        return new StepOutcome { Reaction = Lines((step.ack, null)) };
+                    }
+                    mistakes++;
+                    var lesson = step.expectNote?.Get() ?? Loc.T("try_another");
+                    if (!tips.Contains(lesson)) tips.Add(lesson);
+                    Sfx.Play(ProceduralAudio.Soft, 0.5f);
+                    panel.ShowFeedback(lesson);
+                    continue;
+                }
                 if (step.confirmPrevious && code != pin)
                 {
                     mistakes++;
@@ -427,6 +535,98 @@ namespace SeoulFirstWeek.Procedure
                 Sfx.Play(ProceduralAudio.Blip, 0.5f);
                 return new StepOutcome { Reaction = Lines((step.ack ?? "네.", null)) };
             }
+            }
+            finally
+            {
+                if (dialling) panel.ShowDialog(true);
+            }
+        }
+
+        Waypoint FindWaypoint(string id) => waypoints?.FirstOrDefault(w => w && w.stationId == id);
+
+        /// <summary>
+        /// A world step: arm the target and the wrong turns, and wait for the player to use one. A wrong turn is a
+        /// mistake with its lesson (and a line from the step's staff member); the target ends the step. A set piece
+        /// on the target plays first (the train pulls in), then the step's announcement.
+        /// </summary>
+        async Task RunGo(StepDef step)
+        {
+            var target = FindWaypoint(step.target);
+            if (!target)
+            {
+                Debug.LogError($"[Procedure] '{proc.id}' step '{step.id}': no waypoint '{step.target}' in this scene");
+                return;
+            }
+            if (target.performer) await target.performer.PlayAsync(ct);
+            if (!string.IsNullOrEmpty(step.announce))
+            {
+                hud.Banner(step.announce, step.meaning?.Get(), 4f);
+                await Announce(0.9f, step.announce, session.PlayerNameKo);
+            }
+            if (target.performer && target.autoComplete)
+            {
+                await AfterGo(step);
+                return;
+            }
+            var wrongs = (step.wrong ?? new List<WrongTurnDef>()).Select(w => (def: w, wp: FindWaypoint(w.station))).Where(x => x.wp).ToList();
+            CurrentTarget = step.target;
+            CurrentWrong = wrongs.Select(x => x.def.station).ToArray();
+            var speaker = actors?.FirstOrDefault(a => a && a.staffId == step.staff);
+            while (true)
+            {
+                ct.ThrowIfCancellationRequested();
+                var waits = new List<Task> { target.WaitAsync(ct) };
+                foreach (var x in wrongs) waits.Add(x.wp.WaitAsync(ct));
+                var done = await Task.WhenAny(waits);
+                int k = waits.IndexOf(done);
+                target.Disarm();
+                foreach (var x in wrongs) x.wp.Disarm();
+                if (k == 0)
+                {
+                    CurrentTarget = null;
+                    CurrentWrong = new string[0];
+                    Sfx.Play(ProceduralAudio.Blip, 0.5f);
+                    foreach (var g in target.opens ?? new GameObject[0])
+                        if (g) g.SetActive(false);
+                    if (target.moveTo)
+                    {
+                        await Overlay.I.FadeTo(1, 0.35f);
+                        player.Teleport(target.moveTo.position, target.moveTo.eulerAngles.y);
+                        await Overlay.I.FadeTo(0, 0.5f);
+                    }
+                    await AfterGo(step);
+                    return;
+                }
+
+                // the wrong way: a real reaction, the lesson, and the step goes on
+                var wrong = wrongs[k - 1].def;
+                mistakes++;
+                var note = wrong.note?.Get();
+                if (!string.IsNullOrEmpty(note) && !tips.Contains(note)) tips.Add(note);
+                Sfx.Play(ProceduralAudio.Soft, 0.5f);
+                if (speaker && !string.IsNullOrEmpty(wrong.line))
+                {
+                    actor = speaker;
+                    var staff = proc.Staff(step.staff);
+                    panel.SetSpeaker(staff.name, staff.roleText?.Get() ?? staff.role);
+                    panel.Show(true);
+                    if (!string.IsNullOrEmpty(note)) panel.ShowFeedback(note);
+                    await Say(Lines((wrong.line, wrong.lineMeaning?.Get())));
+                    await Awaitable.WaitForSecondsAsync(2.5f, ct);
+                    panel.Show(false);
+                    panel.ClearFeedback();
+                }
+                else if (!string.IsNullOrEmpty(note)) Toasts.Warn(Loc.T("wrong_turn"), note, 8f);
+                await Awaitable.WaitForSecondsAsync(0.6f, ct);
+            }
+        }
+
+        /// <summary>After a world step: its closing PA line (the in-car announcement), if any.</summary>
+        async Task AfterGo(StepDef step)
+        {
+            if (string.IsNullOrEmpty(step.after)) return;
+            hud.Banner(step.after, step.afterMeaning?.Get(), 4.5f);
+            await Announce(0.9f, step.after, session.PlayerNameKo);
         }
 
         static List<(string, string)> Lines((string text, string meaning) line) =>
@@ -542,7 +742,7 @@ namespace SeoulFirstWeek.Procedure
         async Task EnterConversation(string loc, bool fade)
         {
             location = loc;
-            var seat = loc == "counter" ? Anchor($"Seat_counter_{counter.counterNumber}") ?? Anchor("Seat_counter") : Anchor("Seat_" + loc);
+            var seat = loc == "counter" && counter ? Anchor($"Seat_counter_{counter.counterNumber}") ?? Anchor("Seat_counter") : Anchor("Seat_" + loc);
             // sitting down at a low counter or on the doctor's stool happens behind a short fade
             bool sit = seat && seat.GetComponent<PlayerSeat>();
             fade |= sit && !player.Seated;
@@ -558,11 +758,14 @@ namespace SeoulFirstWeek.Procedure
             // a name call or "go to counter N" banner would sit over the staff member and the answers
             hud.DismissBanner();
             CursorState.Gameplay(false);
-            var target = actors.FirstOrDefault(a => a.staffId == proc.steps.First(s => s.location == loc).staff);
+            // the staff member of the next conversation step at this place (world steps don't count)
+            var talkStep = proc.steps.Skip(stepIndex).FirstOrDefault(s => !s.IsGo && s.location == loc)
+                ?? proc.steps.FirstOrDefault(s => !s.IsGo && s.location == loc);
+            var target = talkStep == null ? null : actors.FirstOrDefault(a => a.staffId == talkStep.staff);
             if (target)
             {
                 actor = target;
-                target.rig.lookTarget = player.Camera.transform;
+                if (target.rig) target.rig.lookTarget = player.Camera.transform;
                 // aim a little below the face so it sits above the answer panel
                 var face = target.face ? target.face.position : target.transform.position + Vector3.up * 1.5f;
                 player.FocusOn(face - Vector3.up * 0.32f, fade ? 0.01f : 0.6f);
@@ -614,12 +817,24 @@ namespace SeoulFirstWeek.Procedure
                 Verified = proc.verified,
                 Lesson = outcome == ScenarioOutcome.Blocked ? proc.blockedLesson?.Get() : proc.completeNote?.Get(),
                 Tips = tips.Take(4).ToList(),
-                PhraseCard = proc.phrases.Select(p => new PhraseLine { Korean = p.ko, Romanization = p.rom, Meaning = p.meaning?.Get() }).ToList(),
+                PhraseCard = proc.phrases.Where(p => Fits(p.needs, p.unless)).Select(p => new PhraseLine { Korean = p.ko, Romanization = p.rom, Meaning = p.meaning?.Get() }).ToList(),
+                Situation = session.SituationTitle(level),
+                SituationNotes = proc.notes.Where(n => Fits(n.needs, n.unless)).Select(n => n.note?.Get()).Where(n => !string.IsNullOrEmpty(n)).ToList(),
+                SpokenCount = spokenCount,
+                SpokenAverage = spokenCount > 0 ? spokenScore / spokenCount : 0f,
             };
 
+            session.RememberSituation(level);
             if (outcome == ScenarioOutcome.Completed)
             {
                 session.Grant(level.DoneFlag);
+                // which cases of a personalised visit are done (the Logbook and the scenario select tick them)
+                if (level.situations != null)
+                    foreach (var q in level.situations)
+                    {
+                        var o = session.Picked(q.id);
+                        if (o != null) session.Grant($"done:{level.id}@{o.id}");
+                    }
                 foreach (var g in proc.grants)
                 {
                     result.Granted.Add(g);

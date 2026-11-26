@@ -65,6 +65,8 @@ namespace SeoulFirstWeek.UI
         ScrollRect pageScroll;
         LevelDef current;
         ProcedureDef proc;
+        // a personalised part: the option shown for each question (level id → question id → option id)
+        readonly Dictionary<string, Dictionary<string, string>> chosen = new();
         Tab tab;
         AudioSource speaker;
         Voiced playing;
@@ -105,9 +107,10 @@ namespace SeoulFirstWeek.UI
             speaker.playOnAwake = false;
             speaker.spatialBlend = 0;
 
-            // over the modal scrim, a deeper wash of ink: this screen is for reading
+            // over the modal scrim, a deep wash of ink: this screen is for reading, so the scenario select behind
+            // must not show through its header (UI blends in linear space: a half wash hardly darkens at all)
             var wash = UIKit.Rect("Wash", root).Stretch().gameObject.AddComponent<Image>();
-            Themed.On(wash, Role.Ink, 0.55f);
+            Themed.On(wash, Role.Ink, 0.9f);
             wash.raycastTarget = false;
 
             // title strip and subtitle, like the scenario select
@@ -368,6 +371,7 @@ namespace SeoulFirstWeek.UI
                 Destroy(child.gameObject);
             }
 
+            if (proc != null && current?.situations != null) SituationChips();
             if (proc == null) Empty();
             else if (tab == Tab.Brief) Brief();
             else if (tab == Tab.Words) Words();
@@ -386,11 +390,105 @@ namespace SeoulFirstWeek.UI
             UIKit.Words(box, Loc.T("logbook_empty"), 28, Role.Ink, Face.ReadBold, TextAnchor.MiddleCenter);
         }
 
-        /// <summary>Before you go: the lesson, what to bring and what you leave with, and the phrase card.</summary>
+        // ------------------------------------------------------------------ personalised parts
+
+        /// <summary>The option shown for each question: what the player picked last time, else the first.</summary>
+        Dictionary<string, string> Chosen(LevelDef level)
+        {
+            if (chosen.TryGetValue(level.id, out var map)) return map;
+            map = new Dictionary<string, string>();
+            var last = GameSession.LastSituation(level);
+            for (int i = 0; i < level.situations.Count; i++)
+            {
+                var q = level.situations[i];
+                var id = i < last.Length ? last[i] : null;
+                map[q.id] = q.options.Any(o => o.id == id) ? id : q.options.FirstOrDefault()?.id;
+            }
+            return chosen[level.id] = map;
+        }
+
+        /// <summary>The flags of the options shown (only `sit:` flags matter to the Logbook).</summary>
+        HashSet<string> SitFlags()
+        {
+            var set = new HashSet<string>();
+            if (current?.situations == null) return set;
+            var map = Chosen(current);
+            foreach (var q in current.situations)
+            {
+                var o = q.options.FirstOrDefault(x => x.id == map[q.id]) ?? q.options.FirstOrDefault();
+                if (o?.grants != null) foreach (var g in o.grants) set.Add(g);
+            }
+            return set;
+        }
+
+        /// <summary>What the options shown have the player bring from home (an empty transport card, the ARC).</summary>
+        List<string> CaseCarry()
+        {
+            var list = new List<string>();
+            if (current?.situations == null) return list;
+            var map = Chosen(current);
+            foreach (var q in current.situations)
+            {
+                var o = q.options.FirstOrDefault(x => x.id == map[q.id]) ?? q.options.FirstOrDefault();
+                if (o?.carry != null) list.AddRange(o.carry);
+            }
+            return list;
+        }
+
+        static bool Fits(string needs, string unless, HashSet<string> flags) =>
+            (string.IsNullOrEmpty(needs) || !needs.StartsWith("sit:") || flags.Contains(needs)) &&
+            (string.IsNullOrEmpty(unless) || !unless.StartsWith("sit:") || !flags.Contains(unless));
+
+        /// <summary>One row per question: its options as tags (the one shown is the brush bar, ✓ on cases played).</summary>
+        void SituationChips()
+        {
+            var map = Chosen(current);
+            foreach (var q in current.situations.Where(q => q.options.Count > 1))
+            {
+                var row = UIKit.Rect("Situation", page);
+                var h = UIKit.HStack(row, 14, null, TextAnchor.MiddleLeft);
+                h.childForceExpandWidth = false;
+                h.childForceExpandHeight = false;
+                UIKit.Words(row, q.question?.Get(), 22, Role.InkSoft, Face.ReadBold).Layout(-1, 40);
+                foreach (var o in q.options)
+                {
+                    bool on = map[q.id] == o.id;
+                    bool done = GameSession.I.Has($"done:{current.id}@{o.id}");
+                    var option = o;
+                    var b = UIKit.InkButton(row, "", () =>
+                    {
+                        map[q.id] = option.id;
+                        Sfx.Play(ProceduralAudio.Tick, 0.5f);
+                        BuildPage();
+                    }, on ? ButtonStyle.Primary : ButtonStyle.Paper, 22);
+                    var t = b.GetComponentInChildren<Text>();
+                    t.font = UIKit.Bold;
+                    t.fontSize = 22;
+                    t.text = (done ? "✓ " : "") + o.title?.Get();
+                    b.Layout(t.preferredWidth + 48, 48);
+                }
+            }
+            Gap(page, 2);
+        }
+
+        /// <summary>Before you go: the lesson, the situation's lessons, the facts to know, what to bring and get, the phrase card.</summary>
         void Brief()
         {
             var note = proc.completeNote?.Get();
             if (!string.IsNullOrEmpty(note)) Strip(page, "✓  " + note, true);
+            var flags = SitFlags();
+            foreach (var n in proc.notes.Where(n => Fits(n.needs, n.unless, flags)))
+            {
+                var text = n.note?.Get();
+                if (!string.IsNullOrEmpty(text)) Strip(page, "!  " + text, false);
+            }
+            var facts = KnowBefore.For(current, f => flags.Contains(f) || (!f.StartsWith("sit:") && GameSession.I.Has(f)));
+            if (facts.Count > 0)
+            {
+                Gap(page, 6);
+                Heading(page, Loc.T("know_before"));
+                Grid(page, facts, 2, 20, (parent, f) => KnowBefore.Card(parent, f, 0));
+            }
             Papers();
             PhraseCard();
         }
@@ -398,8 +496,9 @@ namespace SeoulFirstWeek.UI
         /// <summary>What to bring (left) and what the visit gives you (right).</summary>
         void Papers()
         {
-            var bring = Bring(proc);
-            var earned = Earned(proc);
+            var flags = SitFlags();
+            var bring = Bring(proc, flags, CaseCarry());
+            var earned = Earned(proc, flags);
             if (bring.Count == 0 && earned.Count == 0) return;
             Gap(page, 6);
 
@@ -423,7 +522,9 @@ namespace SeoulFirstWeek.UI
 
         void PhraseCard()
         {
-            if (proc.phrases.Count == 0) return;
+            // the phrases of the case shown (a fever, or a stomach ache)
+            var phrases = proc.phrases.Where(p => Fits(p.needs, p.unless, SitFlags())).ToList();
+            if (phrases.Count == 0) return;
             Gap(page, 6);
             var card = UIKit.Rect("PhraseCard", page);
             UIKit.VStack(card, 14, new RectOffset(36, 32, 34, 30), TextAnchor.UpperLeft, false);
@@ -432,7 +533,7 @@ namespace SeoulFirstWeek.UI
             paper.rectTransform.Stretch();
             paper.radius = 3f;
             UIKit.Lettering(card, Loc.T("phrase_card").ToUpperInvariant(), 36, Role.Brush);
-            Grid(card, proc.phrases, 2, 36, (parent, p) => Line(parent, p.ko, Join(p.rom, p.meaning?.Get()), 25, Clip("player", p.ko), true));
+            Grid(card, phrases, 2, 36, (parent, p) => Line(parent, p.ko, Join(p.rom, p.meaning?.Get()), 25, Clip("player", p.ko), true));
         }
 
         void Words()
@@ -443,9 +544,11 @@ namespace SeoulFirstWeek.UI
         void Conversation()
         {
             string phase = null;
-            for (int i = 0; i < proc.steps.Count; i++)
+            var flags = SitFlags();
+            var steps = proc.steps.Where(s => Fits(s.needs, s.unless, flags)).ToList();
+            for (int i = 0; i < steps.Count; i++)
             {
-                var step = proc.steps[i];
+                var step = steps[i];
                 var task = step.task?.Get();
                 if (!string.IsNullOrEmpty(task) && task != phase)
                 {
@@ -453,7 +556,7 @@ namespace SeoulFirstWeek.UI
                     phase = task;
                 }
                 else if (i > 0) Rule();
-                Step(step);
+                Step(step, flags);
             }
         }
 
@@ -473,12 +576,36 @@ namespace SeoulFirstWeek.UI
             UIKit.Words(band, task, 24, Role.Paper, Face.ReadBold).Layout(0, -1, 1);
         }
 
-        void Step(StepDef step)
+        void Step(StepDef step, HashSet<string> flags)
         {
             var staff = proc.Staff(step.staff);
             var speakerName = $"{staff.name} · {staff.roleText?.Get() ?? staff.role}";
             var block = UIKit.Rect("Step", page);
             UIKit.VStack(block, 12, new RectOffset(0, 0, 4, 4), TextAnchor.UpperLeft, false);
+
+
+            if (step.IsGo)
+            {
+                // a world step: the announcement that goes with it, and each wrong turn with its lesson
+                if (!string.IsNullOrEmpty(step.announce))
+                    Line(block, step.announce, step.meaning?.Get(), 23, Announcement(step.announce));
+                foreach (var w in step.wrong ?? new List<WrongTurnDef>())
+                {
+                    var text = Answer(block, Kind.Mistake, w.line ?? "", w.lineMeaning?.Get(), null);
+                    var wn = w.note?.Get();
+                    if (string.IsNullOrEmpty(wn)) continue;
+                    var n = UIKit.Rect("Note", text);
+                    UIKit.VStack(n, 0, new RectOffset(16, 16, 10, 12), TextAnchor.UpperLeft, false);
+                    var sticky = UIKit.StickyNote(n);
+                    sticky.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+                    sticky.rectTransform.Stretch();
+                    sticky.shadow = new Vector2(3, -4);
+                    UIKit.Words(n, wn, 22, Role.Ink, Face.ReadBold);
+                }
+                if (!string.IsNullOrEmpty(step.after))
+                    Line(block, step.after, step.afterMeaning?.Get(), 23, Announcement(step.after));
+                return;
+            }
 
             if (!string.IsNullOrEmpty(step.announce))
             {
@@ -486,13 +613,23 @@ namespace SeoulFirstWeek.UI
                 Line(block, string.Format(step.announce, GameSession.I.PlayerNameKo), null, 23, Announcement(step.announce));
             }
 
-            Speaker(block, speakerName);
-            Line(block, step.npc, step.meaning?.Get(), 27, Clip(staff.id, step.npc));
+            if (!string.IsNullOrEmpty(step.npc))
+            {
+                Speaker(block, speakerName);
+                Line(block, step.npc, step.meaning?.Get(), 27, Clip(staff.id, step.npc));
+            }
 
-            if (step.type == "keypad")
+            if (step.type == "keypad" && !string.IsNullOrEmpty(step.expect))
+            {
+                Answer(block, Kind.Right, $"[{step.expect}]", step.prompt?.Get(), null);
+                var note = step.expectNote?.Get();
+                if (!string.IsNullOrEmpty(note)) UIKit.Words(block, note, 22, Role.Ink, Face.ReadBold);
+            }
+            else if (step.type == "keypad")
                 Answer(block, Kind.Right, Loc.T(step.confirmPrevious ? "enter_pin_again" : "enter_pin"), null, null);
             // right answers first (a blank form sends you to fill it in, then you answer again), then help, then mistakes
-            foreach (var c in step.choices.Where(c => c.result == "fetch"))
+            var choices = step.choices.Where(c => Fits(c.needs, c.unless, flags)).ToList();
+            foreach (var c in choices.Where(c => c.result == "fetch"))
             {
                 Choice(block, c);
                 if (step.fetch?.objective != null)
@@ -503,9 +640,9 @@ namespace SeoulFirstWeek.UI
                     UIKit.Words(row, "→  " + step.fetch.objective.Get(), 24, Role.BrushDeep, Face.ReadBold).Layout(0, -1, 1);
                 }
             }
-            foreach (var c in step.choices.Where(c => c.Advances)) Choice(block, c);
-            foreach (var c in step.choices.Where(c => c.result == "ask")) Choice(block, c);
-            foreach (var c in step.choices.Where(c => c.result == "retry" || c.result == "block")) Choice(block, c);
+            foreach (var c in choices.Where(c => c.Advances)) Choice(block, c);
+            foreach (var c in choices.Where(c => c.result == "ask")) Choice(block, c);
+            foreach (var c in choices.Where(c => c.result == "retry" || c.result == "block")) Choice(block, c);
 
             if (!string.IsNullOrEmpty(step.after))
             {
@@ -619,9 +756,10 @@ namespace SeoulFirstWeek.UI
         /// <summary>
         /// Documents handed over on the way to the end, in order: the ones given with a right answer (alternatives in
         /// one step become "A 또는 B"), the ones handed over while fetching something, and the ones the story says you
-        /// bring. A form you fill in at the office says so.
+        /// bring. A form you fill in at the office says so. Only the steps and answers of the case shown count, plus
+        /// what that case has you bring from home.
         /// </summary>
-        static List<Paper> Bring(ProcedureDef proc)
+        static List<Paper> Bring(ProcedureDef proc, HashSet<string> flags, List<string> caseCarry)
         {
             var list = new List<Paper>();
             var seen = new HashSet<string>();
@@ -646,27 +784,28 @@ namespace SeoulFirstWeek.UI
                 list.Add(paper);
             }
 
-            foreach (var step in proc.steps)
+            foreach (var step in proc.steps.Where(s => Fits(s.needs, s.unless, flags)))
             {
-                Add(step.choices.Where(c => c.result == "fetch").Select(c => c.give));
-                Add(step.choices.Where(c => c.Advances).Select(c => c.give));
+                var choices = step.choices.Where(c => Fits(c.needs, c.unless, flags)).ToList();
+                Add(choices.Where(c => c.result == "fetch").Select(c => c.give));
+                Add(choices.Where(c => c.Advances).Select(c => c.give));
             }
-            foreach (var doc in proc.carry) Add(new[] { doc });
+            foreach (var doc in proc.carry.Concat(caseCarry)) Add(new[] { doc });
             return list;
         }
 
-        /// <summary>Documents every finished visit ends with (a document only one answer earns is optional, so it's left out).</summary>
-        static List<Paper> Earned(ProcedureDef proc)
+        /// <summary>Documents every finished visit of the case shown ends with (a document only one answer earns is optional, so it's left out).</summary>
+        static List<Paper> Earned(ProcedureDef proc, HashSet<string> flags)
         {
-            var flags = new List<string>();
-            foreach (var step in proc.steps)
+            var granted = new List<string>();
+            foreach (var step in proc.steps.Where(s => Fits(s.needs, s.unless, flags)))
             {
-                flags.AddRange(step.grants);
-                var right = step.choices.Where(c => c.Advances).ToList();
-                if (right.Count > 0) flags.AddRange(right[0].grants.Where(g => right.All(c => c.grants.Contains(g))));
+                granted.AddRange(step.grants);
+                var right = step.choices.Where(c => c.Advances && Fits(c.needs, c.unless, flags)).ToList();
+                if (right.Count > 0) granted.AddRange(right[0].grants.Where(g => right.All(c => c.grants.Contains(g))));
             }
-            flags.AddRange(proc.grants);
-            return flags.Where(f => f.StartsWith("doc:")).Select(f => f.Substring(4)).Distinct()
+            granted.AddRange(proc.grants);
+            return granted.Where(f => f.StartsWith("doc:")).Select(f => f.Substring(4)).Distinct()
                 .Select(d => new Paper
                 {
                     Doc = d,

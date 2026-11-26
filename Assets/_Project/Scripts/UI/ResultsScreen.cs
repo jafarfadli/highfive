@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -69,13 +70,29 @@ namespace SeoulFirstWeek.UI
             head.horizontalOverflow = HorizontalWrapMode.Overflow;
             head.rectTransform.localRotation = Quaternion.Euler(0, 0, 1.5f);
             var title = UIKit.Words(root, result.Title, 32, Role.Paper, Face.ReadBold);
-            title.rectTransform.Place(new Vector2(0, 1), new Vector2(574, -170), new Vector2(1250, 46));
+            title.rectTransform.Place(new Vector2(0, 1), new Vector2(574, -162), new Vector2(1250, 46));
             Outline(title);
+            bool hasSituation = !string.IsNullOrEmpty(result.Situation);
+            if (hasSituation)
+            {
+                // the case played, on a night plate like every line of text over the 3D scene
+                var plate = UIKit.Rect("Situation", root);
+                var sit = UIKit.Words(plate, $"{Loc.T("your_situation")}: {result.Situation}", 22, Role.Glow, Face.ReadBold);
+                sit.horizontalOverflow = HorizontalWrapMode.Overflow;
+                plate.Place(new Vector2(0, 1), new Vector2(562, -212), new Vector2(Mathf.Min(1290f, sit.preferredWidth + 44f), 40));
+                plate.localRotation = Quaternion.Euler(0, 0, 0.5f);
+                var plateBar = UIKit.BrushStrip(plate, "Plate", Role.Night);
+                plateBar.rectTransform.Stretch();
+                plateBar.dry = 0.4f;
+                plateBar.transform.SetAsFirstSibling();
+                sit.rectTransform.Stretch(22, 22, 0, 0);
+            }
 
-            // the report card
+            // the report card, clear of the phrase card on its right
+            float cardTop = hasSituation ? 266f : 240f;
             var card = UIKit.Rect("Report", root);
-            card.Place(new Vector2(0, 1), new Vector2(560, -240), new Vector2(700, 0));
-            UIKit.VStack(card, 18, new RectOffset(40, 40, 36, 34), TextAnchor.UpperLeft);
+            card.Place(new Vector2(0, 1), new Vector2(560, -cardTop), new Vector2(640, 0));
+            var cardStack = UIKit.VStack(card, 18, new RectOffset(40, 40, 36, 34), TextAnchor.UpperLeft);
             card.localRotation = Quaternion.Euler(0, 0, -1f);
             var paper = UIKit.PaperPanel(card, "Paper", Role.Paper, 3.5f);
             paper.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
@@ -99,22 +116,52 @@ namespace SeoulFirstWeek.UI
             bar.dry = 0.5f;
             bar.reveal = 0f;
 
+            Text lessonText = null;
             if (!string.IsNullOrEmpty(result.Lesson))
             {
                 var lesson = UIKit.Rect("Lesson", card);
-                UIKit.VStack(lesson, 0, new RectOffset(30, 30, 16, 18), TextAnchor.UpperLeft, false);
+                // the brush strip's dry ends are ragged: keep the text clear of them
+                UIKit.VStack(lesson, 0, new RectOffset(38, 36, 18, 28), TextAnchor.UpperLeft, false);
                 InkShape bg = done ? UIKit.BrushStrip(lesson, "Strip", Role.Brush) : UIKit.StickyNote(lesson);
                 bg.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
                 bg.rectTransform.Stretch();
                 if (done) bg.dry = 0.4f;
-                UIKit.Words(lesson, (done ? "✓  " : "!  ") + result.Lesson, 24, done ? Role.OnBrush : Role.Ink, Face.ReadBold).lineSpacing = 1.12f;
+                lessonText = UIKit.Words(lesson, (done ? "✓  " : "!  ") + result.Lesson, 24, done ? Role.OnBrush : Role.Ink, Face.ReadBold);
+                lessonText.lineSpacing = 1.12f;
             }
+            // what this situation taught (why the bill was what it was)
+            var noteTexts = new List<Text>();
+            foreach (var n in result.SituationNotes)
+            {
+                var box = UIKit.Rect("SituationNote", card);
+                UIKit.VStack(box, 0, new RectOffset(26, 26, 14, 16), TextAnchor.UpperLeft, false);
+                var sticky = UIKit.StickyNote(box);
+                sticky.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+                sticky.rectTransform.Stretch();
+                sticky.shadow = new Vector2(4, -5);
+                var t = UIKit.Words(box, "!  " + n, 22, Role.Ink, Face.ReadBold);
+                t.lineSpacing = 1.1f;
+                noteTexts.Add(t);
+            }
+            if (result.SpokenCount > 0)
+                UIKit.Words(card, Loc.T("spoken_summary", result.SpokenCount, Mathf.RoundToInt(result.SpokenAverage * 100)), 24, Role.Ink, Face.ReadBold)
+                    .lineSpacing = 1.1f;
             foreach (var g in result.Granted.Where(g => g.StartsWith("doc:")))
             {
                 var doc = g.Substring(4);
                 var line = UIKit.Words(card, $"+ {Documents.Korean(doc)} · {Documents.LocalName(doc)}" +
                     (doc == "arc" ? $"  <size=22><color={Theme.Html(Role.InkSoft)}>{Loc.T("arc_arrived")}</color></size>" : ""), 24, Role.BrushDeep, Face.ReadBold);
                 line.lineSpacing = 1.1f;
+            }
+            // the card ends above the buttons (52 px up, 84 tall): long lessons get smaller type, never under 20 px
+            float reportRoom = 1080f - 136f - 20f - cardTop;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(card);
+            for (int step = 0; step < 4 && LayoutUtility.GetPreferredHeight(card) > reportRoom; step++)
+            {
+                if (lessonText) lessonText.fontSize = Mathf.Max(20, lessonText.fontSize - 1);
+                foreach (var t in noteTexts) t.fontSize = Mathf.Max(20, t.fontSize - 1);
+                cardStack.spacing = Mathf.Max(8f, cardStack.spacing - 3f);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(card);
             }
 
             // what to remember: sticky notes stuck down the page under the stamp
@@ -139,7 +186,7 @@ namespace SeoulFirstWeek.UI
 
             // the phrase card, right
             var phrase = UIKit.Rect("PhraseCard", root);
-            phrase.Place(new Vector2(1, 1), new Vector2(-60, -250), new Vector2(660, 0));
+            phrase.Place(new Vector2(1, 1), new Vector2(-60, -250), new Vector2(620, 0));
             UIKit.VStack(phrase, 10, new RectOffset(40, 36, 40, 36), TextAnchor.UpperLeft);
             phrase.localRotation = Quaternion.Euler(0, 0, 1.6f);
             var index = UIKit.PaperPanel(phrase, "Card", Role.Balloon, 3f);
@@ -148,6 +195,7 @@ namespace SeoulFirstWeek.UI
             index.radius = 3f;
             index.shadow = new Vector2(10, -12);
             UIKit.Lettering(phrase, Loc.T("phrase_card").ToUpperInvariant(), 40, Role.Brush);
+            var blocks = new List<RectTransform>();
             foreach (var p in result.PhraseCard.Take(6))
             {
                 var sub = string.Join(" · ", new[] { p.Romanization, p.Meaning }.Where(x => !string.IsNullOrEmpty(x)));
@@ -158,6 +206,15 @@ namespace SeoulFirstWeek.UI
                 var rule = UIKit.PenStroke(block, Role.Brush, 1.6f, new Vector2(0, 0.5f), new Vector2(1, 0.5f));
                 rule.fillAlpha = 0.45f;
                 rule.Layout(-1, 6);
+                blocks.Add(block);
+            }
+            // the card stops above the buttons: long phrases that wrap leave room for fewer (the Logbook keeps them all)
+            const float cardRoom = 1080f - 250f - 170f;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(phrase);
+            for (int i = blocks.Count - 1; i >= 3 && LayoutUtility.GetPreferredHeight(phrase) > cardRoom; i--)
+            {
+                blocks[i].gameObject.SetActive(false);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(phrase);
             }
 
             // buttons, bottom right
@@ -202,7 +259,14 @@ namespace SeoulFirstWeek.UI
             var box = UIKit.Rect("Stat", parent);
             box.Layout(200, 104);
             UIKit.Lettering(box, value, 70, Role.Ink).rectTransform.Stretch(0, 0, 0, 34);
-            UIKit.Words(box, label, 24, Role.Ink, Face.ReadBold).rectTransform.Stretch(2, 0, 72, 0);
+            // one line under the number: a long label (Wrong answers) gets a little smaller instead of wrapping
+            var words = UIKit.Words(box, label, 24, Role.Ink, Face.ReadBold);
+            words.rectTransform.Stretch(2, 0, 72, 0);
+            words.horizontalOverflow = HorizontalWrapMode.Wrap;
+            words.verticalOverflow = VerticalWrapMode.Truncate;
+            words.resizeTextForBestFit = true;
+            words.resizeTextMinSize = 20;
+            words.resizeTextMaxSize = 24;
         }
 
         void Retry()

@@ -36,6 +36,11 @@ namespace SeoulFirstWeek.Core
             Make("ext_receipt", "연장 접수증", new[] { "Extension receipt", "Giấy biên nhận gia hạn", "Tanda terima perpanjangan" }, "#6C7A89", "연"),
             Make("remit_info", "송금 정보 메모", new[] { "Recipient details (note)", "Ghi chú thông tin người nhận", "Catatan data penerima" }, "#E0A93B", "메"),
             Make("remit_receipt", "송금 영수증", new[] { "Remittance receipt", "Biên lai chuyển tiền", "Bukti pengiriman uang" }, "#2F7F7A", "송"),
+            Make("dorm_cert", "기숙사 입사확인서", new[] { "Dormitory residence certificate", "Giấy xác nhận ở ký túc xá", "Surat keterangan tinggal di asrama" }, "#6C8EBF", "기"),
+            Make("tcard", "교통카드", new[] { "Transport card", "Thẻ giao thông", "Kartu transportasi" }, "#00A4E3", "교"),
+            Make("bus_ticket", "공항버스 승차권", new[] { "Airport bus ticket", "Vé xe buýt sân bay", "Tiket bus bandara" }, "#2A6FDB", "표"),
+            Make("er_form", "진료신청서", new[] { "ER registration form", "Phiếu đăng ký khám", "Formulir pendaftaran UGD" }, "#B08D3C", "신"),
+            Make("er_receipt", "진료비 영수증", new[] { "Medical bill receipt", "Biên lai viện phí", "Kuitansi biaya berobat" }, "#7A7A7A", "영"),
         };
 
         static readonly Dictionary<string, Info> ById = new();
@@ -62,6 +67,17 @@ namespace SeoulFirstWeek.Core
             var lang = (int)Settings.Language;
             return info.Names[lang];
         }
+
+        // shorter names where room is tight (the note on a part card that needs the document)
+        static readonly Dictionary<string, string[]> Shorts = new()
+        {
+            ["arc"] = new[] { "a residence card (ARC)", "thẻ cư trú (ARC)", "kartu tinggal (ARC)" },
+            ["bankbook"] = new[] { "a bankbook", "sổ ngân hàng", "buku tabungan" },
+        };
+
+        /// <summary>A short name in the player's language, for tight spots such as the note on a part card.</summary>
+        public static string ShortName(string id) =>
+            Shorts.TryGetValue(id, out var names) ? names[(int)Settings.Language] : LocalName(id);
 
         public static string Flag(string id) => "doc:" + id;
     }

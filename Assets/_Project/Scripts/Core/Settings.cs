@@ -43,6 +43,15 @@ namespace SeoulFirstWeek.Core
             set { PlayerPrefs.SetInt(MotionKey, value ? 1 : 0); Changed?.Invoke(); }
         }
 
+        /// <summary>Answering by voice: hold Space and say the line (needs a microphone and the Whisper model).</summary>
+        public static bool SpeakAnswers
+        {
+            get => PlayerPrefs.GetInt(SpeakKey, 1) == 1;
+            set { PlayerPrefs.SetInt(SpeakKey, value ? 1 : 0); Changed?.Invoke(); }
+        }
+
+        const string SpeakKey = "sfw.speak";
+
         public static void Save() => PlayerPrefs.Save();
     }
 }

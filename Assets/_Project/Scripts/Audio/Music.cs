@@ -30,12 +30,12 @@ namespace SeoulFirstWeek.Audio
         /// <summary>Ducks the music under a line played outside a conversation (the Logbook's listen buttons).</summary>
         public static void DuckFor(float seconds) => duckUntil = Time.unscaledTime + seconds;
 
-        /// <summary>The track for a scene: menus share one, the street has its own, every interior shares one.</summary>
+        /// <summary>The track for a scene: menus share one, the street has its own, every place you go into shares one.</summary>
         public static string TrackFor(string scene) => scene switch
         {
-            SceneFlow.Hub => "outdoor",
-            SceneFlow.Clinic or SceneFlow.Immigration or SceneFlow.Bank => "indoor",
-            _ => "menu", // Home, Select, Results
+            SceneFlow.Hub or SceneFlow.Street119 => "outdoor",
+            SceneFlow.Home or SceneFlow.Select or SceneFlow.Results => "menu",
+            _ => "indoor", // the clinic, the immigration office, the bank and every place added after them
         };
 
         void Awake()

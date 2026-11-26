@@ -20,7 +20,7 @@ namespace SeoulFirstWeek.EditorTools
     /// Rebuilds the game scenes from code: the Myeongdong hub (entrances, signs, stalls,
     /// pedestrians) and the three interiors. Re-run after changing layout code.
     /// </summary>
-    public static class SeoulSceneBuilder
+    public static partial class SeoulSceneBuilder
     {
         public const string SceneFolder = "Assets/_Project/Scenes";
         const string ProcedureFolder = "Assets/_Project/Data/Procedures";
@@ -30,6 +30,7 @@ namespace SeoulFirstWeek.EditorTools
         {
             BuildHub();
             BuildMenus();
+            BuildStreet119();
             BuildInteriors();
             BuildResults();
             ConfigureProject();
@@ -67,13 +68,17 @@ namespace SeoulFirstWeek.EditorTools
             BuildClinic();
             BuildImmigration();
             BuildBank();
+            BuildAirport();
+            BuildSubway();
+            BuildER();
         }
 
         public static void ConfigureProject()
         {
-            EditorBuildSettings.scenes = new[] { "Home", "Select", "Hub", "Clinic", "Immigration", "Bank", "Results" }
+            EditorBuildSettings.scenes = new[] { "Home", "Select", "Hub", "Clinic", "Immigration", "Bank", "Airport", "Subway", "Street119", "ER", "Results" }
                 .Select(n => new EditorBuildSettingsScene($"{SceneFolder}/{n}.unity", true)).ToArray();
-            PlayerSettings.productName = "Seoul First Week";
+            // the product name (and with it where PlayerPrefs live) is set in Project Settings: "highfive" keeps this
+            // copy's saves apart from the original Seoul First Week project's
             PlayerSettings.runInBackground = true;
             AssetDatabase.SaveAssets();
         }
@@ -188,6 +193,8 @@ namespace SeoulFirstWeek.EditorTools
                 new EntranceSpec { Id = "clinic", Scene = "Clinic", NameKo = "튼튼내과의원", NameEn = "TEUNTEUN CLINIC · 내과", StreetZ = -26f, Side = -1, Color = C("#1FA37A") },
                 new EntranceSpec { Id = "immigration", Scene = "Immigration", NameKo = "출입국 민원센터", NameEn = "IMMIGRATION SERVICE CENTER", StreetZ = 6f, Side = 1, Color = C("#2F5FD0") },
                 new EntranceSpec { Id = "bank", Scene = "Bank", NameKo = "새싹은행", NameEn = "SAESSAK BANK", StreetZ = 58f, Side = 1, Color = C("#5BAA2E") },
+                // a station entrance in a building's ground floor, as many of Seoul's are
+                new EntranceSpec { Id = "subway", Scene = "Subway", NameKo = "명동역 · 4호선", NameEn = "MYEONGDONG STATION · LINE 4", StreetZ = 40f, Side = -1, Color = C("#00A4E3") },
             };
             var entrances = new List<BuildingEntrance>();
             var entranceSpots = new List<Vector3>();
@@ -471,11 +478,25 @@ namespace SeoulFirstWeek.EditorTools
             Box(root, "PostL", new Vector3(-1.25f, 1.4f, 0.1f), new Vector3(0.22f, 2.8f, 0.3f), frame);
             Box(root, "PostR", new Vector3(1.25f, 1.4f, 0.1f), new Vector3(0.22f, 2.8f, 0.3f), frame);
             Box(root, "Lintel", new Vector3(0, 2.9f, 0.1f), new Vector3(2.72f, 0.24f, 0.3f), frame);
-            Glass(root, "DoorL", new Vector3(-0.58f, 1.3f, 0.02f), new Vector3(1.1f, 2.5f, 0.05f));
-            Glass(root, "DoorR", new Vector3(0.58f, 1.3f, 0.02f), new Vector3(1.1f, 2.5f, 0.05f));
-            // the lit lobby seen through the glass doors (a pharmacy-white room for the clinic and the bank,
-            // a white-and-blue service hall for the immigration office)
-            FacadeDresser.GlassPane(root, $"Lobby_{s.Id}", -1.15f, 0.05f, 2.3f, 2.5f, -0.05f, s.Id == "immigration" ? 4 : 6, 5f);
+            if (s.Id == "subway")
+            {
+                // a station entrance: no doors, a flight of stairs going down into the station's light
+                Box(root, "StairWell", new Vector3(0, 1.3f, 0.03f), new Vector3(2.3f, 2.5f, 0.02f), C("#1B1E23"), false);
+                for (int k = 0; k < 8; k++)
+                    Box(root, "StairNosing", new Vector3(0, 0.1f + k * 0.21f, 0.045f), new Vector3(2.2f - k * 0.13f, 0.03f, 0.01f), C("#F2C230"), false);
+                Emissive(root, "StairGlow", new Vector3(0, 1.95f, 0.042f), new Vector3(1.1f, 0.5f, 0.01f), C("#DDE8F5"), 0.7f);
+                Box(root, "LineBadge", new Vector3(-0.95f, 2.25f, 0.05f), new Vector3(0.34f, 0.34f, 0.02f), s.Color, false);
+                WorldText.Create(root, "LineNumber", "4", new Vector3(-0.95f, 2.25f, 0.065f), new Vector2(0.3f, 0.3f), 60, Color.white, true, TextAnchor.MiddleCenter,
+                    Quaternion.Euler(0, 180, 0));
+            }
+            else
+            {
+                Glass(root, "DoorL", new Vector3(-0.58f, 1.3f, 0.02f), new Vector3(1.1f, 2.5f, 0.05f));
+                Glass(root, "DoorR", new Vector3(0.58f, 1.3f, 0.02f), new Vector3(1.1f, 2.5f, 0.05f));
+                // the lit lobby seen through the glass doors (a pharmacy-white room for the clinic and the bank,
+                // a white-and-blue service hall for the immigration office)
+                FacadeDresser.GlassPane(root, $"Lobby_{s.Id}", -1.15f, 0.05f, 2.3f, 2.5f, -0.05f, s.Id == "immigration" ? 4 : 6, 5f);
+            }
             Box(root, "Mat", new Vector3(0, 0.02f, 0.9f), new Vector3(2.4f, 0.04f, 1.3f), C("#3A3A3A"), false);
             Box(root, "Awning", new Vector3(0, 3.25f, 0.8f), new Vector3(3.4f, 0.12f, 1.5f), s.Color, false);
             var sign = Sign(root, "Sign", new Vector3(0, 4.3f, 0.2f), new Vector2(5.6f, 1.3f), s.Color, $"{s.NameKo}\n<size=36>{s.NameEn}</size>", Color.white, 0, 70, 0.3f);
@@ -1052,6 +1073,11 @@ namespace SeoulFirstWeek.EditorTools
             public Material Floor, Ceiling, CounterFront, Cabinet;
             public Material Partition;  // solid partitions between windows (null: a glass divider on the desk)
             public bool Screens;        // tall acrylic screens on each window
+            // no street front: a solid south wall with an open passage (an underground station, an airport hall)
+            // instead of the glazed shop front, the sliding doors and the captured street behind them
+            public bool Enclosed;
+            public string PassageSign;  // the sign over the passage, e.g. "출구 Exit"
+            public Color PassageGlow;   // the light at the far end of the passage (daylight up the stairs)
         }
 
         class Room
@@ -1145,7 +1171,9 @@ namespace SeoulFirstWeek.EditorTools
             var root = r.Root;
             RenderSettings.fog = false;
             RenderSettings.skybox = null;
-            var sun = Sun(root, new Vector3(62, 24, 0), 0.5f, C("#FFF1DE"));
+            // a weak sun through the (shadowless) ceiling, like daylight from the windows: the trilight ambient of
+            // LookKit.Interior does most of the soft lighting, so the halftone doesn't dot every wall
+            var sun = Sun(root, new Vector3(62, 24, 0), 0.24f, C("#FFF1DE"));
             sun.shadowStrength = 0.5f;
             LookKit.Interior(root);
 
@@ -1162,6 +1190,11 @@ namespace SeoulFirstWeek.EditorTools
             Slab(root, "WallN", new Vector3(0, h / 2, d / 2 + 0.1f), new Vector3(w + 0.4f, h, 0.2f), r.WallMat);
             Slab(root, "WallE", new Vector3(w / 2 + 0.1f, h / 2, 0), new Vector3(0.2f, h, d), r.WallMat);
             Slab(root, "WallW", new Vector3(-w / 2 - 0.1f, h / 2, 0), new Vector3(0.2f, h, d), r.WallMat);
+            if (s.Enclosed)
+            {
+                Passage(r, s, door, frameMat);
+                return r;
+            }
             foreach (var sx in new[] { -1f, 1f })
             {
                 float cx = sx * (1.3f + side / 2f);
@@ -1227,9 +1260,85 @@ namespace SeoulFirstWeek.EditorTools
             foreach (var z in new[] { -d / 4f, d / 4f })
                 PointLight(root, new Vector3(x, h - 0.4f, z), 8f, 1.05f, s.Light);
 
-            Counters(r, s);
+            if (s.WindowX != null && s.WindowX.Length > 0) Counters(r, s);
             r.Player = CreatePlayer(root, new Vector3(0, 0.05f, -d / 2 + 1.4f), 0);
             return r;
+        }
+
+        /// <summary>
+        /// The south side of an enclosed room (<see cref="RoomSpec.Enclosed"/>): a solid wall with a 2.6 m
+        /// opening into a short passage. With a <see cref="RoomSpec.PassageGlow"/> the passage climbs as a
+        /// flight of stairs towards that light (daylight at the street, for a station); otherwise it runs
+        /// level and ends in a closed door. The exit trigger, the entrance point, the lights, the counters
+        /// and the player are set up as in <see cref="Shell"/>.
+        /// </summary>
+        static void Passage(Room r, RoomSpec s, float door, Material frameMat)
+        {
+            var root = r.Root;
+            float w = r.W, d = r.D, h = r.H, zS = -d / 2 - 0.1f, side = (w - 2.6f) / 2f;
+            foreach (var sx in new[] { -1f, 1f })
+                Slab(root, "WallS", new Vector3(sx * (1.3f + side / 2f), h / 2, zS), new Vector3(side, h, 0.2f), r.WallMat);
+            Slab(root, "Lintel", new Vector3(0, door + (h - door) / 2, zS), new Vector3(2.6f, h - door, 0.2f), r.WallMat);
+            foreach (var sx in new[] { -1f, 1f })
+                Slab(root, "Jamb", new Vector3(sx * 1.32f, door / 2f, zS + 0.12f), new Vector3(0.06f, door, 0.08f), frameMat, false);
+
+            // the passage: 5 m long, walls in the room's paint, a strip light down the middle
+            float len = 5f, z0 = -d / 2 - 0.2f, z1 = z0 - len;
+            bool stairs = s.PassageGlow.a > 0f;
+            var tread = TextureKit.Surface("Passage_Floor", TextureKit.FloorStone(), C("#B9B4AA"));
+            foreach (var sx in new[] { -1f, 1f })
+                Slab(root, "PassageWall", new Vector3(sx * 1.4f, h / 2 + 0.8f, (z0 + z1) / 2f), new Vector3(0.2f, h + 1.6f, len), r.WallMat);
+            if (stairs)
+            {
+                // a flight up towards the street: 16 cm risers, 30 cm treads, nosing strips in yellow
+                int steps = 14;
+                for (int i = 0; i < steps; i++)
+                {
+                    float z = z0 - 0.3f * i - 0.15f, top = 0.16f * (i + 1);
+                    Slab(root, "Step", new Vector3(0, top / 2f, z), new Vector3(2.6f, top, 0.3f), tread, true, false);
+                    Box(root, "Nosing", new Vector3(0, top + 0.004f, z + 0.12f), new Vector3(2.5f, 0.008f, 0.05f), C("#F2C230"), false);
+                }
+                Slab(root, "PassageCeiling", new Vector3(0, h + 1.2f, (z0 + z1) / 2f), new Vector3(2.8f, 0.1f, len), s.Ceiling, true, false);
+                foreach (var sx in new[] { -1f, 1f })
+                    Cylinder(root, "Handrail", new Vector3(sx * 1.22f, 1.0f + 1.1f, z0 - 2.1f), new Vector3(0.04f, 2.6f, 0.04f), C("#B9BEC4")).transform.localRotation = Quaternion.Euler(62f, 0, 0);
+                // daylight at the top of the stairs
+                var glow = Emissive(root, "Daylight", new Vector3(0, h + 0.4f, z1 + 0.05f), new Vector3(2.6f, 2.8f, 0.05f), s.PassageGlow, 2.4f);
+                glow.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.Off;
+                PointLight(root, new Vector3(0, h, z1 + 1.2f), 6f, 1.4f, s.PassageGlow);
+            }
+            else
+            {
+                Slab(root, "PassageFloor", new Vector3(0, -0.05f, (z0 + z1) / 2f), new Vector3(2.8f, 0.1f, len), tread);
+                Slab(root, "PassageCeiling", new Vector3(0, h + 0.05f, (z0 + z1) / 2f), new Vector3(2.8f, 0.1f, len), s.Ceiling, true, false);
+                Slab(root, "PassageEnd", new Vector3(0, h / 2, z1 - 0.1f), new Vector3(2.8f, h, 0.2f), r.WallMat);
+                Slab(root, "PassageDoor", new Vector3(0, 1.05f, z1 + 0.02f), new Vector3(1.6f, 2.1f, 0.05f), frameMat, false);
+                Emissive(root, "PassageLight", new Vector3(0, h - 0.02f, (z0 + z1) / 2f), new Vector3(0.2f, 0.03f, len - 1f), s.Light, 1.2f)
+                    .GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.Off;
+            }
+            if (!string.IsNullOrEmpty(s.PassageSign))
+                Sign(root, "PassageSign", new Vector3(0, door + 0.28f, -d / 2 + 0.02f), new Vector2(1.9f, 0.34f), C("#22252B"), s.PassageSign, C("#FFFFFF"), 0, 46, 0.06f);
+
+            // leaving: the passage is the way out
+            var exitGo = new GameObject("ExitDoor");
+            exitGo.transform.SetParent(root, false);
+            exitGo.transform.position = new Vector3(0, 1.2f, -d / 2 - 0.4f);
+            var ecol = exitGo.AddComponent<BoxCollider>();
+            ecol.isTrigger = true;
+            ecol.size = new Vector3(2.4f, 2.4f, 0.5f);
+            r.Exit = exitGo.AddComponent<ExitDoor>();
+            // the player may not walk up the stairs or down the passage: the way out is the exit prompt
+            var blocker = new GameObject("PassageBlocker") { layer = 2 };
+            blocker.transform.SetParent(root, false);
+            blocker.transform.position = new Vector3(0, door / 2f, -d / 2 - 0.9f);
+            blocker.AddComponent<BoxCollider>().size = new Vector3(2.6f, door, 0.2f);
+            r.Entrance = Group("EntrancePoint", root);
+            r.Entrance.position = new Vector3(0, 0, -d / 2 + 0.6f);
+
+            // the big enclosed halls (airport, station, ER) get a grid of lights for their size and height
+            HallLights(root, Vector3.zero, w, d, h, s.Light);
+
+            if (s.WindowX != null && s.WindowX.Length > 0) Counters(r, s);
+            r.Player = CreatePlayer(root, new Vector3(0, 0.05f, -d / 2 + 1.4f), 0);
         }
 
         /// <summary>
@@ -1644,11 +1753,36 @@ namespace SeoulFirstWeek.EditorTools
 
         static NpcActor CounterStaff(Room r, int window, string staffId, HumanLook look) => Staff(r, staffId, r.StaffSeats[window - 1], look);
 
+/// <summary>
+        /// Ceilings give back some of the room's light (the Surface shader's self light, a share of their own
+        /// colour), as a white ceiling over a bright floor does: without it a ceiling is lit only in pools right
+        /// around its lamps, which reads as a dark lid over a high hall.
+        /// </summary>
+        static void GlowCeilings(Transform root, float amount = 0.22f)
+        {
+            foreach (var r in root.GetComponentsInChildren<Renderer>(true))
+            {
+                if (!r.name.StartsWith("Ceiling")) continue;
+                foreach (var m in r.sharedMaterials)
+                    if (m && m.shader && m.shader.name == "SeoulFirstWeek/Surface")
+                    {
+                        m.SetColor("_EmissionColor", new Color(amount, amount, amount, 0));
+                        EditorUtility.SetDirty(m);
+                    }
+            }
+        }
+
         static ScenarioDirector Director(Room r, string[] procedures, int crowdSeed, int seated, params FetchStation[] stations)
         {
+            // every interior ends here: its ceilings are built by now
+            GlowCeilings(r.Root);
+            // a place with no waiting seats (an immigration hall's queue lanes, a station) has no visitor crowd
+            QueueCrowd crowd = null;
+            if (r.Seats.Count > 0)
+            {
             var crowdGo = new GameObject("Crowd");
             crowdGo.transform.SetParent(r.Root, false);
-            var crowd = crowdGo.AddComponent<QueueCrowd>();
+            crowd = crowdGo.AddComponent<QueueCrowd>();
             crowd.seats = r.Seats.ToArray();
             crowd.counterSpots = r.CounterSpots.ToArray();
             crowd.sitAtCounter = r.Style == CounterStyle.Low;
@@ -1659,7 +1793,14 @@ namespace SeoulFirstWeek.EditorTools
             crowd.gaps = r.SeatGaps.Count > 0 ? r.SeatGaps.ToArray() : new[] { r.Seats.Max(t => t.position.x) + 0.8f };
             crowd.initialSeated = Mathf.Min(seated, r.Seats.Count - 3);
             crowd.seed = crowdSeed;
-            crowd.crowd = procedures[0].StartsWith("immigration") ? Crowd.Immigration : procedures[0].StartsWith("bank") ? Crowd.Bank : Crowd.Clinic;
+            // who waits here: an immigration hall and an arrivals hall are mostly foreigners; a station or a police
+            // box gets the street's mix
+            var p0 = procedures[0];
+            crowd.crowd = p0.StartsWith("immigration") || p0.StartsWith("airport") ? Crowd.Immigration
+                : p0.StartsWith("bank") ? Crowd.Bank
+                : p0.StartsWith("clinic") ? Crowd.Clinic
+                : Crowd.Street;
+            }
 
             var go = new GameObject("ScenarioDirector");
             go.transform.SetParent(r.Root, false);
@@ -1673,7 +1814,8 @@ namespace SeoulFirstWeek.EditorTools
             d.actors = r.Actors.ToArray();
             d.anchors = r.Anchors.ToArray();
             d.stations = stations;
-            r.Exit.director = d;
+            d.waypoints = r.Root.GetComponentsInChildren<Waypoint>(true);
+            if (r.Exit) r.Exit.director = d;
             foreach (var id in procedures)
                 if (!d.procedures.Any(t => t && t.name == id)) Debug.LogError($"[Builder] Missing procedure file {ProcedureFolder}/{id}.json");
             return d;

@@ -28,6 +28,18 @@ namespace SeoulFirstWeek.UI
         public static Font Regular => regular ? regular : regular = Resources.Load<Font>("Fonts/NotoSansKR-Regular");
         public static Font Bold => bold ? bold : bold = Resources.Load<Font>("Fonts/NotoSansKR-Bold");
 
+        /// <summary>
+        /// Binds a short last word (a counter or room number, up to three letters) to the word before it with a
+        /// no-break space, so a wrapped line never ends on a lone "3".
+        /// </summary>
+        public static string NoOrphan(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return text;
+            int cut = text.LastIndexOf(' ');
+            if (cut <= 0 || text.Length - cut - 1 > 3) return text;
+            return text.Substring(0, cut) + ' ' + text.Substring(cut + 1);
+        }
+
         public static Sprite Rounded => rounded ? rounded : rounded = MakeRounded(64, 24, false);
         public static Sprite Circle => circle ? circle : circle = MakeRounded(64, 32, false);
         public static Sprite Ring => ring ? ring : ring = MakeRounded(64, 32, true);

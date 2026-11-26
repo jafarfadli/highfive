@@ -93,7 +93,51 @@ namespace SeoulFirstWeek.Core
             LoadProgress();
         }
 
-        public bool Has(string flag) => Flags.Contains(flag);
+        public bool Has(string flag) => Flags.Contains(flag) || situationFlags.Contains(flag);
+
+        // the situation picked for the visit being played (personalised visits), one option per question; never saved
+        readonly HashSet<string> situationFlags = new();
+        readonly Dictionary<string, SituationOption> picks = new();
+
+        public void PickSituation(string question, SituationOption option)
+        {
+            if (option == null) picks.Remove(question);
+            else picks[question] = option;
+            situationFlags.Clear();
+            foreach (var o in picks.Values)
+                if (o.grants != null)
+                    foreach (var g in o.grants) situationFlags.Add(g);
+        }
+
+        public void ClearSituation()
+        {
+            picks.Clear();
+            situationFlags.Clear();
+        }
+
+        /// <summary>Questions nobody answered (a part started from the editor) take their first option.</summary>
+        public void EnsureSituation(LevelDef level)
+        {
+            if (level?.situations == null) return;
+            foreach (var q in level.situations)
+                if (!picks.ContainsKey(q.id) && q.options != null && q.options.Count > 0) PickSituation(q.id, q.options[0]);
+        }
+
+        public SituationOption Picked(string question) => picks.TryGetValue(question, out var o) ? o : null;
+
+        /// <summary>"Stomach ache · Three weeks: no health insurance yet".</summary>
+        public string SituationTitle(LevelDef level) =>
+            level?.situations == null ? null
+                : string.Join("  ·  ", level.situations.Select(q => (Picked(q.id)?.tag ?? Picked(q.id)?.title)?.Get()).Where(t => !string.IsNullOrEmpty(t)));
+
+        /// <summary>Remembers the options played, so the Logbook opens on them.</summary>
+        public void RememberSituation(LevelDef level)
+        {
+            if (level?.situations == null) return;
+            PlayerPrefs.SetString("sfw.sit." + level.id, string.Join(",", level.situations.Select(q => Picked(q.id)?.id ?? "")));
+        }
+
+        public static string[] LastSituation(LevelDef level) => PlayerPrefs.GetString("sfw.sit." + level?.id, "").Split(',');
 
         public bool HasDocument(string id) => Flags.Contains(Documents.Flag(id));
 

@@ -16,6 +16,42 @@ namespace SeoulFirstWeek.Audio
         public static AudioClip Tick => Get("tick", () => Tones(new[] { 1760f }, 0.03f, 0.12f));
         public static AudioClip Paper => Get("paper", MakePaper);
         public static AudioClip Step => Get("step", MakeStep);
+        /// <summary>A train running into the station: low rumble that swells and fades.</summary>
+        public static AudioClip Rumble => Get("rumble", MakeRumble);
+        /// <summary>An ambulance siren, hi–lo ("삐뽀삐뽀"), about three seconds.</summary>
+        public static AudioClip Siren => Get("siren", MakeSiren);
+
+        static AudioClip MakeRumble()
+        {
+            var rng = new System.Random(5);
+            var data = new float[(int)(6.5f * Rate)];
+            float lp = 0, lp2 = 0;
+            for (int i = 0; i < data.Length; i++)
+            {
+                float t = i / (float)Rate;
+                lp += 0.02f * ((float)(rng.NextDouble() * 2 - 1) - lp);
+                lp2 += 0.05f * (lp - lp2);
+                // swells as the train comes in, eases off as it brakes, with the clack of the rail joints
+                float env = Mathf.Sin(Mathf.Clamp01(t / 6.5f) * Mathf.PI) * (1f + 0.25f * Mathf.Sin(t * 2 * Mathf.PI * (3.2f - t * 0.35f)));
+                data[i] = lp2 * 7f * env;
+            }
+            return Clip("rumble", data);
+        }
+
+        static AudioClip MakeSiren()
+        {
+            var data = new float[(int)(3.2f * Rate)];
+            float phase = 0;
+            for (int i = 0; i < data.Length; i++)
+            {
+                float t = i / (float)Rate;
+                float f = Mathf.Repeat(t, 0.9f) < 0.45f ? 960f : 770f;
+                phase += 2 * Mathf.PI * f / Rate;
+                float env = Mathf.Min(1f, t * 8f) * Mathf.Min(1f, (3.2f - t) * 4f);
+                data[i] = (Mathf.Sin(phase) * 0.7f + 0.3f * Mathf.Sign(Mathf.Sin(phase))) * 0.16f * env;
+            }
+            return Clip("siren", data);
+        }
 
         static AudioClip Get(string key, System.Func<AudioClip> make)
         {

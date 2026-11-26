@@ -49,7 +49,8 @@
   },
   "carry": [
     "attendance",
-    "tuition"
+    "tuition",
+    "dorm_cert"
   ],
   "grants": [
     "doc:ext_receipt"
@@ -715,6 +716,93 @@
       ]
     },
     {
+      "id": "address_proof",
+      "staff": "clerk2",
+      "npc": "체류지 입증서류도 내 주세요. 기숙사 입사확인서 가져오셨어요?",
+      "meaning": {
+        "en": "Proof of where you live too, please. Did you bring your dormitory residence certificate?",
+        "vi": "Nộp cả giấy chứng minh nơi ở nữa nhé. Bạn có mang giấy xác nhận ký túc xá không?",
+        "id": "Bukti tempat tinggalnya juga ya. Kamu bawa surat keterangan asrama?"
+      },
+      "choices": [
+        {
+          "ko": "네, 여기 있어요.",
+          "rom": "ne, yeogi isseoyo",
+          "meaning": {
+            "en": "Yes, here it is.",
+            "vi": "Vâng, đây ạ.",
+            "id": "Ya, ini dia."
+          },
+          "result": "advance",
+          "reply": "네, 확인했습니다.",
+          "replyMeaning": {
+            "en": "Thank you, that's checked.",
+            "vi": "Vâng, đã kiểm tra.",
+            "id": "Baik, sudah dicek."
+          },
+          "give": "dorm_cert"
+        },
+        {
+          "ko": "주소는 안 바뀌었는데요.",
+          "rom": "jusoneun an bakkwieonneundeyo",
+          "meaning": {
+            "en": "My address hasn't changed, though.",
+            "vi": "Nhưng địa chỉ của tôi không thay đổi mà.",
+            "id": "Alamat saya tidak berubah, kok."
+          },
+          "result": "retry",
+          "reply": "주소가 그대로여도 연장하실 때 다시 내셔야 돼요.",
+          "replyMeaning": {
+            "en": "Even if it hasn't changed, you hand it in again for an extension.",
+            "vi": "Dù địa chỉ không đổi, khi gia hạn vẫn phải nộp lại.",
+            "id": "Meski tidak berubah, saat perpanjangan tetap harus diserahkan lagi."
+          },
+          "note": {
+            "en": "An extension needs proof of address (체류지 입증서류) again, even if you still live in the same dormitory.",
+            "vi": "Gia hạn cần nộp lại giấy chứng minh nơi ở (체류지 입증서류), dù bạn vẫn ở ký túc xá cũ.",
+            "id": "Perpanjangan butuh bukti tempat tinggal (체류지 입증서류) lagi, walau kamu masih di asrama yang sama."
+          }
+        },
+        {
+          "ko": "외국인등록증에 주소 있잖아요.",
+          "rom": "oegugindeungnokjeunge juso itjanayo",
+          "meaning": {
+            "en": "My address is on my residence card.",
+            "vi": "Địa chỉ có trên thẻ cư trú rồi mà.",
+            "id": "Alamat saya ada di kartu tinggal, kan."
+          },
+          "result": "retry",
+          "reply": "등록증 주소랑 별도로, 지금 사시는 곳을 증명하는 서류가 필요해요.",
+          "replyMeaning": {
+            "en": "Apart from the address on the card, I need a paper proving where you live now.",
+            "vi": "Ngoài địa chỉ trên thẻ, tôi cần giấy chứng minh nơi bạn đang ở.",
+            "id": "Selain alamat di kartu, saya perlu surat yang membuktikan tempat tinggalmu sekarang."
+          },
+          "note": {
+            "en": "The address on your ARC isn't proof. Bring the paper itself: the 기숙사 입사확인서 for a dorm.",
+            "vi": "Địa chỉ trên thẻ ARC không phải là bằng chứng. Hãy mang giấy tờ: ở ký túc xá thì là 기숙사 입사확인서.",
+            "id": "Alamat di ARC bukan bukti. Bawa suratnya: untuk asrama, 기숙사 입사확인서."
+          }
+        },
+        {
+          "ko": "체류지 입증서류요?",
+          "rom": "chelyuji ipjeungseoryuyo?",
+          "meaning": {
+            "en": "Proof of residence?",
+            "vi": "Giấy chứng minh nơi ở ạ?",
+            "id": "Bukti tempat tinggal?"
+          },
+          "result": "ask",
+          "reply": "사시는 곳을 증명하는 서류요. 기숙사에 사시면 입사확인서요.",
+          "replyMeaning": {
+            "en": "A paper that proves where you live. In a dormitory, the residence certificate.",
+            "vi": "Là giấy chứng minh nơi bạn ở. Ở ký túc xá thì là giấy xác nhận ký túc xá.",
+            "id": "Surat yang membuktikan tempat tinggalmu. Kalau di asrama, surat keterangan asrama."
+          }
+        }
+      ]
+    },
+    {
       "id": "fee",
       "staff": "clerk2",
       "npc": "수수료는 6만 원입니다. 결제는 어떻게 하시겠어요?",
@@ -778,24 +866,24 @@
           "give": "cash"
         },
         {
-          "ko": "지난번처럼 3만 원 아니에요?",
-          "rom": "jinanbeoncheoreom sammanwon anieyo?",
+          "ko": "지난번처럼 3만 5천 원 아니에요?",
+          "rom": "jinanbeoncheoreom samman ocheon won anieyo?",
           "meaning": {
-            "en": "Isn't it 30,000 won like last time?",
-            "vi": "Không phải 30.000 won như lần trước sao?",
-            "id": "Bukannya 30.000 won seperti waktu itu?"
+            "en": "Isn't it 35,000 won like last time?",
+            "vi": "Không phải 35.000 won như lần trước sao?",
+            "id": "Bukannya 35.000 won seperti waktu itu?"
           },
           "result": "retry",
-          "reply": "등록은 3만 원이었고요, 연장은 6만 원이에요.",
+          "reply": "등록은 3만 5천 원이었고요, 연장은 6만 원이에요.",
           "replyMeaning": {
-            "en": "Registration was 30,000 won; an extension is 60,000.",
-            "vi": "Đăng ký là 30.000 won, còn gia hạn là 60.000 won.",
-            "id": "Registrasi 30.000 won; perpanjangan 60.000 won."
+            "en": "Registration was 35,000 won; an extension is 60,000.",
+            "vi": "Đăng ký là 35.000 won, còn gia hạn là 60.000 won.",
+            "id": "Registrasi 35.000 won; perpanjangan 60.000 won."
           },
           "note": {
-            "en": "Fees depend on the application: registering is 30,000 won, extending your stay is 60,000 won. The fee table is on HiKorea.",
-            "vi": "Lệ phí tùy loại hồ sơ: đăng ký 30.000 won, gia hạn lưu trú 60.000 won. Bảng lệ phí có trên HiKorea.",
-            "id": "Biaya tergantung jenis permohonan: registrasi 30.000 won, perpanjangan masa tinggal 60.000 won. Daftar biayanya ada di HiKorea."
+            "en": "Fees depend on the application: registering is 35,000 won, extending your stay is 60,000 won. The fee table is on HiKorea.",
+            "vi": "Lệ phí tùy loại hồ sơ: đăng ký 35.000 won, gia hạn lưu trú 60.000 won. Bảng lệ phí có trên HiKorea.",
+            "id": "Biaya tergantung jenis permohonan: registrasi 35.000 won, perpanjangan masa tinggal 60.000 won. Daftar biayanya ada di HiKorea."
           }
         }
       ]

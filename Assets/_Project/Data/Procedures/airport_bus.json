@@ -1,0 +1,504 @@
+{
+  "id": "airport_bus",
+  "verified": false,
+  "sources": [
+    "https://airportlimousine.co.kr/en/sub/sub01.php?cat_no=47 (operator page for the Myeongdong airport bus: adult 17,000 won, child 12,000 won for ages 6 to 12; boarding at T2 needs a ticket from the booth or kiosk)",
+    "https://www.studyinkorea.go.kr/en/life/immigration.do (Study in Korea: bus ticket counters on 1F at T1 and on B1 at T2)"
+  ],
+  "titleKo": "공항버스 매표소",
+  "title": {
+    "en": "Airport Bus Ticket Counter",
+    "vi": "Quầy vé xe buýt sân bay",
+    "id": "Loket Tiket Bus Bandara"
+  },
+  "briefing": {
+    "en": "Buy an airport bus ticket to Myeongdong, then find your stop outside.",
+    "vi": "Mua vé xe buýt sân bay đi Myeongdong, rồi tìm trạm xe bên ngoài.",
+    "id": "Beli tiket bus bandara ke Myeongdong, lalu cari haltemu di luar."
+  },
+  "completeNote": {
+    "en": "There's no student fare on this airport bus, so you pay the adult fare. Board at the 승차장 (bus stop) number on your ticket; 출구 numbers are exit doors.",
+    "vi": "Xe buýt sân bay này không có giá vé sinh viên, nên bạn trả giá vé người lớn. Hãy lên xe ở 승차장 (trạm lên xe) ghi trên vé; số 출구 là số cửa ra.",
+    "id": "Bus bandara ini tidak punya tarif pelajar, jadi kamu bayar tarif dewasa. Naik di nomor 승차장 (halte bus) yang tertera di tiket; nomor 출구 adalah pintu keluar."
+  },
+  "staff": [
+    {
+      "id": "busclerk",
+      "name": "서지혜",
+      "role": "ticket clerk",
+      "roleText": {
+        "en": "Ticket clerk",
+        "vi": "Nhân viên bán vé",
+        "id": "Petugas loket tiket"
+      },
+      "macVoice": "Yuna",
+      "macRate": 192,
+      "openaiVoice": "coral"
+    }
+  ],
+  "queue": {
+    "mode": "walkin",
+    "counter": 9
+  },
+  "steps": [
+    {
+      "id": "destination",
+      "staff": "busclerk",
+      "npc": "안녕하세요. 어디까지 가세요?",
+      "meaning": {
+        "en": "Hello. Where are you going?",
+        "vi": "Xin chào. Bạn đi đến đâu ạ?",
+        "id": "Halo. Mau ke mana?"
+      },
+      "choices": [
+        {
+          "ko": "명동이요. 편도로 주세요.",
+          "rom": "myeongdongiyo. pyeondoro juseyo",
+          "meaning": {
+            "en": "Myeongdong. One way, please.",
+            "vi": "Myeongdong. Cho tôi vé một chiều.",
+            "id": "Myeongdong. Sekali jalan, ya."
+          },
+          "result": "advance",
+          "reply": "네, 명동 편도요.",
+          "replyMeaning": {
+            "en": "Okay, one way to Myeongdong.",
+            "vi": "Vâng, vé một chiều đi Myeongdong.",
+            "id": "Baik, sekali jalan ke Myeongdong."
+          }
+        },
+        {
+          "ko": "명동 왕복으로 주세요.",
+          "rom": "myeongdong wangbogeuro juseyo",
+          "meaning": {
+            "en": "A round trip to Myeongdong, please.",
+            "vi": "Cho tôi vé khứ hồi đi Myeongdong.",
+            "id": "Tiket pulang-pergi ke Myeongdong, ya."
+          },
+          "result": "retry",
+          "reply": "왕복이요? 오늘 다시 공항으로 오세요?",
+          "replyMeaning": {
+            "en": "A round trip? Are you coming back to the airport today?",
+            "vi": "Khứ hồi ạ? Hôm nay bạn quay lại sân bay à?",
+            "id": "Pulang-pergi? Hari ini kamu kembali ke bandara?"
+          },
+          "note": {
+            "en": "편도 = one way, 왕복 = round trip. You're not coming back to the airport, so ask for 편도.",
+            "vi": "편도 = một chiều, 왕복 = khứ hồi. Bạn không quay lại sân bay, nên hãy mua vé 편도.",
+            "id": "편도 = sekali jalan, 왕복 = pulang-pergi. Kamu tidak kembali ke bandara, jadi minta 편도."
+          }
+        },
+        {
+          "ko": "명동 가는 버스 있어요?",
+          "rom": "myeongdong ganeun beoseu isseoyo?",
+          "meaning": {
+            "en": "Is there a bus to Myeongdong?",
+            "vi": "Có xe buýt đi Myeongdong không ạ?",
+            "id": "Ada bus ke Myeongdong?"
+          },
+          "result": "ask",
+          "reply": "네, 명동 가는 공항버스 있어요. 편도로 드릴까요?",
+          "replyMeaning": {
+            "en": "Yes, there's an airport bus to Myeongdong. One way?",
+            "vi": "Có, có xe buýt sân bay đi Myeongdong. Tôi lấy vé một chiều cho bạn nhé?",
+            "id": "Ada, bus bandara ke Myeongdong. Sekali jalan?"
+          }
+        }
+      ],
+      "task": {
+        "en": "Buy a ticket at the bus ticket counter",
+        "vi": "Mua vé ở quầy bán vé xe buýt",
+        "id": "Beli tiket di loket tiket bus"
+      }
+    },
+    {
+      "id": "people",
+      "staff": "busclerk",
+      "npc": "몇 분이세요?",
+      "meaning": {
+        "en": "How many people?",
+        "vi": "Mấy người ạ?",
+        "id": "Berapa orang?"
+      },
+      "choices": [
+        {
+          "ko": "한 명이요.",
+          "rom": "han myeongiyo",
+          "meaning": {
+            "en": "One person.",
+            "vi": "Một người.",
+            "id": "Satu orang."
+          },
+          "result": "advance",
+          "reply": "네, 성인 한 장이요.",
+          "replyMeaning": {
+            "en": "Okay, one adult ticket.",
+            "vi": "Vâng, một vé người lớn.",
+            "id": "Baik, satu tiket dewasa."
+          }
+        },
+        {
+          "ko": "10분이요.",
+          "rom": "sip buniyo",
+          "meaning": {
+            "en": "Ten minutes.",
+            "vi": "Mười phút.",
+            "id": "Sepuluh menit."
+          },
+          "result": "retry",
+          "reply": "시간 말고요, 몇 명이 타세요?",
+          "replyMeaning": {
+            "en": "Not the time. How many people are riding?",
+            "vi": "Không phải thời gian. Mấy người đi xe ạ?",
+            "id": "Bukan waktunya. Berapa orang yang naik?"
+          },
+          "note": {
+            "en": "Here 분 is the polite word for counting people (한 분, 두 분), not minutes. Answer with 명: 한 명이요.",
+            "vi": "Ở đây 분 là đơn vị đếm người lịch sự (한 분, 두 분), không phải phút. Hãy trả lời bằng 명: 한 명이요.",
+            "id": "Di sini 분 adalah kata penggolong sopan untuk orang (한 분, 두 분), bukan menit. Jawab dengan 명: 한 명이요."
+          }
+        },
+        {
+          "ko": "한 개요.",
+          "rom": "han gaeyo",
+          "meaning": {
+            "en": "One (item).",
+            "vi": "Một cái.",
+            "id": "Satu buah."
+          },
+          "result": "retry",
+          "reply": "네? 한 분이세요?",
+          "replyMeaning": {
+            "en": "Sorry? Just one person?",
+            "vi": "Dạ? Một người ạ?",
+            "id": "Ya? Satu orang?"
+          },
+          "note": {
+            "en": "개 counts things, not people. Count people with 명: 한 명이요.",
+            "vi": "개 dùng để đếm đồ vật, không đếm người. Đếm người thì dùng 명: 한 명이요.",
+            "id": "개 untuk menghitung benda, bukan orang. Untuk orang pakai 명: 한 명이요."
+          }
+        }
+      ]
+    },
+    {
+      "id": "payment",
+      "staff": "busclerk",
+      "npc": "17,000원입니다. 카드로 하시겠어요, 현금으로 하시겠어요?",
+      "meaning": {
+        "en": "That's 17,000 won. Card or cash?",
+        "vi": "17.000 won ạ. Thẻ hay tiền mặt?",
+        "id": "17.000 won. Kartu atau tunai?"
+      },
+      "choices": [
+        {
+          "ko": "카드로 할게요.",
+          "rom": "kadeuro halgeyo",
+          "meaning": {
+            "en": "I'll pay by card.",
+            "vi": "Tôi trả bằng thẻ.",
+            "id": "Saya bayar pakai kartu."
+          },
+          "result": "advance",
+          "reply": "네, 결제됐습니다.",
+          "replyMeaning": {
+            "en": "Payment done.",
+            "vi": "Đã thanh toán.",
+            "id": "Pembayaran selesai."
+          },
+          "give": "card"
+        },
+        {
+          "ko": "현금으로 할게요.",
+          "rom": "hyeongeumeuro halgeyo",
+          "meaning": {
+            "en": "I'll pay in cash.",
+            "vi": "Tôi trả tiền mặt.",
+            "id": "Saya bayar tunai."
+          },
+          "result": "advance",
+          "reply": "네, 17,000원 받았습니다.",
+          "replyMeaning": {
+            "en": "17,000 won received.",
+            "vi": "Đã nhận 17.000 won.",
+            "id": "17.000 won diterima."
+          },
+          "give": "cash"
+        },
+        {
+          "ko": "학생 할인 돼요?",
+          "rom": "haksaeng harin dwaeyo?",
+          "meaning": {
+            "en": "Is there a student discount?",
+            "vi": "Có giảm giá cho sinh viên không ạ?",
+            "id": "Ada diskon pelajar?"
+          },
+          "result": "ask",
+          "reply": "성인 요금이에요. 17,000원입니다.",
+          "replyMeaning": {
+            "en": "You pay the adult fare: 17,000 won.",
+            "vi": "Bạn trả giá vé người lớn: 17.000 won.",
+            "id": "Kamu bayar tarif dewasa: 17.000 won."
+          }
+        }
+      ]
+    },
+    {
+      "id": "stop",
+      "staff": "busclerk",
+      "npc": "표 여기 있습니다. 다음 차는 밖에 5번 승차장에서 타시면 돼요.",
+      "meaning": {
+        "en": "Here's your ticket. Take the next bus from stop 5 outside.",
+        "vi": "Vé của bạn đây. Chuyến tiếp theo bạn lên xe ở trạm số 5 bên ngoài.",
+        "id": "Ini tiketnya. Bus berikutnya naik dari halte 5 di luar."
+      },
+      "choices": [
+        {
+          "ko": "5번 승차장이요? 감사합니다.",
+          "rom": "obeon seungchajangiyo? gamsahamnida",
+          "meaning": {
+            "en": "Stop 5? Thank you.",
+            "vi": "Trạm số 5 ạ? Cảm ơn.",
+            "id": "Halte 5? Terima kasih."
+          },
+          "result": "advance",
+          "reply": "네, 안녕히 가세요.",
+          "replyMeaning": {
+            "en": "Okay, take care.",
+            "vi": "Vâng, đi cẩn thận nhé.",
+            "id": "Ya, hati-hati di jalan."
+          }
+        },
+        {
+          "ko": "5번 출구로 나가면 돼요?",
+          "rom": "obeon chulguro nagamyeon dwaeyo?",
+          "meaning": {
+            "en": "Do I go out through exit 5?",
+            "vi": "Tôi đi ra cửa số 5 là được ạ?",
+            "id": "Keluarnya lewat pintu 5, ya?"
+          },
+          "result": "retry",
+          "reply": "출구 말고 승차장이요. 버스 타는 곳이요.",
+          "replyMeaning": {
+            "en": "Not the exit, the 승차장: where you board the bus.",
+            "vi": "Không phải cửa ra, là 승차장: nơi lên xe buýt.",
+            "id": "Bukan pintu keluar, tapi 승차장: tempat naik bus."
+          },
+          "note": {
+            "en": "승차장 is the bus stop where you board; 출구 is an exit door. Both are numbered at the airport, so listen to the word after the number.",
+            "vi": "승차장 là trạm để lên xe buýt; 출구 là cửa ra. Ở sân bay cả hai đều có số, nên hãy nghe kỹ từ đứng sau con số.",
+            "id": "승차장 adalah halte tempat naik bus; 출구 adalah pintu keluar. Di bandara keduanya bernomor, jadi dengarkan kata setelah nomornya."
+          }
+        },
+        {
+          "ko": "승차장이 뭐예요?",
+          "rom": "seungchajangi mwoyeyo?",
+          "meaning": {
+            "en": "What's a 승차장?",
+            "vi": "승차장 là gì ạ?",
+            "id": "승차장 itu apa?"
+          },
+          "result": "ask",
+          "reply": "버스 타는 곳이에요. 밖으로 나가시면 있어요.",
+          "replyMeaning": {
+            "en": "It's where you get on the bus. You'll find it outside.",
+            "vi": "Là nơi lên xe buýt. Ra ngoài là thấy.",
+            "id": "Tempat naik bus. Ada di luar."
+          }
+        }
+      ],
+      "grants": [
+        "doc:bus_ticket"
+      ]
+    },
+    {
+      "id": "walk_to_stop",
+      "type": "go",
+      "target": "bus_stop_5",
+      "task": {
+        "en": "Walk out to bus stop 5",
+        "vi": "Đi ra trạm xe buýt số 5",
+        "id": "Jalan keluar ke halte bus 5"
+      },
+      "wrong": [
+        {
+          "station": "bus_stop_3",
+          "note": {
+            "en": "This is stop 3. Board at the stop number on your ticket: 5번 승차장.",
+            "vi": "Đây là trạm số 3. Hãy lên xe ở trạm ghi trên vé: 5번 승차장.",
+            "id": "Ini halte 3. Naiklah di nomor halte yang tertera di tiketmu: 5번 승차장."
+          }
+        }
+      ]
+    }
+  ],
+  "grants": [
+    "done:airport_bus"
+  ],
+  "phrases": [
+    {
+      "ko": "명동 가는 표 한 장 주세요.",
+      "rom": "myeongdong ganeun pyo han jang juseyo",
+      "meaning": {
+        "en": "One ticket to Myeongdong, please.",
+        "vi": "Cho tôi một vé đi Myeongdong.",
+        "id": "Satu tiket ke Myeongdong, ya."
+      }
+    },
+    {
+      "ko": "편도로 주세요.",
+      "rom": "pyeondoro juseyo",
+      "meaning": {
+        "en": "One way, please.",
+        "vi": "Cho tôi vé một chiều.",
+        "id": "Sekali jalan, ya."
+      }
+    },
+    {
+      "ko": "한 명이요.",
+      "rom": "han myeongiyo",
+      "meaning": {
+        "en": "One person.",
+        "vi": "Một người.",
+        "id": "Satu orang."
+      }
+    },
+    {
+      "ko": "카드로 할게요.",
+      "rom": "kadeuro halgeyo",
+      "meaning": {
+        "en": "I'll pay by card.",
+        "vi": "Tôi trả bằng thẻ.",
+        "id": "Saya bayar pakai kartu."
+      }
+    },
+    {
+      "ko": "학생 할인 돼요?",
+      "rom": "haksaeng harin dwaeyo?",
+      "meaning": {
+        "en": "Is there a student discount?",
+        "vi": "Có giảm giá cho sinh viên không ạ?",
+        "id": "Ada diskon pelajar?"
+      }
+    },
+    {
+      "ko": "몇 번 승차장이에요?",
+      "rom": "myeot beon seungchajangieyo?",
+      "meaning": {
+        "en": "Which stop number is it?",
+        "vi": "Trạm số mấy ạ?",
+        "id": "Halte nomor berapa?"
+      }
+    }
+  ],
+  "glossary": [
+    {
+      "ko": "공항버스",
+      "rom": "gonghangbeoseu",
+      "meaning": {
+        "en": "Airport bus",
+        "vi": "Xe buýt sân bay",
+        "id": "Bus bandara"
+      }
+    },
+    {
+      "ko": "어디까지 가세요?",
+      "rom": "eodikkaji gaseyo?",
+      "meaning": {
+        "en": "Where are you going?",
+        "vi": "Bạn đi đến đâu?",
+        "id": "Mau ke mana?"
+      }
+    },
+    {
+      "ko": "편도 · 왕복",
+      "rom": "pyeondo · wangbok",
+      "meaning": {
+        "en": "One way · round trip",
+        "vi": "Một chiều · khứ hồi",
+        "id": "Sekali jalan · pulang-pergi"
+      }
+    },
+    {
+      "ko": "한 분 · 10분",
+      "rom": "han bun · sip bun",
+      "meaning": {
+        "en": "One person (polite) · ten minutes",
+        "vi": "Một người (kính ngữ) · mười phút",
+        "id": "Satu orang (sopan) · sepuluh menit"
+      }
+    },
+    {
+      "ko": "한 명 · 한 장",
+      "rom": "han myeong · han jang",
+      "meaning": {
+        "en": "One person · one ticket",
+        "vi": "Một người · một vé",
+        "id": "Satu orang · satu tiket"
+      }
+    },
+    {
+      "ko": "성인 요금",
+      "rom": "seongin yogeum",
+      "meaning": {
+        "en": "Adult fare",
+        "vi": "Giá vé người lớn",
+        "id": "Tarif dewasa"
+      }
+    },
+    {
+      "ko": "할인",
+      "rom": "harin",
+      "meaning": {
+        "en": "Discount",
+        "vi": "Giảm giá",
+        "id": "Diskon"
+      }
+    },
+    {
+      "ko": "카드 · 현금",
+      "rom": "kadeu · hyeongeum",
+      "meaning": {
+        "en": "Card · cash",
+        "vi": "Thẻ · tiền mặt",
+        "id": "Kartu · tunai"
+      }
+    },
+    {
+      "ko": "표",
+      "rom": "pyo",
+      "meaning": {
+        "en": "Ticket",
+        "vi": "Vé",
+        "id": "Tiket"
+      }
+    },
+    {
+      "ko": "다음 차",
+      "rom": "daeum cha",
+      "meaning": {
+        "en": "The next bus",
+        "vi": "Chuyến xe tiếp theo",
+        "id": "Bus berikutnya"
+      }
+    },
+    {
+      "ko": "승차장 · 출구",
+      "rom": "seungchajang · chulgu",
+      "meaning": {
+        "en": "Bus stop (where you board) · exit",
+        "vi": "Trạm lên xe · cửa ra",
+        "id": "Halte (tempat naik) · pintu keluar"
+      }
+    },
+    {
+      "ko": "타다",
+      "rom": "tada",
+      "meaning": {
+        "en": "To get on, to ride",
+        "vi": "Lên xe, đi xe",
+        "id": "Naik (kendaraan)"
+      }
+    }
+  ]
+}

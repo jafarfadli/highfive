@@ -12,25 +12,26 @@ namespace SeoulFirstWeek.UI
     public enum Role { Ink, InkSoft, Paper, PaperDeep, Brush, BrushDeep, Glow, Night, Balloon, OnBrush, Ground }
 
     /// <summary>
-    /// The one palette of Ready Set Seoul: Persimmon, a retro print kept inside one warm band of the colour
-    /// wheel (brick to marigold) with near-black ink and cream. It colours the UI only; the 3D world keeps
-    /// its own colours.
+    /// The one palette, Signboard, taken from the 3D street so the UI and the world read as one game: the teal
+    /// of Myeongdong's shop fascias for the active thing, the late-afternoon sun for highlights, the street's
+    /// blue-violet shade for ink and dark plates, and warm paper and pavement beige for cards. Text on a
+    /// brush fill is light (on brush); text on a glow fill stays ink.
     /// </summary>
     public static class Theme
     {
         static readonly Color[] Colors =
         {
-            Hex("#1E0F0A"), // ink
-            Hex("#4A2618"), // ink soft
-            Hex("#FCEBCB"), // paper
-            Hex("#F2C47E"), // paper deep
-            Hex("#EE5A24"), // brush
-            Hex("#B0381A"), // brush deep
-            Hex("#FFC23A"), // glow
-            Hex("#2B1610"), // night
-            Hex("#FFF8EA"), // balloon
-            Hex("#1E0F0A"), // on brush
-            Hex("#F2C47E"), // ground
+            Hex("#1A1D26"), // ink
+            Hex("#4B5263"), // ink soft
+            Hex("#F2EADB"), // paper
+            Hex("#D9C6A5"), // paper deep
+            Hex("#1B6F68"), // brush
+            Hex("#0F4A45"), // brush deep
+            Hex("#E9B445"), // glow
+            Hex("#1E2636"), // night
+            Hex("#FBF6EC"), // balloon
+            Hex("#F7F1E6"), // on brush
+            Hex("#D9C6A5"), // ground
         };
 
         public static Color Get(Role role) => Colors[(int)role];

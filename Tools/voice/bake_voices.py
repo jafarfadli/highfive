@@ -43,6 +43,15 @@ VOICES = {
     "clerk2": "female, young adult, moderate pitch",    # 한지민 주무관, immigration window 2 (Part 2)
     "clerk": "male, young adult, moderate pitch",       # 최민수 대리, bank window 2
     "teller3": "male, middle-aged, moderate pitch",     # 정우진 과장, bank foreign exchange (Part 2)
+    "inspector": "male, middle-aged, low pitch",        # 정해준 심사관, airport immigration booth 3
+    "guide": "female, young adult, high pitch",         # airport guide at the queue lanes
+    "customs": "male, young adult, low pitch",          # customs officer by the exits
+    "busclerk": "female, middle-aged, moderate pitch",  # 서지혜, airport bus ticket counter 9
+    "storeclerk": "male, young adult, moderate pitch",  # convenience store in 명동역
+    "stationstaff": "male, middle-aged, low pitch",     # 고객안전실 window, 명동역
+    "dispatcher": "female, middle-aged, moderate pitch",  # 119 상황실 (played through a phone filter)
+    "erdesk": "male, young adult, moderate pitch",      # ER registration desk
+    "triage": "female, middle-aged, moderate pitch",    # ER triage nurse
     "pa": "female, young adult, high pitch",            # the number-calling announcer
     "player": "male, young adult, moderate pitch",      # Minh, the player
 }
@@ -102,6 +111,10 @@ def speakable(text):
     t = re.sub(r"(?<!\d)0\d{1,2}-\d{3,4}-\d{4}(?!\d)",
                lambda m: ", ".join("".join("공" if c == "0" else DIGITS[int(c)] for c in part) for part in m.group().split("-")), t)
     t = re.sub(r"(?<![A-Za-z])D-(\d)(?!\d)", lambda m: "디" + {"2": "투", "4": "포"}.get(m.group(1), sino(int(m.group(1)))), t)
+    # emergency and service numbers are read digit by digit: 119 is 일일구, never 백십구
+    t = re.sub(r"(?<!\d)(119|112|1330)(?!\d)", lambda m: "".join(DIGITS[int(c)] for c in m.group()), t)
+    # a subway car–door number such as 4-2 is read 사다시이
+    t = re.sub(r"(?<![\d-])(\d{1,2})-(\d)(?![\d-])", lambda m: sino(int(m.group(1))) + "다시" + sino(int(m.group(2))), t)
     t = re.sub(r"(\d+)\.(\d+)", lambda m: sino(int(m.group(1))) + " 점 " + " ".join(DIGITS[int(c)] for c in m.group(2)), t)
     t = re.sub(r"\d{1,3}(?:,\d{3})+", lambda m: m.group().replace(",", ""), t)
     t = re.sub(r"\d+", lambda m: sino(int(m.group())), t)
@@ -123,11 +136,21 @@ def collect():
     for path in sorted(PROCEDURES.glob("*.json")):
         proc = json.loads(path.read_text(encoding="utf-8"))
         for step in proc["steps"]:
-            v = step["staff"]
+            v = step.get("staff") or "pa"
             add(v, step.get("npc"), True)
-            add(v, step.get("after"), True)
+            if step.get("type") == "go":
+                # a world step: what its staff member says at a wrong turn; its closing line is a PA announcement
+                for wrong in step.get("wrong", []):
+                    add(v, wrong.get("line"), True)
+                for seg in segments(step.get("after") or ""):
+                    add("pa", seg.format(PLAYER_NAME_KO))
+            else:
+                add(v, step.get("after"), True)
             if step.get("type") == "keypad":
-                add(v, step.get("ack") or "네.", True)
+                if step.get("expect"):
+                    add(v, step.get("ack"), True)  # a phone: only an explicit ack is spoken
+                else:
+                    add(v, step.get("ack") or "네.", True)
                 if step.get("confirmPrevious"):
                     add(v, PIN_MISMATCH, True)
             if step.get("fetch"):

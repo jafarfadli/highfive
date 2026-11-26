@@ -1,0 +1,665 @@
+{
+  "id": "subway_lost",
+  "verified": false,
+  "sources": [
+    "https://news.seoul.go.kr/traffic/archives/514397 (Seoul transport, 2025-06: 아!차!내!짐!, what to tell the 고객안전실 when you leave something on a train)",
+    "https://mediahub.seoul.go.kr/archives/1196795 (Seoul mediahub, 2018-11-30: car and door numbers on the platform, vague answers, staff check the transport card)",
+    "http://www.seoulmetro.co.kr/kr/page.do?menuIdx=730 (Seoul Metro lost-property centres: Lines 3 and 4 at 충무로, weekdays 09:00 to 18:00, collect in person with ID)",
+    "https://mediahub.seoul.go.kr/archives/1188416 (Seoul mediahub, 2018-10-22: where station staff are)"
+  ],
+  "titleKo": "명동역 고객안전실",
+  "title": {
+    "en": "Myeongdong Station Office",
+    "vi": "Văn phòng ga Myeongdong",
+    "id": "Kantor Stasiun Myeongdong"
+  },
+  "briefing": {
+    "en": "Your backpack stayed on the train. Read the car and door number, then report it at the station office.",
+    "vi": "Ba lô của bạn vẫn còn trên tàu. Xem số toa và số cửa, rồi báo ở văn phòng nhà ga.",
+    "id": "Ranselmu tertinggal di kereta. Lihat nomor gerbong dan pintu, lalu laporkan di kantor stasiun."
+  },
+  "completeNote": {
+    "en": "Seoul's tip 아!차!내!짐!: tell staff the train's time, the car you got off and where your bag was. A bag that turns up is collected in person with ID; Line 4's lost-property centre is at Chungmuro (충무로) station, open weekdays 9 am to 6 pm.",
+    "vi": "Mẹo của Seoul 아!차!내!짐!: báo cho nhân viên giờ tàu, toa bạn xuống và chỗ để túi. Túi tìm được thì bạn tự đến nhận và mang giấy tờ tùy thân; trung tâm đồ thất lạc của tuyến 4 ở ga Chungmuro (충무로), mở cửa ngày thường từ 9 giờ sáng đến 6 giờ chiều.",
+    "id": "Tips dari Seoul, 아!차!내!짐!: sebutkan jam kereta, gerbong tempat kamu turun, dan letak tasmu. Tas yang ditemukan diambil sendiri dengan kartu identitas; pusat barang hilang Line 4 ada di Stasiun Chungmuro (충무로), buka hari kerja pukul 09.00 sampai 18.00."
+  },
+  "staff": [
+    {
+      "id": "stationstaff",
+      "name": "오정훈",
+      "role": "station staff",
+      "roleText": {
+        "en": "Station staff",
+        "vi": "Nhân viên nhà ga",
+        "id": "Petugas stasiun"
+      },
+      "macVoice": "Reed (Korean (South Korea))",
+      "macRate": 180,
+      "openaiVoice": "echo"
+    }
+  ],
+  "queue": {
+    "mode": "walkin",
+    "counter": 2
+  },
+  "carry": [
+    "tcard"
+  ],
+  "steps": [
+    {
+      "id": "door_number",
+      "type": "go",
+      "staff": "stationstaff",
+      "target": "door_number",
+      "task": {
+        "en": "Check the car and door number where you got off",
+        "vi": "Xem số toa và số cửa chỗ bạn xuống tàu",
+        "id": "Lihat nomor gerbong dan pintu tempat kamu turun"
+      },
+      "grants": [
+        "seen:door"
+      ]
+    },
+    {
+      "id": "stairs_up",
+      "type": "go",
+      "staff": "stationstaff",
+      "target": "stairs_up",
+      "task": {
+        "en": "Go up to the station office (고객안전실)",
+        "vi": "Đi lên văn phòng nhà ga (고객안전실)",
+        "id": "Naik ke kantor stasiun (고객안전실)"
+      }
+    },
+    {
+      "id": "what",
+      "staff": "stationstaff",
+      "npc": "안녕하세요. 무슨 일이세요?",
+      "meaning": {
+        "en": "Hello. What's the matter?",
+        "vi": "Xin chào. Có chuyện gì vậy ạ?",
+        "id": "Halo. Ada apa?"
+      },
+      "choices": [
+        {
+          "ko": "열차에 가방을 두고 내렸어요.",
+          "rom": "yeolchae gabangeul dugo naeryeosseoyo",
+          "meaning": {
+            "en": "I left my bag on the train.",
+            "vi": "Tôi để quên túi trên tàu.",
+            "id": "Tas saya ketinggalan di kereta."
+          },
+          "result": "advance",
+          "reply": "아이고, 그러셨어요. 바로 찾아볼게요. 몇 가지만 여쭤볼게요.",
+          "replyMeaning": {
+            "en": "Oh no. We'll look for it right away. Just a few questions first.",
+            "vi": "Ôi, vậy à. Chúng tôi sẽ tìm ngay. Cho tôi hỏi vài điều nhé.",
+            "id": "Aduh, begitu. Kami segera cari. Saya tanya beberapa hal dulu ya."
+          }
+        },
+        {
+          "ko": "가방을 잊어버렸어요.",
+          "rom": "gabangeul ijeobeoryeosseoyo",
+          "meaning": {
+            "en": "I forgot my bag.",
+            "vi": "Tôi quên cái túi.",
+            "id": "Saya lupa tas saya."
+          },
+          "result": "retry",
+          "reply": "가방을 어디에 두고 오셨어요? 열차 안에요?",
+          "replyMeaning": {
+            "en": "Where did you leave your bag? On the train?",
+            "vi": "Bạn để quên túi ở đâu? Trên tàu à?",
+            "id": "Tasnya ketinggalan di mana? Di dalam kereta?"
+          },
+          "note": {
+            "en": "잊어버리다 means to forget and 잃어버리다 means to lose. For something left on a train, say 두고 내렸어요: 열차에 가방을 두고 내렸어요.",
+            "vi": "잊어버리다 là quên, 잃어버리다 là làm mất. Đồ để quên trên tàu thì nói 두고 내렸어요: 열차에 가방을 두고 내렸어요.",
+            "id": "잊어버리다 artinya lupa, 잃어버리다 artinya kehilangan. Untuk barang yang tertinggal di kereta, katakan 두고 내렸어요: 열차에 가방을 두고 내렸어요."
+          }
+        },
+        {
+          "ko": "가방 잃어버렸어.",
+          "rom": "gabang ireobeoryeosseo",
+          "meaning": {
+            "en": "I lost my bag.",
+            "vi": "Tôi mất túi rồi.",
+            "id": "Aku kehilangan tas."
+          },
+          "result": "retry",
+          "reply": "…네? 가방을 잃어버리셨어요? 어디서요?",
+          "replyMeaning": {
+            "en": "…Sorry? You lost your bag? Where?",
+            "vi": "…Dạ? Bạn bị mất túi ạ? Ở đâu?",
+            "id": "…Ya? Tasnya hilang? Di mana?"
+          },
+          "note": {
+            "en": "Without -요 at the end this is 반말, casual speech. It sounds rude to staff. Say 열차에 가방을 두고 내렸어요.",
+            "vi": "Không có -요 ở cuối là 반말 (nói trống không), nghe bất lịch sự với nhân viên. Hãy nói 열차에 가방을 두고 내렸어요.",
+            "id": "Tanpa -요 di akhir kalimat itu 반말 (bahasa santai) dan terdengar tidak sopan ke petugas. Katakan 열차에 가방을 두고 내렸어요."
+          }
+        },
+        {
+          "ko": "여기가 역무실 맞아요?",
+          "rom": "yeogiga yeongmusil majayo?",
+          "meaning": {
+            "en": "Is this the station office?",
+            "vi": "Đây có phải phòng nhân viên ga không ạ?",
+            "id": "Ini kantor stasiun, kan?"
+          },
+          "result": "ask",
+          "reply": "네, 여기 고객안전실이에요. 역무실이라고도 해요. 무슨 일이세요?",
+          "replyMeaning": {
+            "en": "Yes, this is the 고객안전실, also called 역무실. What's the matter?",
+            "vi": "Vâng, đây là 고객안전실, còn gọi là 역무실. Có chuyện gì vậy ạ?",
+            "id": "Ya, ini 고객안전실, disebut juga 역무실. Ada apa?"
+          }
+        }
+      ],
+      "task": {
+        "en": "Report your bag at the station office",
+        "vi": "Báo túi để quên ở văn phòng nhà ga",
+        "id": "Laporkan tasmu di kantor stasiun"
+      }
+    },
+    {
+      "id": "when",
+      "staff": "stationstaff",
+      "npc": "몇 시쯤, 어느 방향 열차에서 내리셨어요?",
+      "meaning": {
+        "en": "Around what time did you get off, and from a train going which way?",
+        "vi": "Bạn xuống tàu khoảng mấy giờ, từ tàu chạy hướng nào?",
+        "id": "Kira-kira jam berapa kamu turun, dan dari kereta arah mana?"
+      },
+      "choices": [
+        {
+          "ko": "5분쯤 전에 충무로 쪽으로 가는 열차에서 내렸어요.",
+          "rom": "obunjjeum jeone chungmuro jjogeuro ganeun yeolchaeseo naeryeosseoyo",
+          "meaning": {
+            "en": "About 5 minutes ago, from the train going towards Chungmuro.",
+            "vi": "Khoảng 5 phút trước, từ tàu chạy về hướng Chungmuro.",
+            "id": "Sekitar 5 menit lalu, dari kereta yang ke arah Chungmuro."
+          },
+          "result": "advance",
+          "reply": "네, 5분쯤 전에 충무로 쪽이요.",
+          "replyMeaning": {
+            "en": "Okay: about 5 minutes ago, towards Chungmuro.",
+            "vi": "Vâng, khoảng 5 phút trước, hướng Chungmuro.",
+            "id": "Baik, sekitar 5 menit lalu, arah Chungmuro."
+          }
+        },
+        {
+          "ko": "아까 내렸어요.",
+          "rom": "akka naeryeosseoyo",
+          "meaning": {
+            "en": "I got off a while ago.",
+            "vi": "Tôi xuống lúc nãy.",
+            "id": "Saya turun tadi."
+          },
+          "result": "retry",
+          "reply": "아까 언제쯤이요? 몇 분 전인지 알아야 열차를 찾을 수 있어요.",
+          "replyMeaning": {
+            "en": "A while ago, meaning when? We need to know how many minutes ago to find the train.",
+            "vi": "Lúc nãy là khoảng khi nào? Phải biết mấy phút trước thì mới tìm được tàu.",
+            "id": "Tadi itu kapan? Kami perlu tahu berapa menit lalu supaya bisa menemukan keretanya."
+          },
+          "note": {
+            "en": "아까 (a while ago) is too vague. Staff need the time and the direction to find the train: 5분쯤 전에 충무로 쪽으로 가는 열차에서 내렸어요.",
+            "vi": "아까 (lúc nãy) quá mơ hồ. Nhân viên cần thời gian và hướng tàu để tìm: 5분쯤 전에 충무로 쪽으로 가는 열차에서 내렸어요.",
+            "id": "아까 (tadi) terlalu tidak jelas. Petugas perlu waktu dan arah kereta untuk mencarinya: 5분쯤 전에 충무로 쪽으로 가는 열차에서 내렸어요."
+          }
+        },
+        {
+          "ko": "5분쯤 전에 사당 방면 열차에서 내렸어요.",
+          "rom": "obunjjeum jeone sadang bangmyeon yeolchaeseo naeryeosseoyo",
+          "meaning": {
+            "en": "About 5 minutes ago, from a train towards Sadang.",
+            "vi": "Khoảng 5 phút trước, từ tàu hướng Sadang.",
+            "id": "Sekitar 5 menit lalu, dari kereta arah Sadang."
+          },
+          "result": "retry",
+          "reply": "사당 방면은 사당 쪽으로 가는 열차예요. 타셨던 열차는 어느 쪽으로 갔어요?",
+          "replyMeaning": {
+            "en": "Towards Sadang means a train going to Sadang. Which way did your train go?",
+            "vi": "Hướng Sadang là tàu chạy về phía Sadang. Tàu bạn đi đã chạy về hướng nào?",
+            "id": "Arah Sadang itu kereta yang menuju Sadang. Keretamu tadi pergi ke arah mana?"
+          },
+          "note": {
+            "en": "방면 is where a train is heading, not where it came from. You came from 동작 and the train went on to 충무로: 충무로 쪽으로 가는 열차에서 내렸어요.",
+            "vi": "방면 là nơi tàu sắp chạy tới, không phải nơi tàu vừa chạy qua. Bạn đi từ 동작 đến, và tàu chạy tiếp về 충무로: 충무로 쪽으로 가는 열차에서 내렸어요.",
+            "id": "방면 adalah arah tujuan kereta, bukan asalnya. Kamu datang dari 동작 dan keretanya lanjut ke 충무로: 충무로 쪽으로 가는 열차에서 내렸어요."
+          }
+        }
+      ]
+    },
+    {
+      "id": "car",
+      "staff": "stationstaff",
+      "npc": "몇 번째 칸에서 내리셨어요?",
+      "meaning": {
+        "en": "Which car did you get off from?",
+        "vi": "Bạn xuống ở toa thứ mấy?",
+        "id": "Kamu turun dari gerbong ke berapa?"
+      },
+      "choices": [
+        {
+          "ko": "4-2번 문에서 내렸어요.",
+          "rom": "sadasi-i beon muneseo naeryeosseoyo",
+          "meaning": {
+            "en": "At door 4-2.",
+            "vi": "Tôi xuống ở cửa 4-2.",
+            "id": "Saya turun di pintu 4-2."
+          },
+          "result": "advance",
+          "reply": "4-2번 문이요. 정확하게 알려 주셔서 감사합니다.",
+          "replyMeaning": {
+            "en": "Door 4-2. Thank you for being exact.",
+            "vi": "Cửa 4-2. Cảm ơn bạn đã nói chính xác.",
+            "id": "Pintu 4-2. Terima kasih sudah memberi tahu dengan tepat."
+          },
+          "needs": "seen:door"
+        },
+        {
+          "ko": "대충 앞쪽이에요.",
+          "rom": "daechung apjjogieyo",
+          "meaning": {
+            "en": "Roughly near the front.",
+            "vi": "Khoảng phía đầu tàu.",
+            "id": "Kira-kira di bagian depan."
+          },
+          "result": "retry",
+          "reply": "앞쪽은 범위가 넓어서 찾기 어려워요. 내리신 곳 승강장에 번호가 있어요.",
+          "replyMeaning": {
+            "en": "The front covers a lot, so it's hard to search. There's a number on the platform where you got off.",
+            "vi": "Phía đầu tàu thì rộng quá, khó tìm. Trên sân ga chỗ bạn xuống có số đấy.",
+            "id": "Bagian depan itu luas, jadi susah dicari. Di peron tempat kamu turun ada nomornya."
+          },
+          "note": {
+            "en": "대충 앞쪽 (roughly the front) is too vague for a search. Read the car and door number on the platform and say it: 4-2번 문에서 내렸어요.",
+            "vi": "대충 앞쪽 (khoảng phía đầu) quá mơ hồ để tìm. Hãy đọc số toa và số cửa trên sân ga rồi nói: 4-2번 문에서 내렸어요.",
+            "id": "대충 앞쪽 (kira-kira di depan) terlalu tidak jelas untuk pencarian. Baca nomor gerbong dan pintu di peron lalu sebutkan: 4-2번 문에서 내렸어요."
+          }
+        },
+        {
+          "ko": "칸이 뭐예요?",
+          "rom": "kani mwoyeyo?",
+          "meaning": {
+            "en": "What does 칸 mean?",
+            "vi": "칸 là gì ạ?",
+            "id": "칸 itu apa?"
+          },
+          "result": "ask",
+          "reply": "칸은 열차 한 량이에요. 승강장에 칸하고 문 번호가 쓰여 있어요.",
+          "replyMeaning": {
+            "en": "A 칸 is one car of the train. The car and door numbers are written on the platform.",
+            "vi": "칸 là một toa tàu. Trên sân ga có ghi số toa và số cửa.",
+            "id": "칸 itu satu gerbong kereta. Di peron tertulis nomor gerbong dan pintunya."
+          }
+        }
+      ]
+    },
+    {
+      "id": "bag",
+      "staff": "stationstaff",
+      "npc": "가방을 어디에 두셨어요? 어떻게 생겼어요?",
+      "meaning": {
+        "en": "Where did you put the bag, and what does it look like?",
+        "vi": "Bạn để túi ở đâu? Túi trông như thế nào?",
+        "id": "Tasnya ditaruh di mana? Seperti apa tasnya?"
+      },
+      "choices": [
+        {
+          "ko": "선반 위에요. 검은색 백팩이에요.",
+          "rom": "seonban wieyo. geomeunsaek baekpaegieyo",
+          "meaning": {
+            "en": "On the luggage rack. It's a black backpack.",
+            "vi": "Trên giá hành lý. Là một ba lô màu đen.",
+            "id": "Di rak bagasi. Ransel warna hitam."
+          },
+          "result": "advance",
+          "reply": "선반 위, 검은색 백팩이요. 적어 둘게요.",
+          "replyMeaning": {
+            "en": "On the rack, a black backpack. I'll note that down.",
+            "vi": "Trên giá, ba lô đen. Tôi ghi lại nhé.",
+            "id": "Di rak, ransel hitam. Saya catat."
+          }
+        },
+        {
+          "ko": "가방 안에 노트북이 있어요.",
+          "rom": "gabang ane noteubugi isseoyo",
+          "meaning": {
+            "en": "There's a laptop in it.",
+            "vi": "Trong túi có máy tính xách tay.",
+            "id": "Di dalam tasnya ada laptop."
+          },
+          "result": "retry",
+          "reply": "안에 든 것도 중요한데요, 먼저 어디에 두셨는지하고 가방 모양부터 알려 주세요.",
+          "replyMeaning": {
+            "en": "What's inside matters too, but first tell me where you put it and what it looks like.",
+            "vi": "Đồ bên trong cũng quan trọng, nhưng trước hết cho tôi biết bạn để ở đâu và túi trông thế nào.",
+            "id": "Isinya juga penting, tapi beri tahu dulu ditaruh di mana dan seperti apa tasnya."
+          },
+          "note": {
+            "en": "Answer what was asked: where it was (선반 위, on the rack; 좌석 아래, under a seat) and what it looks like (검은색 백팩, a black backpack).",
+            "vi": "Hãy trả lời đúng câu hỏi: để ở đâu (선반 위, trên giá; 좌석 아래, dưới ghế) và trông thế nào (검은색 백팩, ba lô đen).",
+            "id": "Jawab yang ditanya: di mana tasnya (선반 위, di rak; 좌석 아래, di bawah kursi) dan seperti apa (검은색 백팩, ransel hitam)."
+          }
+        },
+        {
+          "ko": "천천히 말씀해 주시겠어요?",
+          "rom": "cheoncheonhi malsseumhae jusigesseoyo?",
+          "meaning": {
+            "en": "Could you speak slowly, please?",
+            "vi": "Nói chậm giúp tôi được không ạ?",
+            "id": "Bisa bicara lebih pelan?"
+          },
+          "result": "ask",
+          "reply": "네. 가방을 어디에 두셨어요? 선반 위요, 좌석 아래요? 그리고 무슨 색이에요?",
+          "replyMeaning": {
+            "en": "Sure. Where did you put the bag? On the rack, or under a seat? And what colour is it?",
+            "vi": "Vâng. Bạn để túi ở đâu? Trên giá hay dưới ghế? Và túi màu gì?",
+            "id": "Baik. Tasnya ditaruh di mana? Di rak atau di bawah kursi? Lalu warnanya apa?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "card_check",
+      "staff": "stationstaff",
+      "npc": "교통카드 좀 보여 주시겠어요? 내리신 시간 확인해 볼게요.",
+      "meaning": {
+        "en": "May I see your transport card? I'll check the time you got off.",
+        "vi": "Cho tôi xem thẻ giao thông được không? Tôi sẽ kiểm tra giờ bạn xuống tàu.",
+        "id": "Boleh lihat kartu transportasimu? Saya cek jam kamu turun."
+      },
+      "choices": [
+        {
+          "ko": "네, 여기요.",
+          "rom": "ne, yeogiyo",
+          "meaning": {
+            "en": "Sure, here.",
+            "vi": "Vâng, đây ạ.",
+            "id": "Ya, ini."
+          },
+          "result": "advance",
+          "reply": "네, 시간 확인됐어요. 감사합니다.",
+          "replyMeaning": {
+            "en": "Okay, the time is checked. Thank you.",
+            "vi": "Vâng, đã kiểm tra được giờ. Cảm ơn bạn.",
+            "id": "Baik, jamnya sudah dicek. Terima kasih."
+          },
+          "give": "tcard"
+        },
+        {
+          "ko": "여기 있어요.",
+          "rom": "yeogi isseoyo",
+          "meaning": {
+            "en": "Here you go.",
+            "vi": "Đây ạ.",
+            "id": "Ini."
+          },
+          "result": "retry",
+          "reply": "여권 말고 교통카드요. 신분증은 가방 찾으러 오실 때 가져오세요.",
+          "replyMeaning": {
+            "en": "Not your passport, your transport card. Bring ID when you come to collect the bag.",
+            "vi": "Không phải hộ chiếu, là thẻ giao thông. Khi đến nhận túi thì mang giấy tờ tùy thân theo nhé.",
+            "id": "Bukan paspor, tapi kartu transportasi. Bawa kartu identitas nanti waktu mengambil tasnya."
+          },
+          "note": {
+            "en": "The transport card's record shows when you got off, so staff ask for the card. Your ID (passport or ARC) is for collecting the bag later.",
+            "vi": "Lịch sử thẻ giao thông cho biết bạn xuống tàu lúc nào, nên nhân viên cần thẻ. Giấy tờ tùy thân (hộ chiếu hoặc ARC) là để nhận túi sau này.",
+            "id": "Riwayat kartu transportasi menunjukkan kapan kamu turun, jadi petugas minta kartunya. Kartu identitas (paspor atau ARC) untuk mengambil tas nanti."
+          },
+          "give": "passport"
+        },
+        {
+          "ko": "교통카드는 왜 필요해요?",
+          "rom": "gyotongkadeuneun wae piryohaeyo?",
+          "meaning": {
+            "en": "Why do you need my transport card?",
+            "vi": "Sao lại cần thẻ giao thông ạ?",
+            "id": "Kenapa perlu kartu transportasi?"
+          },
+          "result": "ask",
+          "reply": "카드 기록을 보면 내리신 시간을 알 수 있어요.",
+          "replyMeaning": {
+            "en": "The card's record shows when you got off.",
+            "vi": "Xem lịch sử thẻ là biết bạn xuống tàu lúc nào.",
+            "id": "Dari riwayat kartu, kami bisa tahu kapan kamu turun."
+          }
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "staff": "stationstaff",
+      "npc": "연락처 알려 주세요. 찾으면 연락드릴게요.",
+      "meaning": {
+        "en": "Your phone number, please. We'll call you if we find it.",
+        "vi": "Cho tôi số liên lạc. Tìm thấy thì chúng tôi sẽ gọi cho bạn.",
+        "id": "Tolong beri tahu nomor kontakmu. Kalau ketemu, kami hubungi."
+      },
+      "choices": [
+        {
+          "ko": "010-1234-5678이에요.",
+          "rom": "gong-il-gong, il-i-sam-sa, o-yuk-chil-par-ieyo",
+          "meaning": {
+            "en": "It's 010-1234-5678.",
+            "vi": "Số của tôi là 010-1234-5678.",
+            "id": "Nomornya 010-1234-5678."
+          },
+          "result": "advance",
+          "reply": "네, 적어 뒀습니다.",
+          "replyMeaning": {
+            "en": "Got it, noted.",
+            "vi": "Vâng, tôi ghi lại rồi.",
+            "id": "Baik, sudah saya catat."
+          }
+        },
+        {
+          "ko": "카톡 아이디 드릴게요.",
+          "rom": "katok aidi deurilgeyo",
+          "meaning": {
+            "en": "I'll give you my KakaoTalk ID.",
+            "vi": "Tôi cho ID KakaoTalk nhé.",
+            "id": "Saya kasih ID KakaoTalk ya."
+          },
+          "result": "retry",
+          "reply": "저희는 전화로 연락드려요. 휴대폰 번호 알려 주시겠어요?",
+          "replyMeaning": {
+            "en": "We contact people by phone. Could you give me your mobile number?",
+            "vi": "Chúng tôi liên lạc qua điện thoại. Cho tôi số di động được không?",
+            "id": "Kami menghubungi lewat telepon. Boleh minta nomor HP-mu?"
+          },
+          "note": {
+            "en": "Staff will call you, so give your Korean phone number: 010-1234-5678이에요.",
+            "vi": "Nhân viên sẽ gọi điện, nên hãy cho số điện thoại Hàn Quốc: 010-1234-5678이에요.",
+            "id": "Petugas akan menelepon, jadi berikan nomor HP Korea-mu: 010-1234-5678이에요."
+          }
+        },
+        {
+          "ko": "네? 다시 한번만 말씀해 주세요.",
+          "rom": "ne? dasi hanbeonman malsseumhae juseyo",
+          "meaning": {
+            "en": "Sorry? Could you say that once more?",
+            "vi": "Dạ? Nói lại giúp tôi một lần nữa được không ạ?",
+            "id": "Maaf? Bisa diulang sekali lagi?"
+          },
+          "result": "ask",
+          "reply": "전화번호 알려 주시면 가방 찾았을 때 연락드릴게요.",
+          "replyMeaning": {
+            "en": "Give me your phone number and we'll call you when we find the bag.",
+            "vi": "Cho tôi số điện thoại, tìm thấy túi thì chúng tôi sẽ gọi.",
+            "id": "Beri tahu nomor teleponmu, nanti kami hubungi kalau tasnya ketemu."
+          }
+        }
+      ],
+      "after": "앞 역에 연락해서 찾아볼게요. 바로 못 찾으면 유실물센터로 가니까, 평일 아홉 시부터 여섯 시까지 거기로 문의하세요.",
+      "afterMeaning": {
+        "en": "We'll contact the stations ahead and look for it. If we can't find it right away, it goes to the lost-property centre, so ask there on weekdays from 9 am to 6 pm.",
+        "vi": "Chúng tôi sẽ liên lạc với các ga phía trước để tìm. Nếu chưa tìm được ngay, túi sẽ được chuyển đến trung tâm đồ thất lạc, nên bạn hãy hỏi ở đó vào ngày thường, từ 9 giờ sáng đến 6 giờ chiều.",
+        "id": "Kami hubungi stasiun-stasiun berikutnya untuk mencarinya. Kalau tidak langsung ketemu, tasnya dikirim ke pusat barang hilang, jadi tanyakan ke sana pada hari kerja, pukul 09.00 sampai 18.00."
+      }
+    }
+  ],
+  "grants": [
+    "done:subway_lost"
+  ],
+  "phrases": [
+    {
+      "ko": "열차에 가방을 두고 내렸어요.",
+      "rom": "yeolchae gabangeul dugo naeryeosseoyo",
+      "meaning": {
+        "en": "I left my bag on the train.",
+        "vi": "Tôi để quên túi trên tàu.",
+        "id": "Tas saya ketinggalan di kereta."
+      }
+    },
+    {
+      "ko": "5분쯤 전에 충무로 쪽으로 가는 열차에서 내렸어요.",
+      "rom": "obunjjeum jeone chungmuro jjogeuro ganeun yeolchaeseo naeryeosseoyo",
+      "meaning": {
+        "en": "About 5 minutes ago, from the train going towards Chungmuro.",
+        "vi": "Khoảng 5 phút trước, từ tàu chạy về hướng Chungmuro.",
+        "id": "Sekitar 5 menit lalu, dari kereta yang ke arah Chungmuro."
+      }
+    },
+    {
+      "ko": "4-2번 문에서 내렸어요.",
+      "rom": "sadasi-i beon muneseo naeryeosseoyo",
+      "meaning": {
+        "en": "I got off at door 4-2.",
+        "vi": "Tôi xuống ở cửa 4-2.",
+        "id": "Saya turun di pintu 4-2."
+      }
+    },
+    {
+      "ko": "선반 위에요. 검은색 백팩이에요.",
+      "rom": "seonban wieyo. geomeunsaek baekpaegieyo",
+      "meaning": {
+        "en": "On the luggage rack. It's a black backpack.",
+        "vi": "Trên giá hành lý. Là một ba lô màu đen.",
+        "id": "Di rak bagasi. Ransel warna hitam."
+      }
+    },
+    {
+      "ko": "여기가 역무실 맞아요?",
+      "rom": "yeogiga yeongmusil majayo?",
+      "meaning": {
+        "en": "Is this the station office?",
+        "vi": "Đây có phải phòng nhân viên ga không ạ?",
+        "id": "Ini kantor stasiun, kan?"
+      }
+    }
+  ],
+  "glossary": [
+    {
+      "ko": "두고 내리다",
+      "rom": "dugo naerida",
+      "meaning": {
+        "en": "To leave something behind when getting off",
+        "vi": "Để quên đồ khi xuống tàu, xe",
+        "id": "Meninggalkan barang saat turun"
+      }
+    },
+    {
+      "ko": "잃어버리다 · 잊어버리다",
+      "rom": "ireobeorida · ijeobeorida",
+      "meaning": {
+        "en": "To lose · to forget",
+        "vi": "Làm mất · quên",
+        "id": "Kehilangan · lupa"
+      }
+    },
+    {
+      "ko": "고객안전실 · 역무실",
+      "rom": "gogaek anjeonsil · yeongmusil",
+      "meaning": {
+        "en": "Station office (new name · old name)",
+        "vi": "Văn phòng nhà ga (tên mới · tên cũ)",
+        "id": "Kantor stasiun (nama baru · nama lama)"
+      }
+    },
+    {
+      "ko": "열차",
+      "rom": "yeolcha",
+      "meaning": {
+        "en": "Train",
+        "vi": "Tàu",
+        "id": "Kereta"
+      }
+    },
+    {
+      "ko": "방면",
+      "rom": "bangmyeon",
+      "meaning": {
+        "en": "Direction (where the train is heading)",
+        "vi": "Hướng (nơi tàu chạy tới)",
+        "id": "Arah (tujuan kereta)"
+      }
+    },
+    {
+      "ko": "5분쯤 전 · 아까",
+      "rom": "obunjjeum jeon · akka",
+      "meaning": {
+        "en": "About 5 minutes ago · a while ago (too vague)",
+        "vi": "Khoảng 5 phút trước · lúc nãy (quá mơ hồ)",
+        "id": "Sekitar 5 menit lalu · tadi (terlalu tidak jelas)"
+      }
+    },
+    {
+      "ko": "칸",
+      "rom": "kan",
+      "meaning": {
+        "en": "Train car (4-2: car 4, door 2)",
+        "vi": "Toa tàu (4-2: toa 4, cửa 2)",
+        "id": "Gerbong (4-2: gerbong 4, pintu 2)"
+      }
+    },
+    {
+      "ko": "선반 위 · 좌석 아래",
+      "rom": "seonban wi · jwaseok arae",
+      "meaning": {
+        "en": "On the luggage rack · under a seat",
+        "vi": "Trên giá hành lý · dưới ghế",
+        "id": "Di rak bagasi · di bawah kursi"
+      }
+    },
+    {
+      "ko": "신분증",
+      "rom": "sinbunjeung",
+      "meaning": {
+        "en": "ID (passport or ARC)",
+        "vi": "Giấy tờ tùy thân (hộ chiếu hoặc ARC)",
+        "id": "Kartu identitas (paspor atau ARC)"
+      }
+    },
+    {
+      "ko": "연락처",
+      "rom": "yeollakcheo",
+      "meaning": {
+        "en": "Contact number",
+        "vi": "Số liên lạc",
+        "id": "Nomor kontak"
+      }
+    },
+    {
+      "ko": "유실물센터",
+      "rom": "yusilmul senteo",
+      "meaning": {
+        "en": "Lost-property centre",
+        "vi": "Trung tâm đồ thất lạc",
+        "id": "Pusat barang hilang"
+      }
+    },
+    {
+      "ko": "평일",
+      "rom": "pyeongil",
+      "meaning": {
+        "en": "Weekdays",
+        "vi": "Ngày thường",
+        "id": "Hari kerja"
+      }
+    }
+  ]
+}
