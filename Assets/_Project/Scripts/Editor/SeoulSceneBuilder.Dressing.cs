@@ -399,31 +399,38 @@ namespace SeoulFirstWeek.EditorTools
             // one-sided: from the gates it points the way out; people coming in see only its back
             HangingSign(r, "ExitBoard", new Vector3(0, 2.8f, -d / 2 + 3.5f), 0, new Vector2(3.6f, 0.5f), yellow,
                 "<b>↑ 6</b> 나가는 곳 · Exit · 명동길", C("#1E1E1E"), 44);
+            // its back, for people coming down from the street: the way to the trains
+            Sign(root, "ExitBoardBack", new Vector3(0, 2.8f, -d / 2 + 3.5f - 0.045f), new Vector2(3.6f, 0.5f), C("#2B2E33"),
+                "<color=#00A4E3>④</color> ↑ 타는 곳 · To Trains", Color.white, 180, 44, 0.04f);
 
-            // the area map, south wall east of the stairs up
+            // the area map, south wall between the stairs up and the phone shop
             var map = Group("AreaMap", root);
-            map.localPosition = new Vector3(5.2f, 1.55f, -d / 2 + 0.06f);
-            Box(map, "Board", Vector3.zero, new Vector3(2.8f, 1.7f, 0.06f), C("#F4F1EA"), false);
-            Box(map, "Title", new Vector3(0, 0.74f, 0.035f), new Vector3(2.8f, 0.22f, 0.01f), C("#2B2E33"), false);
-            WorldText.Create(map, "TitleText", "주변지역안내도 · Area Map", new Vector3(0, 0.74f, 0.045f), new Vector2(2.6f, 0.18f), 40, Color.white, true, TextAnchor.MiddleCenter, Quaternion.Euler(0, 180, 0));
+            map.localPosition = new Vector3(2.45f, 1.55f, -d / 2 + 0.06f);
+            Box(map, "Board", Vector3.zero, new Vector3(1.6f, 1.5f, 0.06f), C("#F4F1EA"), false);
+            Box(map, "Title", new Vector3(0, 0.64f, 0.035f), new Vector3(1.6f, 0.22f, 0.01f), C("#2B2E33"), false);
+            WorldText.Create(map, "TitleText", "주변지역안내도 · Area Map", new Vector3(0, 0.64f, 0.045f), new Vector2(1.5f, 0.18f), 36, Color.white, true, TextAnchor.MiddleCenter, Quaternion.Euler(0, 180, 0));
             string[] blocks = { "#E8D7B5", "#D6E3C8", "#E2C8D6", "#C8D8E8", "#EEDFC0", "#D9D2E8" };
-            for (int bx = 0; bx < 5; bx++)
+            for (int bx = 0; bx < 4; bx++)
             for (int by = 0; by < 3; by++)
-                Box(map, "Block", new Vector3(-1.1f + bx * 0.55f, -0.5f + by * 0.42f, 0.034f), new Vector3(0.42f, 0.3f, 0.01f), C(blocks[rng.Next(blocks.Length)]), false);
-            Box(map, "Street", new Vector3(0.25f, -0.08f, 0.04f), new Vector3(0.1f, 1.3f, 0.01f), Color.white, false);
-            Box(map, "Here", new Vector3(0.25f, -0.62f, 0.046f), new Vector3(0.09f, 0.09f, 0.01f), C("#D8343B"), false);
-            WorldText.Create(map, "HereText", "현위치", new Vector3(0.62f, -0.62f, 0.05f), new Vector2(0.5f, 0.14f), 34, C("#D8343B"), true, TextAnchor.MiddleCenter, Quaternion.Euler(0, 180, 0));
-            Extra(r, "MapReader", HumanLook.Random(rng, Crowd.Street), new Vector3(5.0f, 0, -d / 2 + 1.1f), 180);
+                Box(map, "Block", new Vector3(-0.6f + bx * 0.4f, -0.45f + by * 0.36f, 0.034f), new Vector3(0.32f, 0.26f, 0.01f), C(blocks[rng.Next(blocks.Length)]), false);
+            Box(map, "Street", new Vector3(0.2f, -0.08f, 0.04f), new Vector3(0.08f, 1.1f, 0.01f), Color.white, false);
+            Box(map, "Here", new Vector3(0.2f, -0.55f, 0.046f), new Vector3(0.08f, 0.08f, 0.01f), C("#D8343B"), false);
+            WorldText.Create(map, "HereText", "현위치", new Vector3(0.5f, -0.55f, 0.05f), new Vector2(0.4f, 0.12f), 30, C("#D8343B"), true, TextAnchor.MiddleCenter, Quaternion.Euler(0, 180, 0));
+            Extra(r, "MapReader", HumanLook.Random(rng, Crowd.Street), new Vector3(2.45f, 0, -d / 2 + 0.95f), 180);
 
             // lockers along the south wall
             Lockers(root, new Vector3(10.2f, 0, -d / 2 + 0.3f), 0, 6, 4, C("#2F7FA8"));
             Extra(r, "LockerUser", HumanLook.Random(rng, Crowd.Street), new Vector3(9.6f, 0, -d / 2 + 1.25f), 180);
 
-            // ads
-            LightBox(root, new Vector3(w / 2 - 0.06f, 1.6f, -7.6f), -90, new Vector2(2.2f, 1.3f), C("#E26A9B"),
-                "별빛화장품\n<size=36>명동 6번 출구 앞 · K-Beauty</size>", Color.white, 70);
-            LightBox(root, new Vector3(-10.6f, 1.6f, -d / 2 + 0.06f), 0, new Vector2(2.6f, 1.4f), C("#1F2F55"),
-                "서울 야경 투어\n<size=36>Seoul Night Tour · 매일 19:00</size>", C("#FFD23F"), 64);
+            // posters on the paid side: how to ride, and what's on in the city
+            Poster(root, new Vector3(-w / 2 + 0.06f, 1.65f, 2.3f), 90, new Vector2(0.9f, 1.25f),
+                "내리는 사람 먼저\n<size=24>Let people off first\n타실 때는 양옆으로</size>", "#FFFFFF", "#0F4A6B", 34);
+            Poster(root, new Vector3(-w / 2 + 0.06f, 1.65f, 7.6f), 90, new Vector2(0.9f, 1.25f),
+                "임산부 배려석\n<size=24>Seats for mothers-to-be\n비워 두세요</size>", "#F7E1E8", "#8C3B6B", 34);
+            Poster(root, new Vector3(w / 2 - 0.06f, 1.65f, 6.6f), -90, new Vector2(0.9f, 1.25f),
+                "서울 빛초롱 축제\n<size=24>Lantern Festival\n청계천 · 매일 17시</size>", "#1F2F55", "#FFD23F", 34);
+            Poster(root, new Vector3(w / 2 - 0.06f, 1.65f, 8.1f), -90, new Vector2(0.9f, 1.25f),
+                "에스컬레이터\n<size=24>두 줄 서기 · 걷거나 뛰지 마세요\nStand, don't walk</size>", "#FFFFFF", "#C8402E", 32);
 
             // the tactile strip from the stairs up to the gate that opens, and a kiosk in use
             Box(root, "TactileStrip", new Vector3(0, 0.004f, -4.6f), new Vector3(0.3f, 0.008f, 8.0f), yellow, false);
@@ -464,7 +471,7 @@ namespace SeoulFirstWeek.EditorTools
             // the strip faces south, so its local +x is the viewer's left: the west, the way to Sadang
             WorldText.Create(strip, "Title", "<color=#00A4E3>④</color> 4호선 · Line 4   ← 사당 방면", new Vector3(2.0f, 0.27f, 0.04f), new Vector2(3.0f, 0.15f), 34, C("#1E1E1E"), true,
                 TextAnchor.MiddleLeft, Quaternion.Euler(0, 180, 0));
-            Extra(r, "Commuter3", HumanLook.Random(rng, Crowd.Street), new Vector3(-7.8f, 0, 6.8f), 0);
+            Extra(r, "Commuter3", HumanLook.Random(rng, Crowd.Street), new Vector3(-10.0f, 0, 5.2f), 160, phone: true);
             Extra(r, "Commuter4", HumanLook.Random(rng, Crowd.Street), new Vector3(7.4f, 0, 6.2f), 20, phone: true);
             InteriorKit.Extinguisher(root, new Vector3(-w / 2 + 0.3f, 0, 7.5f), 90);
         }
@@ -498,10 +505,12 @@ namespace SeoulFirstWeek.EditorTools
             foreach (var x in new[] { -1.0f, 1.0f })
                 Box(led, "Rod", new Vector3(x, (0.18f + (h - 2.7f)) / 2f, 0), new Vector3(0.015f, h - 2.7f - 0.18f, 0.015f), C("#9AA0A6"), false);
             // more people waiting, the emergency phone and an extinguisher on the back wall
-            Extra(r, "Waiting3", HumanLook.Random(rng, Crowd.Street), p.TransformPoint(new Vector3(-14.5f, 0, 0.9f)), 0, phone: true);
-            Extra(r, "Waiting4", HumanLook.Student(rng, true), p.TransformPoint(new Vector3(-16.0f, 0, 0.4f)), 20);
             Extra(r, "Waiting5", HumanLook.SeniorPerson(rng, false), p.TransformPoint(new Vector3(-0.95f, 0, -pw / 2 + 0.385f)), 0, sitting: true);
             Sign(p, "SosPhone", new Vector3(-17.5f, 1.4f, -pw / 2 + 0.05f), new Vector2(0.4f, 0.5f), C("#D8343B"), "비상\n전화", Color.white, 0, 40, 0.1f);
+            // posters on the back wall
+            Poster(p, new Vector3(-13.2f, 1.65f, -pw / 2 + 0.06f), 0, new Vector2(1.0f, 1.3f), "지하철 예절\n<size=24>통화는 작게 · 가방은 앞으로\nQuiet calls, bags in front</size>", "#FFFFFF", "#0F4A6B", 32);
+            Poster(p, new Vector3(-5.2f, 1.65f, -pw / 2 + 0.06f), 0, new Vector2(1.0f, 1.3f), "분실물 센터\n<size=24>Lost & Found\n고객안전실에 문의</size>", "#F2C230", "#1E1E1E", 32);
+            Poster(p, new Vector3(8.0f + 3.0f, 1.65f, -pw / 2 + 0.06f), 0, new Vector2(1.0f, 1.3f), "한국어 말하기 대회\n<size=24>Korean Speech Contest\n12.12 · 중앙대</size>", "#1FA37A", "#FFFFFF", 30);
             InteriorKit.Extinguisher(p, new Vector3(-18.6f, 0, -pw / 2 + 0.3f), 0);
         }
 
