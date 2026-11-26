@@ -114,9 +114,12 @@ namespace SeoulFirstWeek.EditorTools
         // ------------------------------------------------------------------- the gate line
 
         /// <summary>
-        /// The ticket gates across the concourse at <paramref name="gz"/>: twelve cabinets with eleven lanes between
-        /// them, each with its reader, its red flaps and its own `gate` waypoint, so the player taps at whichever lane
-        /// they walk up to. Commuters use the same lanes both ways (Seoul's gates take cards in either direction).
+        /// The ticket gates across the concourse at <paramref name="gz"/>: ten cabinets with nine lanes between them,
+        /// each with its reader, its red flaps and its own `gate` waypoint, so the player taps at whichever lane they
+        /// walk up to. Commuters use the same lanes both ways (Seoul's gates take cards in either direction). A lane
+        /// is 0.9 m clear between the cabinets (a real one is nearer 0.6 m, but the player's capsule needs about 0.76 m
+        /// with its skin); the flaps are only drawn, and an invisible blocker across the lane holds the player back
+        /// until the card is tapped, then folds away with them (<see cref="GateLane"/>).
         /// </summary>
         static GateLane[] BuildGateLine(Room r, float gz)
         {
@@ -124,42 +127,49 @@ namespace SeoulFirstWeek.EditorTools
             var line = Group("GateLine", root);
             var cabinet = TextureKit.Surface("Gate_Cabinet", TextureKit.Metal(), C("#AEB4BA"), 0.7f, 0.8f, true);
             var top = TextureKit.Surface("Gate_Top", TextureKit.Plastic(), C("#2B2E33"), 0.5f);
+            const int cabinets = 10;
+            const float pitch = 1.2f, cab = 0.3f, x0 = -(cabinets - 1) * pitch / 2f;
             var lanes = new List<GateLane>();
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < cabinets; i++)
             {
-                float x = -5.5f + i * 1.0f;
-                Slab(line, "GateCabinet", new Vector3(x, 0.5f, gz), new Vector3(0.3f, 1.0f, 1.7f), cabinet);
-                Slab(line, "GateTop", new Vector3(x, 1.01f, gz), new Vector3(0.32f, 0.03f, 1.72f), top, false);
+                float x = x0 + i * pitch;
+                Slab(line, "GateCabinet", new Vector3(x, 0.5f, gz), new Vector3(cab, 1.0f, 1.7f), cabinet);
+                Slab(line, "GateTop", new Vector3(x, 1.01f, gz), new Vector3(cab + 0.02f, 0.03f, 1.72f), top, false);
                 // the arrows at both ends: green, a card is taken this way
                 foreach (var sz in new[] { -1f, 1f })
                     Emissive(line, "GateArrow", new Vector3(x, 0.86f, gz + sz * 0.86f), new Vector3(0.14f, 0.1f, 0.01f), C("#3DDC84"), 1.4f)
                         .GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.Off;
             }
             var red = C("#D8343B");
-            for (int j = 0; j < 11; j++)
+            float clear = pitch - cab, flapW = clear / 2f - 0.01f;
+            for (int j = 0; j < cabinets - 1; j++)
             {
-                float cx = -5.0f + j * 1.0f;
+                float cx = x0 + pitch / 2f + j * pitch;
                 var lane = Group($"GateLane_{j}", line);
                 lane.localPosition = new Vector3(cx, 0, gz);
-                var flapL = Box(lane, "FlapL", new Vector3(-0.17f, 0.72f, 0), new Vector3(0.36f, 0.48f, 0.04f), red, true);
-                var flapR = Box(lane, "FlapR", new Vector3(0.17f, 0.72f, 0), new Vector3(0.36f, 0.48f, 0.04f), red, true);
+                var flapL = Box(lane, "FlapL", new Vector3(-flapW / 2f - 0.01f, 0.72f, 0), new Vector3(flapW, 0.48f, 0.04f), red, false);
+                var flapR = Box(lane, "FlapR", new Vector3(flapW / 2f + 0.01f, 0.72f, 0), new Vector3(flapW, 0.48f, 0.04f), red, false);
+                var blocker = Solid(lane, "Blocker", new Vector3(0, 0.6f, 0), new Vector3(clear, 1.2f, 0.12f));
                 // the reader for this lane on the cabinet to its right, at both ends (a ring of light around it)
-                var reader = Emissive(lane, "Reader", new Vector3(0.38f, 1.03f, -0.58f), new Vector3(0.16f, 0.012f, 0.16f), C("#3DDC84"), 1.3f);
-                Emissive(lane, "ReaderOut", new Vector3(-0.38f, 1.03f, 0.58f), new Vector3(0.16f, 0.012f, 0.16f), C("#3DDC84"), 1.3f);
+                var reader = Emissive(lane, "Reader", new Vector3(pitch / 2f - 0.22f, 1.03f, -0.58f), new Vector3(0.16f, 0.012f, 0.16f), C("#3DDC84"), 1.3f);
+                Emissive(lane, "ReaderOut", new Vector3(-(pitch / 2f - 0.22f), 1.03f, 0.58f), new Vector3(0.16f, 0.012f, 0.16f), C("#3DDC84"), 1.3f);
                 var gl = lane.gameObject.AddComponent<GateLane>();
                 gl.flapLeft = flapL.transform;
                 gl.flapRight = flapR.transform;
+                gl.travel = flapW + 0.02f;
+                gl.blocker = blocker.GetComponent<Collider>();
                 gl.reader = reader.GetComponent<Renderer>();
                 lanes.Add(gl);
-                var wp = MakeWaypoint(root, "gate", new Vector3(cx, 1f, gz - 1.0f), new Vector3(0.8f, 1.6f, 0.6f), "wp_tap_card", "");
+                var wp = MakeWaypoint(root, "gate", new Vector3(cx, 1f, gz - 1.0f), new Vector3(clear, 1.6f, 0.7f), "wp_tap_card", "");
                 wp.gate = gl;
             }
             // glass railings close the rest of the line
-            foreach (var (x0, x1) in new[] { (-r.W / 2, -5.65f), (5.65f, r.W / 2) })
+            float end = -x0 + cab / 2f;
+            foreach (var (a, b) in new[] { (-r.W / 2, -end), (end, r.W / 2) })
             {
-                Glass(line, "GateRail", new Vector3((x0 + x1) / 2f, 0.55f, gz), new Vector3(x1 - x0, 1.1f, 0.03f));
-                Box(line, "GateRailTop", new Vector3((x0 + x1) / 2f, 1.11f, gz), new Vector3(x1 - x0, 0.04f, 0.06f), C("#9AA0A6"), false);
-                for (float x = x0 + 1.2f; x < x1 - 0.3f; x += 1.6f)
+                Glass(line, "GateRail", new Vector3((a + b) / 2f, 0.55f, gz), new Vector3(b - a, 1.1f, 0.03f));
+                Box(line, "GateRailTop", new Vector3((a + b) / 2f, 1.11f, gz), new Vector3(b - a, 0.04f, 0.06f), C("#9AA0A6"), false);
+                for (float x = a + 1.2f; x < b - 0.3f; x += 1.6f)
                     Box(line, "GateRailPost", new Vector3(x, 0.56f, gz), new Vector3(0.05f, 1.12f, 0.06f), C("#9AA0A6"), false);
             }
             return lanes.ToArray();
@@ -364,17 +374,13 @@ namespace SeoulFirstWeek.EditorTools
         static void BuildStationShops(Room r, System.Random rng)
         {
             float d = r.D, w = r.W;
-            // south wall, west of the ticket machines
-            StationShop(r, ShopKind.Cosmetics, "봄날화장품", "COSMETICS", C("#E26A9B"), new Vector3(-12.25f, 0, -d / 2), 0, 3.0f, 2.2f, rng);
-            StationShop(r, ShopKind.Bakery, "보리빵집", "BAKERY · COFFEE", C("#8C5A2B"), new Vector3(-9.15f, 0, -d / 2), 0, 3.0f, 2.2f, rng);
-            // south wall, east of the stairs up
-            StationShop(r, ShopKind.Phone, "폰마켓", "PHONE ACCESSORIES", C("#2F5FD0"), new Vector3(4.9f, 0, -d / 2), 0, 3.0f, 2.2f, rng);
-            StationShop(r, ShopKind.Socks, "양말가게", "SOCKS", C("#1FA37A"), new Vector3(7.6f, 0, -d / 2), 0, 2.2f, 1.6f, rng);
-            // west wall by the gate line, a flower stall
-            StationShop(r, ShopKind.Flowers, "꽃길", "FLOWERS", C("#3A7D44"), new Vector3(-w / 2, 0, -1.1f), 90, 2.6f, 1.6f, rng);
+            // the south wall, with room to walk round each: a bakery west of the ticket machines (the corner beyond
+            // it stays clear of the store's shelves), and east of the stairs up the phone shop and the cosmetics shop
+            // side by side, their fronts in line, then the lockers (Dressing) and the ATMs round the corner
+            StationShop(r, ShopKind.Bakery, "보리빵집", "BAKERY · COFFEE", C("#8C5A2B"), new Vector3(-10.1f, 0, -d / 2), 0, 3.0f, 2.2f, rng);
+            StationShop(r, ShopKind.Phone, "폰마켓", "PHONE ACCESSORIES", C("#2F5FD0"), new Vector3(4.4f, 0, -d / 2), 0, 2.8f, 2.2f, rng);
+            StationShop(r, ShopKind.Cosmetics, "봄날화장품", "COSMETICS", C("#E26A9B"), new Vector3(7.45f, 0, -d / 2), 0, 2.8f, 2.2f, rng);
 
-            // the photo booth in the corner east of the lockers
-            InteriorKit.PhotoBooth(r.Root, new Vector3(12.9f, 0, -d / 2 + 0.75f), 0);
             // two ATMs of the game's own bank on the east wall
             for (int i = 0; i < 2; i++)
             {
@@ -473,7 +479,7 @@ namespace SeoulFirstWeek.EditorTools
             // a stop at the bakery or the ticket machines on the way in
             routes.Add(new CrowdFlow.Route
             {
-                points = new[] { stairTop, stairFoot, V(-2.0f, -7.6f), V(-9.1f, -6.2f), V(-4.0f, -2.4f), V(0, gS), V(0, gN), V(-5f, 3.4f), V(-6f, 7.3f), V(-6f, 8.9f), Down(-1) },
+                points = new[] { stairTop, stairFoot, V(-2.0f, -7.6f), V(-10.1f, -6.2f), V(-4.0f, -2.4f), V(0, gS), V(0, gN), V(-5f, 3.4f), V(-6f, 7.3f), V(-6f, 8.9f), Down(-1) },
                 waits = new[] { 0f, 0f, 0f, 9f, 0f, 0f, 0f, 0f, 0f, 0f, 0f },
                 gateAt = 5, weight = 0.6f,
             });

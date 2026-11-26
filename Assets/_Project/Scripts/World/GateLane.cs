@@ -5,7 +5,9 @@ namespace SeoulFirstWeek.World
 {
     /// <summary>
     /// One lane of a ticket gate: two flaps across it that fold back into the cabinets when a card is tapped and
-    /// close again behind the person who walked through. The player's tap holds the lane open for good.
+    /// close again behind the person who walked through. The flaps are only drawn; an invisible blocker across the
+    /// lane stops the player until they tap their own card, which holds the lane open for good. A commuter's tap
+    /// only swings the flaps (walkers don't collide), so nobody slips through behind one without tapping.
     /// </summary>
     public class GateLane : MonoBehaviour
     {
@@ -13,6 +15,8 @@ namespace SeoulFirstWeek.World
         public Transform flapLeft, flapRight;
         [Tooltip("The reader on the cabinet, lit a moment brighter when a card is tapped.")]
         public Renderer reader;
+        [Tooltip("The invisible wall across the lane that stops the player while the flaps are shut.")]
+        public Collider blocker;
         public float travel = 0.3f;
         public float openSeconds = 0.22f;
 
@@ -58,6 +62,7 @@ namespace SeoulFirstWeek.World
                 float k = Mathf.SmoothStep(0, 1, open);
                 if (flapLeft) flapLeft.localPosition = leftClosed - Vector3.right * travel * k;
                 if (flapRight) flapRight.localPosition = rightClosed + Vector3.right * travel * k;
+                if (blocker) blocker.enabled = !held;
                 if (open <= 0f && target <= 0f) break;
                 yield return null;
             }

@@ -576,6 +576,13 @@ namespace SeoulFirstWeek.Procedure
             CurrentTarget = step.target;
             CurrentWrong = wrongs.Select(x => x.def.station).ToArray();
             var speaker = actors?.FirstOrDefault(a => a && a.staffId == step.staff);
+            // the way is marked unless the step tests a choice (reading the signs is the lesson then); of many
+            // identical targets (gate lanes, train doors) only the one nearest the player is marked
+            var nearest = player && targets.Length > 3
+                ? targets.OrderBy(t => (t.transform.position - player.transform.position).sqrMagnitude).First()
+                : null;
+            foreach (var t in targets) t.guide = wrongs.Count == 0 && (!nearest || t == nearest);
+            foreach (var x in wrongs) x.wp.guide = false;
             while (true)
             {
                 ct.ThrowIfCancellationRequested();

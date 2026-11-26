@@ -105,7 +105,7 @@ namespace SeoulFirstWeek.EditorTools
 
         // The playable stretch of 명동길; invisible barriers close everything outside it.
         // the south end is where 명동길 opens onto the cross street, with 명동역's exit 6 at its mouth (2026-11-26; it was -72)
-        const float CorridorMinZ = -99f, CorridorMaxZ = 72f;
+        const float CorridorMinZ = -98.5f, CorridorMaxZ = 72f;
 
         // A level starts this far down the street from its building, so the walk there is part of it.
         const float ApproachDistance = 40f;
@@ -176,9 +176,11 @@ namespace SeoulFirstWeek.EditorTools
             LookKit.Street(root);
 
             // pave the playable street first: everything placed below stands on it; the subway exit's stairs go
-            // down through an opening the pavement leaves for them
+            // down through an opening cut out of the paving and the city model's ground
             var station = StationFootprint();
-            BuildPavement(root, new List<Vector4> { new(station.Z0, station.Z1, station.U0, station.U1) });
+            stationSite = station;
+            BuildPavement(root);
+            BuildJunctionPavement(root);
             CutGroundOpening(station);
             Physics.SyncTransforms();
 
@@ -199,7 +201,7 @@ namespace SeoulFirstWeek.EditorTools
                 new EntranceSpec { Id = "immigration", Scene = "Immigration", NameKo = "출입국 민원센터", NameEn = "IMMIGRATION SERVICE CENTER", StreetZ = 6f, Side = 1, Color = C("#2F5FD0") },
                 new EntranceSpec { Id = "bank", Scene = "Bank", NameKo = "새싹은행", NameEn = "SAESSAK BANK", StreetZ = 58f, Side = 1, Color = C("#5BAA2E") },
                 // exit 6 of 명동역: stairs down from the pavement (see BuildStationEntrance)
-                new EntranceSpec { Id = "subway", Scene = "Subway", NameKo = "명동역 · 4호선", NameEn = "MYEONGDONG STATION · LINE 4", StreetZ = -94f, Side = 0, Color = C("#00A4E3") },
+                new EntranceSpec { Id = "subway", Scene = "Subway", NameKo = "명동역 · 4호선", NameEn = "MYEONGDONG STATION · LINE 4", StreetZ = CorridorMinZ, Side = 0, Color = C("#00A4E3") },
             };
             var entrances = new List<BuildingEntrance>();
             var entranceSpots = new List<Vector3>();
@@ -835,16 +837,15 @@ namespace SeoulFirstWeek.EditorTools
         /// The imported roads float 0.4 m above the ground and stop short of some buildings, which left
         /// trenches along the walls where door mats and other props seemed to hover.
         /// </summary>
-        static void BuildPavement(Transform root, List<Vector4> holes = null)
+        static void BuildPavement(Transform root)
         {
-            // cross-sections every metre along the street, 64 strips across it; a cell inside one of the openings
-            // (x..y along the centre line's z, z..w across it) is left out
+            // cross-sections every metre along the street, 64 strips across it
             const float step = 1f, reach = 7.5f, under = 1.4f, lift = 0.02f;
             const int across = 64;
             var verts = new List<Vector3>();
             var uvs = new List<Vector2>();
             var tris = new List<int>();
-            float lastL = 4f, lastR = 4f, along = 0f, prevZ = 0f;
+            float lastL = 4f, lastR = 4f, along = 0f;
             float[] prevU = null;
             var prev = StreetPoint(CorridorMinZ - 8f);
             for (float z = CorridorMinZ - 8f; z <= CorridorMaxZ + 8.01f; z += step)
@@ -872,13 +873,9 @@ namespace SeoulFirstWeek.EditorTools
                 {
                     int a0 = i0 - (across + 1);
                     for (int j = 0; j < across; j++)
-                    {
-                        if (InOpening(holes, prevZ, z, Mathf.Min(prevU[j], us[j]), Mathf.Max(prevU[j + 1], us[j + 1]))) continue;
                         tris.AddRange(new[] { a0 + j, i0 + j, a0 + j + 1, a0 + j + 1, i0 + j, i0 + j + 1 });
-                    }
                 }
                 prevU = us;
-                prevZ = z;
             }
 
             var mesh = new Mesh { name = "Hub_Pavement", indexFormat = IndexFormat.UInt32 };
@@ -903,14 +900,6 @@ namespace SeoulFirstWeek.EditorTools
             Debug.Log($"[Builder] Pavement: {verts.Count / (across + 1)} cross-sections");
         }
 
-        static bool InOpening(List<Vector4> holes, float z0, float z1, float u0, float u1)
-        {
-            if (holes == null) return false;
-            const float eps = 0.01f;
-            foreach (var h in holes)
-                if (z0 >= h.x - eps && z1 <= h.y + eps && u1 > h.z + eps && u0 < h.w - eps) return true;
-            return false;
-        }
 
         /// <summary>
         /// Invisible walls that keep the player on the playable stretch of 명동길. A continuous, thick wall
@@ -960,6 +949,8 @@ namespace SeoulFirstWeek.EditorTools
                     var fwd = StreetDir(z);
                     var dir = Vector3.Cross(Vector3.up, fwd) * side;
                     float dist = FacadeDistance(c, dir, reach, ref lastDist, out bool facade);
+                    // at the south end the street opens onto the cross street, closed further on by BuildJunctionBarriers
+                    if (!facade && z < CorridorMinZ + 2f) continue;
                     if (!facade) Post(c + dir * (dist - 0.3f), 1.5f);
                     // keep the space in front of a door open: the wall steps back behind the door plane
                     foreach (var door in doors)
@@ -984,7 +975,10 @@ namespace SeoulFirstWeek.EditorTools
                 }
             }
 
-            foreach (var z in new[] { CorridorMinZ, CorridorMaxZ })
+            // the north end is closed across the street; the south end opens onto the cross street, where the
+            // station exit stands
+            BuildJunctionBarriers(Wall, Post);
+            foreach (var z in new[] { CorridorMaxZ })
             {
                 var c = StreetPoint(z);
                 c.y = GroundY(c) + height / 2f - 0.5f;
@@ -998,12 +992,7 @@ namespace SeoulFirstWeek.EditorTools
                 l = FacadeDistance(e, -right, reach, ref l);
                 r = FacadeDistance(e, right, reach, ref r);
                 for (float x = -l + 0.5f; x <= r - 0.5f; x += 1.3f)
-                {
-                    // not on the station exit's curbs, at the south end
-                    var post = e + right * x;
-                    if (stationClear.Any(p => (new Vector2(p.x, p.z) - new Vector2(post.x, post.z)).magnitude < 1.9f)) continue;
-                    Post(post, 1f);
-                }
+                    Post(e + right * x, 1f);
             }
             Debug.Log($"[Builder] Barriers: {segments} segments, {posts} bollards");
         }

@@ -19,10 +19,16 @@ namespace SeoulFirstWeek.EditorTools
     {
         // ------------------------------------------------------------------- the carousel
 
+        /// <summary>How far carousel 5's centre line stands from the airport hall's west wall (the middle of the west wing).</summary>
+        const float CarouselFromWall = 4.8f;
+
         /// <summary>
-        /// Carousel 5 at <paramref name="centre"/>, its long side along z: plates on a stadium-shaped loop round a
-        /// stainless island, a rim with its rubber bumper, the feed chute from the wall with its rubber curtain,
-        /// and bags riding round. The player's suitcase is one of them and carries its `carousel` waypoint.
+        /// Carousel 5 at <paramref name="centre"/>, its long side along z, an island in the middle of the west wing
+        /// with a 3.4 m walk all round it: plates on a stadium-shaped loop round a stainless island, a rim with its
+        /// rubber bumper, and bags riding round. They come up from the baggage hall below through the feed housing
+        /// over the north end of the loop (a stainless hood with rubber curtains where the belt goes in and out),
+        /// as on Incheon's belts; nothing crosses the floor to a wall. The player's suitcase is one of the bags and
+        /// carries its `carousel` waypoint.
         /// </summary>
         static void BuildCarousel(Room r, Vector3 centre, System.Random rng)
         {
@@ -31,7 +37,7 @@ namespace SeoulFirstWeek.EditorTools
             c.position = centre;
             var parts = Group("Parts", c);
             var steel = TextureKit.Surface("Steel_Carousel", TextureKit.Metal(), C("#C3C8CE"), 0.45f, 0.6f);
-            const float half = 3.0f, radius = 1.0f, beltW = 0.72f, beltY = 0.46f;
+            const float half = 3.0f, radius = 0.85f, beltW = 0.66f, beltY = 0.46f;
             // the loop the plates and the bags follow: two straights and two half circles
             var loop = new List<Vector3>();
             for (int i = 0; i <= 12; i++)
@@ -82,24 +88,29 @@ namespace SeoulFirstWeek.EditorTools
                 var bumper = Box(parts, "Bumper", mid + outward * (beltW / 2f + 0.1f) - Vector3.up * 0.06f, new Vector3(0.05f, 0.08f, seg), C("#1E1E1E"), false);
                 bumper.transform.localRotation = Quaternion.LookRotation(dir);
             }
-            // the chute from the wall to the far end of the loop, its rubber curtain at the wall
-            float wallX = -r.W / 2f - centre.x;
-            var chute = Group("Chute", parts);
-            chute.localPosition = new Vector3((wallX + (-radius - beltW / 2f)) / 2f, 0, half + 0.4f);
-            float chuteLen = Mathf.Abs(wallX + radius + beltW / 2f);
-            var bed = Box(chute, "Bed", new Vector3(0, 0.95f, 0), new Vector3(chuteLen, 0.06f, 0.9f), C("#2B2E33"), false);
-            bed.transform.localRotation = Quaternion.Euler(0, 0, -18f);
-            foreach (var sz in new[] { -0.47f, 0.47f })
+            // the feed housing over the north end of the loop: the bags come up from below inside it and ride out
+            // through rubber curtains on both straights (and back in on the other)
+            float outer = radius + beltW / 2f + 0.16f, hoodZ0 = half - 0.25f, hoodZ1 = half + outer + 0.05f, hoodH = 1.25f;
+            float hoodLen = hoodZ1 - hoodZ0, hoodZ = (hoodZ0 + hoodZ1) / 2f;
+            Slab(parts, "FeedHood", new Vector3(0, 0.25f + hoodH / 2f, hoodZ), new Vector3(2f * outer, hoodH, hoodLen), steel, false);
+            Slab(parts, "FeedHoodTop", new Vector3(0, 0.25f + hoodH + 0.02f, hoodZ), new Vector3(2f * outer + 0.06f, 0.04f, hoodLen + 0.06f), steel, false);
+            Box(parts, "FeedHoodBand", new Vector3(0, 0.25f + hoodH - 0.12f, hoodZ0 - 0.005f), new Vector3(2f * outer, 0.1f, 0.01f), C("#2F5FD0"), false);
+            foreach (var sx in new[] { -1f, 1f })
             {
-                var side = Box(chute, "Side", new Vector3(0, 1.08f, sz), new Vector3(chuteLen, 0.3f, 0.04f), C("#C3C8CE"), false);
-                side.transform.localRotation = Quaternion.Euler(0, 0, -18f);
+                // the opening over each straight, hung with rubber strips
+                float bx = sx * radius;
+                Box(parts, "FeedMouth", new Vector3(bx, beltY + 0.3f, hoodZ0 - 0.01f), new Vector3(beltW + 0.04f, 0.62f, 0.02f), C("#14171C"), false);
+                for (int k = 0; k < 5; k++)
+                    Box(parts, "Curtain", new Vector3(bx - beltW / 2f + 0.07f + k * (beltW - 0.14f) / 4f, beltY + 0.3f, hoodZ0 - 0.03f), new Vector3(beltW / 5f - 0.01f, 0.6f, 0.01f), C("#1E1E1E"), false);
             }
-            Box(parts, "ChuteHood", new Vector3(wallX + 0.25f, 1.9f, half + 0.4f), new Vector3(0.5f, 0.9f, 1.3f), C("#C3C8CE"), false);
-            for (int k = 0; k < 6; k++)
-                Box(parts, "Curtain", new Vector3(wallX + 0.52f, 1.55f, half + 0.4f - 0.4f + k * 0.16f), new Vector3(0.01f, 0.7f, 0.15f), C("#1E1E1E"), false);
-            Slab(parts, "ChuteLegs", new Vector3((wallX + (-radius - beltW / 2f)) / 2f, 0.4f, half + 0.4f), new Vector3(0.1f, 0.8f, 0.1f), steel, false);
+            Sign(c, "FeedNumber", new Vector3(0, 0.25f + hoodH - 0.45f, hoodZ0 - 0.02f), new Vector2(0.7f, 0.5f), C("#1F2F55"), "5", C("#FFD23F"), 180, 90, 0.04f);
+            // the north face, the one seen first coming from the booths: the belt's number and flight
+            Box(c, "FeedHoodBandN", new Vector3(0, 0.25f + hoodH - 0.12f, hoodZ1 + 0.005f), new Vector3(2f * outer, 0.1f, 0.01f), C("#2F5FD0"), false);
+            Sign(c, "FeedNumberN", new Vector3(0, 0.25f + hoodH - 0.5f, hoodZ1 + 0.02f), new Vector2(2.2f, 0.62f), C("#1F2F55"),
+                "<color=#FFD23F>5</color>  하노이 HANOI\n<size=26>수하물 · Baggage</size>", Color.white, 0, 50, 0.04f);
             MergeByMaterial(parts, "Airport_Carousel");
             Solid(c, "Carousel", new Vector3(0, 0.3f, 0), new Vector3(2f * (radius + beltW / 2f + 0.1f), 0.6f, 2f * (half + radius + beltW / 2f)));
+            Solid(c, "FeedHood", new Vector3(0, 0.25f + hoodH / 2f, hoodZ), new Vector3(2f * outer, hoodH, hoodLen));
 
             // the bags on the belt: hard cases, soft bags and a box, at irregular gaps; the player's yellow one
             var belt = c.gameObject.AddComponent<CarouselBelt>();
@@ -364,21 +375,41 @@ namespace SeoulFirstWeek.EditorTools
             hallFlow.gap = new Vector2(3f, 10f);
             Vector3 V(float x, float z) => new(x, 0, z);
             var fromGate = new[] { V(0, -16.6f), V(0, -12.6f) };
-            CrowdFlow.Route Foreign(float boothX) => new()
+            // after the booth: west along the counters into the west wing, round the north of the carousel's feed
+            // housing, down one side of the belt to wait for a case, round its south end and out through 신고없음
+            float wall = -r.W / 2f, cx = wall + CarouselFromWall;
+            Vector3[] ToBelt(float boothX) => new[]
             {
-                points = fromGate.Concat(new[]
+                V(-1.5f, -9.6f), V(-5.0f, -8.2f), V(-4.0f, -6.6f), V(-4.0f, 7.2f), V(boothX, 8.95f), V(-9.4f, 8.65f), V(-10.9f, 8.4f), V(-12.6f, 7.2f),
+            };
+            // they walk 1.5 m off the belt and step in beside it to wait, between the travellers standing there
+            CrowdFlow.Route West(float boothX) => new()
+            {
+                points = fromGate.Concat(ToBelt(boothX)).Concat(new[]
                 {
-                    V(-1.5f, -9.6f), V(-5.0f, -8.2f), V(-4.0f, -6.6f), V(-4.0f, 7.2f), V(boothX, 8.95f), V(-9.4f, 8.65f), V(-10.9f, 8.6f),
-                    V(-11.0f, 7.6f), V(-13.2f, 6.6f), V(-14.6f, 4.8f), V(-14.65f, 2.8f), V(-14.7f, -2.4f), V(-15.3f, -4.3f), V(-16.75f, -4.3f),
+                    V(cx - 0.6f, 6.8f), V(cx - 2.75f, 6.4f), V(cx - 2.75f, 1.2f), V(cx - 2.05f, 0.6f), V(cx - 2.75f, -0.2f), V(cx - 2.75f, -2.6f),
+                    V(wall + 1.4f, -4.3f), V(wall + 0.25f, -4.3f),
                 }).ToArray(),
-                waits = new[] { 0f, 0f, 0f, 0f, 0f, 0f, 6f, 0f, 0f, 0f, 0f, 0f, 9f, 0f, 0f, 0f },
+                waits = new[] { 0f, 0f, 0f, 0f, 0f, 0f, 6f, 0f, 0f, 0f, 0f, 0f, 0f, 9f, 0f, 0f, 0f, 0f },
+                suitcase = true,
+                caseFrom = 13,
+            };
+            CrowdFlow.Route East(float boothX) => new()
+            {
+                points = fromGate.Concat(ToBelt(boothX)).Concat(new[]
+                {
+                    V(cx + 2.75f, 4.6f), V(cx + 2.75f, 1.8f), V(cx + 2.05f, 1.0f), V(cx + 2.75f, 0.2f), V(cx + 2.75f, -3.0f),
+                    V(wall + 1.4f, -4.3f), V(wall + 0.25f, -4.3f),
+                }).ToArray(),
+                waits = new[] { 0f, 0f, 0f, 0f, 0f, 0f, 6f, 0f, 0f, 0f, 0f, 0f, 9f, 0f, 0f, 0f, 0f },
                 suitcase = true,
                 caseFrom = 12,
             };
             hallFlow.routes = new[]
             {
-                Foreign(-5.25f),
-                Foreign(-8.75f),
+                West(-5.25f),
+                East(-8.75f),
+                East(-5.25f),
                 new CrowdFlow.Route
                 {
                     points = fromGate.Concat(new[] { V(1.5f, -9.6f), V(5.0f, -8.2f), V(4.0f, -6.6f), V(4.0f, 8.6f), V(11.4f, 8.6f), V(15.4f, 8.7f), V(15.4f, 10.9f) }).ToArray(),

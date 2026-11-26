@@ -303,10 +303,12 @@ namespace SeoulFirstWeek.EditorTools
             Sign(root, "BaggageServices", new Vector3(-w / 2 + 0.06f, 2.6f, 9.4f), new Vector2(3.4f, 0.62f), navy, "수하물 서비스 · Baggage Services", Color.white, 90, 46, 0.06f);
             Extra(r, "BaggageStaff", HumanLook.Office(rng, true), new Vector3(-w / 2 + 0.85f, 0, 9.0f), 90, talking: true);
             Extra(r, "BaggageAsk", Traveller(rng, false), new Vector3(-w / 2 + 2.5f, 0, 9.8f), -90);
-            CartRow(root, new Vector3(-11.6f, 0, 8.6f), 0, 7, blue);
-            HangingSign2(r, "CartSign", new Vector3(-11.6f, 3.0f, 9.6f), 90, new Vector2(2.4f, 0.5f), navy, "카트 · Carts", Color.white, 40);
-            Extra(r, "BagWaiter2", Traveller(rng, true), new Vector3(-10.9f, 0, 3.8f), -90, phone: true);
-            Extra(r, "BagWaiter3", Traveller(rng, false), new Vector3(-10.9f, 0, -2.7f), -90);
+            // the carts in a row along the north wall, out of the way from the booths to the belt
+            CartRow(root, new Vector3(-w / 2 + 4.4f, 0, d / 2 - 0.9f), 90, 7, blue);
+            HangingSign2(r, "CartSign", new Vector3(-w / 2 + 5.4f, 3.0f, d / 2 - 0.9f), 0, new Vector2(2.4f, 0.5f), navy, "카트 · Carts", Color.white, 40);
+            float cx = -w / 2 + CarouselFromWall;
+            Extra(r, "BagWaiter2", Traveller(rng, true), new Vector3(cx + 2.05f, 0, 3.4f), -90, phone: true);
+            Extra(r, "BagWaiter3", Traveller(rng, false), new Vector3(cx - 2.05f, 0, -1.4f), 90);
 
             // customs: the X-ray for declared goods, a second officer at its screen, the sign over the exits
             XRayScanner(root, new Vector3(-w / 2 + 1.5f, 0, -9.6f), 0);
@@ -419,8 +421,8 @@ namespace SeoulFirstWeek.EditorTools
             Extra(r, "MapReader", HumanLook.Random(rng, Crowd.Street), new Vector3(2.45f, 0, -d / 2 + 0.95f), 180);
 
             // lockers along the south wall
-            Lockers(root, new Vector3(10.2f, 0, -d / 2 + 0.3f), 0, 6, 4, C("#2F7FA8"));
-            Extra(r, "LockerUser", HumanLook.Random(rng, Crowd.Street), new Vector3(9.6f, 0, -d / 2 + 1.25f), 180);
+            Lockers(root, new Vector3(10.6f, 0, -d / 2 + 0.3f), 0, 6, 4, C("#2F7FA8"));
+            Extra(r, "LockerUser", HumanLook.Random(rng, Crowd.Street), new Vector3(10.0f, 0, -d / 2 + 1.25f), 180);
 
             // posters on the paid side: how to ride, and what's on in the city
             Poster(root, new Vector3(-w / 2 + 0.06f, 1.65f, 2.3f), 90, new Vector2(0.9f, 1.25f),
@@ -471,7 +473,7 @@ namespace SeoulFirstWeek.EditorTools
             // the strip faces south, so its local +x is the viewer's left: the west, the way to Sadang
             WorldText.Create(strip, "Title", "<color=#00A4E3>④</color> 4호선 · Line 4   ← 사당 방면", new Vector3(2.0f, 0.27f, 0.04f), new Vector2(3.0f, 0.15f), 34, C("#1E1E1E"), true,
                 TextAnchor.MiddleLeft, Quaternion.Euler(0, 180, 0));
-            Extra(r, "Commuter3", HumanLook.Random(rng, Crowd.Street), new Vector3(-10.0f, 0, 5.2f), 160, phone: true);
+            Extra(r, "Commuter3", HumanLook.Random(rng, Crowd.Street), new Vector3(-10.0f, 0, 5.95f), 160, phone: true);
             Extra(r, "Commuter4", HumanLook.Random(rng, Crowd.Street), new Vector3(7.4f, 0, 6.2f), 20, phone: true);
             InteriorKit.Extinguisher(root, new Vector3(-w / 2 + 0.3f, 0, 7.5f), 90);
         }

@@ -204,7 +204,9 @@ namespace SeoulFirstWeek.EditorTools
         {
             var scene = NewScene("Airport");
             BeginMaterials();
-            float w = 34, d = 24, h = 6f;
+            // 40 m wide: the west wing between the wall and the foreigners' lane (baggage claim and customs) is
+            // 9.6 m across, room for the carousel with a comfortable walk all round it
+            float w = 40, d = 24, h = 6f;
             var red = C("#D8343B");
             var blue = C("#2A6FDB");
             var panel = TextureKit.Surface("Panel_Airport", TextureKit.Plastic(), C("#E9EBEE"), 0.6f);
@@ -300,12 +302,13 @@ namespace SeoulFirstWeek.EditorTools
                 "입국심사 · Immigration", "수하물 · Baggage", "세관 · Customs", "입국장 · Arrivals",
             }, new[] { red, blue, C("#1FA37A"), C("#E58B2B") });
 
-            // the west wing: baggage carousel 5 (see BuildCarousel), its sign, and the customs exits
-            float cx0 = -w / 2 + 4.2f;
+            // the west wing: baggage carousel 5 (see BuildCarousel) in the middle of it, its sign, travellers
+            // waiting on both sides, and the customs exits
+            float cx0 = -w / 2 + CarouselFromWall;
             BuildCarousel(r, new Vector3(cx0, 0, 1.5f), rng);
-            HangingSign(r, "BaggageSign", new Vector3(cx0 + 2.8f, 4.3f, 1.5f), 90, new Vector2(5f, 0.7f), C("#1F2F55"), "수하물 찾는 곳 · Baggage Claim", Color.white, 58);
-            for (int i = 0; i < 2; i++)
-                Extra(r, $"BagWaiter{i}", Traveller(rng, i == 0), new Vector3(cx0 + 1.9f, 0, -1.2f + i * 2.4f), -90);
+            HangingSign(r, "BaggageSign", new Vector3(cx0 + 3.0f, 4.3f, 1.5f), 90, new Vector2(5f, 0.7f), C("#1F2F55"), "수하물 찾는 곳 · Baggage Claim", Color.white, 58);
+            Extra(r, "BagWaiter0", Traveller(rng, true), new Vector3(cx0 + 2.05f, 0, -0.6f), -90);
+            Extra(r, "BagWaiter1", Traveller(rng, false), new Vector3(cx0 - 2.05f, 0, 2.6f), 90);
 
             // customs: two exits in the west wall, green for nothing to declare, red for goods to declare
             foreach (var (z, c, ko, en, id) in new[]
@@ -477,7 +480,7 @@ namespace SeoulFirstWeek.EditorTools
             Poster(root, new Vector3(w / 2 - 0.06f, 1.7f, -0.8f), -90, new Vector2(1.0f, 0.8f),
                 "물건을 두고 내렸을 땐\n<size=24>아! 차량 시간\n차! 내린 칸 위치\n내! 짐의 위치</size>", "#FFFFFF", "#0F4A6B", 30);
 
-            // ---- the gate line across the hall: any of its eleven lanes takes the card
+            // ---- the gate line across the hall: any of its nine lanes takes the card
             float gz = 0.6f;
             var lanes = BuildGateLine(r, gz);
             HangingSign(r, "GateSign", new Vector3(0, 2.75f, gz - 0.2f), 180, new Vector2(3.2f, 0.42f), C("#2B2E33"), "타는 곳 · To Trains", Color.white, 50);
@@ -505,7 +508,7 @@ namespace SeoulFirstWeek.EditorTools
                 var wp = MakeWaypoint(root, id, mid, new Vector3(2.4f, 2.4f, 1.2f), "wp_stairs", label, true);
                 if (id == "stairs_sadang") wp.moveTo = Anchor(r, "PlatformArrival", new Vector3(PlatformX - 17.6f, 0.05f, -1.0f), 90);
             }
-            Extra(r, "Shopper", HumanLook.Random(rng, Crowd.Street), new Vector3(-12.6f, 0, -6.25f), 170);
+            Extra(r, "Shopper", HumanLook.Random(rng, Crowd.Street), new Vector3(-12.75f, 0, -5.55f), -90);
 
             DressConcourse(r, w, d, h, line4);
             BuildStationShops(r, rng);
