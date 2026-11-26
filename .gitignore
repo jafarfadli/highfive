@@ -126,3 +126,9 @@ InitTestScene*.unity*
 /Assets/StreamingAssets/Whisper/*.bin.meta
 # the folder exists only where the model was fetched, so its meta stays local too
 /Assets/StreamingAssets/Whisper.meta
+
+# the pretend headset (Mock HMD) that VRPlaytest assigns for play-tests on a Mac: never part of the project
+/Assets/XR/Loaders/MockHMDLoader.asset
+/Assets/XR/Loaders/MockHMDLoader.asset.meta
+/Assets/XR/Settings/MockHMDBuildSettings.asset
+/Assets/XR/Settings/MockHMDBuildSettings.asset.meta

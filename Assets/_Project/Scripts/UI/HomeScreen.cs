@@ -103,6 +103,17 @@ namespace SeoulFirstWeek.UI
             UIKit.Words(startRow, "▶ 시작", 42, lettering, Face.DisplayKo, TextAnchor.MiddleCenter).Layout(170, 60);
             UIKit.Words(startRow, Loc.T(canHear ? "click_to_start" : "start_locked"), canHear ? 26 : 24, lettering, Face.ReadBold, TextAnchor.MiddleLeft).Layout(340, 60);
 
+            // the street is built from OpenStreetMap data, whose licence (ODbL) asks for this credit where it is shown
+            var credit = UIKit.Rect("MapCredit", root);
+            credit.Place(new Vector2(1, 0), new Vector2(-24, 18), new Vector2(0, 40));
+            UIKit.HStack(credit, 0, new RectOffset(16, 16, 4, 4), TextAnchor.MiddleRight).childForceExpandHeight = false;
+            credit.gameObject.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            var plate = UIKit.BrushStrip(credit, "Plate", Role.Night);
+            plate.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+            plate.rectTransform.Stretch();
+            var creditText = UIKit.Words(credit, Loc.T("map_credit"), 22, Role.Paper, Face.ReadBold, TextAnchor.MiddleRight);
+            creditText.horizontalOverflow = HorizontalWrapMode.Overflow;
+
             // the nurse asks what the game is about: a real question at a real counter, with its translation
             var nurse = Balloon("Cast_Nurse", "어디가 불편하세요?", Loc.T("home_nurse"), 0.16f);
 
