@@ -48,11 +48,8 @@ namespace SeoulFirstWeek.UI
         Text speakLabel;
         InkShape speakRing;
         bool talking;
-        // answers are said, not clicked, whenever the game can hear (Speech.Enabled); after three tries in one
-        // question that didn't come through (noise, a weak microphone), clicking that question is allowed too
-        int unheard;
-        bool clickAllowed;
-        const int TriesBeforeClick = 3;
+        // answers are said, never clicked (owner, 2026-11-26): a click or a number key only asks for the answer
+        // out loud; an action in [brackets], which can't be said, is the one thing clicked
 
         /// <summary>Whether the last answer was said out loud, how well it came across, and what was heard.</summary>
         public bool LastPickSpoken { get; private set; }
@@ -272,11 +269,22 @@ namespace SeoulFirstWeek.UI
 
         // ---------------------------------------------------------------- answering by voice
 
-        bool CanSpeak => pendingChoice != null && Speech.Enabled && shown.Any(c => !c.Tried && KoreanMatch.Speakable(c.Korean));
+        /// <summary>An answer on screen that can be said (the SPACE control shows while there is one).</summary>
+        bool HasSpeakable => pendingChoice != null && shown.Any(c => !c.Tried && KoreanMatch.Speakable(c.Korean));
+
+        bool CanSpeak => HasSpeakable && Speech.Enabled;
+
+        static string TalkKey => Core.VRMode.Active ? "A" : "SPACE";
 
         void StartTalk()
         {
-            if (talking || !CanSpeak) return;
+            if (talking || !HasSpeakable) return;
+            // the microphone went away after the Home screen checked it: say so, there is no other way to answer
+            if (!Speech.Enabled)
+            {
+                ShowFeedback(Loc.T("say_no_mic", TalkKey));
+                return;
+            }
             if (!Speech.Begin()) return;
             talking = true;
             Music.DuckFor(8f);
@@ -314,7 +322,7 @@ namespace SeoulFirstWeek.UI
             if (pendingChoice == null) return;
             if (string.IsNullOrWhiteSpace(heard))
             {
-                Unheard(Loc.T("say_nothing", Core.VRMode.Active ? "A" : "SPACE"));
+                ShowFeedback(Loc.T("say_nothing", TalkKey));
                 return;
             }
             var candidates = shown.Select(c => c.Tried ? null : c.Korean).ToList();
@@ -322,7 +330,7 @@ namespace SeoulFirstWeek.UI
             if (m.Index < 0)
             {
                 Sfx.Play(ProceduralAudio.Soft, 0.5f);
-                Unheard(Loc.T("say_unclear", heard));
+                ShowFeedback(Loc.T("say_unclear", heard));
                 return;
             }
             ClearFeedback();
@@ -331,23 +339,10 @@ namespace SeoulFirstWeek.UI
             Resolve(m.Index, true, m.Score, heard);
         }
 
-        /// <summary>A try that didn't come through; the third one in a question lets the player click as well.</summary>
-        void Unheard(string note)
-        {
-            unheard++;
-            if (unheard >= TriesBeforeClick && !clickAllowed)
-            {
-                clickAllowed = true;
-                note += "\n" + Loc.T("say_fallback");
-            }
-            ShowFeedback(note);
-        }
+        /// <summary>Whether this answer has to be said rather than clicked (all but actions in [brackets]).</summary>
+        bool MustSay(int index) => index >= 0 && index < shown.Count && KoreanMatch.Speakable(shown[index].Korean);
 
-        /// <summary>Whether this answer has to be said rather than clicked.</summary>
-        bool MustSay(int index) =>
-            Speech.Enabled && !clickAllowed && index >= 0 && index < shown.Count && KoreanMatch.Speakable(shown[index].Korean);
-
-        /// <summary>A click on an answer or its number key: picks it, or asks for it to be said out loud.</summary>
+        /// <summary>A click on an answer or its number key: an action is done; anything else is asked for out loud.</summary>
         void Clicked(int index)
         {
             if (pendingChoice == null || index < 0 || index >= shown.Count || shown[index].Tried) return;
@@ -357,7 +352,7 @@ namespace SeoulFirstWeek.UI
                 return;
             }
             Sfx.Play(ProceduralAudio.Soft, 0.5f);
-            ShowFeedback(Loc.T("say_required", Core.VRMode.Active ? "A" : "SPACE"));
+            ShowFeedback(Loc.T(Speech.Enabled ? "say_required" : "say_no_mic", TalkKey));
             if (speak && speak.gameObject.activeInHierarchy) _ = Motion.Shake(speak, 6f, 0.3f);
         }
 
@@ -376,8 +371,6 @@ namespace SeoulFirstWeek.UI
         {
             HideChoices();
             shown = choices;
-            unheard = 0;
-            clickAllowed = false;
             for (int i = 0; i < choices.Count; i++) answers.Add(BuildAnswer(i, choices[i]));
             // lay the column out now, so each answer slides in from where it will rest
             LayoutRebuilder.ForceRebuildLayoutImmediate(choicesBox);
@@ -591,9 +584,9 @@ namespace SeoulFirstWeek.UI
             if (replayAction.WasPressedThisFrame()) ReplayRequested?.Invoke();
 
             // say it: shown while there is an answer that can be said; held Space records, letting go hears it
-            bool canSpeak = CanSpeak;
-            if (speak.gameObject.activeSelf != (canSpeak || talking)) speak.gameObject.SetActive(canSpeak || talking);
-            if (canSpeak && !talking && talkAction.WasPressedThisFrame()) StartTalk();
+            bool hasSpeakable = HasSpeakable;
+            if (speak.gameObject.activeSelf != (hasSpeakable || talking)) speak.gameObject.SetActive(hasSpeakable || talking);
+            if (hasSpeakable && !talking && talkAction.WasPressedThisFrame()) StartTalk();
             if (Speech.Listening && talkAction.WasReleasedThisFrame()) _ = EndTalk();
             if (Speech.Listening)
             {

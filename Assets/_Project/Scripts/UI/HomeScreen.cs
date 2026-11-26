@@ -69,7 +69,9 @@ namespace SeoulFirstWeek.UI
             tag.shadowRole = Role.Ink;
             UIKit.Words(tag.transform, "서울 첫 주", 44, Role.Paper, Face.DisplayKo, TextAnchor.MiddleCenter).rectTransform.Stretch();
 
+            // (without a microphone the note saying so takes the tagline's place)
             var tagline = UIKit.Rect("Tagline", root);
+            tagline.gameObject.SetActive(Conversation.Speech.Enabled);
             tagline.Place(new Vector2(0, 1), new Vector2(92, -540), new Vector2(860, 0));
             UIKit.VStack(tagline, 0, new RectOffset(28, 28, 14, 16), TextAnchor.MiddleLeft);
             var card = UIKit.PaperPanel(tagline, "Card", Role.Paper);
@@ -80,21 +82,26 @@ namespace SeoulFirstWeek.UI
             LanguagePicker();
             DifficultyPicker();
 
-            // start, bottom left
+            // start, bottom left; the game is played by speaking, so without a microphone (or the speech model)
+            // the start stays locked and a note says why (it unlocks by itself once one is connected)
+            canHear = Conversation.Speech.Enabled;
+            if (!canHear) MicNotice();
             start = UIKit.Rect("Start", root);
             start.anchorMin = start.anchorMax = new Vector2(0, 0);
             start.pivot = new Vector2(0.5f, 0.5f);
             start.sizeDelta = new Vector2(600, 88);
             start.anchoredPosition = new Vector2(96 + 300, 80 + 44);
             start.localRotation = Quaternion.Euler(0, 0, -1.5f);
-            var strip = UIKit.BrushStrip(start, "Strip", Role.Glow);
+            // a start that isn't ready is an opaque kraft bar with slate lettering
+            var strip = UIKit.BrushStrip(start, "Strip", canHear ? Role.Glow : Role.PaperDeep);
             strip.rectTransform.Stretch();
             strip.shadow = new Vector2(8, -9);
             strip.shadowRole = Role.Ink;
             var startRow = UIKit.Rect("Row", start).Stretch(36, 36, 0, 0);
             UIKit.HStack(startRow, 18, null, TextAnchor.MiddleCenter).childForceExpandHeight = false;
-            UIKit.Words(startRow, "▶ 시작", 42, Role.Ink, Face.DisplayKo, TextAnchor.MiddleCenter).Layout(170, 60);
-            UIKit.Words(startRow, Loc.T("click_to_start"), 26, Role.Ink, Face.ReadBold, TextAnchor.MiddleLeft).Layout(340, 60);
+            var lettering = canHear ? Role.Ink : Role.InkSoft;
+            UIKit.Words(startRow, "▶ 시작", 42, lettering, Face.DisplayKo, TextAnchor.MiddleCenter).Layout(170, 60);
+            UIKit.Words(startRow, Loc.T(canHear ? "click_to_start" : "start_locked"), canHear ? 26 : 24, lettering, Face.ReadBold, TextAnchor.MiddleLeft).Layout(340, 60);
 
             // the nurse asks what the game is about: a real question at a real counter, with its translation
             var nurse = Balloon("Cast_Nurse", "어디가 불편하세요?", Loc.T("home_nurse"), 0.16f);
@@ -106,6 +113,28 @@ namespace SeoulFirstWeek.UI
             _ = Motion.SlideIn(tagline, new Vector2(-80, 0), 0.24f, 0.6f);
             _ = Motion.SlideIn(start, new Vector2(0, -160), 0.26f, 0.85f);
             if (nurse) _ = Motion.Slap(nurse, 0f, 1.1f, -6f);
+        }
+
+        bool canHear;
+        RectTransform notice;
+
+        /// <summary>
+        /// Above the language and the level: a glow note saying the game needs a microphone (or, in a copy without
+        /// the speech model, that it can't hear at all), and how to unlock the start.
+        /// </summary>
+        void MicNotice()
+        {
+            bool model = Conversation.Speech.ModelPresent;
+            notice = UIKit.Rect("MicNotice", root);
+            notice.Place(new Vector2(0, 0), new Vector2(96, 284), new Vector2(860, 0));
+            UIKit.VStack(notice, 6, new RectOffset(30, 30, 18, 20), TextAnchor.UpperLeft);
+            var note = UIKit.StickyNote(notice, "Note");
+            note.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+            note.rectTransform.Stretch();
+            UIKit.Words(notice, "!  " + Loc.T(model ? "mic_needed_title" : "speech_missing_title"), 34, Role.Ink, Face.Display);
+            UIKit.Words(notice, Loc.T(model ? "mic_needed_body" : "speech_missing_body"), 23, Role.Ink, Face.ReadBold).lineSpacing = 1.1f;
+            notice.localRotation = Quaternion.Euler(0, 0, -1f);
+            if (intro) _ = Motion.Slap(notice, -1f, 1.0f, -6f);
         }
 
         /// <summary>Retro block lettering: cream letters, a thick ink outline and a rust block behind them.</summary>
@@ -288,9 +317,15 @@ namespace SeoulFirstWeek.UI
 
         void Update()
         {
+            // a microphone plugged in (or taken out) while the title is up unlocks (or locks) the start
+            if (Time.frameCount % 30 == 0 && Conversation.Speech.Enabled != canHear)
+            {
+                intro = false;
+                Build();
+            }
             var kb = Keyboard.current;
             if (kb != null && (kb.enterKey.wasPressedThisFrame || kb.spaceKey.wasPressedThisFrame) && !menu) Go();
-            if (Settings.ReducedMotion || !start) return;
+            if (Settings.ReducedMotion || !start || !canHear) return;
             // the start bar breathes
             start.localScale = Vector3.one * (1f + 0.025f * Mathf.Sin(Time.unscaledTime * 3.4f));
         }
@@ -298,6 +333,12 @@ namespace SeoulFirstWeek.UI
         void Go()
         {
             if (leaving) return;
+            if (!canHear)
+            {
+                Sfx.Play(ProceduralAudio.Soft, 0.6f);
+                if (notice) _ = Motion.Shake(notice, 8f, 0.3f);
+                return;
+            }
             leaving = true;
             Sfx.Play(ProceduralAudio.Blip, 0.7f);
             SceneFlow.Load(SceneFlow.Select);

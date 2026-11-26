@@ -25,13 +25,17 @@ namespace SeoulFirstWeek.Conversation
         static float startedAt;
 
         public static bool ModelPresent => File.Exists(Path.Combine(Application.streamingAssetsPath, ModelFile));
-        public static bool MicPresent => PretendMic || Microphone.devices.Length > 0;
+        public static bool MicPresent => !PretendNoMic && (PretendMic || Microphone.devices.Length > 0);
+
+        /// <summary>Play-tests: behave as if no microphone were connected (the Home screen's notice).</summary>
+        public static bool PretendNoMic;
 
         /// <summary>Play-tests on a machine without a microphone still show the control.</summary>
         public static bool PretendMic;
 
         /// <summary>The player may answer by voice: the setting is on, the model is there and a microphone is plugged in.</summary>
-        /// <summary>Answers are said out loud whenever the game can hear them (a microphone and the model).</summary>
+        /// <summary>Whether the game can hear answers (a microphone and the model). Without that it can't be played:
+        /// the Home screen says so and keeps the start locked.</summary>
         public static bool Enabled => ModelPresent && MicPresent;
 
         public static bool Listening => recording != null;

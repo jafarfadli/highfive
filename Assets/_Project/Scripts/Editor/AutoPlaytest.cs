@@ -208,6 +208,7 @@ namespace SeoulFirstWeek.EditorTools
                 EditorApplication.isPaused = true;
                 PlaytestTools.Frames(200);
                 Shot("home");
+                HomeMicCheck();
                 Core.SceneFlow.Load("Select");
                 PlaytestTools.WaitScene("Select");
                 PlaytestTools.Frames(60);
@@ -396,54 +397,63 @@ namespace SeoulFirstWeek.EditorTools
         static bool voiceChecked;
 
         /// <summary>
-        /// Answers are said, not clicked: with a microphone (pretended) a click on the answer the run means to give
-        /// leaves the question open and asks for it out loud; without one, the same click picks it. Checked once a
-        /// run, on an answer that can be said. Returns true when it gave the answer itself.
+        /// Answers are said, never clicked: a click on the answer the run means to give leaves the question open and
+        /// asks for it out loud (with a microphone, pretended) or says a microphone is needed (without one). Checked
+        /// once a run, on an answer that can be said; the run then gives the answer itself.
         /// </summary>
-        static bool VoiceRequiredCheck(ConversationPanel p, string plan, int pick)
+        static void VoiceRequiredCheck(ConversationPanel p, string plan, int pick)
         {
             var choice = p.CurrentChoices[pick];
-            if (choice.Tried || !Conversation.KoreanMatch.Speakable(choice.Korean)) return false;
+            if (choice.Tried || !Conversation.KoreanMatch.Speakable(choice.Korean)) return;
             voiceChecked = true;
-            if (!Conversation.Speech.ModelPresent)
-            {
-                Note("voice-required: skipped (no Whisper model)");
-                return false;
-            }
             var button = p.GetComponentsInChildren<UnityEngine.UI.Button>()
                 .FirstOrDefault(b => b.name == "Answer" && b.GetComponentsInChildren<UnityEngine.UI.Text>().Any(t => t.text == choice.Korean));
             if (!button)
             {
                 Note($"FAIL voice-required: no button for '{choice.Korean}' in {plan}");
-                return false;
+                return;
             }
-            bool pretended = Conversation.Speech.PretendMic;
+            string key = Core.VRMode.Active ? "A" : "SPACE";
+            bool pretended = Conversation.Speech.PretendMic, pretendedNone = Conversation.Speech.PretendNoMic;
             try
             {
-                Conversation.Speech.PretendMic = true;
-                button.onClick.Invoke();
-                PlaytestTools.Frames(10);
-                bool stillOpen = p.IsWaiting;
-                string asked = Core.Loc.T("say_required", Core.VRMode.Active ? "A" : "SPACE");
-                bool note = p.GetComponentsInChildren<UnityEngine.UI.Text>().Any(t => t.isActiveAndEnabled && t.text.Contains(asked));
-                Shot($"{plan.Replace('#', '_')}-voice-required");
-                Note(stillOpen && note ? $"voice-required: ok, a click asked for the answer out loud ({plan})"
-                    : $"FAIL voice-required: question open={stillOpen}, note shown={note} ({plan})");
-                // without a microphone the same click picks (only checkable on a machine that has none)
-                if (Microphone.devices.Length > 0)
+                foreach (var (mic, expect, label) in new[] { (true, "say_required", "with a microphone"), (false, "say_no_mic", "without a microphone") })
                 {
-                    Note($"voice-required: this machine has a microphone ({Microphone.devices[0]}), so clicking without one isn't checked");
-                    return false;
+                    Conversation.Speech.PretendMic = mic;
+                    Conversation.Speech.PretendNoMic = !mic;
+                    button.onClick.Invoke();
+                    PlaytestTools.Frames(10);
+                    bool stillOpen = p.IsWaiting;
+                    string asked = Core.Loc.T(expect, key);
+                    bool note = p.GetComponentsInChildren<UnityEngine.UI.Text>().Any(t => t.isActiveAndEnabled && t.text.Contains(asked));
+                    Shot($"{plan.Replace('#', '_')}-voice-required-{(mic ? "mic" : "nomic")}");
+                    Note(stillOpen && note ? $"voice-required: ok {label}, a click left the question open and said why ({plan})"
+                        : $"FAIL voice-required {label}: question open={stillOpen}, note shown={note} ({plan})");
                 }
-                Conversation.Speech.PretendMic = false;
-                button.onClick.Invoke();
-                PlaytestTools.Frames(5);
-                Note(!p.IsWaiting ? "voice-required: ok, without a microphone the click picks" : "FAIL voice-required: the click without a microphone didn't pick");
-                return true;
             }
             finally
             {
                 Conversation.Speech.PretendMic = pretended;
+                Conversation.Speech.PretendNoMic = pretendedNone;
+            }
+        }
+
+        /// <summary>Without a microphone the Home screen says so and its start stays locked.</summary>
+        static void HomeMicCheck()
+        {
+            Conversation.Speech.PretendNoMic = true;
+            try
+            {
+                PlaytestTools.Frames(70);
+                Shot("home-no-mic");
+                string title = Core.Loc.T(Conversation.Speech.ModelPresent ? "mic_needed_title" : "speech_missing_title");
+                bool shown = Object.FindObjectsByType<UnityEngine.UI.Text>(FindObjectsInactive.Exclude).Any(t => t.text.Contains(title));
+                Note(shown ? "home-mic: ok, without a microphone the note shows and the start is locked" : "FAIL home-mic: no note without a microphone");
+            }
+            finally
+            {
+                Conversation.Speech.PretendNoMic = false;
+                PlaytestTools.Frames(70);
             }
         }
 
@@ -570,7 +580,8 @@ namespace SeoulFirstWeek.EditorTools
                             if (pick < 0) pick = shown.FindIndex(c => c.result == want);
                         if (pick < 0) pick = 0;
                         PlaytestTools.Log.Add($"NPC> {p.CurrentLine}\n   YOU> {shown[pick].ko} ({shown[pick].result})");
-                        if (voiceChecked || !VoiceRequiredCheck(p, plan, pick)) p.Pick(pick);
+                        if (!voiceChecked) VoiceRequiredCheck(p, plan, pick);
+                        p.Pick(pick);
                     }
                     PlaytestTools.Frames(3);
                     continue;
