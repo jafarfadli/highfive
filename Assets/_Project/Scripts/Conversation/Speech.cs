@@ -31,7 +31,8 @@ namespace SeoulFirstWeek.Conversation
         public static bool PretendMic;
 
         /// <summary>The player may answer by voice: the setting is on, the model is there and a microphone is plugged in.</summary>
-        public static bool Enabled => Settings.SpeakAnswers && ModelPresent && MicPresent;
+        /// <summary>Answers are said out loud whenever the game can hear them (a microphone and the model).</summary>
+        public static bool Enabled => ModelPresent && MicPresent;
 
         public static bool Listening => recording != null;
         public static bool Ready => manager && manager.IsLoaded;
@@ -53,11 +54,24 @@ namespace SeoulFirstWeek.Conversation
             go.SetActive(true);
         }
 
+        /// <summary>The first microphone, or in a headset the headset's own (Quest Link adds it to Windows as
+        /// "Headset Microphone (Oculus Virtual Audio Device)").</summary>
+        static string PickDevice()
+        {
+            if (Core.VRMode.Active)
+                foreach (var d in Microphone.devices)
+                    if (d.IndexOf("Oculus", System.StringComparison.OrdinalIgnoreCase) >= 0 ||
+                        d.IndexOf("Quest", System.StringComparison.OrdinalIgnoreCase) >= 0 ||
+                        d.IndexOf("Headset", System.StringComparison.OrdinalIgnoreCase) >= 0)
+                        return d;
+            return Microphone.devices[0];
+        }
+
         public static bool Begin()
         {
             if (Listening || Microphone.devices.Length == 0) return false;
             Warm();
-            device = Microphone.devices[0];
+            device = PickDevice();
             recording = Microphone.Start(device, false, MaxSeconds, Rate);
             startedAt = Time.unscaledTime;
             return recording != null;

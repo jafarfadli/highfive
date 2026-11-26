@@ -48,11 +48,21 @@ namespace SeoulFirstWeek.Player
         /// collider it starts inside, so the counter's or the door's box used to vanish when the player stepped
         /// up close); people and triggers that can't be used don't stand in the way; walls and furniture do.
         /// </summary>
+        /// <summary>Where the pointer meets the thing it would use this frame (the VR laser ends there).</summary>
+        public static Vector3? CurrentHit { get; private set; }
+
         Interactable Find()
         {
+            CurrentHit = null;
             var cam = fps.Camera;
             Ray ray;
-            if (Cursor.lockState == CursorLockMode.Locked || Mouse.current == null)
+            if (fps.VR)
+            {
+                // in a headset the right controller points; the panels take what it points at first
+                if (UI.VRUI.PointerOverUI) return null;
+                ray = fps.VR.PointerRay;
+            }
+            else if (Cursor.lockState == CursorLockMode.Locked || Mouse.current == null)
                 ray = new Ray(cam.transform.position, cam.transform.forward);
             else
             {
@@ -69,11 +79,19 @@ namespace SeoulFirstWeek.Player
                 var it = h.collider.GetComponentInParent<Interactable>();
                 if (it && it.CanInteract)
                 {
-                    if (h.distance > 0f) return it;
+                    if (h.distance > 0f)
+                    {
+                        CurrentHit = h.point;
+                        return it;
+                    }
                     // already inside its box (distance 0): it counts while the player faces its way
                     var to = h.collider.bounds.center - ray.origin;
                     to.y = 0;
-                    if (to.sqrMagnitude < 0.04f || Vector3.Dot(to.normalized, flatDir) > -0.05f) return it;
+                    if (to.sqrMagnitude < 0.04f || Vector3.Dot(to.normalized, flatDir) > -0.05f)
+                    {
+                        CurrentHit = ray.origin + ray.direction * 0.6f;
+                        return it;
+                    }
                     continue;
                 }
                 // started inside it (the player's own capsule), a trigger, or a person: look past it

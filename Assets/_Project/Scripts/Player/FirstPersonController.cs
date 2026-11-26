@@ -77,7 +77,13 @@ namespace SeoulFirstWeek.Player
             lookHold = map.FindAction("LookHold", true);
             sprint = map.FindAction("Sprint", true);
             yaw = viewYaw = transform.eulerAngles.y;
+            if (Core.VRMode.Active) vr = VRRig.Attach(this);
         }
+
+        VRRig vr;
+
+        /// <summary>The headset rig, while the game runs in VR.</summary>
+        public VRRig VR => vr;
 
         void OnEnable() => map?.Enable();
         void OnDisable() => map?.Disable();
@@ -85,6 +91,11 @@ namespace SeoulFirstWeek.Player
         void Update()
         {
             var dt = Time.deltaTime;
+            if (vr)
+            {
+                UpdateVR(dt);
+                return;
+            }
             // taken before UpdateDrag, which may lock the cursor: the jump that causes arrives from the next frame
             bool settling = settle > 0;
             if (settling) settle--;
@@ -146,6 +157,36 @@ namespace SeoulFirstWeek.Player
             cameraPivot.localRotation = Quaternion.Euler(viewPitch, 0, 0);
         }
 
+        /// <summary>
+        /// In a headset the head looks around by itself: no mouse look, no pitch, no head bob. The stick walks where
+        /// the head looks, and the eyes ease to the standing or seated height.
+        /// </summary>
+        void UpdateVR(float dt)
+        {
+            ClickedThisFrame = false;
+            eye = eye < 0 ? TargetEye : Mathf.MoveTowards(eye, TargetEye, dt * 1.4f);
+            vr.Tick(eye);
+            var input = MovementEnabled ? move.ReadValue<Vector2>() : Vector2.zero;
+            var speed = sprint.IsPressed() ? sprintSpeed : walkSpeed;
+            var basis = vr.HeadYaw;
+            var planar = (basis * Vector3.right * input.x + basis * Vector3.forward * input.y) * speed;
+            verticalVelocity = controller.isGrounded ? -2f : verticalVelocity + gravity * dt;
+            controller.Move((planar + Vector3.up * verticalVelocity) * dt);
+            if (MovementEnabled) vr.FollowHead();
+            yaw = viewYaw = transform.eulerAngles.y;
+
+            float moving = new Vector2(controller.velocity.x, controller.velocity.z).magnitude;
+            if (moving > 0.2f && controller.isGrounded)
+            {
+                stepTimer -= dt * moving;
+                if (stepTimer <= 0)
+                {
+                    Sfx.Play(ProceduralAudio.Step, 0.35f);
+                    stepTimer = 1.55f;
+                }
+            }
+        }
+
         void UpdateDrag()
         {
             ClickedThisFrame = false;
@@ -197,6 +238,13 @@ namespace SeoulFirstWeek.Player
 
         public void Teleport(Vector3 position, float newYaw)
         {
+            if (vr)
+            {
+                vr.Teleport(position, newYaw);
+                yaw = viewYaw = transform.eulerAngles.y;
+                pitch = viewPitch = 0;
+                return;
+            }
             controller.enabled = false;
             transform.position = position;
             yaw = viewYaw = newYaw;
@@ -208,6 +256,13 @@ namespace SeoulFirstWeek.Player
         /// <summary>Smoothly turn body and head to look at a world point.</summary>
         public void FocusOn(Vector3 point, float seconds = 0.6f)
         {
+            // never swing the view in a headset: at most a quick snap when the point is well off to the side
+            if (vr)
+            {
+                vr.FocusOn(point);
+                yaw = viewYaw = transform.eulerAngles.y;
+                return;
+            }
             if (focusRoutine != null) StopCoroutine(focusRoutine);
             focusRoutine = StartCoroutine(Focus(point, seconds));
         }

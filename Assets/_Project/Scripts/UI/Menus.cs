@@ -229,7 +229,7 @@ namespace SeoulFirstWeek.UI
         }
     }
 
-    /// <summary>Music, SFX, look sensitivity, theme and calm animation (pause menu).</summary>
+    /// <summary>Music, SFX, look sensitivity, calm animation and the level (pause menu).</summary>
     public static class SettingsPanel
     {
         public static void Build(Transform parent)
@@ -242,7 +242,8 @@ namespace SeoulFirstWeek.UI
             }, v => $"{Mathf.RoundToInt(v * 100)}%");
             Row(parent, Loc.T("sensitivity"), 0.25f, 2.5f, Settings.Sensitivity, v => Settings.Sensitivity = v, v => $"{v:0.00}×");
             Choices(parent, Loc.T("reduced_motion"), new[] { Loc.T("off"), Loc.T("on") }, Settings.ReducedMotion ? 1 : 0, i => Settings.ReducedMotion = i == 1);
-            Choices(parent, Loc.T("speak_setting"), new[] { Loc.T("off"), Loc.T("on") }, Settings.SpeakAnswers ? 1 : 0, i => Settings.SpeakAnswers = i == 1);
+            Choices(parent, Loc.T("difficulty"), new[] { Loc.T("difficulty_0"), Loc.T("difficulty_1"), Loc.T("difficulty_2") }, (int)Settings.Difficulty,
+                i => Settings.Difficulty = (Difficulty)i);
         }
 
         static void Row(Transform parent, string label, float min, float max, float value, Action<float> set, Func<float, string> format)

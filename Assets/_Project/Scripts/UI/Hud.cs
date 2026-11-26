@@ -117,7 +117,7 @@ namespace SeoulFirstWeek.UI
             strip.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
             strip.rectTransform.Stretch(-10, -16, 0, 0);
             strip.dry = 0.6f;
-            UIKit.Keycap(promptBox, "E", 24);
+            UIKit.Keycap(promptBox, Core.VRMode.Active ? "TRIGGER" : "E", Core.VRMode.Active ? 18 : 24);
             promptText = UIKit.Words(promptBox, "", 26, Role.Paper, Face.ReadBold);
             promptText.horizontalOverflow = HorizontalWrapMode.Overflow;
             promptBox.gameObject.SetActive(false);

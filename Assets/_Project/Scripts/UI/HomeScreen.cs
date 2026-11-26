@@ -78,6 +78,7 @@ namespace SeoulFirstWeek.UI
             UIKit.Words(tagline, Loc.T("tagline"), 27, Role.Ink, Face.ReadBold).lineSpacing = 1.1f;
 
             LanguagePicker();
+            DifficultyPicker();
 
             // start, bottom left
             start = UIKit.Rect("Start", root);
@@ -130,20 +131,36 @@ namespace SeoulFirstWeek.UI
             rt.sizeDelta = size;
         }
 
+        float languageRight;
+
         /// <summary>The hint language as a dropdown: a card showing the current one; it opens a short list upward.</summary>
         void LanguagePicker()
         {
             var name = Loc.LanguageName(Settings.Language);
-            var button = UIKit.InkButton(root, "", ToggleMenu, ButtonStyle.Paper, 24);
+            var button = UIKit.InkButton(root, "", () => ToggleMenu(false), ButtonStyle.Paper, 24);
             var label = button.GetComponentInChildren<Text>();
             label.font = UIKit.Bold;
             label.fontSize = 24;
             label.text = $"{Loc.T("language")}:  {name}   ▼";
             var rt = (RectTransform)button.transform;
-            rt.Place(new Vector2(0, 0), new Vector2(96, 196), new Vector2(label.preferredWidth + 60f, 60));
+            float width = label.preferredWidth + 60f;
+            rt.Place(new Vector2(0, 0), new Vector2(96, 196), new Vector2(width, 60));
+            languageRight = 96 + width;
         }
 
-        void ToggleMenu()
+        /// <summary>The level beside it, a dropdown too: each choice says how much help the answers give.</summary>
+        void DifficultyPicker()
+        {
+            var button = UIKit.InkButton(root, "", () => ToggleMenu(true), ButtonStyle.Paper, 24);
+            var label = button.GetComponentInChildren<Text>();
+            label.font = UIKit.Bold;
+            label.fontSize = 24;
+            label.text = $"{Loc.T("difficulty")}:  {Loc.T($"difficulty_{(int)Settings.Difficulty}")}   ▼";
+            var rt = (RectTransform)button.transform;
+            rt.Place(new Vector2(0, 0), new Vector2(languageRight + 18f, 196), new Vector2(label.preferredWidth + 60f, 60));
+        }
+
+        void ToggleMenu(bool difficulty)
         {
             if (menu)
             {
@@ -152,36 +169,62 @@ namespace SeoulFirstWeek.UI
                 return;
             }
             Sfx.Play(ProceduralAudio.Tick, 0.5f);
-            menu = UIKit.Rect("LanguageMenu", root).Stretch();
+            menu = UIKit.Rect(difficulty ? "DifficultyMenu" : "LanguageMenu", root).Stretch();
             // a click anywhere outside the list closes it instead of starting the game
             var blocker = menu.gameObject.AddComponent<Image>();
             blocker.color = Color.clear;
-            menu.gameObject.AddComponent<Button>().onClick.AddListener(ToggleMenu);
+            menu.gameObject.AddComponent<Button>().onClick.AddListener(() => ToggleMenu(difficulty));
             var list = UIKit.Rect("List", menu);
-            list.Place(new Vector2(0, 0), new Vector2(96, 266), new Vector2(320, 0));
+            list.Place(new Vector2(0, 0), new Vector2(difficulty ? languageRight + 18f : 96, 266), new Vector2(difficulty ? 560 : 320, 0));
             UIKit.VStack(list, 10, new RectOffset(16, 16, 16, 16), TextAnchor.UpperLeft);
             var card = UIKit.PaperPanel(list, "Card", Role.Paper);
             card.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
             card.rectTransform.Stretch();
-            foreach (HintLanguage l in Enum.GetValues(typeof(HintLanguage)))
-            {
-                var value = l;
-                bool chosen = Settings.Language == l;
-                var b = UIKit.InkButton(list, "", () => Choose(value), ButtonStyle.Paper, 24);
-                var body = b.GetComponentInChildren<InkShape>();
-                if (chosen)
+            if (difficulty)
+                foreach (Difficulty d in Enum.GetValues(typeof(Difficulty)))
                 {
-                    body.fillRole = Role.Glow;
-                    body.SetVerticesDirty();
+                    var value = d;
+                    Option(list, Settings.Difficulty == d,
+                        $"{Loc.T($"difficulty_{(int)d}")}\n<size=20>{Loc.T($"difficulty_{(int)d}_desc")}</size>", 76, () => ChooseDifficulty(value));
                 }
-                var text = b.GetComponentInChildren<Text>();
-                text.font = UIKit.Bold;
-                text.fontSize = 24;
-                text.alignment = TextAnchor.MiddleLeft;
-                text.text = (chosen ? "✓  " : "     ") + Loc.LanguageName(l);
-                ((RectTransform)b.transform).Layout(-1, 56);
-            }
+            else
+                foreach (HintLanguage l in Enum.GetValues(typeof(HintLanguage)))
+                {
+                    var value = l;
+                    Option(list, Settings.Language == l, Loc.LanguageName(l), 56, () => Choose(value));
+                }
             _ = Motion.Slap(list, 0f, 0f, -3f, 0.2f);
+        }
+
+        static void Option(Transform list, bool chosen, string text, float height, Action pick)
+        {
+            var b = UIKit.InkButton(list, "", () => pick(), ButtonStyle.Paper, 24);
+            var body = b.GetComponentInChildren<InkShape>();
+            if (chosen)
+            {
+                body.fillRole = Role.Glow;
+                body.SetVerticesDirty();
+            }
+            var t = b.GetComponentInChildren<Text>();
+            t.font = UIKit.Bold;
+            t.fontSize = 24;
+            t.alignment = TextAnchor.MiddleLeft;
+            t.supportRichText = true;
+            t.lineSpacing = 1.05f;
+            t.text = (chosen ? "✓  " : "     ") + text.Replace("\n", "\n      ");
+            ((RectTransform)b.transform).Layout(-1, height);
+        }
+
+        void ChooseDifficulty(Difficulty level)
+        {
+            if (Settings.Difficulty != level)
+            {
+                Settings.Difficulty = level;
+                Settings.Save();
+                Sfx.Play(ProceduralAudio.Tick, 0.6f);
+            }
+            intro = false;
+            Build();
         }
 
         void Choose(HintLanguage language)
@@ -237,7 +280,8 @@ namespace SeoulFirstWeek.UI
             bool visible = screen.z > 0;
             if (balloon.gameObject.activeSelf != visible) balloon.gameObject.SetActive(visible);
             if (!visible) return;
-            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(root, screen, null, out var local)) return;
+            // in a headset the screen is a panel in the world: the camera's ray to the head finds the spot on it
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(root, screen, Core.VRMode.Active ? cam : null, out var local)) return;
             float tail = balloon.rect.height * 0.55f + 4f;
             balloon.anchoredPosition = local + new Vector2(0, tail);
         }

@@ -162,6 +162,12 @@ namespace SeoulFirstWeek.EditorTools
             if (!Camera.main) { Note("no camera for " + name); return; }
             PlaytestTools.Frames(2);
             PlaytestTools.Capture(Path.Combine(Out, name + ".png"));
+            if (Core.VRMode.Active)
+            {
+                // the game view shows what each eye gets, side by side (VRPlaytest)
+                ScreenCapture.CaptureScreenshot(Path.Combine(Out, name + "-eyes.png"));
+                PlaytestTools.Frames(3);
+            }
         }
 
         /// <summary>Stands the player a few metres from a waypoint, looking at it, for a photo of the place.</summary>
@@ -182,6 +188,9 @@ namespace SeoulFirstWeek.EditorTools
 
         static void Play()
         {
+            // in the pretend headset every shader needs its stereo variants, which the editor would otherwise draw
+            // as cyan placeholders while it compiles them in the background
+            if (Core.VRMode.Active) ShaderUtil.allowAsyncCompilation = false;
             // a run of only some parts keeps the other parts' photos
             if (!File.Exists(OnlyPath))
                 foreach (var f in Directory.GetFiles(Out, "*.png")) File.Delete(f);
@@ -384,6 +393,60 @@ namespace SeoulFirstWeek.EditorTools
             Shot("after-logbook-er-insured");
         }
 
+        static bool voiceChecked;
+
+        /// <summary>
+        /// Answers are said, not clicked: with a microphone (pretended) a click on the answer the run means to give
+        /// leaves the question open and asks for it out loud; without one, the same click picks it. Checked once a
+        /// run, on an answer that can be said. Returns true when it gave the answer itself.
+        /// </summary>
+        static bool VoiceRequiredCheck(ConversationPanel p, string plan, int pick)
+        {
+            var choice = p.CurrentChoices[pick];
+            if (choice.Tried || !Conversation.KoreanMatch.Speakable(choice.Korean)) return false;
+            voiceChecked = true;
+            if (!Conversation.Speech.ModelPresent)
+            {
+                Note("voice-required: skipped (no Whisper model)");
+                return false;
+            }
+            var button = p.GetComponentsInChildren<UnityEngine.UI.Button>()
+                .FirstOrDefault(b => b.name == "Answer" && b.GetComponentsInChildren<UnityEngine.UI.Text>().Any(t => t.text == choice.Korean));
+            if (!button)
+            {
+                Note($"FAIL voice-required: no button for '{choice.Korean}' in {plan}");
+                return false;
+            }
+            bool pretended = Conversation.Speech.PretendMic;
+            try
+            {
+                Conversation.Speech.PretendMic = true;
+                button.onClick.Invoke();
+                PlaytestTools.Frames(10);
+                bool stillOpen = p.IsWaiting;
+                string asked = Core.Loc.T("say_required", Core.VRMode.Active ? "A" : "SPACE");
+                bool note = p.GetComponentsInChildren<UnityEngine.UI.Text>().Any(t => t.isActiveAndEnabled && t.text.Contains(asked));
+                Shot($"{plan.Replace('#', '_')}-voice-required");
+                Note(stillOpen && note ? $"voice-required: ok, a click asked for the answer out loud ({plan})"
+                    : $"FAIL voice-required: question open={stillOpen}, note shown={note} ({plan})");
+                // without a microphone the same click picks (only checkable on a machine that has none)
+                if (Microphone.devices.Length > 0)
+                {
+                    Note($"voice-required: this machine has a microphone ({Microphone.devices[0]}), so clicking without one isn't checked");
+                    return false;
+                }
+                Conversation.Speech.PretendMic = false;
+                button.onClick.Invoke();
+                PlaytestTools.Frames(5);
+                Note(!p.IsWaiting ? "voice-required: ok, without a microphone the click picks" : "FAIL voice-required: the click without a microphone didn't pick");
+                return true;
+            }
+            finally
+            {
+                Conversation.Speech.PretendMic = pretended;
+            }
+        }
+
         static void PlayLevel(string plan)
         {
             var parts = plan.Split('#');
@@ -507,7 +570,7 @@ namespace SeoulFirstWeek.EditorTools
                             if (pick < 0) pick = shown.FindIndex(c => c.result == want);
                         if (pick < 0) pick = 0;
                         PlaytestTools.Log.Add($"NPC> {p.CurrentLine}\n   YOU> {shown[pick].ko} ({shown[pick].result})");
-                        p.Pick(pick);
+                        if (voiceChecked || !VoiceRequiredCheck(p, plan, pick)) p.Pick(pick);
                     }
                     PlaytestTools.Frames(3);
                     continue;

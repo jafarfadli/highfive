@@ -183,7 +183,7 @@ namespace SeoulFirstWeek.Procedure
                         carried.Add(doc);
                     }
             UpdateProgress();
-            hud.ShowHelp(Loc.T("controls"), 12f);
+            hud.ShowHelp(Loc.T(VRMode.Active ? "controls_vr" : "controls"), 12f);
             hud.Banner(proc.titleKo, level.FullTitle, 2.6f);
             // everything brought from home for this visit: the procedure's and the case's (an empty card, the ARC)
             var brought = proc.carry

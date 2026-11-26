@@ -64,6 +64,8 @@ namespace SeoulFirstWeek.UI
             sheet.tear = 4f;
             sheet.halftone = 0f;
             cut.anchoredPosition = new Vector2(-Park, 0);
+            // on a panel in a headset it would hang in the air beside the view: VRUI.Fade covers the eyes instead
+            if (Core.VRMode.Active) cut.gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -73,6 +75,18 @@ namespace SeoulFirstWeek.UI
         public async Task FadeTo(float alpha, float seconds)
         {
             bool cover = alpha >= 0.5f;
+            if (Core.VRMode.Active)
+            {
+                // a sheet sweeping across a panel can't cover the eyes: in a headset the ink comes up over the view
+                if (cover == covered) return;
+                blocker.raycastTarget = true;
+                await VRUI.Fade(cover, Mathf.Clamp(seconds * 0.75f, 0.2f, 0.4f));
+                if (!this) return;
+                covered = cover;
+                blocker.raycastTarget = cover;
+                if (!cover) VRUI.Recenter();
+                return;
+            }
             if (cover == covered && (cover || cut.anchoredPosition.x <= -Park + 1f)) return;
             blocker.raycastTarget = true;
             float from = cover ? -Park : 0f, to = cover ? 0f : Park;

@@ -48,6 +48,11 @@ namespace SeoulFirstWeek.UI
         Text speakLabel;
         InkShape speakRing;
         bool talking;
+        // answers are said, not clicked, whenever the game can hear (Speech.Enabled); after three tries in one
+        // question that didn't come through (noise, a weak microphone), clicking that question is allowed too
+        int unheard;
+        bool clickAllowed;
+        const int TriesBeforeClick = 3;
 
         /// <summary>Whether the last answer was said out loud, how well it came across, and what was heard.</summary>
         public bool LastPickSpoken { get; private set; }
@@ -122,7 +127,7 @@ namespace SeoulFirstWeek.UI
             again.Place(new Vector2(1, 1), new Vector2(-34, -30), new Vector2(190, 44));
             var ah = UIKit.HStack(again, 10, null, TextAnchor.MiddleRight);
             ah.childForceExpandHeight = false;
-            var rKey = UIKit.Keycap(again, "R", 18);
+            var rKey = UIKit.Keycap(again, Core.VRMode.Active ? "B" : "R", 18);
             rKey.gameObject.AddComponent<Button>().onClick.AddListener(() => ReplayRequested?.Invoke());
             rKey.GetComponentInChildren<InkShape>().raycastTarget = true;
             UIKit.Words(again, Loc.T("hear_again"), 22, Role.Paper, Face.ReadBold).Layout(130, 40);
@@ -133,7 +138,7 @@ namespace SeoulFirstWeek.UI
             speak.Place(new Vector2(1, 1), new Vector2(-34, -86), new Vector2(220, 48));
             var sh = UIKit.HStack(speak, 10, null, TextAnchor.MiddleRight);
             sh.childForceExpandHeight = false;
-            var spaceKey = UIKit.Keycap(speak, "SPACE", 18);
+            var spaceKey = UIKit.Keycap(speak, Core.VRMode.Active ? "A" : "SPACE", 18);
             spaceKey.GetComponentInChildren<InkShape>().raycastTarget = true;
             var hold = spaceKey.gameObject.AddComponent<HoldButton>();
             hold.Pressed += StartTalk;
@@ -309,7 +314,7 @@ namespace SeoulFirstWeek.UI
             if (pendingChoice == null) return;
             if (string.IsNullOrWhiteSpace(heard))
             {
-                ShowFeedback(Loc.T("say_nothing"));
+                Unheard(Loc.T("say_nothing", Core.VRMode.Active ? "A" : "SPACE"));
                 return;
             }
             var candidates = shown.Select(c => c.Tried ? null : c.Korean).ToList();
@@ -317,13 +322,43 @@ namespace SeoulFirstWeek.UI
             if (m.Index < 0)
             {
                 Sfx.Play(ProceduralAudio.Soft, 0.5f);
-                ShowFeedback(Loc.T("say_unclear", heard));
+                Unheard(Loc.T("say_unclear", heard));
                 return;
             }
             ClearFeedback();
             var missed = KoreanMatch.Missed(heard, shown[m.Index].Korean);
             SaidLine(answers[m.Index], heard, m.Score, missed);
             Resolve(m.Index, true, m.Score, heard);
+        }
+
+        /// <summary>A try that didn't come through; the third one in a question lets the player click as well.</summary>
+        void Unheard(string note)
+        {
+            unheard++;
+            if (unheard >= TriesBeforeClick && !clickAllowed)
+            {
+                clickAllowed = true;
+                note += "\n" + Loc.T("say_fallback");
+            }
+            ShowFeedback(note);
+        }
+
+        /// <summary>Whether this answer has to be said rather than clicked.</summary>
+        bool MustSay(int index) =>
+            Speech.Enabled && !clickAllowed && index >= 0 && index < shown.Count && KoreanMatch.Speakable(shown[index].Korean);
+
+        /// <summary>A click on an answer or its number key: picks it, or asks for it to be said out loud.</summary>
+        void Clicked(int index)
+        {
+            if (pendingChoice == null || index < 0 || index >= shown.Count || shown[index].Tried) return;
+            if (!MustSay(index))
+            {
+                Pick(index);
+                return;
+            }
+            Sfx.Play(ProceduralAudio.Soft, 0.5f);
+            ShowFeedback(Loc.T("say_required", Core.VRMode.Active ? "A" : "SPACE"));
+            if (speak && speak.gameObject.activeInHierarchy) _ = Motion.Shake(speak, 6f, 0.3f);
         }
 
         /// <summary>Under the answer that was said: what was heard, how well it came across, and what didn't.</summary>
@@ -341,6 +376,8 @@ namespace SeoulFirstWeek.UI
         {
             HideChoices();
             shown = choices;
+            unheard = 0;
+            clickAllowed = false;
             for (int i = 0; i < choices.Count; i++) answers.Add(BuildAnswer(i, choices[i]));
             // lay the column out now, so each answer slides in from where it will rest
             LayoutRebuilder.ForceRebuildLayoutImmediate(choicesBox);
@@ -394,10 +431,17 @@ namespace SeoulFirstWeek.UI
             // romanization: the tag says so in its place
             bool action = c.Korean != null && c.Korean.TrimStart().StartsWith("[");
             string tag = c.Tried ? $"▶ {Loc.T("answer_action")}" : $"<color={Theme.Html(Role.Glow)}>▶ {Loc.T("answer_action")}</color>";
-            var sub = string.Join("  ·  ", new[] { action ? tag : c.Romanization, c.Meaning }.Where(s => !string.IsNullOrEmpty(s)));
+            // the level sets how much help the card gives: Easy romanization and translation, Medium the
+            // romanization only, Hard the Korean alone (an action keeps its tag, which is not a translation)
+            var level = Settings.Difficulty;
+            var pron = action ? tag : level == Difficulty.Hard ? null : c.Romanization;
+            var meaning = level == Difficulty.Easy ? c.Meaning : null;
+            var sub = string.Join("  ·  ", new[] { pron, meaning }.Where(s => !string.IsNullOrEmpty(s)));
             a.Sub = UIKit.Words(text, sub, 22, Role.Paper, Face.ReadBold);
             a.Sub.lineSpacing = 1.05f;
-            if (!string.IsNullOrEmpty(c.DocKorean)) DocChip(text, c.DocKorean, c.DocLocal, ChoicesWidth - 24f - 52f - 42f - 18f);
+            a.Sub.gameObject.SetActive(!string.IsNullOrEmpty(sub));
+            if (!string.IsNullOrEmpty(c.DocKorean))
+                DocChip(text, c.DocKorean, level == Difficulty.Easy ? c.DocLocal : null, ChoicesWidth - 24f - 52f - 42f - 18f);
 
             a.Stars = UIKit.Words(a.Body, "★ ★", 28, Role.Glow, Face.Display, TextAnchor.UpperRight);
             a.Stars.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
@@ -423,7 +467,7 @@ namespace SeoulFirstWeek.UI
             var btn = a.Root.gameObject.AddComponent<Button>();
             btn.transition = Selectable.Transition.None;
             btn.targetGraphic = a.Strip;
-            btn.onClick.AddListener(() => Pick(index));
+            btn.onClick.AddListener(() => Clicked(index));
             var hover = a.Root.gameObject.AddComponent<InkHover>();
             hover.visual = a.Body;
             hover.tilt = -0.8f;
@@ -520,7 +564,7 @@ namespace SeoulFirstWeek.UI
             }
         }
 
-        // Automation hooks for editor play-tests.
+        // Automation hooks for editor play-tests (Pick chooses an answer whether or not it has to be said).
         public bool IsWaiting => pendingChoice != null || pendingPin != null;
         public bool WaitingForPin => pendingPin != null;
         public string CurrentLine => $"{speakerText.text} | {npcText.text}";
@@ -559,7 +603,7 @@ namespace SeoulFirstWeek.UI
 
             if (pendingChoice != null && pickAction.WasPressedThisFrame() && pickAction.activeControl != null &&
                 int.TryParse(pickAction.activeControl.name, out var n))
-                Pick(n - 1);
+                Clicked(n - 1);
 
             var kb = Keyboard.current;
             if (pendingPin == null || kb == null) return;

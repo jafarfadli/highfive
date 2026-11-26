@@ -106,6 +106,8 @@ namespace SeoulFirstWeek.UI
             scaler.matchWidthOrHeight = 0.5f;
             go.AddComponent<GraphicRaycaster>();
             EnsureEventSystem();
+            // in a headset the canvas becomes a panel floating in front of the player
+            VRUI.Register(canvas);
             return canvas;
         }
 

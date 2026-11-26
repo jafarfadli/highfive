@@ -121,7 +121,7 @@ namespace SeoulFirstWeek.UI
             return s;
         }
 
-        /// <summary>A dry-brush strip (no outline): dark answer strips, primary buttons, banners.</summary>
+        /// <summary>A flat rectangular bar (no outline, square ends): dark answer strips, primary buttons, banners, title bands.</summary>
         public static InkShape BrushStrip(Transform parent, string name = "Strip", Role fill = Role.Night)
         {
             var s = Ink(parent, name, InkKind.Strip, fill, 0f);
