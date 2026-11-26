@@ -18,6 +18,8 @@ Shader "SeoulFirstWeek/Surface"
         [Toggle(_TRIPLANAR_OBJECT)] _ObjectSpace ("Project in object space", Float) = 0
         [Toggle(_UV_MAPPED)] _UVMapped ("Use mesh UVs (no triplanar)", Float) = 0
         _DetailAlbedoMapScale ("Halftone in the shade", Range(0, 1)) = 1
+        // light the surface gives back, as a share of its own colour: a ceiling lit by the bright room under it
+        _EmissionColor ("Self light (× albedo)", Color) = (0, 0, 0, 0)
 
         // URP Lit inputs read by the reused shadow and depth passes
         [HideInInspector] _Cutoff ("Alpha cutoff", Range(0, 1)) = 0.5
@@ -150,10 +152,11 @@ Shader "SeoulFirstWeek/Surface"
                 tx.x *= axisSign.x;
                 ty.x *= axisSign.y;
                 tz.x *= -axisSign.z;
-                half3 an = abs(n);
-                tx = half3(tx.xy + n.zy, an.x * tx.z);
-                ty = half3(ty.xy + n.xz, an.y * ty.z);
-                tz = half3(tz.xy + n.xy, an.z * tz.z);
+                // whiteout: the tangent z takes the sign of the surface normal, so a face turned towards −x, −y or
+                // −z keeps its normal (with |n| here it pointed the other way and was lit from behind)
+                tx = half3(tx.xy + n.zy, abs(tx.z) * n.x);
+                ty = half3(ty.xy + n.xz, abs(ty.z) * n.y);
+                tz = half3(tz.xy + n.xy, abs(tz.z) * n.z);
                 float3 mapped = normalize(tx.zyx * blend.x + ty.xzy * blend.y + tz.xyz * blend.z);
                 #if defined(_TRIPLANAR_OBJECT)
                     float3 normalWS = TransformObjectToWorldNormal(mapped);
@@ -182,6 +185,8 @@ Shader "SeoulFirstWeek/Surface"
                 s.occlusion = 1;
                 s.halftone = _Halftone;
                 half4 color = InkFragment(inputData, s);
+                // (LitInput declares _EmissionColor in the UnityPerMaterial buffer, so this stays SRP Batcher safe)
+                color.rgb += s.albedo * _EmissionColor.rgb;
                 color.rgb = MixFog(color.rgb, inputData.fogCoord);
                 return color;
             }

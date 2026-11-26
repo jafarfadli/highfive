@@ -13,7 +13,7 @@ namespace SeoulFirstWeek.UI
     /// Title screen as one page of key art: 명동길 at street level with the people this game is about
     /// (the student talking with the clinic nurse, the immigration officer and the bank teller beside them,
     /// built into the Home scene as "Cast_…"), the nurse's question in a speech balloon, and on the left a column
-    /// on a fading halftone field: "READY SET / SEOUL!" in big block letters, the 서울 첫 주 tag, the tagline, a
+    /// on a fading halftone field: "READY SET / GO!" in big block letters, the 서울 첫 주 tag, the tagline, a
     /// language dropdown and the start bar. Clicking anywhere (or Enter / Space) starts.
     /// </summary>
     public class HomeScreen : MonoBehaviour
@@ -55,10 +55,10 @@ namespace SeoulFirstWeek.UI
             dots.rectTransform.sizeDelta = new Vector2(1180, 0);
             dots.rectTransform.anchoredPosition = Vector2.zero;
 
-            // the title, Ready Set Seoul: big block letters, "READY SET" stepping up into "SEOUL!"
+            // the title, Ready Set Go!: big block letters, "READY SET" stepping up into "GO!"
             var readySet = Block("READY SET", 136, 15f);
             At(readySet.rectTransform, new Vector2(400, -150), new Vector2(820, 170));
-            var seoul = Block("SEOUL!", 236, 22f);
+            var seoul = Block("GO!", 236, 22f);
             At(seoul.rectTransform, new Vector2(440, -306), new Vector2(900, 260));
             foreach (var t in new[] { readySet, seoul }) t.rectTransform.localRotation = Quaternion.Euler(0, 0, -6f);
 
@@ -92,8 +92,8 @@ namespace SeoulFirstWeek.UI
             strip.shadowRole = Role.Ink;
             var startRow = UIKit.Rect("Row", start).Stretch(36, 36, 0, 0);
             UIKit.HStack(startRow, 18, null, TextAnchor.MiddleCenter).childForceExpandHeight = false;
-            UIKit.Words(startRow, "▶ 시작", 42, Role.OnBrush, Face.DisplayKo, TextAnchor.MiddleCenter).Layout(170, 60);
-            UIKit.Words(startRow, Loc.T("click_to_start"), 26, Role.OnBrush, Face.ReadBold, TextAnchor.MiddleLeft).Layout(340, 60);
+            UIKit.Words(startRow, "▶ 시작", 42, Role.Ink, Face.DisplayKo, TextAnchor.MiddleCenter).Layout(170, 60);
+            UIKit.Words(startRow, Loc.T("click_to_start"), 26, Role.Ink, Face.ReadBold, TextAnchor.MiddleLeft).Layout(340, 60);
 
             // the nurse asks what the game is about: a real question at a real counter, with its translation
             var nurse = Balloon("Cast_Nurse", "어디가 불편하세요?", Loc.T("home_nurse"), 0.16f);

@@ -4,7 +4,14 @@
   "sources": [
     "https://global.seoul.go.kr (Seoul Global Center: using clinics and hospitals)",
     "https://www.nhis.or.kr (National Health Insurance Service: foreigners)",
-    "https://www.hikorea.go.kr"
+    "https://www.hikorea.go.kr",
+    "https://v.daum.net/v/KYRi9tkLhN (JoongAng Ilbo on Daum, 2025-10-31: the 의원 초진 진찰료 is 18,840원 from 1 Jan 2026)",
+    "https://www.fnnews.com/news/202610281541168231 (Financial News, 2026-10-28: 18,840원 in 2026, the patient pays 30% of it; 21,210원 from 2027)",
+    "https://www.law.go.kr/LSW/flDownload.do?flSeq=169130851 (국민건강보험법 시행령 별표 2, amended 2026-02-19: clinic outpatients pay 30% of the total; amounts under 100원 are not charged)",
+    "https://www.nhis.or.kr/static/html/wbma/c/wbmac0103.html (NHIS, 급여의 범위 및 비용부담: clinic outpatients pay 30%)",
+    "https://www.nhis.or.kr/lm/lmxsrv/law/lawFullContent.do?SEQ=41 (보건복지부고시 제2025-69호, 장기체류 재외국민 및 외국인에 대한 건강보험 적용기준: foreigners join health insurance the day after 6 months in Korea; D-4 language students are not among the exceptions that join on entry)",
+    "https://m.go.seoul.co.kr/news/2021/02/26/20210226500160 (Seoul Shinmun, 2021-02-26: D-4 language students join health insurance after 6 months)",
+    "https://www.dailypharm.com/user/news/253273 (Dailypharm, 2006-03-22: many hospitals charged uninsured foreign patients their own 일반수가; old, have it checked)"
   ],
   "titleKo": "튼튼내과의원",
   "title": {
@@ -13,15 +20,33 @@
     "id": "Klinik Penyakit Dalam Teunteun"
   },
   "briefing": {
-    "en": "Fever and sore throat since yesterday. Register, see the doctor, pay.",
-    "vi": "Sốt và đau họng từ hôm qua. Đăng ký, gặp bác sĩ, thanh toán.",
-    "id": "Demam dan sakit tenggorokan sejak kemarin. Daftar, periksa, bayar."
+    "en": "Fever and sore throat, or a stomach ache. Register, see the doctor, pay.",
+    "vi": "Sốt và đau họng, hoặc đau bụng. Đăng ký, gặp bác sĩ, thanh toán.",
+    "id": "Demam dan sakit tenggorokan, atau sakit perut. Daftar, periksa, bayar."
   },
   "completeNote": {
     "en": "Take the prescription (처방전) to a pharmacy (약국). Most clinics have one right downstairs.",
     "vi": "Mang đơn thuốc (처방전) đến nhà thuốc (약국). Hầu hết phòng khám đều có nhà thuốc ngay tầng dưới.",
     "id": "Bawa resep (처방전) ke apotek (약국). Biasanya ada di lantai bawah klinik."
   },
+  "notes": [
+    {
+      "needs": "sit:uninsured",
+      "note": {
+        "en": "Without national health insurance (건강보험) you usually pay the full fee, set by each clinic. D-4 language students join only after 6 months in Korea; until then, keep the receipt (영수증) for any private insurance.",
+        "vi": "Khi chưa có bảo hiểm y tế quốc dân (건강보험), bạn thường trả toàn bộ phí khám theo giá riêng của từng phòng khám. Học viên tiếng visa D-4 chỉ được tham gia sau 6 tháng ở Hàn; trước đó, hãy giữ hóa đơn (영수증) nếu có bảo hiểm tư nhân.",
+        "id": "Tanpa asuransi kesehatan nasional (건강보험), biasanya kamu membayar biaya penuh sesuai tarif tiap klinik. Siswa bahasa visa D-4 baru ikut setelah 6 bulan di Korea; sampai saat itu, simpan struk (영수증) kalau punya asuransi swasta."
+      }
+    },
+    {
+      "needs": "sit:insured",
+      "note": {
+        "en": "National health insurance (건강보험) pays most of a clinic visit: you usually pay about 30%, your share (본인부담금). Today you paid 5,600 won of the 18,840 won fee.",
+        "vi": "Bảo hiểm y tế quốc dân (건강보험) trả phần lớn chi phí khám ở phòng khám: bạn thường chỉ trả khoảng 30%, là phần tự chi trả (본인부담금). Hôm nay bạn trả 5.600 won trên tổng phí 18.840 won.",
+        "id": "Asuransi kesehatan nasional (건강보험) menanggung sebagian besar biaya periksa di klinik: biasanya kamu hanya membayar sekitar 30%, yaitu bagianmu (본인부담금). Hari ini kamu membayar 5.600 won dari biaya 18.840 won."
+      }
+    }
+  ],
   "staff": [
     {
       "id": "nurse",
@@ -53,7 +78,11 @@
   "queue": {
     "mode": "walkin",
     "counter": 1,
-    "names": ["이영희", "박서연", "최영호"],
+    "names": [
+      "이영희",
+      "박서연",
+      "최영호"
+    ],
     "interval": 6.0
   },
   "steps": [
@@ -230,6 +259,24 @@
           "give": "passport"
         },
         {
+          "ko": "외국인등록증 여기 있어요.",
+          "rom": "oegugindeungnokjeung yeogi isseoyo",
+          "meaning": {
+            "en": "Here's my residence card (ARC).",
+            "vi": "Thẻ cư trú (ARC) của tôi đây ạ.",
+            "id": "Ini kartu tinggal (ARC) saya."
+          },
+          "result": "advance",
+          "reply": "감사합니다. 확인됐어요.",
+          "replyMeaning": {
+            "en": "Thank you. All checked.",
+            "vi": "Cảm ơn. Đã xác nhận.",
+            "id": "Terima kasih. Sudah dicek."
+          },
+          "needs": "sit:insured",
+          "give": "arc"
+        },
+        {
           "ko": "여기 있어요.",
           "rom": "yeogi isseoyo",
           "meaning": {
@@ -346,6 +393,7 @@
     },
     {
       "id": "symptoms",
+      "unless": "sit:stomach",
       "staff": "nurse",
       "npc": "어디가 불편하세요?",
       "meaning": {
@@ -415,7 +463,79 @@
       ]
     },
     {
+      "id": "symptoms_stomach",
+      "needs": "sit:stomach",
+      "staff": "nurse",
+      "npc": "어디가 불편하세요?",
+      "meaning": {
+        "en": "What's bothering you?",
+        "vi": "Bạn thấy khó chịu ở đâu?",
+        "id": "Apa keluhanmu?"
+      },
+      "choices": [
+        {
+          "ko": "배가 아파요.",
+          "rom": "baega apayo",
+          "meaning": {
+            "en": "I have a stomach ache.",
+            "vi": "Tôi bị đau bụng.",
+            "id": "Saya sakit perut."
+          },
+          "result": "advance",
+          "reply": "아이고, 힘드시겠어요.",
+          "replyMeaning": {
+            "en": "Oh dear, that must be hard.",
+            "vi": "Ôi, chắc mệt lắm.",
+            "id": "Aduh, pasti berat ya."
+          }
+        },
+        {
+          "ko": "배고파요.",
+          "rom": "baegopayo",
+          "meaning": {
+            "en": "I'm hungry.",
+            "vi": "Tôi đói bụng.",
+            "id": "Saya lapar."
+          },
+          "result": "retry",
+          "reply": "배가 고프세요? 아니면 배가 아프세요?",
+          "replyMeaning": {
+            "en": "You're hungry? Or does your stomach hurt?",
+            "vi": "Bạn đói à? Hay là bạn đau bụng?",
+            "id": "Lapar? Atau perutnya sakit?"
+          },
+          "note": {
+            "en": "배고파요 means I'm hungry; 배가 아파요 means my stomach hurts. Say 배가 아파요.",
+            "vi": "배고파요 là đói bụng, còn 배가 아파요 là đau bụng. Hãy nói 배가 아파요.",
+            "id": "배고파요 artinya lapar, sedangkan 배가 아파요 artinya sakit perut. Katakan 배가 아파요."
+          }
+        },
+        {
+          "ko": "몸이 좀 안 좋아요.",
+          "rom": "momi jom an joayo",
+          "meaning": {
+            "en": "I don't feel well.",
+            "vi": "Tôi thấy không khỏe lắm.",
+            "id": "Badan saya kurang enak."
+          },
+          "result": "retry",
+          "reply": "어디가 안 좋으세요? 머리가 아프세요, 배가 아프세요?",
+          "replyMeaning": {
+            "en": "Where does it feel bad? Your head, your stomach?",
+            "vi": "Chỗ nào không khỏe ạ? Đau đầu hay đau bụng?",
+            "id": "Bagian mana yang tidak enak? Kepala atau perut?"
+          },
+          "note": {
+            "en": "Too vague for registration. Say where it hurts: 배가 아파요 (my stomach hurts).",
+            "vi": "Quá chung chung để đăng ký. Hãy nói chỗ bị đau: 배가 아파요 (tôi đau bụng).",
+            "id": "Terlalu umum untuk pendaftaran. Sebut bagian yang sakit: 배가 아파요 (perut saya sakit)."
+          }
+        }
+      ]
+    },
+    {
       "id": "since",
+      "unless": "sit:stomach",
       "staff": "nurse",
       "npc": "언제부터 아프셨어요?",
       "meaning": {
@@ -491,7 +611,85 @@
       }
     },
     {
+      "id": "since_stomach",
+      "needs": "sit:stomach",
+      "staff": "nurse",
+      "npc": "언제부터 아프셨어요?",
+      "meaning": {
+        "en": "Since when have you been sick?",
+        "vi": "Bạn bị ốm từ khi nào?",
+        "id": "Sejak kapan kamu sakit?"
+      },
+      "choices": [
+        {
+          "ko": "어젯밤부터 아팠어요.",
+          "rom": "eojetbambuteo apasseoyo",
+          "meaning": {
+            "en": "Since last night.",
+            "vi": "Từ đêm qua.",
+            "id": "Sejak semalam."
+          },
+          "result": "advance",
+          "reply": "네, 접수 다 됐어요.",
+          "replyMeaning": {
+            "en": "Okay, you're registered.",
+            "vi": "Vâng, đăng ký xong rồi.",
+            "id": "Baik, pendaftaran selesai."
+          }
+        },
+        {
+          "ko": "어젯밤까지 아팠어요.",
+          "rom": "eojetbamkkaji apasseoyo",
+          "meaning": {
+            "en": "I was sick until last night.",
+            "vi": "Tôi bị ốm đến đêm qua.",
+            "id": "Saya sakit sampai semalam."
+          },
+          "result": "retry",
+          "reply": "어젯밤까지요? 그럼 지금은 괜찮으세요?",
+          "replyMeaning": {
+            "en": "Until last night? So you're fine now?",
+            "vi": "Đến đêm qua ạ? Vậy giờ bạn khỏe rồi à?",
+            "id": "Sampai semalam? Jadi sekarang sudah sembuh?"
+          },
+          "note": {
+            "en": "까지 means until, 부터 means since. You're still sick: 어젯밤부터 아팠어요.",
+            "vi": "까지 là đến, 부터 là từ. Bạn vẫn đang ốm: 어젯밤부터 아팠어요.",
+            "id": "까지 artinya sampai, 부터 artinya sejak. Kamu masih sakit: 어젯밤부터 아팠어요."
+          }
+        },
+        {
+          "ko": "좀 됐어요.",
+          "rom": "jom dwaesseoyo",
+          "meaning": {
+            "en": "It's been a while.",
+            "vi": "Cũng được một thời gian rồi.",
+            "id": "Sudah agak lama."
+          },
+          "result": "retry",
+          "reply": "언제부터요? 어젯밤부터요, 오늘 아침부터요?",
+          "replyMeaning": {
+            "en": "Since when? Since last night, or this morning?",
+            "vi": "Từ khi nào ạ? Từ đêm qua hay từ sáng nay?",
+            "id": "Sejak kapan? Sejak semalam atau tadi pagi?"
+          },
+          "note": {
+            "en": "Give a specific time: 어젯밤부터 (since last night), 오늘 아침부터 (since this morning).",
+            "vi": "Hãy nói thời gian cụ thể: 어젯밤부터 (từ đêm qua), 오늘 아침부터 (từ sáng nay).",
+            "id": "Sebut waktu yang jelas: 어젯밤부터 (sejak semalam), 오늘 아침부터 (sejak tadi pagi)."
+          }
+        }
+      ],
+      "after": "잠깐 앉아서 기다리시면 진료실에서 이름 불러 드릴게요.",
+      "afterMeaning": {
+        "en": "Please take a seat. They'll call your name from the consulting room.",
+        "vi": "Bạn ngồi chờ một chút, phòng khám sẽ gọi tên bạn.",
+        "id": "Silakan duduk, namamu akan dipanggil dari ruang periksa."
+      }
+    },
+    {
       "id": "cough",
+      "unless": "sit:stomach",
       "staff": "doctor",
       "location": "doctor",
       "announce": "{0} 님, 1번 진료실로 들어오세요.",
@@ -579,6 +777,100 @@
       }
     },
     {
+      "id": "diarrhoea",
+      "needs": "sit:stomach",
+      "staff": "doctor",
+      "location": "doctor",
+      "announce": "{0} 님, 1번 진료실로 들어오세요.",
+      "npc": "안녕하세요. 배가 아프시다고요. 설사도 하세요?",
+      "meaning": {
+        "en": "Hello. I hear your stomach hurts. Do you have diarrhoea too?",
+        "vi": "Xin chào. Nghe nói bạn bị đau bụng. Bạn có bị tiêu chảy không?",
+        "id": "Halo. Katanya sakit perut. Diare juga?"
+      },
+      "choices": [
+        {
+          "ko": "네, 설사도 해요.",
+          "rom": "ne, seolsado haeyo",
+          "meaning": {
+            "en": "Yes, I have diarrhoea too.",
+            "vi": "Vâng, tôi cũng bị tiêu chảy.",
+            "id": "Ya, saya juga diare."
+          },
+          "result": "advance",
+          "reply": "네, 알겠어요.",
+          "replyMeaning": {
+            "en": "I see.",
+            "vi": "Tôi hiểu rồi.",
+            "id": "Baik."
+          }
+        },
+        {
+          "ko": "설사가 뭐예요?",
+          "rom": "seolsaga mwoyeyo?",
+          "meaning": {
+            "en": "What does 설사 mean?",
+            "vi": "설사 là gì ạ?",
+            "id": "설사 itu apa?"
+          },
+          "result": "ask",
+          "reply": "설사요, 화장실에 자주 가고 변이 물처럼 나오는 거요. 설사도 하세요?",
+          "replyMeaning": {
+            "en": "설사 is diarrhoea: going to the toilet often, with watery stools. Do you have it?",
+            "vi": "설사 là tiêu chảy: đi vệ sinh nhiều lần, phân lỏng như nước. Bạn có bị không?",
+            "id": "설사 itu diare: sering ke toilet dan BAB-nya encer. Diare juga?"
+          }
+        },
+        {
+          "ko": "아니요, 변비는 없어요.",
+          "rom": "aniyo, byeonbineun eopseoyo",
+          "meaning": {
+            "en": "No, I'm not constipated.",
+            "vi": "Không, tôi không bị táo bón.",
+            "id": "Tidak, saya tidak sembelit."
+          },
+          "result": "retry",
+          "reply": "변비 말고 설사요. 화장실에 자주 가세요?",
+          "replyMeaning": {
+            "en": "Not constipation, diarrhoea. Are you going to the toilet a lot?",
+            "vi": "Không phải táo bón, là tiêu chảy. Bạn có đi vệ sinh nhiều lần không?",
+            "id": "Bukan sembelit, diare. Sering ke toilet?"
+          },
+          "note": {
+            "en": "설사 = diarrhoea, 변비 = constipation: opposite problems. You have diarrhoea: 네, 설사도 해요.",
+            "vi": "설사 = tiêu chảy, 변비 = táo bón: hai vấn đề ngược nhau. Bạn bị tiêu chảy: 네, 설사도 해요.",
+            "id": "설사 = diare, 변비 = sembelit: dua masalah yang berlawanan. Kamu diare: 네, 설사도 해요."
+          }
+        },
+        {
+          "ko": "응, 설사해.",
+          "rom": "eung, seolsahae",
+          "meaning": {
+            "en": "Yeah, I've got diarrhoea.",
+            "vi": "Ừ, bị tiêu chảy.",
+            "id": "Iya, aku diare."
+          },
+          "result": "retry",
+          "reply": "…네? 아, 설사도 하신다고요?",
+          "replyMeaning": {
+            "en": "…Sorry? Oh, you have diarrhoea too?",
+            "vi": "…Dạ? À, bạn cũng bị tiêu chảy à?",
+            "id": "…Ya? Oh, diare juga?"
+          },
+          "note": {
+            "en": "응 and endings without -요 are 반말, casual speech for friends. To the doctor, say 네, 설사도 해요.",
+            "vi": "응 và đuôi câu không có -요 là 반말 (nói trống không), chỉ dùng với bạn bè. Với bác sĩ, hãy nói 네, 설사도 해요.",
+            "id": "응 dan akhiran tanpa -요 itu 반말 (bahasa santai) untuk teman. Ke dokter, katakan 네, 설사도 해요."
+          }
+        }
+      ],
+      "task": {
+        "en": "See the doctor in room 1",
+        "vi": "Gặp bác sĩ ở phòng khám số 1",
+        "id": "Temui dokter di ruang 1"
+      }
+    },
+    {
       "id": "allergy",
       "staff": "doctor",
       "location": "doctor",
@@ -651,6 +943,7 @@
     },
     {
       "id": "throat",
+      "unless": "sit:stomach",
       "staff": "doctor",
       "location": "doctor",
       "npc": "목 좀 볼게요. 입 벌리고 '아' 해 보세요.",
@@ -719,6 +1012,77 @@
         "en": "Your throat is quite swollen. It's a cold. Three days of medicine: three times a day, 30 minutes after meals.",
         "vi": "Họng sưng khá nhiều. Bạn bị cảm. Tôi kê thuốc 3 ngày: ngày 3 lần, 30 phút sau khi ăn.",
         "id": "Tenggorokanmu bengkak. Ini flu. Obat 3 hari: 3 kali sehari, 30 menit setelah makan."
+      }
+    },
+    {
+      "id": "belly",
+      "needs": "sit:stomach",
+      "staff": "doctor",
+      "location": "doctor",
+      "npc": "배 좀 볼게요. 여기 침대에 누워 보세요.",
+      "meaning": {
+        "en": "Let me check your stomach. Please lie down on the bed here.",
+        "vi": "Để tôi khám bụng. Bạn nằm lên giường này nhé.",
+        "id": "Saya periksa perutnya. Silakan berbaring di tempat tidur ini."
+      },
+      "choices": [
+        {
+          "ko": "[침대에 눕는다]",
+          "meaning": {
+            "en": "Lie down on the bed.",
+            "vi": "Nằm xuống giường.",
+            "id": "Berbaring di tempat tidur."
+          },
+          "result": "advance",
+          "reply": "좀 눌러 볼게요. 네, 됐어요.",
+          "replyMeaning": {
+            "en": "I'll press a little. Okay, done.",
+            "vi": "Tôi ấn nhẹ một chút nhé. Vâng, xong rồi.",
+            "id": "Saya tekan sedikit, ya. Ya, sudah."
+          }
+        },
+        {
+          "ko": "[침대에 앉는다]",
+          "meaning": {
+            "en": "Sit on the bed.",
+            "vi": "Ngồi lên giường.",
+            "id": "Duduk di tempat tidur."
+          },
+          "result": "retry",
+          "reply": "앉지 마시고 누워 보세요. 편하게 누우시면 돼요.",
+          "replyMeaning": {
+            "en": "Please lie down, not sit. Just get comfortable.",
+            "vi": "Đừng ngồi, bạn nằm xuống nhé. Cứ nằm thoải mái là được.",
+            "id": "Jangan duduk, silakan berbaring. Berbaring santai saja."
+          },
+          "note": {
+            "en": "누워 보세요 means please lie down (눕다); 앉다 means to sit. Lie down on the bed.",
+            "vi": "누워 보세요 nghĩa là mời bạn nằm xuống (눕다); 앉다 là ngồi. Hãy nằm lên giường.",
+            "id": "누워 보세요 artinya silakan berbaring (눕다); 앉다 artinya duduk. Berbaringlah di tempat tidur."
+          }
+        },
+        {
+          "ko": "천천히 말씀해 주시겠어요?",
+          "rom": "cheoncheonhi malsseumhae jusigesseoyo?",
+          "meaning": {
+            "en": "Could you speak slowly, please?",
+            "vi": "Bác sĩ nói chậm giúp tôi được không?",
+            "id": "Bisa bicara lebih pelan?"
+          },
+          "result": "ask",
+          "reply": "네. 배를 좀 볼게요. 침대에 누우세요.",
+          "replyMeaning": {
+            "en": "Sure. I'll check your stomach. Lie down on the bed.",
+            "vi": "Vâng. Tôi sẽ khám bụng. Bạn nằm lên giường nhé.",
+            "id": "Baik. Saya periksa perutnya. Silakan berbaring di tempat tidur."
+          }
+        }
+      ],
+      "after": "장염 같아요. 약 사흘 치 처방해 드릴게요. 하루 세 번, 식후 30분에 드세요.",
+      "afterMeaning": {
+        "en": "It looks like a stomach bug. Three days of medicine: three times a day, 30 minutes after meals.",
+        "vi": "Có vẻ bạn bị viêm ruột. Tôi kê thuốc 3 ngày: ngày 3 lần, 30 phút sau khi ăn.",
+        "id": "Sepertinya radang usus. Obat 3 hari: 3 kali sehari, 30 menit setelah makan."
       }
     },
     {
@@ -800,13 +1164,14 @@
     },
     {
       "id": "payment",
+      "needs": "sit:insured",
       "staff": "nurse",
       "location": "counter",
-      "npc": "진료비는 5,300원입니다. 카드로 하시겠어요, 현금으로 하시겠어요?",
+      "npc": "진료비는 5,600원입니다. 카드로 하시겠어요, 현금으로 하시겠어요?",
       "meaning": {
-        "en": "The consultation fee is 5,300 won. Card or cash?",
-        "vi": "Phí khám là 5.300 won. Thẻ hay tiền mặt?",
-        "id": "Biaya periksa 5.300 won. Kartu atau tunai?"
+        "en": "The consultation fee is 5,600 won. Card or cash?",
+        "vi": "Phí khám là 5.600 won. Thẻ hay tiền mặt?",
+        "id": "Biaya periksa 5.600 won. Kartu atau tunai?"
       },
       "choices": [
         {
@@ -852,16 +1217,106 @@
             "id": "Saya punya asuransi."
           },
           "result": "retry",
-          "reply": "네, 이미 보험 적용된 금액이에요. 5,300원 결제해 주시면 돼요.",
+          "reply": "네, 이미 보험 적용된 금액이에요. 5,600원 결제해 주시면 돼요.",
           "replyMeaning": {
-            "en": "Yes, that's already the insured price. Please pay the 5,300 won.",
-            "vi": "Vâng, đây đã là số tiền sau bảo hiểm. Bạn thanh toán 5.300 won nhé.",
-            "id": "Ya, itu sudah harga setelah asuransi. Silakan bayar 5.300 won."
+            "en": "Yes, that's already the insured price. Please pay the 5,600 won.",
+            "vi": "Vâng, đây đã là số tiền sau bảo hiểm. Bạn thanh toán 5.600 won nhé.",
+            "id": "Ya, itu sudah harga setelah asuransi. Silakan bayar 5.600 won."
           },
           "note": {
             "en": "National Health Insurance already lowered the bill. You still pay your share (본인부담금) at the desk.",
             "vi": "Bảo hiểm y tế đã giảm tiền rồi. Bạn vẫn trả phần của mình (본인부담금) ở quầy.",
             "id": "Asuransi kesehatan nasional sudah memotong tagihannya. Kamu tetap bayar bagianmu (본인부담금) di loket."
+          }
+        }
+      ],
+      "task": {
+        "en": "Pay at the reception",
+        "vi": "Thanh toán ở quầy lễ tân",
+        "id": "Bayar di resepsionis"
+      }
+    },
+    {
+      "id": "payment_uninsured",
+      "needs": "sit:uninsured",
+      "staff": "nurse",
+      "location": "counter",
+      "npc": "건강보험이 아직 없으셔서 진료비는 18,840원입니다. 카드로 하시겠어요, 현금으로 하시겠어요?",
+      "meaning": {
+        "en": "You're not in national health insurance yet, so the consultation fee is 18,840 won. Card or cash?",
+        "vi": "Bạn chưa có bảo hiểm y tế quốc dân nên phí khám là 18.840 won. Thẻ hay tiền mặt?",
+        "id": "Kamu belum punya asuransi kesehatan nasional, jadi biaya periksanya 18.840 won. Kartu atau tunai?"
+      },
+      "choices": [
+        {
+          "ko": "카드로 할게요.",
+          "rom": "kadeuro halgeyo",
+          "meaning": {
+            "en": "I'll pay by card.",
+            "vi": "Tôi trả bằng thẻ.",
+            "id": "Saya bayar pakai kartu."
+          },
+          "result": "advance",
+          "reply": "네, 결제됐습니다.",
+          "replyMeaning": {
+            "en": "Payment done.",
+            "vi": "Đã thanh toán.",
+            "id": "Pembayaran selesai."
+          },
+          "give": "card"
+        },
+        {
+          "ko": "현금으로 할게요.",
+          "rom": "hyeongeumeuro halgeyo",
+          "meaning": {
+            "en": "I'll pay in cash.",
+            "vi": "Tôi trả tiền mặt.",
+            "id": "Saya bayar tunai."
+          },
+          "result": "advance",
+          "reply": "네, 거스름돈 여기 있습니다.",
+          "replyMeaning": {
+            "en": "Here's your change.",
+            "vi": "Tiền thừa đây ạ.",
+            "id": "Ini kembaliannya."
+          },
+          "give": "cash"
+        },
+        {
+          "ko": "저 보험 있어요.",
+          "rom": "jeo boheom isseoyo",
+          "meaning": {
+            "en": "I have insurance.",
+            "vi": "Tôi có bảo hiểm.",
+            "id": "Saya punya asuransi."
+          },
+          "result": "retry",
+          "reply": "건강보험은 아직 안 되세요. 다른 보험이 있으시면 영수증으로 따로 청구하시면 돼요.",
+          "replyMeaning": {
+            "en": "National health insurance doesn't cover you yet. If you have other insurance, you can claim it with the receipt.",
+            "vi": "Bạn chưa được bảo hiểm y tế quốc dân chi trả. Nếu có bảo hiểm khác, bạn có thể dùng hóa đơn để yêu cầu chi trả riêng.",
+            "id": "Asuransi kesehatan nasional belum berlaku untukmu. Kalau punya asuransi lain, kamu bisa klaim sendiri pakai struknya."
+          },
+          "note": {
+            "en": "Only national health insurance (건강보험) lowers the bill here, and you're not in it yet. Pay first (카드로 할게요); other insurance usually pays you back later from the receipt.",
+            "vi": "Chỉ bảo hiểm y tế quốc dân (건강보험) mới giảm tiền khám ở đây, mà bạn chưa tham gia. Hãy trả trước (카드로 할게요); bảo hiểm khác thường hoàn tiền sau dựa trên hóa đơn.",
+            "id": "Hanya asuransi kesehatan nasional (건강보험) yang mengurangi tagihan di sini, dan kamu belum ikut. Bayar dulu (카드로 할게요); asuransi lain biasanya mengganti biayanya nanti lewat struk."
+          }
+        },
+        {
+          "ko": "학생 할인 돼요?",
+          "rom": "haksaeng harin dwaeyo?",
+          "meaning": {
+            "en": "Is there a student discount?",
+            "vi": "Có giảm giá cho sinh viên không ạ?",
+            "id": "Ada diskon pelajar?"
+          },
+          "result": "ask",
+          "reply": "학생 할인은 따로 없어요. 카드로 하시겠어요, 현금으로 하시겠어요?",
+          "replyMeaning": {
+            "en": "We don't have a student discount. Card or cash?",
+            "vi": "Ở đây không có giảm giá cho sinh viên. Thẻ hay tiền mặt?",
+            "id": "Di sini tidak ada diskon pelajar. Kartu atau tunai?"
           }
         }
       ],
@@ -964,22 +1419,24 @@
       }
     },
     {
-      "ko": "열이 나고 목이 아파요.",
-      "rom": "yeori nago mogi apayo",
+      "ko": "어제부터 열이 나고 목이 아파요.",
+      "rom": "eojebuteo yeori nago mogi apayo",
       "meaning": {
-        "en": "I have a fever and a sore throat.",
-        "vi": "Tôi bị sốt và đau họng.",
-        "id": "Saya demam dan sakit tenggorokan."
-      }
+        "en": "I've had a fever and a sore throat since yesterday.",
+        "vi": "Từ hôm qua tôi bị sốt và đau họng.",
+        "id": "Sejak kemarin saya demam dan sakit tenggorokan."
+      },
+      "needs": "sit:cold"
     },
     {
-      "ko": "어제부터 아팠어요.",
-      "rom": "eojebuteo apasseoyo",
+      "ko": "어젯밤부터 배가 아프고 설사를 해요.",
+      "rom": "eojetbambuteo baega apeugo seolsareul haeyo",
       "meaning": {
-        "en": "Since yesterday.",
-        "vi": "Từ hôm qua.",
-        "id": "Sejak kemarin."
-      }
+        "en": "I've had a stomach ache and diarrhoea since last night.",
+        "vi": "Từ đêm qua tôi bị đau bụng và tiêu chảy.",
+        "id": "Sejak semalam saya sakit perut dan diare."
+      },
+      "needs": "sit:stomach"
     },
     {
       "ko": "약 알레르기는 없어요.",
@@ -1038,21 +1495,21 @@
       }
     },
     {
-      "ko": "열이 나다",
-      "rom": "yeori nada",
+      "ko": "열이 나다 · 목이 아프다",
+      "rom": "yeori nada · mogi apeuda",
       "meaning": {
-        "en": "To have a fever",
-        "vi": "Bị sốt",
-        "id": "Demam"
+        "en": "To have a fever · to have a sore throat",
+        "vi": "Bị sốt · đau họng",
+        "id": "Demam · sakit tenggorokan"
       }
     },
     {
-      "ko": "목이 아프다",
-      "rom": "mogi apeuda",
+      "ko": "배가 아프다 · 배고프다",
+      "rom": "baega apeuda · baegopeuda",
       "meaning": {
-        "en": "To have a sore throat",
-        "vi": "Đau họng",
-        "id": "Sakit tenggorokan"
+        "en": "To have a stomach ache · to be hungry",
+        "vi": "Đau bụng · đói bụng",
+        "id": "Sakit perut · lapar"
       }
     },
     {
@@ -1065,6 +1522,15 @@
       }
     },
     {
+      "ko": "설사 · 변비",
+      "rom": "seolsa · byeonbi",
+      "meaning": {
+        "en": "Diarrhoea · constipation",
+        "vi": "Tiêu chảy · táo bón",
+        "id": "Diare · sembelit"
+      }
+    },
+    {
       "ko": "부터 · 까지",
       "rom": "buteo · kkaji",
       "meaning": {
@@ -1074,12 +1540,12 @@
       }
     },
     {
-      "ko": "알레르기",
-      "rom": "allereugi",
+      "ko": "건강보험",
+      "rom": "geongangboheom",
       "meaning": {
-        "en": "Allergy",
-        "vi": "Dị ứng",
-        "id": "Alergi"
+        "en": "National health insurance",
+        "vi": "Bảo hiểm y tế quốc dân",
+        "id": "Asuransi kesehatan nasional"
       }
     },
     {
@@ -1092,21 +1558,12 @@
       }
     },
     {
-      "ko": "처방전",
-      "rom": "cheobangjeon",
+      "ko": "처방전 · 약국",
+      "rom": "cheobangjeon · yakguk",
       "meaning": {
-        "en": "Prescription",
-        "vi": "Đơn thuốc",
-        "id": "Resep"
-      }
-    },
-    {
-      "ko": "약국",
-      "rom": "yakguk",
-      "meaning": {
-        "en": "Pharmacy",
-        "vi": "Nhà thuốc",
-        "id": "Apotek"
+        "en": "Prescription · pharmacy",
+        "vi": "Đơn thuốc · nhà thuốc",
+        "id": "Resep · apotek"
       }
     }
   ]

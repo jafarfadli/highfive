@@ -1,0 +1,784 @@
+{
+  "id": "subway",
+  "verified": false,
+  "sources": [
+    "https://news.seoul.go.kr/traffic/archives/519046 (Seoul transport Q&A, 2026-10-06: prepaid cards are charged in cash at station machines and convenience stores)",
+    "https://news.seoul.go.kr/traffic/archives/516544 (Seoul transport, 2026-03-16: foreign cards at the new kiosks; prepaid cards are still charged in cash)",
+    "http://www.seoulmetro.co.kr/kr/page.do?menuIdx=355 (Seoul Metro ticket guide: tap the card on the reader on the right side of the gate)",
+    "https://mediahub.seoul.go.kr/archives/590678 (Seoul mediahub, 2014-08-20: with too little balance the gate stays shut)",
+    "https://mediahub.seoul.go.kr/archives/2010099 (Seoul mediahub, 2024-01-31: platform signs show the direction, 방면)",
+    "https://news.seoul.go.kr/gov/?p=39640 (Seoul, 2013-10-11: 안전문이 열립니다 in platform announcements)",
+    "https://www.khan.co.kr/article/202510031410001 (Kyunghyang, 2025-10-03: the in-car announcement 이번 역은 ○○역입니다)",
+    "https://mediahub.seoul.go.kr/archives/2009169 (Seoul mediahub, 2023-09-26: re-entry at the same station within 15 minutes)"
+  ],
+  "titleKo": "명동역",
+  "title": {
+    "en": "Myeongdong Station",
+    "vi": "Ga Myeongdong",
+    "id": "Stasiun Myeongdong"
+  },
+  "briefing": {
+    "en": "Buy a transport card if you don't have one, charge it in cash, tap in at the gate and take Line 4 towards Sadang.",
+    "vi": "Mua thẻ giao thông nếu chưa có, nạp tiền mặt vào thẻ, chạm thẻ ở cổng soát vé rồi đi tuyến 4 hướng Sadang.",
+    "id": "Beli kartu transportasi kalau belum punya, isi saldonya dengan uang tunai, tap di gerbang tiket, lalu naik Line 4 arah Sadang."
+  },
+  "completeNote": {
+    "en": "At Dongjak (동작), follow the Line 9 (9호선) signs to change trains for Heukseok (흑석), and tap your card at the gate there to get out. Tip: tapped in for the wrong direction? You can usually tap out and back in at the same station within 15 minutes without paying the base fare again.",
+    "vi": "Ở ga Dongjak (동작), đi theo biển chỉ dẫn tuyến 9 (9호선) để đổi tàu về Heukseok (흑석), rồi chạm thẻ ở cổng soát vé để ra ngoài. Mẹo: lỡ chạm thẻ vào nhầm hướng? Thường bạn có thể chạm thẻ ra rồi vào lại ở cùng ga trong vòng 15 phút mà không phải trả lại giá vé cơ bản.",
+    "id": "Di Dongjak (동작), ikuti papan petunjuk Line 9 (9호선) untuk pindah kereta ke Heukseok (흑석), lalu tap kartumu di gerbang untuk keluar. Tips: terlanjur tap masuk ke arah yang salah? Biasanya kamu bisa tap keluar lalu masuk lagi di stasiun yang sama dalam 15 menit tanpa bayar tarif dasar lagi."
+  },
+  "notes": [
+    {
+      "needs": "sit:nocard",
+      "note": {
+        "en": "With no card yet, you buy one first and then charge it (사다 → 충전하다). Transport cards are charged in cash (현금), at a convenience store or a station machine.",
+        "vi": "Chưa có thẻ thì mua thẻ trước rồi mới nạp tiền (사다 → 충전하다). Thẻ giao thông được nạp bằng tiền mặt (현금), ở cửa hàng tiện lợi hoặc máy trong ga.",
+        "id": "Kalau belum punya kartu, beli dulu baru isi saldonya (사다 → 충전하다). Kartu transportasi diisi dengan uang tunai (현금), di minimarket atau mesin di stasiun."
+      }
+    },
+    {
+      "needs": "sit:emptycard",
+      "note": {
+        "en": "A card you already have only needs charging (충전하다), not buying again (사다). Transport cards are charged in cash (현금), at a convenience store or a station machine.",
+        "vi": "Đã có thẻ thì chỉ cần nạp tiền (충전하다), không cần mua thẻ mới (사다). Thẻ giao thông được nạp bằng tiền mặt (현금), ở cửa hàng tiện lợi hoặc máy trong ga.",
+        "id": "Kartu yang sudah kamu punya cukup diisi saldonya (충전하다), tidak perlu beli lagi (사다). Kartu transportasi diisi dengan uang tunai (현금), di minimarket atau mesin di stasiun."
+      }
+    }
+  ],
+  "staff": [
+    {
+      "id": "storeclerk",
+      "name": "윤재민",
+      "role": "convenience store clerk",
+      "roleText": {
+        "en": "Store clerk",
+        "vi": "Nhân viên cửa hàng tiện lợi",
+        "id": "Pegawai minimarket"
+      },
+      "macVoice": "Eddy (Korean (South Korea))",
+      "macRate": 192,
+      "openaiVoice": "ash"
+    }
+  ],
+  "queue": {
+    "mode": "walkin",
+    "counter": 1
+  },
+  "steps": [
+    {
+      "id": "card",
+      "needs": "sit:nocard",
+      "staff": "storeclerk",
+      "npc": "어서 오세요. 뭐 찾으세요?",
+      "meaning": {
+        "en": "Welcome. What are you looking for?",
+        "vi": "Xin chào. Bạn tìm gì ạ?",
+        "id": "Selamat datang. Cari apa?"
+      },
+      "choices": [
+        {
+          "ko": "교통카드 하나 사고 싶어요.",
+          "rom": "gyotongkadeu hana sago sipeoyo",
+          "meaning": {
+            "en": "I'd like to buy a transport card.",
+            "vi": "Tôi muốn mua một thẻ giao thông.",
+            "id": "Saya mau beli satu kartu transportasi."
+          },
+          "result": "advance",
+          "reply": "네, 교통카드요. 잠시만요.",
+          "replyMeaning": {
+            "en": "Sure, a transport card. One moment.",
+            "vi": "Vâng, thẻ giao thông ạ. Chờ một chút nhé.",
+            "id": "Baik, kartu transportasi. Sebentar ya."
+          }
+        },
+        {
+          "ko": "교통카드 충전해 주세요.",
+          "rom": "gyotongkadeu chungjeonhae juseyo",
+          "meaning": {
+            "en": "Please charge my transport card.",
+            "vi": "Nạp tiền vào thẻ giao thông giúp tôi.",
+            "id": "Tolong isi saldo kartu transportasi saya."
+          },
+          "result": "retry",
+          "reply": "카드 가지고 계세요? 없으시면 먼저 사셔야 돼요.",
+          "replyMeaning": {
+            "en": "Do you have a card? If not, you need to buy one first.",
+            "vi": "Bạn có thẻ chưa? Chưa có thì phải mua trước đã.",
+            "id": "Sudah punya kartunya? Kalau belum, harus beli dulu."
+          },
+          "note": {
+            "en": "You don't have a card yet, so there's nothing to charge. Buy one first (사다), then charge it (충전하다): 교통카드 하나 사고 싶어요.",
+            "vi": "Bạn chưa có thẻ nên chưa có gì để nạp tiền. Mua thẻ trước (사다), rồi mới nạp tiền (충전하다): 교통카드 하나 사고 싶어요.",
+            "id": "Kamu belum punya kartu, jadi belum ada yang bisa diisi. Beli dulu (사다), baru isi saldonya (충전하다): 교통카드 하나 사고 싶어요."
+          }
+        },
+        {
+          "ko": "교통카드 하나 줘.",
+          "rom": "gyotongkadeu hana jwo",
+          "meaning": {
+            "en": "Give me a transport card.",
+            "vi": "Cho tôi một thẻ giao thông.",
+            "id": "Kasih aku satu kartu transportasi."
+          },
+          "result": "retry",
+          "reply": "…네? 아, 교통카드 사시게요?",
+          "replyMeaning": {
+            "en": "…Sorry? Oh, you want to buy a transport card?",
+            "vi": "…Dạ? À, bạn muốn mua thẻ giao thông ạ?",
+            "id": "…Ya? Oh, mau beli kartu transportasi?"
+          },
+          "note": {
+            "en": "Without -요 at the end this is 반말, casual speech. It sounds rude to a clerk. Say 교통카드 하나 사고 싶어요.",
+            "vi": "Không có -요 ở cuối là 반말 (nói trống không), nghe bất lịch sự với nhân viên. Hãy nói 교통카드 하나 사고 싶어요.",
+            "id": "Tanpa -요 di akhir kalimat itu 반말 (bahasa santai) dan terdengar tidak sopan ke pegawai toko. Katakan 교통카드 하나 사고 싶어요."
+          }
+        },
+        {
+          "ko": "흑석역 가려면 어디서 타요?",
+          "rom": "heukseogyeok garyeomyeon eodiseo tayo?",
+          "meaning": {
+            "en": "Where do I catch the train to Heukseok?",
+            "vi": "Muốn đến ga Heukseok thì lên tàu ở đâu ạ?",
+            "id": "Kalau mau ke Stasiun Heukseok, naik dari mana?"
+          },
+          "result": "ask",
+          "reply": "사당 방면 타시고 동작역에서 9호선으로 갈아타세요. 교통카드는 있으세요?",
+          "replyMeaning": {
+            "en": "Take the train towards Sadang and change to Line 9 at Dongjak. Do you have a transport card?",
+            "vi": "Bạn đi tàu hướng Sadang, rồi đổi sang tuyến 9 ở ga Dongjak. Bạn có thẻ giao thông chưa?",
+            "id": "Naik yang arah Sadang, lalu pindah ke Line 9 di Stasiun Dongjak. Sudah punya kartu transportasi?"
+          }
+        }
+      ],
+      "task": {
+        "en": "Buy a transport card at the convenience store",
+        "vi": "Mua thẻ giao thông ở cửa hàng tiện lợi",
+        "id": "Beli kartu transportasi di minimarket"
+      }
+    },
+    {
+      "id": "charge",
+      "needs": "sit:nocard",
+      "staff": "storeclerk",
+      "npc": "충전도 같이 해 드릴까요?",
+      "meaning": {
+        "en": "Shall I charge it for you as well?",
+        "vi": "Tôi nạp tiền vào thẻ luôn cho bạn nhé?",
+        "id": "Sekalian diisi saldonya?"
+      },
+      "choices": [
+        {
+          "ko": "네, 만 원 충전해 주세요.",
+          "rom": "ne, man won chungjeonhae juseyo",
+          "meaning": {
+            "en": "Yes, please charge 10,000 won.",
+            "vi": "Vâng, nạp giúp tôi 10.000 won.",
+            "id": "Ya, tolong isi 10.000 won."
+          },
+          "result": "advance",
+          "reply": "네, 만 원 충전해 드릴게요.",
+          "replyMeaning": {
+            "en": "Okay, I'll put 10,000 won on it.",
+            "vi": "Vâng, tôi nạp 10.000 won nhé.",
+            "id": "Baik, saya isi 10.000 won."
+          }
+        },
+        {
+          "ko": "네, 만 원 환전해 주세요.",
+          "rom": "ne, man won hwanjeonhae juseyo",
+          "meaning": {
+            "en": "Yes, please exchange 10,000 won.",
+            "vi": "Vâng, đổi giúp tôi 10.000 won.",
+            "id": "Ya, tolong tukar 10.000 won."
+          },
+          "result": "retry",
+          "reply": "환전이요? 충전 말씀하시는 거죠? 카드에 만 원 넣어 드릴까요?",
+          "replyMeaning": {
+            "en": "Exchange? You mean charge, right? Shall I put 10,000 won on the card?",
+            "vi": "Đổi tiền ạ? Ý bạn là nạp tiền phải không? Tôi nạp 10.000 won vào thẻ nhé?",
+            "id": "Tukar uang? Maksudnya isi saldo, kan? Saya isi 10.000 won ke kartunya?"
+          },
+          "note": {
+            "en": "환전 is changing money into another currency; 충전 is putting money on a card. Say 만 원 충전해 주세요.",
+            "vi": "환전 là đổi sang tiền nước khác; 충전 là nạp tiền vào thẻ. Hãy nói 만 원 충전해 주세요.",
+            "id": "환전 artinya menukar ke mata uang lain; 충전 artinya mengisi saldo kartu. Katakan 만 원 충전해 주세요."
+          }
+        },
+        {
+          "ko": "아니요, 괜찮아요.",
+          "rom": "aniyo, gwaenchanayo",
+          "meaning": {
+            "en": "No, thanks.",
+            "vi": "Không cần đâu ạ.",
+            "id": "Tidak usah."
+          },
+          "result": "retry",
+          "reply": "새 카드는 보통 잔액이 없어요. 충전하셔야 개찰구를 지나갈 수 있어요.",
+          "replyMeaning": {
+            "en": "A new card usually has no balance. You need to charge it to get through the gate.",
+            "vi": "Thẻ mới thường không có số dư. Phải nạp tiền thì mới qua được cổng soát vé.",
+            "id": "Kartu baru biasanya belum ada saldonya. Harus diisi dulu supaya bisa lewat gerbang tiket."
+          },
+          "note": {
+            "en": "A new card usually has no money on it, and the gate won't open without a balance (잔액). Charge it: 네, 만 원 충전해 주세요.",
+            "vi": "Thẻ mới thường chưa có tiền, mà không có số dư (잔액) thì cổng không mở. Hãy nạp tiền: 네, 만 원 충전해 주세요.",
+            "id": "Kartu baru biasanya belum ada isinya, dan gerbang tidak terbuka tanpa saldo (잔액). Isi saldonya: 네, 만 원 충전해 주세요."
+          }
+        },
+        {
+          "ko": "충전이 뭐예요?",
+          "rom": "chungjeoni mwoyeyo?",
+          "meaning": {
+            "en": "What does 충전 mean?",
+            "vi": "충전 là gì ạ?",
+            "id": "충전 itu apa?"
+          },
+          "result": "ask",
+          "reply": "카드에 돈을 넣는 거예요. 충전해 드릴까요?",
+          "replyMeaning": {
+            "en": "It means putting money on the card. Shall I charge it?",
+            "vi": "Là nạp tiền vào thẻ. Tôi nạp cho bạn nhé?",
+            "id": "Artinya mengisi uang ke kartu. Mau saya isi?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pay",
+      "needs": "sit:nocard",
+      "staff": "storeclerk",
+      "npc": "카드 값이랑 충전 만 원, 같이 계산해 드릴게요. 결제는 어떻게 하시겠어요?",
+      "meaning": {
+        "en": "I'll ring up the card and the 10,000 won charge together. How would you like to pay?",
+        "vi": "Tôi tính chung tiền thẻ và 10.000 won tiền nạp nhé. Bạn thanh toán bằng gì ạ?",
+        "id": "Harga kartu dan isi saldo 10.000 won saya hitung sekalian. Mau bayar pakai apa?"
+      },
+      "choices": [
+        {
+          "ko": "현금으로 할게요.",
+          "rom": "hyeongeumeuro halgeyo",
+          "meaning": {
+            "en": "I'll pay in cash.",
+            "vi": "Tôi trả tiền mặt.",
+            "id": "Saya bayar tunai."
+          },
+          "result": "advance",
+          "reply": "네, 충전 다 됐어요. 카드 여기 있습니다.",
+          "replyMeaning": {
+            "en": "All charged. Here's your card.",
+            "vi": "Vâng, nạp xong rồi. Thẻ của bạn đây.",
+            "id": "Baik, saldonya sudah terisi. Ini kartunya."
+          },
+          "give": "cash"
+        },
+        {
+          "ko": "카드로 할게요.",
+          "rom": "kadeuro halgeyo",
+          "meaning": {
+            "en": "I'll pay by card.",
+            "vi": "Tôi trả bằng thẻ.",
+            "id": "Saya bayar pakai kartu."
+          },
+          "result": "retry",
+          "reply": "죄송한데 충전은 현금만 돼요. 현금 있으세요?",
+          "replyMeaning": {
+            "en": "Sorry, charging is cash only. Do you have cash?",
+            "vi": "Xin lỗi, nạp tiền chỉ nhận tiền mặt thôi. Bạn có tiền mặt không?",
+            "id": "Maaf, isi saldo hanya bisa tunai. Ada uang tunai?"
+          },
+          "note": {
+            "en": "Transport cards are charged in cash, at a store or a station machine. Keep some won notes with you: 현금으로 할게요.",
+            "vi": "Thẻ giao thông được nạp bằng tiền mặt, ở cửa hàng hoặc máy trong ga. Hãy mang theo ít tiền won: 현금으로 할게요.",
+            "id": "Kartu transportasi diisi dengan uang tunai, di minimarket atau mesin di stasiun. Selalu bawa uang won: 현금으로 할게요."
+          },
+          "give": "card"
+        },
+        {
+          "ko": "해외 카드도 돼요?",
+          "rom": "haeoe kadeudo dwaeyo?",
+          "meaning": {
+            "en": "Do foreign cards work?",
+            "vi": "Thẻ nước ngoài có dùng được không ạ?",
+            "id": "Kartu luar negeri bisa?"
+          },
+          "result": "ask",
+          "reply": "충전은 현금으로만 돼요.",
+          "replyMeaning": {
+            "en": "Charging can only be paid in cash.",
+            "vi": "Nạp tiền thì chỉ nhận tiền mặt thôi.",
+            "id": "Isi saldo hanya bisa dengan uang tunai."
+          }
+        }
+      ],
+      "after": "카드는 개찰구 오른쪽 단말기에 찍으시면 돼요. 안녕히 가세요.",
+      "afterMeaning": {
+        "en": "Tap the card on the reader on the right side of the gate. Goodbye.",
+        "vi": "Bạn chạm thẻ vào máy đọc bên phải cổng soát vé là được. Tạm biệt.",
+        "id": "Tempelkan kartunya ke mesin pembaca di sisi kanan gerbang tiket. Sampai jumpa."
+      },
+      "grants": [
+        "doc:tcard"
+      ]
+    },
+    {
+      "id": "card_empty",
+      "needs": "sit:emptycard",
+      "staff": "storeclerk",
+      "npc": "어서 오세요. 뭐 찾으세요?",
+      "meaning": {
+        "en": "Welcome. What are you looking for?",
+        "vi": "Xin chào. Bạn tìm gì ạ?",
+        "id": "Selamat datang. Cari apa?"
+      },
+      "choices": [
+        {
+          "ko": "교통카드 충전해 주세요.",
+          "rom": "gyotongkadeu chungjeonhae juseyo",
+          "meaning": {
+            "en": "Please charge my transport card.",
+            "vi": "Nạp tiền vào thẻ giao thông giúp tôi.",
+            "id": "Tolong isi saldo kartu transportasi saya."
+          },
+          "result": "advance",
+          "reply": "네, 잠시만요.",
+          "replyMeaning": {
+            "en": "Sure, one moment.",
+            "vi": "Vâng, chờ một chút nhé.",
+            "id": "Baik, sebentar ya."
+          },
+          "give": "tcard"
+        },
+        {
+          "ko": "교통카드 하나 사고 싶어요.",
+          "rom": "gyotongkadeu hana sago sipeoyo",
+          "meaning": {
+            "en": "I'd like to buy a transport card.",
+            "vi": "Tôi muốn mua một thẻ giao thông.",
+            "id": "Saya mau beli satu kartu transportasi."
+          },
+          "result": "retry",
+          "reply": "새로 사시게요? 쓰시던 카드가 있으면 충전만 하셔도 돼요.",
+          "replyMeaning": {
+            "en": "A new one? If you already have a card, you can just charge it.",
+            "vi": "Bạn mua thẻ mới ạ? Nếu đã có thẻ đang dùng thì chỉ cần nạp tiền thôi.",
+            "id": "Mau beli yang baru? Kalau sudah punya kartu, cukup diisi saldonya."
+          },
+          "note": {
+            "en": "You already have a card: it's only out of money. Charge it (충전하다) instead of buying a new one (사다): 교통카드 충전해 주세요.",
+            "vi": "Bạn đã có thẻ rồi, chỉ là thẻ hết tiền thôi. Hãy nạp tiền (충전하다) thay vì mua thẻ mới (사다): 교통카드 충전해 주세요.",
+            "id": "Kamu sudah punya kartu, hanya saldonya habis. Isi saldonya (충전하다), jangan beli yang baru (사다): 교통카드 충전해 주세요."
+          }
+        },
+        {
+          "ko": "교통카드 충전해 줘.",
+          "rom": "gyotongkadeu chungjeonhae jwo",
+          "meaning": {
+            "en": "Charge my transport card.",
+            "vi": "Nạp tiền vào thẻ giao thông cho tôi.",
+            "id": "Isi saldo kartu transportasiku."
+          },
+          "result": "retry",
+          "reply": "…네? 아, 충전하시게요?",
+          "replyMeaning": {
+            "en": "…Sorry? Oh, you want to charge it?",
+            "vi": "…Dạ? À, bạn muốn nạp tiền ạ?",
+            "id": "…Ya? Oh, mau isi saldo?"
+          },
+          "note": {
+            "en": "Without -요 at the end this is 반말, casual speech. It sounds rude to a clerk. Say 교통카드 충전해 주세요.",
+            "vi": "Không có -요 ở cuối là 반말 (nói trống không), nghe bất lịch sự với nhân viên. Hãy nói 교통카드 충전해 주세요.",
+            "id": "Tanpa -요 di akhir kalimat itu 반말 (bahasa santai) dan terdengar tidak sopan ke pegawai toko. Katakan 교통카드 충전해 주세요."
+          }
+        },
+        {
+          "ko": "흑석역 가려면 어디서 타요?",
+          "rom": "heukseogyeok garyeomyeon eodiseo tayo?",
+          "meaning": {
+            "en": "Where do I catch the train to Heukseok?",
+            "vi": "Muốn đến ga Heukseok thì lên tàu ở đâu ạ?",
+            "id": "Kalau mau ke Stasiun Heukseok, naik dari mana?"
+          },
+          "result": "ask",
+          "reply": "사당 방면 타시고 동작역에서 9호선으로 갈아타세요. 교통카드는 있으세요?",
+          "replyMeaning": {
+            "en": "Take the train towards Sadang and change to Line 9 at Dongjak. Do you have a transport card?",
+            "vi": "Bạn đi tàu hướng Sadang, rồi đổi sang tuyến 9 ở ga Dongjak. Bạn có thẻ giao thông chưa?",
+            "id": "Naik yang arah Sadang, lalu pindah ke Line 9 di Stasiun Dongjak. Sudah punya kartu transportasi?"
+          }
+        }
+      ],
+      "task": {
+        "en": "Charge your transport card at the convenience store",
+        "vi": "Nạp tiền vào thẻ giao thông ở cửa hàng tiện lợi",
+        "id": "Isi saldo kartu transportasi di minimarket"
+      }
+    },
+    {
+      "id": "charge_empty",
+      "needs": "sit:emptycard",
+      "staff": "storeclerk",
+      "npc": "얼마 충전해 드릴까요?",
+      "meaning": {
+        "en": "How much shall I charge?",
+        "vi": "Bạn muốn nạp bao nhiêu ạ?",
+        "id": "Mau diisi berapa?"
+      },
+      "choices": [
+        {
+          "ko": "만 원 충전해 주세요.",
+          "rom": "man won chungjeonhae juseyo",
+          "meaning": {
+            "en": "Please charge 10,000 won.",
+            "vi": "Nạp giúp tôi 10.000 won.",
+            "id": "Tolong isi 10.000 won."
+          },
+          "result": "advance",
+          "reply": "네, 만 원 충전해 드릴게요.",
+          "replyMeaning": {
+            "en": "Okay, I'll put 10,000 won on it.",
+            "vi": "Vâng, tôi nạp 10.000 won nhé.",
+            "id": "Baik, saya isi 10.000 won."
+          }
+        },
+        {
+          "ko": "만 원 환전해 주세요.",
+          "rom": "man won hwanjeonhae juseyo",
+          "meaning": {
+            "en": "Please exchange 10,000 won.",
+            "vi": "Đổi giúp tôi 10.000 won.",
+            "id": "Tolong tukar 10.000 won."
+          },
+          "result": "retry",
+          "reply": "환전이요? 충전 말씀하시는 거죠? 카드에 만 원 넣어 드릴까요?",
+          "replyMeaning": {
+            "en": "Exchange? You mean charge, right? Shall I put 10,000 won on the card?",
+            "vi": "Đổi tiền ạ? Ý bạn là nạp tiền phải không? Tôi nạp 10.000 won vào thẻ nhé?",
+            "id": "Tukar uang? Maksudnya isi saldo, kan? Saya isi 10.000 won ke kartunya?"
+          },
+          "note": {
+            "en": "환전 is changing money into another currency; 충전 is putting money on a card. Say 만 원 충전해 주세요.",
+            "vi": "환전 là đổi sang tiền nước khác; 충전 là nạp tiền vào thẻ. Hãy nói 만 원 충전해 주세요.",
+            "id": "환전 artinya menukar ke mata uang lain; 충전 artinya mengisi saldo kartu. Katakan 만 원 충전해 주세요."
+          }
+        },
+        {
+          "ko": "천천히 말씀해 주시겠어요?",
+          "rom": "cheoncheonhi malsseumhae jusigesseoyo?",
+          "meaning": {
+            "en": "Could you speak slowly, please?",
+            "vi": "Anh nói chậm giúp tôi được không?",
+            "id": "Bisa bicara lebih pelan?"
+          },
+          "result": "ask",
+          "reply": "네. 카드에 돈을 얼마 넣어 드릴까요?",
+          "replyMeaning": {
+            "en": "Sure. How much money shall I put on your card?",
+            "vi": "Vâng. Bạn muốn nạp vào thẻ bao nhiêu tiền?",
+            "id": "Baik. Mau isi uang berapa ke kartunya?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pay_empty",
+      "needs": "sit:emptycard",
+      "staff": "storeclerk",
+      "npc": "만 원 충전이요. 결제는 어떻게 하시겠어요?",
+      "meaning": {
+        "en": "That's a 10,000 won charge. How would you like to pay?",
+        "vi": "Nạp 10.000 won ạ. Bạn thanh toán bằng gì ạ?",
+        "id": "Isi saldo 10.000 won. Mau bayar pakai apa?"
+      },
+      "choices": [
+        {
+          "ko": "현금으로 할게요.",
+          "rom": "hyeongeumeuro halgeyo",
+          "meaning": {
+            "en": "I'll pay in cash.",
+            "vi": "Tôi trả tiền mặt.",
+            "id": "Saya bayar tunai."
+          },
+          "result": "advance",
+          "reply": "네, 충전 다 됐어요. 카드 여기 있습니다.",
+          "replyMeaning": {
+            "en": "All charged. Here's your card.",
+            "vi": "Vâng, nạp xong rồi. Thẻ của bạn đây.",
+            "id": "Baik, saldonya sudah terisi. Ini kartunya."
+          },
+          "give": "cash"
+        },
+        {
+          "ko": "카드로 할게요.",
+          "rom": "kadeuro halgeyo",
+          "meaning": {
+            "en": "I'll pay by card.",
+            "vi": "Tôi trả bằng thẻ.",
+            "id": "Saya bayar pakai kartu."
+          },
+          "result": "retry",
+          "reply": "죄송한데 충전은 현금만 돼요. 현금 있으세요?",
+          "replyMeaning": {
+            "en": "Sorry, charging is cash only. Do you have cash?",
+            "vi": "Xin lỗi, nạp tiền chỉ nhận tiền mặt thôi. Bạn có tiền mặt không?",
+            "id": "Maaf, isi saldo hanya bisa tunai. Ada uang tunai?"
+          },
+          "note": {
+            "en": "Transport cards are charged in cash, at a store or a station machine. Keep some won notes with you: 현금으로 할게요.",
+            "vi": "Thẻ giao thông được nạp bằng tiền mặt, ở cửa hàng hoặc máy trong ga. Hãy mang theo ít tiền won: 현금으로 할게요.",
+            "id": "Kartu transportasi diisi dengan uang tunai, di minimarket atau mesin di stasiun. Selalu bawa uang won: 현금으로 할게요."
+          },
+          "give": "card"
+        },
+        {
+          "ko": "해외 카드도 돼요?",
+          "rom": "haeoe kadeudo dwaeyo?",
+          "meaning": {
+            "en": "Do foreign cards work?",
+            "vi": "Thẻ nước ngoài có dùng được không ạ?",
+            "id": "Kartu luar negeri bisa?"
+          },
+          "result": "ask",
+          "reply": "충전은 현금으로만 돼요.",
+          "replyMeaning": {
+            "en": "Charging can only be paid in cash.",
+            "vi": "Nạp tiền thì chỉ nhận tiền mặt thôi.",
+            "id": "Isi saldo hanya bisa dengan uang tunai."
+          }
+        }
+      ],
+      "after": "안녕히 가세요.",
+      "afterMeaning": {
+        "en": "Goodbye.",
+        "vi": "Tạm biệt.",
+        "id": "Sampai jumpa."
+      }
+    },
+    {
+      "id": "gate",
+      "type": "go",
+      "staff": "storeclerk",
+      "target": "gate",
+      "task": {
+        "en": "Tap your card at the gate",
+        "vi": "Chạm thẻ ở cổng soát vé",
+        "id": "Tap kartumu di gerbang tiket"
+      }
+    },
+    {
+      "id": "direction",
+      "type": "go",
+      "staff": "storeclerk",
+      "target": "stairs_sadang",
+      "task": {
+        "en": "Take the stairs for the right direction",
+        "vi": "Đi xuống cầu thang đúng hướng",
+        "id": "Turuni tangga ke arah yang benar"
+      },
+      "wrong": [
+        {
+          "station": "stairs_jinjeop",
+          "note": {
+            "en": "충무로 방면 goes the other way. 방면 is the direction the train is heading: 흑석 is to the south, so take 사당 방면 and change to Line 9 at 동작.",
+            "vi": "충무로 방면 là hướng ngược lại. 방면 là hướng tàu chạy tới: 흑석 ở phía nam, nên hãy đi 사당 방면 rồi đổi sang tuyến 9 ở 동작.",
+            "id": "충무로 방면 itu arah sebaliknya. 방면 adalah arah tujuan kereta: 흑석 ada di selatan, jadi ambil 사당 방면 lalu pindah ke Line 9 di 동작."
+          }
+        }
+      ]
+    },
+    {
+      "id": "train",
+      "type": "go",
+      "staff": "storeclerk",
+      "target": "train",
+      "task": {
+        "en": "Board the train",
+        "vi": "Lên tàu",
+        "id": "Naik ke kereta"
+      },
+      "announce": "안전문이 열립니다.",
+      "meaning": {
+        "en": "The platform doors are opening.",
+        "vi": "Cửa chắn sân ga đang mở.",
+        "id": "Pintu peron terbuka."
+      },
+      "after": "이번 역은 동작역입니다.",
+      "afterMeaning": {
+        "en": "This stop is Dongjak.",
+        "vi": "Ga này là ga Dongjak.",
+        "id": "Stasiun ini adalah Dongjak."
+      }
+    }
+  ],
+  "grants": [
+    "done:subway"
+  ],
+  "phrases": [
+    {
+      "ko": "교통카드 하나 사고 싶어요.",
+      "rom": "gyotongkadeu hana sago sipeoyo",
+      "meaning": {
+        "en": "I'd like to buy a transport card.",
+        "vi": "Tôi muốn mua một thẻ giao thông.",
+        "id": "Saya mau beli satu kartu transportasi."
+      },
+      "needs": "sit:nocard"
+    },
+    {
+      "ko": "교통카드 충전해 주세요.",
+      "rom": "gyotongkadeu chungjeonhae juseyo",
+      "meaning": {
+        "en": "Please charge my transport card.",
+        "vi": "Nạp tiền vào thẻ giao thông giúp tôi.",
+        "id": "Tolong isi saldo kartu transportasi saya."
+      },
+      "needs": "sit:emptycard"
+    },
+    {
+      "ko": "만 원 충전해 주세요.",
+      "rom": "man won chungjeonhae juseyo",
+      "meaning": {
+        "en": "Please charge 10,000 won.",
+        "vi": "Nạp giúp tôi 10.000 won.",
+        "id": "Tolong isi 10.000 won."
+      }
+    },
+    {
+      "ko": "현금으로 할게요.",
+      "rom": "hyeongeumeuro halgeyo",
+      "meaning": {
+        "en": "I'll pay in cash.",
+        "vi": "Tôi trả tiền mặt.",
+        "id": "Saya bayar tunai."
+      }
+    },
+    {
+      "ko": "해외 카드도 돼요?",
+      "rom": "haeoe kadeudo dwaeyo?",
+      "meaning": {
+        "en": "Do foreign cards work?",
+        "vi": "Thẻ nước ngoài có dùng được không ạ?",
+        "id": "Kartu luar negeri bisa?"
+      }
+    },
+    {
+      "ko": "흑석역 가려면 어디서 타요?",
+      "rom": "heukseogyeok garyeomyeon eodiseo tayo?",
+      "meaning": {
+        "en": "Where do I catch the train to Heukseok?",
+        "vi": "Muốn đến ga Heukseok thì lên tàu ở đâu ạ?",
+        "id": "Kalau mau ke Stasiun Heukseok, naik dari mana?"
+      }
+    }
+  ],
+  "glossary": [
+    {
+      "ko": "교통카드",
+      "rom": "gyotongkadeu",
+      "meaning": {
+        "en": "Transport card",
+        "vi": "Thẻ giao thông",
+        "id": "Kartu transportasi"
+      }
+    },
+    {
+      "ko": "충전 · 환전",
+      "rom": "chungjeon · hwanjeon",
+      "meaning": {
+        "en": "Putting money on a card · exchanging money",
+        "vi": "Nạp tiền vào thẻ · đổi tiền",
+        "id": "Isi saldo kartu · tukar uang"
+      }
+    },
+    {
+      "ko": "잔액",
+      "rom": "janaek",
+      "meaning": {
+        "en": "Balance (money left on the card)",
+        "vi": "Số dư (tiền còn trong thẻ)",
+        "id": "Saldo (sisa uang di kartu)"
+      }
+    },
+    {
+      "ko": "현금",
+      "rom": "hyeongeum",
+      "meaning": {
+        "en": "Cash",
+        "vi": "Tiền mặt",
+        "id": "Uang tunai"
+      }
+    },
+    {
+      "ko": "개찰구",
+      "rom": "gaechalgu",
+      "meaning": {
+        "en": "Ticket gate",
+        "vi": "Cổng soát vé",
+        "id": "Gerbang tiket"
+      }
+    },
+    {
+      "ko": "단말기",
+      "rom": "danmalgi",
+      "meaning": {
+        "en": "Card reader",
+        "vi": "Máy đọc thẻ",
+        "id": "Mesin pembaca kartu"
+      }
+    },
+    {
+      "ko": "찍다",
+      "rom": "jjikda",
+      "meaning": {
+        "en": "To tap (a card on the reader)",
+        "vi": "Chạm (thẻ vào máy đọc)",
+        "id": "Tap (kartu ke mesin pembaca)"
+      }
+    },
+    {
+      "ko": "방면",
+      "rom": "bangmyeon",
+      "meaning": {
+        "en": "Direction (where the train is heading)",
+        "vi": "Hướng (nơi tàu chạy tới)",
+        "id": "Arah (tujuan kereta)"
+      }
+    },
+    {
+      "ko": "호선",
+      "rom": "hoseon",
+      "meaning": {
+        "en": "Subway line (9호선 = Line 9)",
+        "vi": "Tuyến tàu (9호선 = tuyến 9)",
+        "id": "Jalur kereta (9호선 = Line 9)"
+      }
+    },
+    {
+      "ko": "갈아타다",
+      "rom": "garatada",
+      "meaning": {
+        "en": "To change trains",
+        "vi": "Đổi tàu",
+        "id": "Pindah kereta"
+      }
+    },
+    {
+      "ko": "안전문",
+      "rom": "anjeonmun",
+      "meaning": {
+        "en": "Platform doors",
+        "vi": "Cửa chắn sân ga",
+        "id": "Pintu peron"
+      }
+    },
+    {
+      "ko": "이번 역",
+      "rom": "ibeon yeok",
+      "meaning": {
+        "en": "This stop (in the train announcement)",
+        "vi": "Ga này (trong thông báo trên tàu)",
+        "id": "Stasiun ini (dalam pengumuman kereta)"
+      }
+    }
+  ]
+}

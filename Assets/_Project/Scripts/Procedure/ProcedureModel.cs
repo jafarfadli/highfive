@@ -20,6 +20,8 @@ namespace SeoulFirstWeek.Procedure
         public string ko;
         public string rom;
         public LocText meaning;
+        public string needs;  // a phrase that only fits one situation (sit:…) is shown only for it
+        public string unless;
     }
 
     public class StaffDef
@@ -50,12 +52,14 @@ namespace SeoulFirstWeek.Procedure
         /// "ticket" (default): take a 번호표 and wait for the number board, as at a bank or a public office.
         /// "walkin": walk straight up to the reception, then sit and wait to be called by name, as at a
         /// neighbourhood clinic.
+        /// "none": no counter at all; the first conversation starts wherever the player is (a phone call).
         /// </summary>
         public string mode = "ticket";
         /// <summary>Walk-in places: the patients called in before the player, by name, in order.</summary>
         public List<string> names = new();
 
         [JsonIgnore] public bool WalkIn => mode == "walkin";
+        [JsonIgnore] public bool None => mode == "none";
     }
 
     /// <summary>One answer the player can pick. The result decides what the procedure does next.</summary>
@@ -76,24 +80,58 @@ namespace SeoulFirstWeek.Procedure
         [JsonIgnore] public bool Advances => result == "advance";
     }
 
+    /// <summary>A place in the world that is the wrong one for a `go` step: using it is a mistake with a lesson.</summary>
+    public class WrongTurnDef
+    {
+        public string station;   // the waypoint's id
+        public string line;      // what the step's staff member says (optional)
+        public LocText lineMeaning;
+        public LocText note;     // the lesson
+    }
+
     public class StepDef
     {
         public string id;
         public string staff;
         public string location = "counter";
-        public string announce; // PA line when the player is called to a new location ({0} = player name)
+        public string announce; // PA line when the player is called to a new location ({0} = player name); a go step plays it when it starts
         public LocText task;    // the player's to-do from this step on (shown in the quest panel)
-        public string type = "choice"; // choice | keypad
+        /// <summary>
+        /// choice: a staff line and answers. keypad: the PIN pad (or a phone's dial pad with <see cref="expect"/>).
+        /// go: no conversation; the player goes somewhere in the world (a <see cref="target"/> waypoint).
+        /// </summary>
+        public string type = "choice";
         public string npc;
         public LocText meaning;
         public List<ChoiceDef> choices = new();
         public string ack;
-        public string after;
+        public string after;          // a closing line; after a go step, a PA line (the in-car announcement)
         public LocText afterMeaning;
         public FetchDef fetch;
         public bool confirmPrevious;
         public List<string> grants = new();
         public List<string> takes = new();
+        // go steps
+        public string target;         // the waypoint that completes the step
+        public List<WrongTurnDef> wrong = new();
+        // keypad steps used as a phone
+        public string expect;         // the only number accepted (e.g. "119")
+        public LocText prompt;        // the title on the pad ("Dial 119")
+        public LocText expectNote;    // the lesson for a wrong number
+
+        // a personalised visit: the step only happens in a situation that sets (or doesn't set) this flag
+        public string needs;
+        public string unless;
+
+        [JsonIgnore] public bool IsGo => type == "go";
+    }
+
+    /// <summary>A lesson for one situation, shown on the results screen (why the bill was what it was).</summary>
+    public class NoteDef
+    {
+        public string needs;
+        public string unless;
+        public LocText note;
     }
 
     public class ProcedureDef
@@ -113,6 +151,7 @@ namespace SeoulFirstWeek.Procedure
         public List<string> carry = new(); // documents the player brings to this visit (named in the story)
         public List<PhraseDef> phrases = new();
         public List<PhraseDef> glossary = new(); // key words for the Logbook
+        public List<NoteDef> notes = new();      // lessons for the situation played (personalised visits)
 
         public StaffDef Staff(string id) => staff.Find(s => s.id == id) ?? staff[0];
 

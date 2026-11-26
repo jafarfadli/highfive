@@ -1,0 +1,1040 @@
+{
+  "id": "emergency_er",
+  "verified": false,
+  "sources": [
+    "https://www.amc.seoul.kr/asan/emergencytreatguide/treatguide/treatGuide.do (Asan Medical Center ER guide: 진료신청서 at the ER desk first, then triage, then payment and a receipt)",
+    "https://sev.severance.healthcare/sev/patient-carer/guide/emergency.do (Severance Hospital ER guide: 예진실, treatment by severity)",
+    "https://seoul.hyumc.com/conts/102002002000000.do (Hanyang University Seoul Hospital ER guide: treatment by severity)",
+    "https://dailypharm.com/user/news/16968 (Dailypharm: hospitals check ID from 20 May 2024)",
+    "https://m.go.seoul.co.kr/news/2021/02/26/20210226500160 (Seoul Shinmun, 2021-02-26: D-4 language students join health insurance after 6 months)",
+    "https://devcms.yonsei.ac.kr/_res/graduate/etc/외국인유학생_건강보험제도_안내(한영본).pdf (Yonsei University: health insurance guide for international students)",
+    "https://www.nhis.or.kr/static/html/wbma/b/wbmab0103.html (NHIS: health insurance for foreigners; confirm the D-4 timing with NHIS 1577-1000)",
+    "https://www.newsis.com/view/NISX20240911_0002885059 (Newsis, 2024-09-11: from 13 Sep 2024 mild cases pay 90% of the ER bill at regional and local emergency centres)",
+    "https://dailymedi.com/news/news_view.php?wr_id=915944 (Dailymedi, 2024-09: the 90% charge for mild cases from the Chuseok holiday)",
+    "https://www.nhis.or.kr/lm/lmxsrv/law/lawFullContent.do?SEQ=41 (보건복지부고시 제2025-69호, 장기체류 재외국민 및 외국인에 대한 건강보험 적용기준: foreigners join health insurance the day after 6 months in Korea; D-4 language students are not among the exceptions that join on entry)"
+  ],
+  "titleKo": "응급실",
+  "title": {
+    "en": "Emergency room",
+    "vi": "Phòng cấp cứu",
+    "id": "Unit Gawat Darurat (UGD)"
+  },
+  "briefing": {
+    "en": "A bad stomach ache after midnight. Register, see the triage nurse, pay.",
+    "vi": "Đau bụng dữ dội sau nửa đêm. Đăng ký, gặp y tá phân loại, thanh toán.",
+    "id": "Sakit perut parah lewat tengah malam. Daftar, temui perawat triase, bayar."
+  },
+  "completeNote": {
+    "en": "The ER sees the most urgent patients first, not whoever arrived first. Keep the receipt (영수증).",
+    "vi": "Phòng cấp cứu khám người nguy cấp nhất trước, không theo thứ tự đến. Hãy giữ biên lai (영수증).",
+    "id": "UGD menangani pasien yang paling gawat lebih dulu, bukan yang datang duluan. Simpan kuitansinya (영수증)."
+  },
+  "notes": [
+    {
+      "needs": "sit:uninsured",
+      "note": {
+        "en": "Without national health insurance (건강보험) you usually pay the whole ER bill yourself. D-4 language students join only after 6 months in Korea.",
+        "vi": "Khi chưa có bảo hiểm y tế quốc dân (건강보험), bạn thường phải tự trả toàn bộ viện phí cấp cứu. Học viên tiếng visa D-4 chỉ được tham gia sau 6 tháng ở Hàn.",
+        "id": "Tanpa asuransi kesehatan nasional (건강보험), biasanya kamu membayar seluruh biaya UGD sendiri. Siswa bahasa visa D-4 baru ikut setelah 6 bulan di Korea."
+      }
+    },
+    {
+      "needs": "sit:insured",
+      "note": {
+        "en": "National health insurance (건강보험) pays part of the ER bill. But since 2024, if triage rates your case as mild, you usually pay 90% of it yourself at a big ER.",
+        "vi": "Bảo hiểm y tế quốc dân (건강보험) trả một phần viện phí cấp cứu. Nhưng từ năm 2024, nếu khâu phân loại xếp bạn là ca nhẹ, ở phòng cấp cứu lớn bạn thường phải tự trả 90%.",
+        "id": "Asuransi kesehatan nasional (건강보험) menanggung sebagian biaya UGD. Tapi sejak 2024, kalau triase menilai kasusmu ringan, di UGD besar biasanya kamu membayar sendiri 90%."
+      }
+    }
+  ],
+  "staff": [
+    {
+      "id": "erdesk",
+      "name": "정현우",
+      "role": "ER registration clerk",
+      "roleText": {
+        "en": "ER registration clerk",
+        "vi": "Nhân viên tiếp nhận cấp cứu",
+        "id": "Petugas pendaftaran UGD"
+      },
+      "macVoice": "Eddy (Korean (South Korea))",
+      "macRate": 180,
+      "openaiVoice": "ash"
+    },
+    {
+      "id": "triage",
+      "name": "윤하은",
+      "role": "triage nurse",
+      "roleText": {
+        "en": "Triage nurse",
+        "vi": "Y tá phân loại",
+        "id": "Perawat triase"
+      },
+      "macVoice": "Yuna",
+      "macRate": 190,
+      "openaiVoice": "shimmer"
+    }
+  ],
+  "queue": {
+    "mode": "walkin",
+    "counter": 1,
+    "names": [
+      "김민수",
+      "이지민"
+    ],
+    "interval": 5.0
+  },
+  "steps": [
+    {
+      "id": "reason",
+      "staff": "erdesk",
+      "npc": "어떻게 오셨어요?",
+      "meaning": {
+        "en": "What brings you here?",
+        "vi": "Bạn đến có việc gì?",
+        "id": "Ada keperluan apa?"
+      },
+      "choices": [
+        {
+          "ko": "배가 많이 아파서 왔어요.",
+          "rom": "baega mani apaseo wasseoyo",
+          "meaning": {
+            "en": "My stomach hurts a lot, so I came.",
+            "vi": "Tôi đau bụng nhiều quá nên đến đây.",
+            "id": "Perut saya sakit sekali, jadi saya datang."
+          },
+          "result": "advance",
+          "reply": "네, 접수 도와드릴게요.",
+          "replyMeaning": {
+            "en": "Okay, I'll register you.",
+            "vi": "Vâng, tôi sẽ giúp bạn đăng ký.",
+            "id": "Baik, saya bantu daftar."
+          }
+        },
+        {
+          "ko": "택시 타고 왔어요.",
+          "rom": "taeksi tago wasseoyo",
+          "meaning": {
+            "en": "I came by taxi.",
+            "vi": "Tôi đến bằng taxi.",
+            "id": "Saya datang naik taksi."
+          },
+          "result": "retry",
+          "reply": "아, 그런 뜻이 아니고요. 어디가 아파서 오셨어요?",
+          "replyMeaning": {
+            "en": "Oh, I didn't mean that. Where does it hurt?",
+            "vi": "À, ý tôi không phải vậy. Bạn đau ở đâu?",
+            "id": "Oh, bukan itu maksud saya. Bagian mana yang sakit?"
+          },
+          "note": {
+            "en": "어떻게 오셨어요? asks why you came, not how you got here. Say what's wrong: 배가 많이 아파서 왔어요.",
+            "vi": "어떻게 오셨어요? là hỏi bạn đến vì việc gì, không phải đến bằng phương tiện gì. Hãy nói lý do: 배가 많이 아파서 왔어요.",
+            "id": "어떻게 오셨어요? menanyakan keperluanmu, bukan naik apa kamu datang. Sebut keluhanmu: 배가 많이 아파서 왔어요."
+          }
+        },
+        {
+          "ko": "네? 다시 한번만 말씀해 주세요.",
+          "rom": "ne? dasi hanbeonman malsseumhae juseyo",
+          "meaning": {
+            "en": "Sorry? Could you say that once more?",
+            "vi": "Dạ? Anh nói lại giúp tôi được không?",
+            "id": "Maaf? Bisa diulang sekali lagi?"
+          },
+          "result": "ask",
+          "reply": "어디가 아파서 오셨어요?",
+          "replyMeaning": {
+            "en": "Where does it hurt?",
+            "vi": "Bạn đau ở đâu?",
+            "id": "Bagian mana yang sakit?"
+          }
+        }
+      ],
+      "task": {
+        "en": "Register at the ER counter",
+        "vi": "Đăng ký ở quầy tiếp nhận cấp cứu",
+        "id": "Daftar di loket UGD"
+      }
+    },
+    {
+      "id": "id_check",
+      "staff": "erdesk",
+      "npc": "신분증 주시겠어요?",
+      "meaning": {
+        "en": "May I have your ID?",
+        "vi": "Cho tôi xem giấy tờ tùy thân nhé?",
+        "id": "Boleh minta kartu identitasnya?"
+      },
+      "choices": [
+        {
+          "ko": "네, 여기 있어요.",
+          "rom": "ne, yeogi isseoyo",
+          "meaning": {
+            "en": "Yes, here it is.",
+            "vi": "Vâng, đây ạ.",
+            "id": "Ya, ini dia."
+          },
+          "result": "advance",
+          "reply": "네, 여권 확인했습니다.",
+          "replyMeaning": {
+            "en": "Thank you, passport checked.",
+            "vi": "Vâng, tôi đã xem hộ chiếu.",
+            "id": "Baik, paspor sudah saya cek."
+          },
+          "give": "passport"
+        },
+        {
+          "ko": "외국인등록증 여기 있어요.",
+          "rom": "oegugindeungnokjeung yeogi isseoyo",
+          "meaning": {
+            "en": "Here's my residence card (ARC).",
+            "vi": "Thẻ cư trú (ARC) của tôi đây ạ.",
+            "id": "Ini kartu tinggal (ARC) saya."
+          },
+          "result": "advance",
+          "reply": "네, 외국인등록증 확인했습니다.",
+          "replyMeaning": {
+            "en": "Yes, I've checked your residence card.",
+            "vi": "Vâng, tôi đã kiểm tra thẻ cư trú của bạn.",
+            "id": "Baik, kartu tinggalmu sudah saya cek."
+          },
+          "give": "arc",
+          "needs": "sit:insured"
+        },
+        {
+          "ko": "여기 있어요.",
+          "rom": "yeogi isseoyo",
+          "meaning": {
+            "en": "Here you go.",
+            "vi": "Đây ạ.",
+            "id": "Ini."
+          },
+          "result": "retry",
+          "reply": "이건 재학증명서네요. 여권 있으세요?",
+          "replyMeaning": {
+            "en": "That's a certificate of enrollment. Do you have your passport?",
+            "vi": "Đây là giấy xác nhận đang học. Bạn có hộ chiếu không?",
+            "id": "Ini surat keterangan kuliah. Ada paspor?"
+          },
+          "note": {
+            "en": "A certificate of enrollment isn't ID. Hand over your passport (여권).",
+            "vi": "Giấy xác nhận đang học không phải giấy tờ tùy thân. Hãy đưa hộ chiếu (여권).",
+            "id": "Surat keterangan kuliah bukan kartu identitas. Serahkan paspor (여권)."
+          },
+          "give": "enrollment"
+        },
+        {
+          "ko": "외국인등록증은 아직 없는데요.",
+          "rom": "oegugindeungnokjeungeun ajik eomneundeyo",
+          "meaning": {
+            "en": "I don't have a residence card (ARC) yet.",
+            "vi": "Tôi chưa có thẻ cư trú (ARC).",
+            "id": "Saya belum punya kartu tinggal (ARC)."
+          },
+          "result": "ask",
+          "reply": "그럼 여권 주시면 돼요.",
+          "replyMeaning": {
+            "en": "Then your passport is fine.",
+            "vi": "Vậy đưa hộ chiếu là được.",
+            "id": "Kalau begitu, paspor saja."
+          },
+          "needs": "sit:uninsured"
+        }
+      ]
+    },
+    {
+      "id": "insurance",
+      "staff": "erdesk",
+      "npc": "건강보험 있으세요?",
+      "meaning": {
+        "en": "Do you have national health insurance?",
+        "vi": "Bạn có bảo hiểm y tế quốc dân không?",
+        "id": "Apakah kamu punya asuransi kesehatan nasional?"
+      },
+      "choices": [
+        {
+          "ko": "아직 없어요. 한국에 온 지 얼마 안 됐어요.",
+          "rom": "ajik eopseoyo. hanguge on ji eolma an dwaesseoyo",
+          "meaning": {
+            "en": "Not yet. I only came to Korea recently.",
+            "vi": "Chưa có ạ. Tôi mới sang Hàn chưa lâu.",
+            "id": "Belum. Saya baru saja datang ke Korea."
+          },
+          "result": "advance",
+          "reply": "네, 그럼 건강보험 없이 접수해 드릴게요.",
+          "replyMeaning": {
+            "en": "Okay, then I'll register you without insurance.",
+            "vi": "Vâng, vậy tôi sẽ đăng ký cho bạn mà không có bảo hiểm.",
+            "id": "Baik, saya daftarkan tanpa asuransi."
+          },
+          "needs": "sit:uninsured"
+        },
+        {
+          "ko": "네, 있어요.",
+          "rom": "ne, isseoyo",
+          "meaning": {
+            "en": "Yes, I do.",
+            "vi": "Vâng, tôi có.",
+            "id": "Ya, ada."
+          },
+          "result": "retry",
+          "reply": "그러세요? 한국에 오신 지 얼마나 되셨어요?",
+          "replyMeaning": {
+            "en": "Is that so? How long have you been in Korea?",
+            "vi": "Vậy à? Bạn sang Hàn được bao lâu rồi?",
+            "id": "Oh ya? Sudah berapa lama di Korea?"
+          },
+          "note": {
+            "en": "D-4 language students join national health insurance (건강보험) only after 6 months in Korea. You just arrived: 아직 없어요.",
+            "vi": "Học viên tiếng visa D-4 chỉ được tham gia bảo hiểm y tế quốc dân (건강보험) sau 6 tháng ở Hàn. Bạn mới sang: 아직 없어요.",
+            "id": "Siswa bahasa visa D-4 baru ikut asuransi kesehatan nasional (건강보험) setelah 6 bulan di Korea. Kamu baru datang: 아직 없어요."
+          },
+          "needs": "sit:uninsured"
+        },
+        {
+          "ko": "네, 있어요.",
+          "rom": "ne, isseoyo",
+          "meaning": {
+            "en": "Yes, I do.",
+            "vi": "Vâng, tôi có.",
+            "id": "Ya, ada."
+          },
+          "result": "advance",
+          "reply": "네, 그럼 건강보험으로 접수해 드릴게요.",
+          "replyMeaning": {
+            "en": "Okay, then I'll register you with national health insurance.",
+            "vi": "Vâng, vậy tôi sẽ đăng ký cho bạn theo bảo hiểm y tế quốc dân.",
+            "id": "Baik, saya daftarkan dengan asuransi kesehatan nasional."
+          },
+          "needs": "sit:insured"
+        },
+        {
+          "ko": "아직 없어요.",
+          "rom": "ajik eopseoyo",
+          "meaning": {
+            "en": "Not yet.",
+            "vi": "Chưa có ạ.",
+            "id": "Belum."
+          },
+          "result": "retry",
+          "reply": "그러세요? 한국에 오신 지 얼마나 되셨어요?",
+          "replyMeaning": {
+            "en": "Is that so? How long have you been in Korea?",
+            "vi": "Vậy à? Bạn sang Hàn được bao lâu rồi?",
+            "id": "Oh ya? Sudah berapa lama di Korea?"
+          },
+          "note": {
+            "en": "D-4 language students are enrolled in national health insurance (건강보험) after 6 months in Korea. You've been here seven months: 네, 있어요.",
+            "vi": "Học viên tiếng visa D-4 được tham gia bảo hiểm y tế quốc dân (건강보험) sau 6 tháng ở Hàn. Bạn đã ở đây bảy tháng: 네, 있어요.",
+            "id": "Siswa bahasa visa D-4 ikut asuransi kesehatan nasional (건강보험) setelah 6 bulan di Korea. Kamu sudah tujuh bulan di sini: 네, 있어요."
+          },
+          "needs": "sit:insured"
+        },
+        {
+          "ko": "건강보험이 뭐예요?",
+          "rom": "geongangboheomi mwoyeyo?",
+          "meaning": {
+            "en": "What's 건강보험?",
+            "vi": "건강보험 là gì ạ?",
+            "id": "건강보험 itu apa?"
+          },
+          "result": "ask",
+          "reply": "국민건강보험이요. 나라에서 하는 의료보험이에요. 가입하셨어요?",
+          "replyMeaning": {
+            "en": "National Health Insurance, the state's medical insurance. Have you joined?",
+            "vi": "Là bảo hiểm y tế quốc dân, bảo hiểm y tế của nhà nước. Bạn đã tham gia chưa?",
+            "id": "Asuransi Kesehatan Nasional, asuransi kesehatan dari negara. Sudah ikut?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "staff": "erdesk",
+      "npc": "진료신청서 주시겠어요?",
+      "meaning": {
+        "en": "May I have your registration form?",
+        "vi": "Cho tôi phiếu đăng ký khám nhé?",
+        "id": "Boleh minta formulir pendaftarannya?"
+      },
+      "choices": [
+        {
+          "ko": "네, 여기 있어요.",
+          "rom": "ne, yeogi isseoyo",
+          "meaning": {
+            "en": "Yes, here it is.",
+            "vi": "Vâng, đây ạ.",
+            "id": "Ya, ini dia."
+          },
+          "result": "advance",
+          "reply": "네, 접수됐습니다.",
+          "replyMeaning": {
+            "en": "Okay, you're registered.",
+            "vi": "Vâng, đăng ký xong rồi.",
+            "id": "Baik, pendaftaran selesai."
+          },
+          "give": "er_form",
+          "needs": "doc:er_form"
+        },
+        {
+          "ko": "진료신청서는 아직 없어요.",
+          "rom": "jillyosincheongseoneun ajik eopseoyo",
+          "meaning": {
+            "en": "I don't have the form yet.",
+            "vi": "Tôi chưa có phiếu đăng ký khám.",
+            "id": "Saya belum punya formulirnya."
+          },
+          "result": "fetch",
+          "reply": "저쪽 선반에 진료신청서가 있어요. 작성해서 다시 오세요.",
+          "replyMeaning": {
+            "en": "The forms are on the shelf over there. Fill one in and come back.",
+            "vi": "Phiếu đăng ký khám ở trên kệ đằng kia. Bạn điền xong rồi quay lại nhé.",
+            "id": "Formulirnya ada di rak sebelah sana. Isi, lalu kembali ke sini."
+          },
+          "unless": "doc:er_form"
+        },
+        {
+          "ko": "여기 있어요.",
+          "rom": "yeogi isseoyo",
+          "meaning": {
+            "en": "Here you go.",
+            "vi": "Đây ạ.",
+            "id": "Ini."
+          },
+          "result": "retry",
+          "reply": "여권은 아까 확인했어요. 신분증 말고 진료신청서요.",
+          "replyMeaning": {
+            "en": "I already checked your passport. Not your ID, the registration form.",
+            "vi": "Hộ chiếu thì tôi xem rồi. Không phải giấy tờ tùy thân, mà là phiếu đăng ký khám.",
+            "id": "Paspornya sudah saya cek tadi. Bukan kartu identitas, formulir pendaftarannya."
+          },
+          "note": {
+            "en": "신청서 is a form you fill in; 신분증 is ID. They sound alike. Hand over the 진료신청서.",
+            "vi": "신청서 là phiếu bạn tự điền, 신분증 là giấy tờ tùy thân. Hai từ nghe giống nhau. Hãy đưa 진료신청서.",
+            "id": "신청서 adalah formulir yang kamu isi; 신분증 adalah kartu identitas. Bunyinya mirip. Serahkan 진료신청서."
+          },
+          "give": "passport"
+        }
+      ],
+      "fetch": {
+        "document": "er_form",
+        "station": "er_form",
+        "objective": {
+          "en": "Fill in the registration form (진료신청서) at the form shelf",
+          "vi": "Điền phiếu đăng ký khám (진료신청서) ở kệ để phiếu",
+          "id": "Isi formulir pendaftaran (진료신청서) di rak formulir"
+        }
+      },
+      "takes": [
+        "er_form"
+      ],
+      "after": "앉아서 기다리시면 예진실에서 이름 불러 드릴게요.",
+      "afterMeaning": {
+        "en": "Please take a seat. The triage room will call your name.",
+        "vi": "Bạn ngồi chờ, phòng phân loại sẽ gọi tên bạn.",
+        "id": "Silakan duduk, namamu akan dipanggil ke ruang triase."
+      }
+    },
+    {
+      "id": "pain_where",
+      "staff": "triage",
+      "location": "triage",
+      "announce": "{0} 님, 예진실로 들어오세요.",
+      "npc": "어디가 아파서 오셨어요?",
+      "meaning": {
+        "en": "Where does it hurt?",
+        "vi": "Bạn đau ở đâu?",
+        "id": "Bagian mana yang sakit?"
+      },
+      "choices": [
+        {
+          "ko": "배가 많이 아파요.",
+          "rom": "baega mani apayo",
+          "meaning": {
+            "en": "My stomach hurts a lot.",
+            "vi": "Tôi đau bụng lắm.",
+            "id": "Perut saya sakit sekali."
+          },
+          "result": "advance",
+          "reply": "네, 배가 많이 아프시군요.",
+          "replyMeaning": {
+            "en": "I see, your stomach hurts a lot.",
+            "vi": "Vâng, bạn bị đau bụng nhiều nhỉ.",
+            "id": "Baik, perutnya sakit sekali ya."
+          }
+        },
+        {
+          "ko": "배고파요.",
+          "rom": "baegopayo",
+          "meaning": {
+            "en": "I'm hungry.",
+            "vi": "Tôi đói bụng.",
+            "id": "Saya lapar."
+          },
+          "result": "retry",
+          "reply": "배가 고프세요? 아니면 배가 아프세요?",
+          "replyMeaning": {
+            "en": "You're hungry? Or does your stomach hurt?",
+            "vi": "Bạn đói à? Hay là bạn đau bụng?",
+            "id": "Lapar? Atau perutnya sakit?"
+          },
+          "note": {
+            "en": "배고파요 means I'm hungry. 배가 아파요 means my stomach hurts. Say 배가 많이 아파요.",
+            "vi": "배고파요 là đói bụng. 배가 아파요 là đau bụng. Hãy nói 배가 많이 아파요.",
+            "id": "배고파요 artinya lapar. 배가 아파요 artinya sakit perut. Katakan 배가 많이 아파요."
+          }
+        },
+        {
+          "ko": "몸이 안 좋아요.",
+          "rom": "momi an joayo",
+          "meaning": {
+            "en": "I don't feel well.",
+            "vi": "Tôi thấy không khỏe.",
+            "id": "Badan saya tidak enak."
+          },
+          "result": "retry",
+          "reply": "어디가 제일 아프세요? 머리가 아프세요, 배가 아프세요?",
+          "replyMeaning": {
+            "en": "Where does it hurt most? Your head, your stomach?",
+            "vi": "Bạn đau chỗ nào nhất? Đau đầu hay đau bụng?",
+            "id": "Bagian mana yang paling sakit? Kepala atau perut?"
+          },
+          "note": {
+            "en": "Too vague for the nurse. Say where it hurts: 배가 많이 아파요.",
+            "vi": "Quá chung chung. Hãy nói chỗ đau: 배가 많이 아파요.",
+            "id": "Terlalu umum. Sebut bagian yang sakit: 배가 많이 아파요."
+          }
+        }
+      ],
+      "task": {
+        "en": "See the nurse in the triage room",
+        "vi": "Gặp y tá ở phòng phân loại",
+        "id": "Temui perawat di ruang triase"
+      }
+    },
+    {
+      "id": "since",
+      "staff": "triage",
+      "location": "triage",
+      "npc": "언제부터 아프셨어요?",
+      "meaning": {
+        "en": "Since when has it hurt?",
+        "vi": "Bạn đau từ khi nào?",
+        "id": "Sakitnya sejak kapan?"
+      },
+      "choices": [
+        {
+          "ko": "저녁 여섯 시쯤부터요.",
+          "rom": "jeonyeok yeoseot sijjeumbuteoyo",
+          "meaning": {
+            "en": "Since about six in the evening.",
+            "vi": "Từ khoảng sáu giờ tối.",
+            "id": "Sejak sekitar jam enam sore."
+          },
+          "result": "advance",
+          "reply": "네, 저녁 여섯 시쯤부터요.",
+          "replyMeaning": {
+            "en": "Okay, since about six in the evening.",
+            "vi": "Vâng, từ khoảng sáu giờ tối.",
+            "id": "Baik, sejak sekitar jam enam sore."
+          }
+        },
+        {
+          "ko": "여섯 시까지요.",
+          "rom": "yeoseot sikkajiyo",
+          "meaning": {
+            "en": "Until six.",
+            "vi": "Đến sáu giờ.",
+            "id": "Sampai jam enam."
+          },
+          "result": "retry",
+          "reply": "여섯 시까지요? 그럼 지금은 괜찮으세요?",
+          "replyMeaning": {
+            "en": "Until six? So it doesn't hurt now?",
+            "vi": "Đến sáu giờ ạ? Vậy giờ bạn hết đau rồi à?",
+            "id": "Sampai jam enam? Jadi sekarang sudah tidak sakit?"
+          },
+          "note": {
+            "en": "까지 means until, 부터 means since. It still hurts: 저녁 여섯 시쯤부터요.",
+            "vi": "까지 là đến, 부터 là từ. Bạn vẫn đang đau: 저녁 여섯 시쯤부터요.",
+            "id": "까지 artinya sampai, 부터 artinya sejak. Masih sakit: 저녁 여섯 시쯤부터요."
+          }
+        },
+        {
+          "ko": "천천히 말씀해 주시겠어요?",
+          "rom": "cheoncheonhi malsseumhae jusigesseoyo",
+          "meaning": {
+            "en": "Could you speak slowly, please?",
+            "vi": "Chị nói chậm giúp tôi được không?",
+            "id": "Bisa bicara lebih pelan?"
+          },
+          "result": "ask",
+          "reply": "네. 언제부터 아프셨어요? 몇 시부터요?",
+          "replyMeaning": {
+            "en": "Sure. Since when has it hurt? From what time?",
+            "vi": "Vâng. Bạn đau từ khi nào? Từ mấy giờ?",
+            "id": "Baik. Sakitnya sejak kapan? Mulai jam berapa?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pain_scale",
+      "staff": "triage",
+      "location": "triage",
+      "npc": "얼마나 아프세요? 0부터 10까지 중에 몇 점이에요?",
+      "meaning": {
+        "en": "How bad is it? From 0 to 10, what number is it?",
+        "vi": "Đau đến mức nào? Từ 0 đến 10 thì được mấy điểm?",
+        "id": "Seberapa sakit? Dari 0 sampai 10, nilainya berapa?"
+      },
+      "choices": [
+        {
+          "ko": "칠 점쯤이요.",
+          "rom": "chil jeomjjeumiyo",
+          "meaning": {
+            "en": "About a 7.",
+            "vi": "Khoảng 7 điểm.",
+            "id": "Sekitar 7."
+          },
+          "result": "advance",
+          "reply": "네, 칠 점이요.",
+          "replyMeaning": {
+            "en": "Okay, a 7.",
+            "vi": "Vâng, 7 điểm.",
+            "id": "Baik, 7."
+          }
+        },
+        {
+          "ko": "많이요.",
+          "rom": "maniyo",
+          "meaning": {
+            "en": "A lot.",
+            "vi": "Đau lắm.",
+            "id": "Sakit sekali."
+          },
+          "result": "retry",
+          "reply": "숫자로 말씀해 주시겠어요? 10이 제일 아픈 거예요.",
+          "replyMeaning": {
+            "en": "Could you give me a number? 10 is the worst pain.",
+            "vi": "Bạn nói bằng số được không? 10 là đau nhất.",
+            "id": "Bisa sebut angkanya? 10 itu paling sakit."
+          },
+          "note": {
+            "en": "The nurse wants a number from 0 to 10. Say 칠 점쯤이요 (about 7).",
+            "vi": "Y tá cần một con số từ 0 đến 10. Hãy nói 칠 점쯤이요 (khoảng 7).",
+            "id": "Perawat butuh angka dari 0 sampai 10. Katakan 칠 점쯤이요 (sekitar 7)."
+          }
+        },
+        {
+          "ko": "몇 점이 뭐예요?",
+          "rom": "myeot jeomi mwoyeyo?",
+          "meaning": {
+            "en": "What do you mean, what number?",
+            "vi": "Mấy điểm là sao ạ?",
+            "id": "Maksudnya nilai berapa?"
+          },
+          "result": "ask",
+          "reply": "아픈 정도를 숫자로 말하는 거예요. 0은 안 아픈 거고, 10은 제일 아픈 거예요.",
+          "replyMeaning": {
+            "en": "Say how much it hurts as a number. 0 is no pain, 10 is the worst.",
+            "vi": "Là nói mức đau bằng con số. 0 là không đau, 10 là đau nhất.",
+            "id": "Sebutkan tingkat sakitnya dengan angka. 0 tidak sakit, 10 paling sakit."
+          }
+        }
+      ]
+    },
+    {
+      "id": "meds",
+      "staff": "triage",
+      "location": "triage",
+      "npc": "드시는 약이나 알레르기 있으세요?",
+      "meaning": {
+        "en": "Do you take any medicine, or have any allergies?",
+        "vi": "Bạn có đang dùng thuốc gì hay bị dị ứng gì không?",
+        "id": "Apakah kamu sedang minum obat atau punya alergi?"
+      },
+      "choices": [
+        {
+          "ko": "아니요, 없어요.",
+          "rom": "aniyo, eopseoyo",
+          "meaning": {
+            "en": "No, none.",
+            "vi": "Không, tôi không có.",
+            "id": "Tidak, tidak ada."
+          },
+          "result": "advance",
+          "reply": "네, 알겠어요.",
+          "replyMeaning": {
+            "en": "Okay.",
+            "vi": "Vâng, tôi hiểu rồi.",
+            "id": "Baik."
+          }
+        },
+        {
+          "ko": "괜찮아요.",
+          "rom": "gwaenchanayo",
+          "meaning": {
+            "en": "It's okay.",
+            "vi": "Không sao ạ.",
+            "id": "Tidak apa-apa."
+          },
+          "result": "retry",
+          "reply": "드시는 약이나 알레르기가 있으세요, 없으세요?",
+          "replyMeaning": {
+            "en": "Do you take any medicine or have allergies, yes or no?",
+            "vi": "Bạn có dùng thuốc hay bị dị ứng không? Có hay không?",
+            "id": "Ada obat yang diminum atau alergi, atau tidak?"
+          },
+          "note": {
+            "en": "괜찮아요 sounds like \"no thanks\" to an offer. For a question about what you have, say 아니요, 없어요.",
+            "vi": "괜찮아요 nghe như lời từ chối một lời mời. Câu hỏi có hay không thì trả lời: 아니요, 없어요.",
+            "id": "괜찮아요 terdengar seperti menolak tawaran. Untuk pertanyaan ada atau tidak, jawab 아니요, 없어요."
+          }
+        },
+        {
+          "ko": "드시는 약이 뭐예요?",
+          "rom": "deusineun yagi mwoyeyo?",
+          "meaning": {
+            "en": "What does 드시는 약 mean?",
+            "vi": "드시는 약 là gì ạ?",
+            "id": "드시는 약 itu apa?"
+          },
+          "result": "ask",
+          "reply": "평소에 먹는 약이요. 매일 먹는 약 있으세요?",
+          "replyMeaning": {
+            "en": "Medicine you usually take. Do you take any every day?",
+            "vi": "Là thuốc bạn thường uống. Bạn có uống thuốc gì hằng ngày không?",
+            "id": "Obat yang biasa diminum. Ada obat yang diminum setiap hari?"
+          }
+        }
+      ],
+      "after": "의사 선생님이 보실 거예요. 응급실은 오신 순서가 아니라 급한 순서대로 진료해요.",
+      "afterMeaning": {
+        "en": "The doctor will see you. The ER sees patients by urgency, not by who came first.",
+        "vi": "Bác sĩ sẽ khám cho bạn. Phòng cấp cứu khám theo mức độ khẩn cấp, không theo thứ tự đến.",
+        "id": "Dokter akan memeriksamu. UGD menangani pasien menurut tingkat kegawatan, bukan urutan datang."
+      }
+    },
+    {
+      "id": "payment",
+      "staff": "erdesk",
+      "location": "counter",
+      "npc": "진료 다 끝나셨네요. 수납 도와드릴게요.",
+      "meaning": {
+        "en": "You're all done. I'll take your payment now.",
+        "vi": "Bạn khám xong rồi. Tôi sẽ giúp bạn thanh toán.",
+        "id": "Pemeriksaannya sudah selesai. Saya bantu pembayarannya."
+      },
+      "choices": [
+        {
+          "ko": "카드로 할게요.",
+          "rom": "kadeuro halgeyo",
+          "meaning": {
+            "en": "I'll pay by card.",
+            "vi": "Tôi trả bằng thẻ.",
+            "id": "Saya bayar pakai kartu."
+          },
+          "result": "advance",
+          "reply": "네, 결제됐습니다.",
+          "replyMeaning": {
+            "en": "Payment done.",
+            "vi": "Đã thanh toán.",
+            "id": "Pembayaran selesai."
+          },
+          "give": "card"
+        },
+        {
+          "ko": "아까 접수했는데요?",
+          "rom": "akka jeopsuhaenneundeyo?",
+          "meaning": {
+            "en": "But I registered earlier?",
+            "vi": "Lúc nãy tôi đăng ký rồi mà?",
+            "id": "Tadi saya sudah daftar, kan?"
+          },
+          "result": "retry",
+          "reply": "네, 접수는 하셨고요. 지금은 수납, 진료비 내시는 거예요.",
+          "replyMeaning": {
+            "en": "Yes, you registered. Now it's 수납: paying the bill.",
+            "vi": "Vâng, bạn đã đăng ký rồi. Giờ là 수납, tức là trả viện phí.",
+            "id": "Ya, tadi itu pendaftaran. Sekarang 수납, membayar biaya berobat."
+          },
+          "note": {
+            "en": "접수 is registering when you arrive; 수납 is paying the bill before you leave. Say 카드로 할게요.",
+            "vi": "접수 là đăng ký lúc đến, 수납 là trả viện phí trước khi về. Hãy nói 카드로 할게요.",
+            "id": "접수 itu mendaftar saat datang; 수납 itu membayar sebelum pulang. Katakan 카드로 할게요."
+          }
+        },
+        {
+          "ko": "수납이 뭐예요?",
+          "rom": "sunabi mwoyeyo?",
+          "meaning": {
+            "en": "What's 수납?",
+            "vi": "수납 là gì ạ?",
+            "id": "수납 itu apa?"
+          },
+          "result": "ask",
+          "reply": "진료비를 내시는 거예요. 카드로 하시겠어요?",
+          "replyMeaning": {
+            "en": "It's paying the bill. By card?",
+            "vi": "Là trả viện phí. Bạn trả bằng thẻ nhé?",
+            "id": "Membayar biaya berobat. Pakai kartu?"
+          }
+        }
+      ],
+      "task": {
+        "en": "Pay at the ER counter",
+        "vi": "Thanh toán ở quầy tiếp nhận cấp cứu",
+        "id": "Bayar di loket UGD"
+      }
+    },
+    {
+      "id": "receipt",
+      "staff": "erdesk",
+      "location": "counter",
+      "npc": "영수증 필요하세요?",
+      "meaning": {
+        "en": "Do you need the receipt?",
+        "vi": "Bạn có cần biên lai không?",
+        "id": "Perlu kuitansinya?"
+      },
+      "choices": [
+        {
+          "ko": "네, 영수증 주세요.",
+          "rom": "ne, yeongsujeung juseyo",
+          "meaning": {
+            "en": "Yes, the receipt, please.",
+            "vi": "Vâng, cho tôi biên lai.",
+            "id": "Ya, minta kuitansinya."
+          },
+          "result": "advance",
+          "reply": "네, 여기 있습니다. 잘 보관하시고, 몸조리 잘하세요.",
+          "replyMeaning": {
+            "en": "Here you are. Keep it safe, and take care of yourself.",
+            "vi": "Đây ạ. Bạn giữ cẩn thận và giữ gìn sức khỏe nhé.",
+            "id": "Ini. Simpan baik-baik, dan semoga cepat sembuh."
+          }
+        },
+        {
+          "ko": "아니요, 버려 주세요.",
+          "rom": "aniyo, beoryeo juseyo",
+          "meaning": {
+            "en": "No, you can throw it away.",
+            "vi": "Không, bỏ đi giúp tôi.",
+            "id": "Tidak, buang saja."
+          },
+          "result": "retry",
+          "reply": "병원 영수증은 챙겨 두시는 게 좋아요. 나중에 필요할 수 있어요.",
+          "replyMeaning": {
+            "en": "It's better to keep hospital receipts. You may need it later.",
+            "vi": "Biên lai bệnh viện nên giữ lại. Sau này có thể cần đến.",
+            "id": "Kuitansi rumah sakit sebaiknya disimpan. Nanti mungkin diperlukan."
+          },
+          "note": {
+            "en": "Keep hospital receipts (영수증): if you have private insurance, you need them to claim. Say 영수증 주세요.",
+            "vi": "Hãy giữ biên lai bệnh viện (영수증): nếu có bảo hiểm tư nhân, bạn cần nó để yêu cầu chi trả. Hãy nói 영수증 주세요.",
+            "id": "Simpan kuitansi rumah sakit (영수증): kalau punya asuransi swasta, kuitansi diperlukan untuk klaim. Katakan 영수증 주세요."
+          }
+        },
+        {
+          "ko": "영수증은 왜 필요해요?",
+          "rom": "yeongsujeungeun wae piryohaeyo?",
+          "meaning": {
+            "en": "Why would I need the receipt?",
+            "vi": "Biên lai để làm gì ạ?",
+            "id": "Kuitansinya untuk apa?"
+          },
+          "result": "ask",
+          "reply": "따로 드신 보험이 있으면 나중에 필요할 수 있어요. 드릴까요?",
+          "replyMeaning": {
+            "en": "If you have other insurance, you may need it later. Shall I give it to you?",
+            "vi": "Nếu bạn có bảo hiểm khác thì sau này có thể cần. Tôi đưa bạn nhé?",
+            "id": "Kalau punya asuransi lain, nanti mungkin perlu. Mau saya berikan?"
+          }
+        }
+      ],
+      "grants": [
+        "doc:er_receipt"
+      ]
+    }
+  ],
+  "grants": [
+    "done:emergency_er"
+  ],
+  "phrases": [
+    {
+      "ko": "배가 많이 아파서 왔어요.",
+      "rom": "baega mani apaseo wasseoyo",
+      "meaning": {
+        "en": "I came because my stomach hurts a lot.",
+        "vi": "Tôi đến vì đau bụng nhiều.",
+        "id": "Saya datang karena perut saya sakit sekali."
+      }
+    },
+    {
+      "ko": "건강보험은 아직 없어요.",
+      "rom": "geongangboheomeun ajik eopseoyo",
+      "meaning": {
+        "en": "I don't have national health insurance yet.",
+        "vi": "Tôi chưa có bảo hiểm y tế quốc dân.",
+        "id": "Saya belum punya asuransi kesehatan nasional."
+      },
+      "needs": "sit:uninsured"
+    },
+    {
+      "ko": "건강보험 있어요.",
+      "rom": "geongangboheom isseoyo",
+      "meaning": {
+        "en": "I have national health insurance.",
+        "vi": "Tôi có bảo hiểm y tế quốc dân.",
+        "id": "Saya punya asuransi kesehatan nasional."
+      },
+      "needs": "sit:insured"
+    },
+    {
+      "ko": "저녁 여섯 시쯤부터 아팠어요.",
+      "rom": "jeonyeok yeoseot sijjeumbuteo apasseoyo",
+      "meaning": {
+        "en": "It has hurt since about six in the evening.",
+        "vi": "Tôi bị đau từ khoảng sáu giờ tối.",
+        "id": "Sakitnya sejak sekitar jam enam sore."
+      }
+    },
+    {
+      "ko": "칠 점쯤이요.",
+      "rom": "chil jeomjjeumiyo",
+      "meaning": {
+        "en": "About a 7 (out of 10).",
+        "vi": "Khoảng 7 điểm (trên 10).",
+        "id": "Sekitar 7 (dari 10)."
+      }
+    },
+    {
+      "ko": "먹는 약도, 알레르기도 없어요.",
+      "rom": "meongneun yakdo, allereugido eopseoyo",
+      "meaning": {
+        "en": "I take no medicine and have no allergies.",
+        "vi": "Tôi không dùng thuốc gì và không bị dị ứng.",
+        "id": "Saya tidak minum obat dan tidak punya alergi."
+      }
+    },
+    {
+      "ko": "영수증 주세요.",
+      "rom": "yeongsujeung juseyo",
+      "meaning": {
+        "en": "The receipt, please.",
+        "vi": "Cho tôi biên lai.",
+        "id": "Minta kuitansinya."
+      }
+    }
+  ],
+  "glossary": [
+    {
+      "ko": "응급실",
+      "rom": "eunggeupsil",
+      "meaning": {
+        "en": "Emergency room (ER)",
+        "vi": "Phòng cấp cứu",
+        "id": "Unit Gawat Darurat (UGD)"
+      }
+    },
+    {
+      "ko": "어떻게 오셨어요?",
+      "rom": "eotteoke osyeosseoyo?",
+      "meaning": {
+        "en": "What brings you here?",
+        "vi": "Bạn đến có việc gì?",
+        "id": "Ada keperluan apa?"
+      }
+    },
+    {
+      "ko": "접수 · 수납",
+      "rom": "jeopsu · sunap",
+      "meaning": {
+        "en": "Registering · paying the bill",
+        "vi": "Đăng ký · thanh toán viện phí",
+        "id": "Pendaftaran · pembayaran"
+      }
+    },
+    {
+      "ko": "신분증",
+      "rom": "sinbunjeung",
+      "meaning": {
+        "en": "ID (passport or ARC)",
+        "vi": "Giấy tờ tùy thân (hộ chiếu hoặc ARC)",
+        "id": "Kartu identitas (paspor atau ARC)"
+      }
+    },
+    {
+      "ko": "건강보험",
+      "rom": "geongangboheom",
+      "meaning": {
+        "en": "National health insurance",
+        "vi": "Bảo hiểm y tế quốc dân",
+        "id": "Asuransi kesehatan nasional"
+      }
+    },
+    {
+      "ko": "진료신청서",
+      "rom": "jillyosincheongseo",
+      "meaning": {
+        "en": "Registration form",
+        "vi": "Phiếu đăng ký khám",
+        "id": "Formulir pendaftaran berobat"
+      }
+    },
+    {
+      "ko": "예진실",
+      "rom": "yejinsil",
+      "meaning": {
+        "en": "Triage room",
+        "vi": "Phòng phân loại bệnh nhân",
+        "id": "Ruang triase"
+      }
+    },
+    {
+      "ko": "배가 아프다 · 배고프다",
+      "rom": "baega apeuda · baegopeuda",
+      "meaning": {
+        "en": "To have a stomach ache · to be hungry",
+        "vi": "Đau bụng · đói bụng",
+        "id": "Sakit perut · lapar"
+      }
+    },
+    {
+      "ko": "부터 · 까지",
+      "rom": "buteo · kkaji",
+      "meaning": {
+        "en": "Since (from) · until",
+        "vi": "Từ · đến",
+        "id": "Sejak · sampai"
+      }
+    },
+    {
+      "ko": "몇 점",
+      "rom": "myeot jeom",
+      "meaning": {
+        "en": "What number (on a scale of 0 to 10)",
+        "vi": "Mấy điểm (thang từ 0 đến 10)",
+        "id": "Nilai berapa (skala 0 sampai 10)"
+      }
+    },
+    {
+      "ko": "드시는 약",
+      "rom": "deusineun yak",
+      "meaning": {
+        "en": "Medicine you take (polite)",
+        "vi": "Thuốc đang dùng (cách nói lịch sự)",
+        "id": "Obat yang diminum (bentuk sopan)"
+      }
+    },
+    {
+      "ko": "영수증",
+      "rom": "yeongsujeung",
+      "meaning": {
+        "en": "Receipt",
+        "vi": "Biên lai",
+        "id": "Kuitansi"
+      }
+    }
+  ]
+}

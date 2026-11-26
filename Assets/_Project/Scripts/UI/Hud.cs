@@ -149,14 +149,16 @@ namespace SeoulFirstWeek.UI
             var track = UIKit.PenStroke(progressRow, Role.Ink, 2.5f, new Vector2(0, 0.3f), new Vector2(0.5f, 0.26f), new Vector2(1, 0.3f));
             track.fillAlpha = 0.35f;
             track.taper = 0.7f;
-            track.rectTransform.Stretch(0, 70, 0, 0);
+            track.rectTransform.Stretch(0, 86, 0, 0);
             progressStroke = UIKit.BrushStrip(progressRow, "Fill", Role.Brush);
-            progressStroke.rectTransform.Stretch(0, 70, 3, 3);
+            progressStroke.rectTransform.Stretch(0, 86, 3, 3);
             progressStroke.dry = 0.55f;
             progressStroke.rough = 1.4f;
             progressStroke.reveal = 0f;
             progressText = UIKit.Words(progressRow, "0%", 24, Role.Ink, Face.ReadBold, TextAnchor.MiddleRight);
-            progressText.rectTransform.Place(new Vector2(1, 0.5f), Vector2.zero, new Vector2(64, 30));
+            // wide enough for "100%" on one line
+            progressText.rectTransform.Place(new Vector2(1, 0.5f), Vector2.zero, new Vector2(80, 30));
+            progressText.horizontalOverflow = HorizontalWrapMode.Overflow;
 
             // the one to-do, on a highlighter band
             todoRow = UIKit.Rect("Todo", questBox);
@@ -257,6 +259,8 @@ namespace SeoulFirstWeek.UI
         /// <summary>The one thing the player should do now: the arrow redraws and the line pops in.</summary>
         public void SetTask(string text)
         {
+            // keep a short last word (a counter or room number) on the line before it
+            text = UIKit.NoOrphan(text);
             bool changed = todoText.text != (text ?? "");
             todoText.text = text ?? "";
             todoRow.gameObject.SetActive(!string.IsNullOrEmpty(text));

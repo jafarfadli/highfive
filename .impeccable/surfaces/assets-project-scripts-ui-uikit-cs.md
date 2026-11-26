@@ -13,6 +13,8 @@ Audience and job: international students rehearsing their first counter visits i
 
 ## Direction contract
 
+Revision 2026-11-25 (user): the UI is pulled towards the 3D world. Palette Signboard replaces Persimmon, with every value sampled from the street: shop-fascia teal (brush #1B6F68, deep #0F4A45, light text on it), late-sun gold (glow #E9B445, ink text on it), blue-violet ink #1A1D26 and night #1E2636, warm paper #F2EADB and kraft #D9C6A5. Shapes, type and motion are unchanged. Read every colour mention below through this palette (orange → teal, mustard → gold).
+
 Revision 2026-10-18 (user): one palette (Persimmon) instead of two themes; firmer, more highlighted and less papery (no tape, torn edges or paper texture; thick outlines, solid shadows, orange title bands, mustard highlighters); a retro poster title screen; solid bold reading text (Patrick Hand and Gaegu removed); no compass; golden-hour light and an inked toon sky. Where the contract below disagrees, the revision and CLAUDE.md ("UI design system: Retro Ink") win.
 
 THESIS: Your first week in Seoul as a hand-inked graphic novel: paper, brush ink and halftone carry every screen and the 3D street, and Seoul's own signboards organise where you go. Refuses the flat translucent dark-panel HUD and rounded-pill menus of every sim.

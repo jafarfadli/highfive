@@ -58,6 +58,11 @@ namespace SeoulFirstWeek.EditorTools
             Volume(root, Profile("Interior", p =>
                 Common(p, exposure: 0.3f, contrast: 14f, saturation: 8f, temperature: 3f, bloom: 0.45f, vignette: 0.2f)));
             RenderSettings.defaultReflectionMode = DefaultReflectionMode.Skybox;
+            // soft room light from every side, a little brighter from above than from below (the cel ambient
+            // turns it into three tones by facing); interiors have no sky, so without it only lamps and the weak
+            // sun light a surface and every face they miss is printed as deep shade
+            Ambient(C("#7C7A76"), C("#84807A"), C("#726C65"));
+            RenderSettings.ambientIntensity = 1f;
         }
 
         static void Common(VolumeProfile p, float exposure, float contrast, float saturation, float temperature, float bloom, float vignette,

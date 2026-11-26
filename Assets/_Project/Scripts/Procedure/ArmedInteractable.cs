@@ -26,6 +26,14 @@ namespace SeoulFirstWeek.Procedure
             return tcs.Task;
         }
 
+        /// <summary>Stops waiting without completing (another way through the step was taken).</summary>
+        public void Disarm()
+        {
+            var t = tcs;
+            tcs = null;
+            t?.TrySetCanceled();
+        }
+
         protected void Fire()
         {
             var t = tcs;

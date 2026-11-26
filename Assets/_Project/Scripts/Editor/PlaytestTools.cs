@@ -116,20 +116,43 @@ namespace SeoulFirstWeek.EditorTools
         public static ConversationPanel Panel() =>
             Object.FindAnyObjectByType<ConversationPanel>(FindObjectsInactive.Include);
 
-        /// <summary>Takes a ticket (walk-in places have none), fast-forwards the queue and steps up to the counter.</summary>
+        /// <summary>
+        /// Clears the story card, takes a ticket (walk-in places have none), does any errands in the world first
+        /// (the `go` steps before the first conversation), fast-forwards the queue and steps up to the counter.
+        /// </summary>
         public static ScenarioDirector ToCounter()
         {
             var d = Director();
+            if (StoryCard.Current) SkipStory();
             if (d.ticketMachine)
             {
                 for (int i = 0; i < 300 && !d.ticketMachine.Armed; i++) Frames(1);
                 d.ticketMachine.Interact(null);
             }
             Time.timeScale = 4f;
-            for (int i = 0; i < 3000 && !d.counter.Armed; i++) Frames(1);
+            for (int i = 0; i < 3000 && !(d.counter && d.counter.Armed) && !(Panel() && Panel().IsWaiting); i++)
+            {
+                CompleteTarget(d);
+                Frames(1);
+            }
             Time.timeScale = 1f;
-            d.counter.Interact(null);
+            if (d.counter && d.counter.Armed) d.counter.Interact(null);
             return d;
+        }
+
+        /// <summary>Uses the waypoint the current `go` step wants (or, with <paramref name="wrongFirst"/>, a wrong one).</summary>
+        public static bool CompleteTarget(ScenarioDirector d, bool wrongFirst = false)
+        {
+            if (string.IsNullOrEmpty(d.CurrentTarget) || d.waypoints == null) return false;
+            string id = wrongFirst && d.CurrentWrong.Length > 0 ? d.CurrentWrong[0] : d.CurrentTarget;
+            foreach (var w in d.waypoints)
+                if (w && w.Armed && w.stationId == id)
+                {
+                    Log.Add($"   (goes to {id})");
+                    w.Complete();
+                    return true;
+                }
+            return false;
         }
 
         public static bool WaitForInput(int max = 3000)
@@ -167,7 +190,15 @@ namespace SeoulFirstWeek.EditorTools
                         Log.Add($"   (fills in {st.document} at {st.stationId})");
                         st.Complete();
                     }
-                if (d.counter.Armed) d.counter.Interact(null);
+                if (d.counter && d.counter.Armed) d.counter.Interact(null);
+                // world steps: a wrong turn once when asked for mistakes, then the right way
+                if (!string.IsNullOrEmpty(d.CurrentTarget))
+                {
+                    bool wrong = mistakes && lastStep != "go:" + d.CurrentTarget && d.CurrentWrong.Length > 0;
+                    if (CompleteTarget(d, wrong)) lastStep = "go:" + d.CurrentTarget;
+                    Frames(2);
+                    continue;
+                }
                 // walk-in places: the patient walks into the treatment room when called
                 foreach (var room in d.rooms ?? new RoomEntrance[0])
                     if (room && room.Armed)
@@ -181,8 +212,9 @@ namespace SeoulFirstWeek.EditorTools
                 {
                     if (p.WaitingForPin)
                     {
-                        Log.Add($"NPC> {p.CurrentLine}\n   YOU> [PIN 2580]");
-                        p.EnterPin("2580");
+                        var code = string.IsNullOrEmpty(d.CurrentExpect) ? "2580" : d.CurrentExpect;
+                        Log.Add($"NPC> {p.CurrentLine}\n   YOU> [PIN {code}]");
+                        p.EnterPin(code);
                     }
                     else
                     {
@@ -206,11 +238,20 @@ namespace SeoulFirstWeek.EditorTools
         }
 
         /// <summary>Waits for the level's story card and clicks through it.</summary>
+        /// <summary>The option play-tests pick for each question on a personalised visit's story card (missing: the first).</summary>
+        public static int[] Situations = new int[0];
+
         public static bool SkipStory(int max = 600)
         {
             for (int i = 0; i < max; i++)
             {
                 var card = StoryCard.Current;
+                if (card && card.Picking)
+                {
+                    card.Pick(card.Asking < Situations.Length ? Situations[card.Asking] : 0);
+                    Frames(30);
+                    continue;
+                }
                 if (card) card.Begin();
                 else if (i > 30) return true;
                 Frames(1);

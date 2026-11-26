@@ -44,5 +44,6 @@ Material:
     - _UVMapped: 0
     m_Colors:
     - _BaseColor: {r: 0.9529412, g: 0.89411765, b: 0.8, a: 1}
+    - _EmissionColor: {r: 0.22, g: 0.22, b: 0.22, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

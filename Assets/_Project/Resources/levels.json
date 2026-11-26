@@ -26,7 +26,142 @@
             "en": "You've had a fever and a sore throat since yesterday.\nToday you're going to a clinic in Myeongdong to see a doctor.",
             "vi": "Từ hôm qua bạn bị sốt và đau họng.\nHôm nay bạn đến một phòng khám ở Myeongdong để gặp bác sĩ.",
             "id": "Sejak kemarin kamu demam dan sakit tenggorokan.\nHari ini kamu pergi ke klinik di Myeongdong untuk periksa ke dokter."
-          }
+          },
+          "situations": [
+            {
+              "id": "symptom",
+              "question": {
+                "en": "What brings you here today?",
+                "vi": "Hôm nay bạn bị sao?",
+                "id": "Apa keluhanmu hari ini?"
+              },
+              "options": [
+                {
+                  "id": "cold",
+                  "title": {
+                    "en": "Fever and sore throat",
+                    "vi": "Sốt và đau họng",
+                    "id": "Demam dan sakit tenggorokan"
+                  },
+                  "story": {
+                    "en": "You've had a fever and a sore throat since yesterday.\nToday you're going to a clinic in Myeongdong to see a doctor.",
+                    "vi": "Từ hôm qua bạn bị sốt và đau họng.\nHôm nay bạn đến một phòng khám ở Myeongdong để gặp bác sĩ.",
+                    "id": "Sejak kemarin kamu demam dan sakit tenggorokan.\nHari ini kamu pergi ke klinik di Myeongdong untuk periksa ke dokter."
+                  },
+                  "grants": [
+                    "sit:cold"
+                  ]
+                },
+                {
+                  "id": "stomach",
+                  "title": {
+                    "en": "Stomach ache",
+                    "vi": "Đau bụng",
+                    "id": "Sakit perut"
+                  },
+                  "story": {
+                    "en": "You've had a stomach ache and diarrhoea since last night.\nToday you're going to a clinic in Myeongdong to see a doctor.",
+                    "vi": "Từ đêm qua bạn bị đau bụng và tiêu chảy.\nHôm nay bạn đến một phòng khám ở Myeongdong để gặp bác sĩ.",
+                    "id": "Sejak semalam kamu sakit perut dan diare.\nHari ini kamu pergi ke klinik di Myeongdong untuk periksa ke dokter."
+                  },
+                  "grants": [
+                    "sit:stomach"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "insurance",
+              "question": {
+                "en": "How long have you been in Korea?",
+                "vi": "Bạn ở Hàn Quốc được bao lâu rồi?",
+                "id": "Sudah berapa lama kamu di Korea?"
+              },
+              "options": [
+                {
+                  "id": "uninsured",
+                  "title": {
+                    "en": "Three weeks: no health insurance yet",
+                    "vi": "Ba tuần: chưa có bảo hiểm y tế",
+                    "id": "Tiga minggu: belum ikut asuransi"
+                  },
+                  "tag": {
+                    "en": "No health insurance yet",
+                    "vi": "Chưa có bảo hiểm y tế",
+                    "id": "Belum punya asuransi kesehatan"
+                  },
+                  "story": {
+                    "en": "You arrived in Korea three weeks ago, so you're not in national health insurance yet.",
+                    "vi": "Bạn mới sang Hàn Quốc được ba tuần nên chưa có bảo hiểm y tế quốc dân.",
+                    "id": "Kamu baru tiga minggu di Korea, jadi belum ikut asuransi kesehatan nasional."
+                  },
+                  "grants": [
+                    "sit:uninsured"
+                  ]
+                },
+                {
+                  "id": "insured",
+                  "title": {
+                    "en": "Seven months: now insured",
+                    "vi": "Bảy tháng: đã có bảo hiểm y tế",
+                    "id": "Tujuh bulan: sudah ikut asuransi"
+                  },
+                  "tag": {
+                    "en": "In national health insurance",
+                    "vi": "Đã có bảo hiểm y tế quốc dân",
+                    "id": "Sudah ikut asuransi kesehatan nasional"
+                  },
+                  "story": {
+                    "en": "You've lived in Korea for seven months, so you have your residence card (ARC) and you're now in national health insurance.",
+                    "vi": "Bạn đã sống ở Hàn Quốc được bảy tháng nên đã có thẻ cư trú (ARC) và giờ đã có bảo hiểm y tế quốc dân.",
+                    "id": "Kamu sudah tujuh bulan di Korea, jadi sudah punya kartu tinggal (ARC) dan sekarang sudah ikut asuransi kesehatan nasional."
+                  },
+                  "grants": [
+                    "sit:insured"
+                  ],
+                  "carry": [
+                    "arc"
+                  ]
+                }
+              ]
+            }
+          ],
+          "before": [
+            {
+              "kind": "bring",
+              "text": {
+                "en": "Bring your passport or ARC: you show ID at the reception desk when you register.",
+                "vi": "Mang theo hộ chiếu hoặc thẻ ARC: khi đăng ký, bạn xuất trình giấy tờ tùy thân ở quầy tiếp nhận.",
+                "id": "Bawa paspor atau ARC: kamu menunjukkan kartu identitas di meja depan saat mendaftar."
+              }
+            },
+            {
+              "kind": "cost",
+              "needs": "sit:uninsured",
+              "text": {
+                "en": "Without national insurance you pay the full fee, set by each clinic: here, 18,840 won for a first visit.",
+                "vi": "Chưa có bảo hiểm y tế quốc dân thì bạn trả toàn bộ phí, do mỗi phòng khám tự quy định: ở đây, lần khám đầu là 18.840 won.",
+                "id": "Tanpa asuransi kesehatan nasional, kamu membayar biaya penuh yang ditetapkan tiap klinik: di sini, kunjungan pertama 18.840 won."
+              }
+            },
+            {
+              "kind": "cost",
+              "needs": "sit:insured",
+              "text": {
+                "en": "With national insurance you pay 30% of the fee: about 5,600 won for a first visit in 2026.",
+                "vi": "Có bảo hiểm y tế quốc dân thì bạn trả 30% chi phí: khoảng 5.600 won cho lần khám đầu trong năm 2026.",
+                "id": "Dengan asuransi kesehatan nasional, kamu membayar 30% biaya: sekitar 5.600 won untuk kunjungan pertama pada 2026."
+              }
+            },
+            {
+              "kind": "tip",
+              "text": {
+                "en": "After paying, take the prescription (처방전) to a pharmacy (약국) nearby to buy your medicine.",
+                "vi": "Sau khi thanh toán, hãy mang đơn thuốc (처방전) đến một nhà thuốc (약국) gần đó để mua thuốc.",
+                "id": "Setelah membayar, bawa resep (처방전) ke apotek (약국) terdekat untuk membeli obat."
+              }
+            }
+          ]
         },
         {
           "id": "clinic-2",
@@ -44,7 +179,33 @@
             "en": "Your cold kept you home for three days, and your language school wants proof for the classes you missed.\nToday you go back to the clinic to get a medical document.",
             "vi": "Vì bị cảm, bạn đã nghỉ ở nhà ba ngày, và trường tiếng cần giấy tờ chứng minh cho những buổi học bạn vắng.\nHôm nay bạn quay lại phòng khám để xin giấy tờ y tế.",
             "id": "Flu membuatmu tidak masuk tiga hari, dan lembaga bahasamu minta bukti untuk kelas yang terlewat.\nHari ini kamu kembali ke klinik untuk minta surat keterangan medis."
-          }
+          },
+          "before": [
+            {
+              "kind": "bring",
+              "text": {
+                "en": "Bring your passport or ARC: clinics usually give medical papers only to the patient, after an ID check.",
+                "vi": "Mang theo hộ chiếu hoặc thẻ ARC: phòng khám thường chỉ cấp giấy tờ y tế cho chính bệnh nhân, sau khi kiểm tra giấy tờ tùy thân.",
+                "id": "Bawa paspor atau ARC: klinik biasanya hanya memberikan dokumen medis kepada pasiennya sendiri, setelah memeriksa identitas."
+              }
+            },
+            {
+              "kind": "cost",
+              "text": {
+                "en": "A medical certificate (진단서) costs up to 20,000 won, and health insurance doesn't cover it.",
+                "vi": "Giấy chẩn đoán (진단서) có giá tối đa 20.000 won, và bảo hiểm y tế không chi trả khoản này.",
+                "id": "Surat keterangan dokter (진단서) biayanya paling banyak 20.000 won, dan tidak ditanggung asuransi kesehatan."
+              }
+            },
+            {
+              "kind": "tip",
+              "text": {
+                "en": "A 진료확인서 (up to 3,000 won) proves your visit; for the days you had to rest, ask for a 진단서.",
+                "vi": "진료확인서 (tối đa 3.000 won) chỉ xác nhận bạn đã đi khám; muốn ghi số ngày phải nghỉ, hãy xin 진단서.",
+                "id": "진료확인서 (paling banyak 3.000 won) hanya membuktikan kamu sudah berobat; untuk hari-hari kamu harus istirahat, minta 진단서."
+              }
+            }
+          ]
         }
       ]
     },
@@ -71,10 +232,44 @@
             "id": "Buat kartu tinggal (ARC)"
           },
           "story": {
-            "en": "Anyone staying in Korea longer than 90 days needs a residence card (ARC).\nToday you apply for yours at the immigration office.",
-            "vi": "Ai ở Hàn Quốc hơn 90 ngày đều cần thẻ cư trú (ARC).\nHôm nay bạn đến văn phòng xuất nhập cảnh để làm thẻ.",
-            "id": "Siapa pun yang tinggal di Korea lebih dari 90 hari butuh kartu tinggal (ARC).\nHari ini kamu mengajukannya di kantor imigrasi."
-          }
+            "en": "Anyone staying in Korea longer than 90 days needs a residence card (ARC).\nToday you apply for yours at the immigration office. You also bring your dormitory residence certificate as proof of address.",
+            "vi": "Ai ở Hàn Quốc hơn 90 ngày đều cần thẻ cư trú (ARC).\nHôm nay bạn đến văn phòng xuất nhập cảnh để làm thẻ. Bạn mang theo cả giấy xác nhận ở ký túc xá để chứng minh nơi ở.",
+            "id": "Siapa pun yang tinggal di Korea lebih dari 90 hari butuh kartu tinggal (ARC).\nHari ini kamu mengajukannya di kantor imigrasi. Kamu juga membawa surat keterangan asrama sebagai bukti tempat tinggal."
+          },
+          "before": [
+            {
+              "kind": "hours",
+              "text": {
+                "en": "Apply for your residence card within 90 days of arriving in Korea.",
+                "vi": "Hãy đăng ký thẻ cư trú trong vòng 90 ngày kể từ khi đến Hàn Quốc.",
+                "id": "Ajukan kartu tinggalmu dalam 90 hari sejak tiba di Korea."
+              }
+            },
+            {
+              "kind": "bring",
+              "text": {
+                "en": "Bring your passport, a 3.5 × 4.5 cm photo, an enrollment certificate and proof of address (dorm certificate).",
+                "vi": "Mang hộ chiếu, một ảnh 3,5 × 4,5 cm, giấy chứng nhận đang học và giấy tờ chứng minh nơi ở (giấy xác nhận ở ký túc xá).",
+                "id": "Bawa paspor, pas foto 3,5 × 4,5 cm, surat keterangan aktif kuliah, dan bukti tempat tinggal (surat keterangan asrama)."
+              }
+            },
+            {
+              "kind": "cost",
+              "text": {
+                "en": "The residence card fee is 35,000 won; it rose from 30,000 won in January 2025.",
+                "vi": "Lệ phí làm thẻ cư trú là 35.000 won, tăng từ 30.000 won kể từ tháng 1 năm 2025.",
+                "id": "Biaya kartu tinggal 35.000 won, naik dari 30.000 won sejak Januari 2025."
+              }
+            },
+            {
+              "kind": "tip",
+              "text": {
+                "en": "Book your visit on HiKorea first: in 2025 the average wait for a slot was about 19 days.",
+                "vi": "Hãy đặt lịch hẹn trên HiKorea trước: năm 2025, trung bình phải chờ khoảng 19 ngày mới có lịch.",
+                "id": "Buat reservasi kunjungan di HiKorea dulu: pada 2025, rata-rata harus menunggu sekitar 19 hari untuk mendapat jadwal."
+              }
+            }
+          ]
         },
         {
           "id": "immigration-2",
@@ -90,10 +285,44 @@
             "id": "Perpanjang izin tinggal"
           },
           "story": {
-            "en": "Your permitted stay ends next month, so today you apply to extend it.\nYou booked a visit on HiKorea and brought your attendance certificate and next term's tuition receipt.",
-            "vi": "Thời hạn lưu trú của bạn hết vào tháng sau, nên hôm nay bạn đi xin gia hạn.\nBạn đã đặt lịch trên HiKorea và mang theo giấy chứng nhận chuyên cần cùng biên lai học phí kỳ sau.",
-            "id": "Masa tinggalmu habis bulan depan, jadi hari ini kamu mengajukan perpanjangan.\nKamu sudah membuat janji di HiKorea dan membawa surat keterangan kehadiran serta bukti bayar uang kuliah semester depan."
-          }
+            "en": "Your permitted stay ends next month, so today you apply to extend it.\nYou booked a visit on HiKorea and brought your attendance certificate and next term's tuition receipt. Your dormitory residence certificate goes in the folder too.",
+            "vi": "Thời hạn lưu trú của bạn hết vào tháng sau, nên hôm nay bạn đi xin gia hạn.\nBạn đã đặt lịch trên HiKorea và mang theo giấy chứng nhận chuyên cần cùng biên lai học phí kỳ sau. Giấy xác nhận ở ký túc xá cũng nằm trong tập hồ sơ.",
+            "id": "Masa tinggalmu habis bulan depan, jadi hari ini kamu mengajukan perpanjangan.\nKamu sudah membuat janji di HiKorea dan membawa surat keterangan kehadiran serta bukti bayar uang kuliah semester depan. Surat keterangan asrama juga ada di mapmu."
+          },
+          "before": [
+            {
+              "kind": "hours",
+              "text": {
+                "en": "Book a HiKorea visit well before your stay ends: waiting for a slot can take several weeks.",
+                "vi": "Hãy đặt lịch hẹn trên HiKorea thật sớm, trước khi hết hạn lưu trú: có khi phải chờ vài tuần mới có lịch.",
+                "id": "Buat reservasi di HiKorea jauh sebelum masa tinggalmu habis: menunggu jadwal bisa makan waktu beberapa minggu."
+              }
+            },
+            {
+              "kind": "bring",
+              "text": {
+                "en": "Bring your ARC, passport, enrollment and attendance certificates, tuition receipt and proof of address.",
+                "vi": "Mang thẻ ARC, hộ chiếu, giấy chứng nhận đang học và chuyên cần, biên lai học phí và giấy tờ chứng minh nơi ở.",
+                "id": "Bawa ARC, paspor, surat keterangan aktif kuliah dan kehadiran, bukti bayar uang kuliah, serta bukti tempat tinggal."
+              }
+            },
+            {
+              "kind": "cost",
+              "text": {
+                "en": "The extension fee is 60,000 won, and applying after your stay has ended can mean a fine.",
+                "vi": "Lệ phí gia hạn là 60.000 won, và nộp đơn sau khi đã hết hạn lưu trú có thể bị phạt.",
+                "id": "Biaya perpanjangan 60.000 won, dan mengajukan setelah masa tinggal habis bisa kena denda."
+              }
+            },
+            {
+              "kind": "tip",
+              "text": {
+                "en": "Immigration reads your attendance rate, so give the school a medical certificate for days you were ill.",
+                "vi": "Cục xuất nhập cảnh xem tỷ lệ chuyên cần của bạn, nên những ngày bị ốm hãy nộp giấy chẩn đoán cho trường.",
+                "id": "Imigrasi melihat tingkat kehadiranmu, jadi serahkan surat keterangan dokter ke sekolah untuk hari-hari kamu sakit."
+              }
+            }
+          ]
         }
       ]
     },
@@ -124,7 +353,33 @@
             "en": "You need a Korean bank account for tuition and living costs.\nToday you open one at the bank.",
             "vi": "Bạn cần tài khoản ngân hàng Hàn Quốc để đóng học phí và chi tiêu.\nHôm nay bạn đến ngân hàng để mở tài khoản.",
             "id": "Kamu butuh rekening bank Korea untuk uang kuliah dan biaya hidup.\nHari ini kamu membukanya di bank."
-          }
+          },
+          "before": [
+            {
+              "kind": "hours",
+              "text": {
+                "en": "Bank branches are usually open 9:00 to 16:00 on weekdays.",
+                "vi": "Chi nhánh ngân hàng thường mở cửa từ 9 giờ đến 16 giờ vào ngày thường.",
+                "id": "Kantor cabang bank biasanya buka pukul 09.00 sampai 16.00 pada hari kerja."
+              }
+            },
+            {
+              "kind": "bring",
+              "text": {
+                "en": "Bring your ARC (외국인등록증) and certificate of enrollment; most banks want the ARC, not just a passport.",
+                "vi": "Mang thẻ ARC (외국인등록증) và giấy chứng nhận đang học; hầu hết ngân hàng cần thẻ ARC chứ không chỉ hộ chiếu.",
+                "id": "Bawa ARC (외국인등록증) dan surat keterangan aktif kuliah; kebanyakan bank meminta ARC, bukan hanya paspor."
+              }
+            },
+            {
+              "kind": "tip",
+              "text": {
+                "en": "Know the account's purpose (tuition, living costs): banks must record it and may limit an account without one.",
+                "vi": "Hãy biết rõ bạn mở tài khoản để làm gì (học phí, sinh hoạt phí): ngân hàng phải ghi lại mục đích, và có thể giới hạn tài khoản nếu không có.",
+                "id": "Siapkan tujuan rekeningnya (uang kuliah, biaya hidup): bank wajib mencatatnya dan bisa membatasi rekening tanpa tujuan yang jelas."
+              }
+            }
+          ]
         },
         {
           "id": "bank-2",
@@ -143,7 +398,574 @@
             "en": "Your younger brother's school fees are due back home in Vietnam.\nToday you send 500,000 won from your Korean account, with the family's bank details written on a note.",
             "vi": "Học phí của em trai bạn ở Việt Nam sắp đến hạn.\nHôm nay bạn gửi 500.000 won từ tài khoản ở Hàn, thông tin ngân hàng của gia đình đã ghi sẵn trên một tờ giấy.",
             "id": "Biaya sekolah adikmu di Vietnam sudah jatuh tempo.\nHari ini kamu mengirim 500.000 won dari rekening Korea-mu, dengan data bank keluarga yang sudah dicatat di secarik kertas."
-          }
+          },
+          "before": [
+            {
+              "kind": "hours",
+              "text": {
+                "en": "Bank branches are usually open 9:00 to 16:00 on weekdays.",
+                "vi": "Chi nhánh ngân hàng thường mở cửa từ 9 giờ đến 16 giờ vào ngày thường.",
+                "id": "Kantor cabang bank biasanya buka pukul 09.00 sampai 16.00 pada hari kerja."
+              }
+            },
+            {
+              "kind": "bring",
+              "text": {
+                "en": "Bring your bankbook, ARC and passport, plus the recipient's name, bank, account number and SWIFT code.",
+                "vi": "Mang sổ ngân hàng, thẻ ARC và hộ chiếu, cùng tên người nhận, ngân hàng, số tài khoản và mã SWIFT.",
+                "id": "Bawa buku tabungan, ARC, dan paspor, serta nama penerima, nama bank, nomor rekening, dan kode SWIFT."
+              }
+            },
+            {
+              "kind": "cost",
+              "text": {
+                "en": "Sending up to USD 500 at the counter usually costs about 5,000 won plus an 8,000 won cable charge (전신료).",
+                "vi": "Gửi tối đa 500 USD tại quầy thường mất khoảng 5.000 won phí chuyển tiền cộng 8.000 won phí điện tín (전신료).",
+                "id": "Mengirim sampai USD 500 di loket biasanya kena biaya sekitar 5.000 won ditambah biaya kawat 8.000 won (전신료)."
+              }
+            },
+            {
+              "kind": "tip",
+              "text": {
+                "en": "Without income papers you can send up to USD 50,000 a year, all through one bank you designate.",
+                "vi": "Không cần giấy tờ thu nhập, bạn có thể gửi tối đa 50.000 USD mỗi năm, tất cả qua một ngân hàng bạn chỉ định.",
+                "id": "Tanpa dokumen penghasilan, kamu bisa mengirim sampai USD 50.000 per tahun, semuanya lewat satu bank yang kamu tunjuk."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "airport",
+      "nameKo": "인천공항",
+      "color": "#2A6FDB",
+      "name": {
+        "en": "Airport",
+        "vi": "Sân bay",
+        "id": "Bandara"
+      },
+      "levels": [
+        {
+          "id": "airport-1",
+          "level": 1,
+          "procedure": "airport",
+          "scene": "Airport",
+          "entrance": "",
+          "available": true,
+          "title": {
+            "en": "Pass immigration",
+            "vi": "Làm thủ tục nhập cảnh",
+            "id": "Lewati imigrasi"
+          },
+          "story": {
+            "en": "You've just landed at Incheon on a D-4 visa, and you filed the e-Arrival Card online before the flight.\nNow get through immigration, collect your suitcase and walk out through customs.",
+            "vi": "Bạn vừa hạ cánh xuống Incheon với visa D-4, và đã khai thẻ nhập cảnh điện tử (e-Arrival Card) trên mạng trước chuyến bay.\nGiờ hãy làm thủ tục nhập cảnh, lấy vali và đi ra qua hải quan.",
+            "id": "Kamu baru mendarat di Incheon dengan visa D-4, dan sudah mengisi e-Arrival Card secara online sebelum terbang.\nSekarang lewati imigrasi, ambil kopermu, lalu keluar melalui bea cukai."
+          },
+          "situations": [
+            {
+              "id": "suitcase",
+              "question": {
+                "en": "What's in your suitcase?",
+                "vi": "Trong vali của bạn có gì?",
+                "id": "Apa isi kopermu?"
+              },
+              "options": [
+                {
+                  "id": "nothing",
+                  "title": {
+                    "en": "Just clothes and books",
+                    "vi": "Chỉ có quần áo và sách",
+                    "id": "Cuma baju dan buku"
+                  },
+                  "tag": {
+                    "en": "Nothing to declare",
+                    "vi": "Không có gì phải khai báo",
+                    "id": "Tidak ada yang perlu dilaporkan"
+                  },
+                  "story": {
+                    "en": "You've just landed at Incheon on a D-4 visa, and you filed the e-Arrival Card online before the flight.\nNow get through immigration, collect your suitcase of clothes and books, and walk out through customs.",
+                    "vi": "Bạn vừa hạ cánh xuống Incheon với visa D-4, và đã khai thẻ nhập cảnh điện tử (e-Arrival Card) trên mạng trước chuyến bay.\nGiờ hãy làm thủ tục nhập cảnh, lấy chiếc vali đựng quần áo và sách, rồi đi ra qua hải quan.",
+                    "id": "Kamu baru mendarat di Incheon dengan visa D-4, dan sudah mengisi e-Arrival Card secara online sebelum terbang.\nSekarang lewati imigrasi, ambil kopermu yang berisi baju dan buku, lalu keluar melalui bea cukai."
+                  },
+                  "grants": [
+                    "sit:nothing"
+                  ]
+                },
+                {
+                  "id": "food",
+                  "title": {
+                    "en": "Homemade sausages from your family",
+                    "vi": "Xúc xích nhà làm của gia đình",
+                    "id": "Sosis buatan keluarga"
+                  },
+                  "tag": {
+                    "en": "Homemade sausages in the suitcase",
+                    "vi": "Xúc xích nhà làm trong vali",
+                    "id": "Sosis buatan rumah di koper"
+                  },
+                  "story": {
+                    "en": "You've just landed at Incheon on a D-4 visa, and you filed the e-Arrival Card online before the flight.\nYour family packed homemade sausages in your suitcase: get through immigration, collect it and walk out through customs.",
+                    "vi": "Bạn vừa hạ cánh xuống Incheon với visa D-4, và đã khai thẻ nhập cảnh điện tử (e-Arrival Card) trên mạng trước chuyến bay.\nGia đình đã bỏ ít xúc xích nhà làm vào vali cho bạn: giờ hãy làm thủ tục nhập cảnh, lấy vali rồi đi ra qua hải quan.",
+                    "id": "Kamu baru mendarat di Incheon dengan visa D-4, dan sudah mengisi e-Arrival Card secara online sebelum terbang.\nKeluargamu memasukkan sosis buatan sendiri ke dalam kopermu: sekarang lewati imigrasi, ambil kopermu, lalu keluar melalui bea cukai."
+                  },
+                  "grants": [
+                    "sit:food"
+                  ]
+                }
+              ]
+            }
+          ],
+          "before": [
+            {
+              "kind": "hours",
+              "text": {
+                "en": "Allow 1 to 2 hours from landing before you book any onward transport.",
+                "vi": "Hãy tính 1 đến 2 tiếng từ lúc hạ cánh rồi mới đặt phương tiện đi tiếp.",
+                "id": "Sisihkan waktu 1 sampai 2 jam sejak mendarat sebelum memesan transportasi lanjutan."
+              }
+            },
+            {
+              "kind": "bring",
+              "text": {
+                "en": "Have your passport with the D-4 visa, and file the free e-Arrival Card online before you land.",
+                "vi": "Chuẩn bị sẵn hộ chiếu có visa D-4, và khai thẻ nhập cảnh điện tử (e-Arrival Card) miễn phí trên mạng trước khi hạ cánh.",
+                "id": "Siapkan paspor dengan visa D-4, dan isi e-Arrival Card secara online, gratis, sebelum mendarat."
+              }
+            },
+            {
+              "kind": "cost",
+              "needs": "sit:nothing",
+              "text": {
+                "en": "Goods up to USD 800 are duty-free; with nothing to declare, walk through 신고없음 with no form to fill in.",
+                "vi": "Hàng hóa trị giá đến 800 USD được miễn thuế; nếu không có gì phải khai báo, hãy đi qua lối 신고없음, không cần điền tờ khai.",
+                "id": "Barang sampai USD 800 bebas bea; kalau tidak ada yang perlu dilaporkan, lewati jalur 신고없음 tanpa mengisi formulir."
+              }
+            },
+            {
+              "kind": "cost",
+              "needs": "sit:food",
+              "text": {
+                "en": "Declare meat, fruit or dairy from home at 신고있음: undeclared farm products can be fined up to 10 million won.",
+                "vi": "Thịt, trái cây hay sản phẩm từ sữa mang từ nhà phải khai báo ở lối 신고있음: nông sản không khai báo có thể bị phạt đến 10 triệu won.",
+                "id": "Laporkan daging, buah, atau produk susu dari rumah di jalur 신고있음: produk pertanian yang tidak dilaporkan bisa didenda sampai 10 juta won."
+              }
+            },
+            {
+              "kind": "tip",
+              "text": {
+                "en": "Foreigners queue on the red line (blue is for Koreans) and give both index fingerprints and a face photo.",
+                "vi": "Người nước ngoài xếp hàng ở vạch đỏ (vạch xanh dành cho người Hàn), rồi lấy vân tay hai ngón trỏ và chụp ảnh khuôn mặt.",
+                "id": "Orang asing antre di garis merah (garis biru untuk warga Korea), lalu memberikan sidik jari kedua telunjuk dan foto wajah."
+              }
+            }
+          ]
+        },
+        {
+          "id": "airport-2",
+          "level": 2,
+          "procedure": "airport_bus",
+          "scene": "Airport",
+          "entrance": "",
+          "start": "arrivals",
+          "available": true,
+          "title": {
+            "en": "Take the bus to Myeongdong",
+            "vi": "Đi xe buýt đến Myeongdong",
+            "id": "Naik bus ke Myeongdong"
+          },
+          "story": {
+            "en": "You're through customs with your suitcase, and your school buddy is waiting in Myeongdong to show you the way to the dormitory.\nTake the airport bus into the city.",
+            "vi": "Bạn đã qua hải quan cùng chiếc vali, và bạn buddy của trường đang chờ ở Myeongdong để dẫn đường về ký túc xá.\nHãy đi xe buýt sân bay vào thành phố.",
+            "id": "Kamu sudah lewat bea cukai bersama kopermu, dan buddy dari sekolahmu menunggu di Myeongdong untuk menunjukkan jalan ke asrama.\nNaik bus bandara ke pusat kota."
+          },
+          "before": [
+            {
+              "kind": "hours",
+              "text": {
+                "en": "The airport bus to Myeongdong usually runs from about 5:20 to 23:00.",
+                "vi": "Xe buýt sân bay đi Myeongdong thường chạy từ khoảng 5 giờ 20 sáng đến 23 giờ.",
+                "id": "Bus bandara ke Myeongdong biasanya beroperasi sekitar pukul 05.20 sampai 23.00."
+              }
+            },
+            {
+              "kind": "cost",
+              "text": {
+                "en": "The adult fare to Myeongdong is 17,000 won; there's no student fare (children 6 to 12 pay 12,000 won).",
+                "vi": "Vé người lớn đi Myeongdong là 17.000 won; không có giá vé sinh viên (trẻ em từ 6 đến 12 tuổi trả 12.000 won).",
+                "id": "Tarif dewasa ke Myeongdong 17.000 won; tidak ada tarif pelajar (anak usia 6 sampai 12 tahun membayar 12.000 won)."
+              }
+            },
+            {
+              "kind": "tip",
+              "text": {
+                "en": "Ticket counters are on 1F at Terminal 1 and B1 at Terminal 2; at Terminal 2 you need a ticket to board.",
+                "vi": "Quầy bán vé ở tầng 1 Nhà ga 1 và tầng B1 Nhà ga 2; ở Nhà ga 2 phải có vé mới được lên xe.",
+                "id": "Loket tiket ada di lantai 1 Terminal 1 dan lantai B1 Terminal 2; di Terminal 2 kamu harus punya tiket untuk naik."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "subway",
+      "nameKo": "명동역",
+      "color": "#00A4E3",
+      "name": {
+        "en": "Subway station",
+        "vi": "Ga tàu điện ngầm",
+        "id": "Stasiun kereta bawah tanah"
+      },
+      "levels": [
+        {
+          "id": "subway-1",
+          "level": 1,
+          "procedure": "subway",
+          "scene": "Subway",
+          "entrance": "subway",
+          "available": true,
+          "title": {
+            "en": "Get a transport card and ride home",
+            "vi": "Mua thẻ giao thông và đi tàu về nhà",
+            "id": "Beli kartu transportasi dan pulang naik kereta"
+          },
+          "story": {
+            "en": "Classes are over and you're in Myeongdong, but you don't have a transport card yet.\nNow you buy one in the station and ride home to your dormitory near Heukseok (흑석): Line 4 towards Sadang (사당), changing to Line 9 at Dongjak (동작).",
+            "vi": "Tan học, bạn đang ở Myeongdong nhưng chưa có thẻ giao thông.\nGiờ bạn mua thẻ trong ga rồi đi tàu về ký túc xá gần ga Heukseok (흑석): tuyến 4 hướng Sadang (사당), đổi sang tuyến 9 ở ga Dongjak (동작).",
+            "id": "Kelas sudah selesai dan kamu sedang di Myeongdong, tapi belum punya kartu transportasi.\nSekarang kamu membelinya di stasiun lalu pulang ke asrama dekat Heukseok (흑석): Line 4 arah Sadang (사당), lalu pindah ke Line 9 di Dongjak (동작)."
+          },
+          "situations": [
+            {
+              "id": "tcard",
+              "question": {
+                "en": "Do you have a transport card?",
+                "vi": "Bạn đã có thẻ giao thông chưa?",
+                "id": "Kamu sudah punya kartu transportasi?"
+              },
+              "options": [
+                {
+                  "id": "nocard",
+                  "title": {
+                    "en": "No, not yet",
+                    "vi": "Chưa có",
+                    "id": "Belum punya"
+                  },
+                  "tag": {
+                    "en": "No transport card yet",
+                    "vi": "Chưa có thẻ giao thông",
+                    "id": "Belum punya kartu transportasi"
+                  },
+                  "story": {
+                    "en": "Classes are over and you're in Myeongdong, but you don't have a transport card yet.\nNow you buy one in the station and ride home to your dormitory near Heukseok (흑석): Line 4 towards Sadang (사당), changing to Line 9 at Dongjak (동작).",
+                    "vi": "Tan học, bạn đang ở Myeongdong nhưng chưa có thẻ giao thông.\nGiờ bạn mua thẻ trong ga rồi đi tàu về ký túc xá gần ga Heukseok (흑석): tuyến 4 hướng Sadang (사당), đổi sang tuyến 9 ở ga Dongjak (동작).",
+                    "id": "Kelas sudah selesai dan kamu sedang di Myeongdong, tapi belum punya kartu transportasi.\nSekarang kamu membelinya di stasiun lalu pulang ke asrama dekat Heukseok (흑석): Line 4 arah Sadang (사당), lalu pindah ke Line 9 di Dongjak (동작)."
+                  },
+                  "grants": [
+                    "sit:nocard"
+                  ]
+                },
+                {
+                  "id": "emptycard",
+                  "title": {
+                    "en": "Yes, but it's out of money",
+                    "vi": "Có, nhưng thẻ hết tiền rồi",
+                    "id": "Punya, tapi saldonya habis"
+                  },
+                  "tag": {
+                    "en": "Transport card with no money left",
+                    "vi": "Thẻ giao thông đã hết tiền",
+                    "id": "Kartu transportasi yang saldonya habis"
+                  },
+                  "story": {
+                    "en": "Classes are over and you're in Myeongdong with your transport card in your pocket, but there's no money left on it.\nNow you charge it in the station and ride home to your dormitory near Heukseok (흑석): Line 4 towards Sadang (사당), changing to Line 9 at Dongjak (동작).",
+                    "vi": "Tan học, bạn đang ở Myeongdong, thẻ giao thông nằm trong túi nhưng đã hết tiền.\nGiờ bạn nạp tiền vào thẻ trong ga rồi đi tàu về ký túc xá gần ga Heukseok (흑석): tuyến 4 hướng Sadang (사당), đổi sang tuyến 9 ở ga Dongjak (동작).",
+                    "id": "Kelas sudah selesai dan kamu sedang di Myeongdong dengan kartu transportasi di saku, tapi saldonya sudah habis.\nSekarang kamu mengisi saldonya di stasiun lalu pulang ke asrama dekat Heukseok (흑석): Line 4 arah Sadang (사당), lalu pindah ke Line 9 di Dongjak (동작)."
+                  },
+                  "grants": [
+                    "sit:emptycard"
+                  ],
+                  "carry": [
+                    "tcard"
+                  ]
+                }
+              ]
+            }
+          ],
+          "before": [
+            {
+              "kind": "bring",
+              "text": {
+                "en": "Bring cash in won: transport cards are usually charged in cash, at station machines or convenience stores.",
+                "vi": "Mang theo tiền mặt won: thẻ giao thông thường chỉ nạp được bằng tiền mặt, ở máy trong ga hoặc cửa hàng tiện lợi.",
+                "id": "Bawa uang tunai won: kartu transportasi biasanya diisi dengan uang tunai, di mesin stasiun atau minimarket."
+              }
+            },
+            {
+              "kind": "cost",
+              "text": {
+                "en": "An adult ride is 1,550 won by card (first 10 km), or 1,650 won plus a 500 won deposit with a single ticket.",
+                "vi": "Người lớn đi bằng thẻ là 1.550 won (10 km đầu), còn vé một lượt là 1.650 won cộng 500 won tiền cọc.",
+                "id": "Tarif dewasa dengan kartu 1.550 won (10 km pertama), atau 1.650 won plus deposit 500 won dengan tiket sekali jalan."
+              }
+            },
+            {
+              "kind": "tip",
+              "needs": "sit:nocard",
+              "text": {
+                "en": "Buy a transport card at a convenience store or station machine, then charge it before you tap in.",
+                "vi": "Mua thẻ giao thông ở cửa hàng tiện lợi hoặc máy trong ga, rồi nạp tiền trước khi chạm thẻ qua cổng.",
+                "id": "Beli kartu transportasi di minimarket atau mesin stasiun, lalu isi saldonya sebelum tap masuk."
+              }
+            },
+            {
+              "kind": "tip",
+              "needs": "sit:emptycard",
+              "text": {
+                "en": "Top up before you ride: with too little balance the gate won't open (잔액이 부족합니다).",
+                "vi": "Nạp tiền trước khi đi: nếu số dư không đủ, cổng soát vé sẽ không mở (잔액이 부족합니다).",
+                "id": "Isi saldo sebelum naik: kalau saldonya kurang, gerbang tiket tidak akan terbuka (잔액이 부족합니다)."
+              }
+            }
+          ]
+        },
+        {
+          "id": "subway-2",
+          "level": 2,
+          "procedure": "subway_lost",
+          "scene": "Subway",
+          "entrance": "",
+          "start": "platform",
+          "available": true,
+          "title": {
+            "en": "Report a bag left on the train",
+            "vi": "Báo túi để quên trên tàu",
+            "id": "Laporkan tas yang tertinggal di kereta"
+          },
+          "story": {
+            "en": "You rode Line 4 from Dongjak (동작) to Myeongdong, and five minutes ago the train went on towards Chungmuro (충무로) with your black backpack still on its luggage rack.\nNow you go to the station office to report it, with your transport card in your pocket.",
+            "vi": "Bạn đi tuyến 4 từ Dongjak (동작) đến Myeongdong, và năm phút trước tàu đã chạy tiếp về hướng Chungmuro (충무로) trong khi chiếc ba lô đen của bạn vẫn nằm trên giá hành lý.\nGiờ bạn đến văn phòng nhà ga để báo, thẻ giao thông vẫn ở trong túi áo.",
+            "id": "Kamu naik Line 4 dari Dongjak (동작) ke Myeongdong, dan lima menit lalu keretanya melaju lagi ke arah Chungmuro (충무로) dengan ransel hitammu masih di rak bagasi.\nSekarang kamu pergi ke kantor stasiun untuk melapor, dengan kartu transportasi di sakumu."
+          },
+          "before": [
+            {
+              "kind": "hours",
+              "text": {
+                "en": "Line 4's lost-property centre is at Chungmuro (충무로) station, open weekdays 9:00 to 18:00.",
+                "vi": "Trung tâm đồ thất lạc của tuyến 4 ở ga Chungmuro (충무로), mở cửa ngày thường từ 9 giờ đến 18 giờ.",
+                "id": "Pusat barang hilang Line 4 ada di Stasiun Chungmuro (충무로), buka hari kerja pukul 09.00 sampai 18.00."
+              }
+            },
+            {
+              "kind": "bring",
+              "text": {
+                "en": "Show staff the transport card you rode with; to collect the bag later, bring your passport or ARC.",
+                "vi": "Đưa nhân viên xem thẻ giao thông bạn đã dùng khi đi tàu; khi đến nhận túi, hãy mang hộ chiếu hoặc thẻ ARC.",
+                "id": "Tunjukkan kartu transportasi yang kamu pakai ke petugas; saat mengambil tas nanti, bawa paspor atau ARC."
+              }
+            },
+            {
+              "kind": "cost",
+              "text": {
+                "en": "A found bag can be delivered to your home for 5,000 to 7,000 won by weight, or collected in person.",
+                "vi": "Túi tìm được có thể gửi về nhà với giá 5.000 đến 7.000 won tùy cân nặng, hoặc bạn tự đến nhận.",
+                "id": "Tas yang ditemukan bisa diantar ke rumah dengan biaya 5.000 sampai 7.000 won sesuai berat, atau diambil sendiri."
+              }
+            },
+            {
+              "kind": "tip",
+              "text": {
+                "en": "Remember 아!차!내!짐!: tell staff the train's time, the car and door number (like 4-2) and where your bag was.",
+                "vi": "Nhớ 아!차!내!짐!: báo nhân viên giờ tàu, số toa và số cửa (như 4-2) và chỗ bạn để túi.",
+                "id": "Ingat 아!차!내!짐!: sebutkan ke petugas jam kereta, nomor gerbong dan pintu (misalnya 4-2), dan letak tasmu."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emergency",
+      "nameKo": "응급상황",
+      "color": "#D64545",
+      "name": {
+        "en": "Emergency",
+        "vi": "Khẩn cấp",
+        "id": "Darurat"
+      },
+      "levels": [
+        {
+          "id": "emergency-1",
+          "level": 1,
+          "procedure": "emergency_119",
+          "scene": "Street119",
+          "entrance": "",
+          "start": "patient",
+          "available": true,
+          "title": {
+            "en": "Call 119",
+            "vi": "Gọi 119",
+            "id": "Telepon 119"
+          },
+          "story": {
+            "en": "One evening on Myeongdong-gil, you see a man in his sixties fall in front of a cosmetics shop and stay down.\nHe's conscious and breathing and says his leg hurts, and the people around are all looking at you.",
+            "vi": "Một buổi tối trên phố Myeongdong, bạn thấy một người đàn ông khoảng sáu mươi tuổi ngã trước một cửa hàng mỹ phẩm và không đứng dậy được.\nÔng ấy vẫn tỉnh, vẫn thở và nói bị đau chân, còn mọi người xung quanh đều đang nhìn bạn.",
+            "id": "Suatu malam di Myeongdong-gil, kamu melihat seorang bapak berusia enam puluhan jatuh di depan toko kosmetik dan tidak bisa berdiri.\nIa sadar dan bernapas, katanya kakinya sakit, dan orang-orang di sekitar semuanya memandangimu."
+          },
+          "before": [
+            {
+              "kind": "hours",
+              "text": {
+                "en": "119 answers 24 hours a day; you can also report by text message to 119 or through the 119 app.",
+                "vi": "119 trực 24 giờ mỗi ngày; bạn cũng có thể báo bằng tin nhắn đến số 119 hoặc qua ứng dụng 119.",
+                "id": "119 siaga 24 jam sehari; kamu juga bisa melapor lewat SMS ke 119 atau lewat aplikasi 119."
+              }
+            },
+            {
+              "kind": "bring",
+              "text": {
+                "en": "Keep your phone's GPS on; without an address, give a shop or building name, or a utility-pole number.",
+                "vi": "Bật GPS trên điện thoại; nếu không biết địa chỉ, hãy nói tên cửa hàng, tòa nhà hoặc số trên cột điện.",
+                "id": "Nyalakan GPS ponselmu; kalau tidak tahu alamatnya, sebutkan nama toko atau gedung, atau nomor tiang listrik."
+              }
+            },
+            {
+              "kind": "cost",
+              "text": {
+                "en": "The 119 ambulance is free, and from a mobile you just dial 119, with no area code.",
+                "vi": "Xe cứu thương 119 miễn phí, và từ điện thoại di động bạn chỉ cần bấm 119, không cần mã vùng.",
+                "id": "Ambulans 119 gratis, dan dari ponsel cukup tekan 119 tanpa kode area."
+              }
+            },
+            {
+              "kind": "tip",
+              "text": {
+                "en": "119 is for fire and ambulance, 112 for the police; 119 can add an interpreter to your call.",
+                "vi": "119 là cứu hỏa và cấp cứu, 112 là cảnh sát; 119 có thể nối thêm phiên dịch viên vào cuộc gọi của bạn.",
+                "id": "119 untuk pemadam kebakaran dan ambulans, 112 untuk polisi; 119 bisa menyambungkan penerjemah ke panggilanmu."
+              }
+            }
+          ]
+        },
+        {
+          "id": "emergency-2",
+          "level": 2,
+          "procedure": "emergency_er",
+          "scene": "ER",
+          "entrance": "",
+          "available": true,
+          "title": {
+            "en": "Go to the ER at night",
+            "vi": "Đi cấp cứu ban đêm",
+            "id": "Ke UGD malam hari"
+          },
+          "story": {
+            "en": "It's past midnight, and the stomach ache that began around six in the evening has got much worse.\nYou take a taxi to a university hospital's emergency room.",
+            "vi": "Đã quá nửa đêm, cơn đau bụng bắt đầu từ khoảng sáu giờ tối càng lúc càng nặng.\nBạn đi taxi đến phòng cấp cứu của một bệnh viện đại học.",
+            "id": "Sudah lewat tengah malam, dan sakit perut yang mulai sekitar jam enam sore makin parah.\nKamu naik taksi ke UGD sebuah rumah sakit universitas."
+          },
+          "situations": [
+            {
+              "id": "insurance",
+              "question": {
+                "en": "How long have you been in Korea?",
+                "vi": "Bạn ở Hàn Quốc được bao lâu rồi?",
+                "id": "Sudah berapa lama kamu di Korea?"
+              },
+              "options": [
+                {
+                  "id": "uninsured",
+                  "title": {
+                    "en": "Three weeks: no health insurance yet",
+                    "vi": "Ba tuần: chưa có bảo hiểm y tế",
+                    "id": "Tiga minggu: belum ikut asuransi"
+                  },
+                  "tag": {
+                    "en": "No health insurance yet",
+                    "vi": "Chưa có bảo hiểm y tế",
+                    "id": "Belum punya asuransi kesehatan"
+                  },
+                  "story": {
+                    "en": "It's past midnight, and the stomach ache that began around six in the evening has got much worse.\nYou take a taxi to a university hospital's emergency room.\nYou arrived in Korea three weeks ago, so you're not in national health insurance yet.",
+                    "vi": "Đã quá nửa đêm, cơn đau bụng bắt đầu từ khoảng sáu giờ tối càng lúc càng nặng.\nBạn đi taxi đến phòng cấp cứu của một bệnh viện đại học.\nBạn mới sang Hàn Quốc được ba tuần nên chưa có bảo hiểm y tế quốc dân.",
+                    "id": "Sudah lewat tengah malam, dan sakit perut yang mulai sekitar jam enam sore makin parah.\nKamu naik taksi ke UGD sebuah rumah sakit universitas.\nKamu baru tiga minggu di Korea, jadi belum ikut asuransi kesehatan nasional."
+                  },
+                  "grants": [
+                    "sit:uninsured"
+                  ]
+                },
+                {
+                  "id": "insured",
+                  "title": {
+                    "en": "Seven months: now insured",
+                    "vi": "Bảy tháng: đã có bảo hiểm y tế",
+                    "id": "Tujuh bulan: sudah ikut asuransi"
+                  },
+                  "tag": {
+                    "en": "In national health insurance",
+                    "vi": "Đã có bảo hiểm y tế quốc dân",
+                    "id": "Sudah ikut asuransi kesehatan nasional"
+                  },
+                  "story": {
+                    "en": "It's past midnight, and the stomach ache that began around six in the evening has got much worse.\nYou take a taxi to a university hospital's emergency room.\nYou've lived in Korea for seven months, so you have your residence card (ARC) and you're now in national health insurance.",
+                    "vi": "Đã quá nửa đêm, cơn đau bụng bắt đầu từ khoảng sáu giờ tối càng lúc càng nặng.\nBạn đi taxi đến phòng cấp cứu của một bệnh viện đại học.\nBạn đã sống ở Hàn Quốc được bảy tháng nên đã có thẻ cư trú (ARC) và giờ đã có bảo hiểm y tế quốc dân.",
+                    "id": "Sudah lewat tengah malam, dan sakit perut yang mulai sekitar jam enam sore makin parah.\nKamu naik taksi ke UGD sebuah rumah sakit universitas.\nKamu sudah tujuh bulan di Korea, jadi sudah punya kartu tinggal (ARC) dan sekarang sudah ikut asuransi kesehatan nasional."
+                  },
+                  "grants": [
+                    "sit:insured"
+                  ],
+                  "carry": [
+                    "arc"
+                  ]
+                }
+              ]
+            }
+          ],
+          "before": [
+            {
+              "kind": "hours",
+              "text": {
+                "en": "Hospital ERs are open 24 hours; the e-gen app, or a call to 120 or 119, finds one near you.",
+                "vi": "Phòng cấp cứu bệnh viện mở cửa 24 giờ; ứng dụng e-gen, hoặc gọi 120 hay 119, sẽ giúp bạn tìm nơi gần nhất.",
+                "id": "UGD rumah sakit buka 24 jam; aplikasi e-gen, atau telepon ke 120 atau 119, bisa mencarikan yang terdekat."
+              }
+            },
+            {
+              "kind": "bring",
+              "text": {
+                "en": "Bring your passport or ARC and a payment card: you register and pay at the ER desk.",
+                "vi": "Mang hộ chiếu hoặc thẻ ARC và thẻ thanh toán: bạn đăng ký và trả tiền ở quầy phòng cấp cứu.",
+                "id": "Bawa paspor atau ARC dan kartu pembayaran: kamu mendaftar dan membayar di loket UGD."
+              }
+            },
+            {
+              "kind": "cost",
+              "needs": "sit:uninsured",
+              "text": {
+                "en": "Without national insurance you pay the whole bill; keep the receipt (영수증) to claim from private insurance.",
+                "vi": "Chưa có bảo hiểm y tế quốc dân thì bạn tự trả toàn bộ; hãy giữ biên lai (영수증) để yêu cầu bảo hiểm tư nhân chi trả.",
+                "id": "Tanpa asuransi kesehatan nasional, kamu membayar seluruh biaya; simpan kuitansinya (영수증) untuk klaim asuransi swasta."
+              }
+            },
+            {
+              "kind": "cost",
+              "needs": "sit:insured",
+              "text": {
+                "en": "Even insured, if triage rates your case as mild, you usually pay most or all of the bill at a big ER.",
+                "vi": "Dù có bảo hiểm, nếu khâu phân loại đánh giá ca của bạn là nhẹ, ở phòng cấp cứu lớn bạn thường phải trả gần hết hoặc toàn bộ chi phí.",
+                "id": "Meski punya asuransi, kalau triase menilai kasusmu ringan, di UGD besar kamu biasanya membayar hampir semua atau seluruh biayanya."
+              }
+            },
+            {
+              "kind": "tip",
+              "text": {
+                "en": "The ER sees the most urgent patients first, not whoever arrived first.",
+                "vi": "Phòng cấp cứu khám người nguy cấp nhất trước, không theo thứ tự đến.",
+                "id": "UGD menangani pasien yang paling gawat lebih dulu, bukan yang datang duluan."
+              }
+            }
+          ]
         }
       ]
     }

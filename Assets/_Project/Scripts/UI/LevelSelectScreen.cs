@@ -15,12 +15,18 @@ namespace SeoulFirstWeek.UI
     public class LevelSelectScreen : MonoBehaviour
     {
         const float ColumnWidth = 540f, SignWidth = 112f;
+        const int PerPage = 3;
 
         [Tooltip("Every procedure file, for the Logbook (assigned by the scene builder).")]
         public TextAsset[] procedures;
 
         RectTransform root;
         bool intro = true;
+
+        // the page of places on show; kept for the session, so a player who finishes a part comes back to its page
+        static int page;
+
+        static int Pages => Mathf.Max(1, Mathf.CeilToInt(Levels.Places.Count / (float)PerPage));
 
         static readonly Role[] SignFill = { Role.Brush, Role.Night, Role.Glow };
 
@@ -61,13 +67,15 @@ namespace SeoulFirstWeek.UI
             ((RectTransform)logbook.transform).Place(new Vector2(1, 1), new Vector2(-64, -54), new Vector2(210, 70));
             ((RectTransform)logbook.transform).localRotation = Quaternion.Euler(0, 0, 1.5f);
 
-            // one signboard per place, its parts hanging beside it
+            // one signboard per place, its parts hanging beside it; three places to a page
+            page = Mathf.Clamp(page, 0, Pages - 1);
             var row = UIKit.Rect("Places", root);
             row.Place(new Vector2(0.5f, 0.5f), new Vector2(0, -36), new Vector2(ColumnWidth * 3 + 120, 720));
             var h = UIKit.HStack(row, 60, null, TextAnchor.UpperCenter);
             h.childForceExpandHeight = false;
             int index = 0;
-            foreach (var place in Levels.Places) Column(row, place, index++);
+            foreach (var place in Levels.Places.Skip(page * PerPage).Take(PerPage)) Column(row, place, index++);
+            if (Pages > 1) PageTabs();
 
             // back (Esc) and reset, along the bottom
             var back = UIKit.Rect("Back", root);
@@ -81,8 +89,9 @@ namespace SeoulFirstWeek.UI
             backText.Layout(160, 50);
             Shadow(backText);
 
-            var reset = UIKit.Words(root, Loc.T("reset_progress"), 24, Role.Paper, Face.ReadBold, TextAnchor.MiddleCenter);
-            reset.rectTransform.Place(new Vector2(0.5f, 0), new Vector2(0, 40), new Vector2(360, 44));
+            // reset is rare and destructive: tucked into the bottom-right corner, clear of the page tabs
+            var reset = UIKit.Words(root, Loc.T("reset_progress"), 24, Role.Paper, Face.ReadBold, TextAnchor.MiddleRight);
+            reset.rectTransform.Place(new Vector2(1, 0), new Vector2(-64, 40), new Vector2(reset.preferredWidth + 8f, 44));
             reset.raycastTarget = true;
             reset.gameObject.AddComponent<Button>().onClick.AddListener(() =>
                 Dialog.Confirm(null, Loc.T("reset_progress_confirm"), () =>
@@ -97,6 +106,47 @@ namespace SeoulFirstWeek.UI
 
             if (!intro) return;
             _ = Motion.Draw(strip, 0.28f);
+        }
+
+        /// <summary>
+        /// The pages along the bottom: one tab per page naming the places on it (so the player sees what the other
+        /// page holds), the page on show lit as the primary bar, with Q and E keycaps for the keyboard.
+        /// </summary>
+        void PageTabs()
+        {
+            var bar = UIKit.Rect("Pages", root);
+            bar.Place(new Vector2(0.5f, 0), new Vector2(0, 34), new Vector2(1100, 64));
+            var hb = UIKit.HStack(bar, 16, null, TextAnchor.MiddleCenter);
+            hb.childForceExpandHeight = false;
+            hb.childForceExpandWidth = false;
+            PageKey(bar, "Q", -1);
+            for (int p = 0; p < Pages; p++)
+            {
+                int target = p;
+                var names = Levels.Places.Skip(p * PerPage).Take(PerPage).Select(pl => pl.name?.Get() ?? pl.nameKo);
+                var tab = UIKit.InkButton(bar, string.Join("  ·  ", names).ToUpperInvariant(), () => GoTo(target),
+                    p == page ? ButtonStyle.Primary : ButtonStyle.Paper, 22);
+                var label = tab.GetComponentInChildren<Text>();
+                tab.Layout(label.preferredWidth + 56f, 58);
+            }
+            PageKey(bar, "E", +1);
+        }
+
+        void PageKey(RectTransform bar, string key, int step)
+        {
+            var cap = UIKit.Keycap(bar, key, 22);
+            cap.gameObject.AddComponent<Button>().onClick.AddListener(() => GoTo(page + step));
+            cap.GetComponentInChildren<InkShape>().raycastTarget = true;
+        }
+
+        void GoTo(int target)
+        {
+            target = (target % Pages + Pages) % Pages;
+            if (target == page) return;
+            page = target;
+            Sfx.Play(ProceduralAudio.Paper, 0.6f);
+            intro = true;
+            Build();
         }
 
         static void Shadow(Text t)
@@ -169,6 +219,31 @@ namespace SeoulFirstWeek.UI
                     new Vector2(0.38f, 0.62f), new Vector2(0.52f, 0.74f), new Vector2(0.66f, 0.6f), new Vector2(0.52f, 0.44f), new Vector2(0.38f, 0.6f), nan,
                     new Vector2(0.36f, 0.24f), new Vector2(0.66f, 0.24f),
                 },
+                // a plane seen from above
+                "airport" => new[]
+                {
+                    new Vector2(0.5f, 0.94f), new Vector2(0.5f, 0.08f), nan,
+                    new Vector2(0.06f, 0.44f), new Vector2(0.5f, 0.64f), new Vector2(0.94f, 0.44f), nan,
+                    new Vector2(0.3f, 0.1f), new Vector2(0.5f, 0.2f), new Vector2(0.7f, 0.1f),
+                },
+                // the front of a train on its rails
+                "subway" => new[]
+                {
+                    new Vector2(0.22f, 0.14f), new Vector2(0.22f, 0.84f), new Vector2(0.78f, 0.84f), new Vector2(0.78f, 0.14f), new Vector2(0.22f, 0.14f), nan,
+                    new Vector2(0.3f, 0.64f), new Vector2(0.7f, 0.64f), nan,
+                    new Vector2(0.3f, 0.32f), new Vector2(0.38f, 0.32f), nan,
+                    new Vector2(0.62f, 0.32f), new Vector2(0.7f, 0.32f), nan,
+                    new Vector2(0.1f, 0.04f), new Vector2(0.9f, 0.04f),
+                },
+                // a flashing light on its base
+                "emergency" => new[]
+                {
+                    new Vector2(0.26f, 0.24f), new Vector2(0.26f, 0.52f), new Vector2(0.5f, 0.72f), new Vector2(0.74f, 0.52f), new Vector2(0.74f, 0.24f), nan,
+                    new Vector2(0.14f, 0.22f), new Vector2(0.86f, 0.22f), nan,
+                    new Vector2(0.5f, 0.82f), new Vector2(0.5f, 0.96f), nan,
+                    new Vector2(0.18f, 0.7f), new Vector2(0.08f, 0.8f), nan,
+                    new Vector2(0.82f, 0.7f), new Vector2(0.92f, 0.8f),
+                },
                 _ => new[]
                 {
                     new Vector2(0.5f, 0.06f), new Vector2(0.14f, 0.24f), new Vector2(0.08f, 0.56f), new Vector2(0.3f, 0.9f), new Vector2(0.7f, 0.9f),
@@ -209,6 +284,17 @@ namespace SeoulFirstWeek.UI
             title.resizeTextForBestFit = true;
             title.resizeTextMinSize = 22;
             title.resizeTextMaxSize = 29;
+
+            // a personalised part: how many of its cases (the first question's options) are done
+            var cases = level.situations?.FirstOrDefault(q => q.options.Count > 1);
+            if (cases != null)
+            {
+                int doneCases = cases.options.Count(o => session.Has($"done:{level.id}@{o.id}"));
+                var count = UIKit.Words(body.transform, $"{Loc.T("cases")} {doneCases}/{cases.options.Count}", 22,
+                    doneCases > 0 ? Role.BrushDeep : Role.InkSoft, Face.ReadBold, TextAnchor.LowerLeft);
+                count.rectTransform.Place(new Vector2(0, 0), new Vector2(24, 14), new Vector2(200, 30));
+                title.rectTransform.offsetMin = new Vector2(title.rectTransform.offsetMin.x, Mathf.Max(title.rectTransform.offsetMin.y, 42));
+            }
 
             if (level.available)
             {
@@ -252,11 +338,18 @@ namespace SeoulFirstWeek.UI
             }
             else if (missing)
             {
+                // a note stuck on the card's corner, as wide and tall as its words need (a long name wraps)
+                var label = "! " + Loc.T("needs_doc", Documents.ShortName(level.needs.Replace("doc:", "")));
                 var note = UIKit.StickyNote(root, "Needs");
-                note.rectTransform.Place(new Vector2(1, 0), new Vector2(8, -18), new Vector2(230, 56));
-                note.rectTransform.localRotation = Quaternion.Euler(0, 0, 4f);
-                UIKit.Words(note.transform, "! " + Loc.T("needs_doc", Documents.LocalName(level.needs.Replace("doc:", ""))), 22, Role.Ink, Face.ReadBold, TextAnchor.MiddleCenter)
-                    .rectTransform.Stretch(8, 8, 4, 4);
+                var words = UIKit.Words(note.transform, label, 22, Role.Ink, Face.ReadBold, TextAnchor.MiddleCenter);
+                float width = Mathf.Min(290f, words.preferredWidth + 30f);
+                var fit = words.GetGenerationSettings(new Vector2(width - 30f, 0));
+                float height = Mathf.Max(52f, words.cachedTextGeneratorForLayout.GetPreferredHeight(label, fit) / words.pixelsPerUnit + 20f);
+                note.rectTransform.Place(new Vector2(1, 0), new Vector2(8, -14), new Vector2(width, height));
+                note.rectTransform.localRotation = Quaternion.Euler(0, 0, 3f);
+                words.rectTransform.Stretch(15, 15, 6, 6);
+                // the title keeps clear of a tall note (it shrinks to fit above it)
+                title.rectTransform.offsetMin = new Vector2(title.rectTransform.offsetMin.x, Mathf.Max(title.rectTransform.offsetMin.y, height - 14f + 6f));
             }
             else
             {
@@ -286,7 +379,10 @@ namespace SeoulFirstWeek.UI
         void Update()
         {
             var kb = Keyboard.current;
-            if (kb != null && kb.escapeKey.wasPressedThisFrame && Modal.OpenCount == 0) SceneFlow.Load(SceneFlow.Home);
+            if (kb == null || Modal.OpenCount != 0) return;
+            if (kb.escapeKey.wasPressedThisFrame) SceneFlow.Load(SceneFlow.Home);
+            else if (Pages > 1 && (kb.qKey.wasPressedThisFrame || kb.leftArrowKey.wasPressedThisFrame)) GoTo(page - 1);
+            else if (Pages > 1 && (kb.eKey.wasPressedThisFrame || kb.rightArrowKey.wasPressedThisFrame)) GoTo(page + 1);
         }
     }
 }
