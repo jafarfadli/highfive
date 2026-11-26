@@ -556,9 +556,9 @@
       "type": "go",
       "target": "carousel",
       "task": {
-        "en": "Pick up your suitcase at the baggage carousel",
-        "vi": "Lấy vali ở băng chuyền hành lý",
-        "id": "Ambil kopermu di ban berjalan bagasi"
+        "en": "Pick up your yellow suitcase at baggage carousel 5",
+        "vi": "Lấy vali màu vàng của bạn ở băng chuyền hành lý số 5",
+        "id": "Ambil koper kuningmu di ban bagasi 5"
       }
     },
     {

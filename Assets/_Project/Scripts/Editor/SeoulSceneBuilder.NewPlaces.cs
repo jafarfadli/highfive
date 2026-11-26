@@ -204,7 +204,9 @@ namespace SeoulFirstWeek.EditorTools
         {
             var scene = NewScene("Airport");
             BeginMaterials();
-            float w = 34, d = 24, h = 6f;
+            // 40 m wide: the west wing between the wall and the foreigners' lane (baggage claim and customs) is
+            // 9.6 m across, room for the carousel with a comfortable walk all round it
+            float w = 40, d = 24, h = 6f;
             var red = C("#D8343B");
             var blue = C("#2A6FDB");
             var panel = TextureKit.Surface("Panel_Airport", TextureKit.Plastic(), C("#E9EBEE"), 0.6f);
@@ -300,32 +302,13 @@ namespace SeoulFirstWeek.EditorTools
                 "입국심사 · Immigration", "수하물 · Baggage", "세관 · Customs", "입국장 · Arrivals",
             }, new[] { red, blue, C("#1FA37A"), C("#E58B2B") });
 
-            // the west wing: baggage carousel 5, its board, and the customs exits
-            float cx0 = -w / 2 + 4.2f;
-            var belt = TextureKit.Surface("Belt_Rubber", TextureKit.Rubber(), C("#3A3D42"), 0.4f);
-            var carousel = Group("Carousel", root);
-            carousel.position = new Vector3(cx0, 0, 1.5f);
-            Slab(carousel, "Island", new Vector3(0, 0.25f, 0), new Vector3(1.2f, 0.5f, 7.0f), steel);
-            Slab(carousel, "Belt", new Vector3(0, 0.42f, 0), new Vector3(2.6f, 0.08f, 8.4f), belt);
-            Slab(carousel, "Skirt", new Vector3(0, 0.2f, 0), new Vector3(2.7f, 0.4f, 8.5f), steel);
-            var bags = new[] { "#3B5B8C", "#2B2E33", "#B83B3B", "#6B7A8C", "#3A6B4F", "#8C3B6B" };
-            for (int i = 0; i < 9; i++)
-            {
-                float z = -3.6f + i * 0.9f;
-                if (i == 4) continue;
-                var bag = Box(carousel, "Bag", new Vector3(i % 2 == 0 ? -0.75f : 0.75f, 0.6f, z), new Vector3(0.45f, 0.26f, 0.65f), C(bags[i % bags.Length]), false, rng.Next(-20, 20));
-            }
-            // the player's suitcase: bright yellow, with a luggage tag
-            var mine = Group("MySuitcase", carousel);
-            mine.localPosition = new Vector3(-0.75f, 0.6f, 0f);
-            Box(mine, "Shell", Vector3.zero, new Vector3(0.48f, 0.28f, 0.68f), C("#F2C230"), false);
-            Box(mine, "Tag", new Vector3(0.26f, 0.05f, 0.2f), new Vector3(0.02f, 0.12f, 0.08f), C("#FFFFFF"), false);
-            var bagWp = MakeWaypoint(root, "carousel", carousel.TransformPoint(new Vector3(-0.75f, 0.9f, 0f)), new Vector3(1.4f, 1.6f, 1.4f), "wp_bag", "");
-            bagWp.opens = new[] { mine.gameObject };
-            Sign(root, "CarouselBoard", new Vector3(cx0 + 0.2f, 3.0f, 1.5f), new Vector2(2.4f, 1.1f), C("#1F2F55"), "5\n<size=34>하노이 HANOI</size>", C("#FFD23F"), 90, 90, 0.08f);
-            HangingSign(r, "BaggageSign", new Vector3(cx0 + 2.8f, 4.3f, 1.5f), 90, new Vector2(5f, 0.7f), C("#1F2F55"), "수하물 찾는 곳 · Baggage Claim", Color.white, 58);
-            for (int i = 0; i < 2; i++)
-                Extra(r, $"BagWaiter{i}", Traveller(rng, i == 0), new Vector3(cx0 + 1.9f, 0, -1.2f + i * 2.4f), -90);
+            // the west wing: baggage carousel 5 (see BuildCarousel) in the middle of it, its sign, travellers
+            // waiting on both sides, and the customs exits
+            float cx0 = -w / 2 + CarouselFromWall;
+            BuildCarousel(r, new Vector3(cx0, 0, 1.5f), rng);
+            HangingSign(r, "BaggageSign", new Vector3(cx0 + 3.0f, 4.3f, 1.5f), 90, new Vector2(5f, 0.7f), C("#1F2F55"), "수하물 찾는 곳 · Baggage Claim", Color.white, 58);
+            Extra(r, "BagWaiter0", Traveller(rng, true), new Vector3(cx0 + 2.05f, 0, -0.6f), -90);
+            Extra(r, "BagWaiter1", Traveller(rng, false), new Vector3(cx0 - 2.05f, 0, 2.6f), 90);
 
             // customs: two exits in the west wall, green for nothing to declare, red for goods to declare
             foreach (var (z, c, ko, en, id) in new[]
@@ -375,12 +358,6 @@ namespace SeoulFirstWeek.EditorTools
                 Box(cart, "Back", new Vector3(0, 0.7f, 0.48f), new Vector3(0.6f, 0.9f, 0.04f), C("#9AA0A6"), false);
                 Box(cart, "Handle", new Vector3(0, 1.15f, 0.5f), new Vector3(0.62f, 0.05f, 0.05f), C("#2A6FDB"), false);
             }
-            for (int i = 0; i < 3; i++)
-            {
-                var pos = hall + new Vector3(-2f + i * 3.2f, 0, -0.5f - (i % 2) * 2f);
-                Extra(r, $"Traveller{i}", Traveller(rng, i == 1), pos, rng.Next(0, 360), phone: i == 2);
-                Suitcase(root, pos + new Vector3(0.45f, 0, 0.1f), 0, C(new[] { "#3B5B8C", "#B83B3B", "#3A3D42" }[i]));
-            }
 
             // the bus ticket counter on the north wall, under its sign
             var busCounter = ServiceCounter(r, 9, hall + new Vector3(-5f, 0, hd / 2 - 2.6f), 0, 2.4f, panel, r.TopMat, "busclerk", HumanLook.Office(new System.Random(91), true), blue);
@@ -395,8 +372,15 @@ namespace SeoulFirstWeek.EditorTools
             Slab(root, "ExchangeCounter", hall + new Vector3(10.5f, 0.55f, hd / 2 - 1.2f), new Vector3(3.2f, 1.1f, 0.6f), panel);
             // greeters behind a rail, benches
             InteriorKit.Stanchions(root, hall + new Vector3(-hw / 2 + 2f, 0, -1.5f), hall + new Vector3(-hw / 2 + 9f, 0, -1.5f), 6, C("#1F2F55"));
+            // the people waiting face the walk from the arrivals exit; two hold up a name
             for (int i = 0; i < 4; i++)
-                Extra(r, $"Greeter{i}", HumanLook.Random(rng, Crowd.Street), hall + new Vector3(-hw / 2 + 2.6f + i * 1.7f, 0, -2.2f), 180 + rng.Next(-20, 20), phone: i == 2);
+            {
+                var at = hall + new Vector3(-hw / 2 + 2.6f + i * 1.7f, 0, -2.3f);
+                Extra(r, $"Greeter{i}", HumanLook.Random(rng, Crowd.Street), at, rng.Next(-25, 25), phone: i == 2);
+                if (i == 1 || i == 3)
+                    Sign(root, "NameBoard", at + new Vector3(0, 1.22f, 0.32f), new Vector2(0.5f, 0.32f), C("#FFFFFF"), i == 1 ? "WELCOME\n<size=26>Ms. NGUYEN</size>" : "환영\n<size=26>Mr. KIM</size>",
+                        C("#1E1E1E"), 0, 34, 0.012f);
+            }
             var bench = TextureKit.Surface("Seat_Perforated", TextureKit.Perforated(), C("#B7BEC6"), 0.6f, 0.5f);
             for (int i = 0; i < 3; i++)
             {
@@ -413,29 +397,18 @@ namespace SeoulFirstWeek.EditorTools
             Extra(r, "ChatB", Traveller(rng, false), hall + new Vector3(12.3f, 0, -4.9f), 241);
             Suitcase(root, hall + new Vector3(10.9f, 0, -6.0f), 30, C("#7A3B8C"));
             Extra(r, "InfoVisitor", Traveller(rng, false), hall + new Vector3(6f, 0, 0.95f), 0);
-            // the doors out to the bus stops, numbered
+            // the doors out to the bus stops, numbered; the openings, doors and the kerb outside are BuildArrivalsWays
             foreach (var (x, n) in new[] { (-6f, 5), (4f, 3) })
             {
                 var doorPos = hall + new Vector3(x, 0, -hd / 2);
-                Glass(root, "StopDoor", doorPos + new Vector3(0, 1.3f, 0.06f), new Vector3(2.4f, 2.6f, 0.04f), 0, false);
-                Sign(root, "StopSign", doorPos + new Vector3(0, 3.0f, 0.1f), new Vector2(2.6f, 0.7f), C("#1F2F55"), $"{n}번 승차장\n<size=30>Bus Stop {n}</size>", C("#FFD23F"), 0, 60, 0.06f);
-                Emissive(root, "OutsideSky", doorPos + new Vector3(0, 1.75f, 0.01f), new Vector3(2.4f, 1.7f, 0.02f), C("#A9CBE6"), 0.3f)
-                    .GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.Off;
-                Box(root, "OutsideKerb", doorPos + new Vector3(0, 0.45f, 0.012f), new Vector3(2.4f, 0.9f, 0.02f), C("#86847E"), false);
-                Box(root, "OutsideLine", doorPos + new Vector3(0, 0.62f, 0.016f), new Vector3(2.4f, 0.05f, 0.01f), C("#F2C230"), false);
-                if (n == 5)
-                {
-                    Box(root, "BusBody", doorPos + new Vector3(0.25f, 1.25f, 0.02f), new Vector3(2.1f, 1.1f, 0.01f), C("#F4F4F2"), false);
-                    Box(root, "BusStripe", doorPos + new Vector3(0.25f, 0.95f, 0.025f), new Vector3(2.1f, 0.14f, 0.01f), C("#2A6FDB"), false);
-                    Emissive(root, "BusWindows", doorPos + new Vector3(0.25f, 1.5f, 0.026f), new Vector3(1.9f, 0.4f, 0.01f), C("#2B3A4A"), 0.4f);
-                    Cylinder(root, "BusWheel", doorPos + new Vector3(-0.35f, 0.72f, 0.03f), new Vector3(0.36f, 0.02f, 0.36f), C("#1E1E1E")).transform.localRotation = Quaternion.Euler(90, 0, 0);
-                    Cylinder(root, "BusWheel", doorPos + new Vector3(0.95f, 0.72f, 0.03f), new Vector3(0.36f, 0.02f, 0.36f), C("#1E1E1E")).transform.localRotation = Quaternion.Euler(90, 0, 0);
-                }
+                Sign(root, "StopSign", doorPos + new Vector3(0, 3.05f, 0.12f), new Vector2(2.6f, 0.7f), C("#1F2F55"), $"{n}번 승차장\n<size=30>Bus Stop {n}</size>", C("#FFD23F"), 0, 60, 0.06f);
                 MakeWaypoint(root, $"bus_stop_{n}", doorPos + new Vector3(0, 1f, 0.7f), new Vector3(2.4f, 2f, 1.2f), "wp_stop", $"{n}번 승차장", true);
             }
+            BuildArrivalsWays(r, hall, hw, hd, hh, rng);
             Anchor(r, "Start_arrivals", hall + new Vector3(4f, 0.05f, -hd / 2 + 2.5f), -20);
 
             DressArrivals(r, hall, hw, hd, hh);
+            BuildAirportFlows(r, hall);
 
             var director = Director(r, new[] { "airport", "airport_bus" }, 41, 0);
             EndMaterials();
@@ -507,54 +480,40 @@ namespace SeoulFirstWeek.EditorTools
             Poster(root, new Vector3(w / 2 - 0.06f, 1.7f, -0.8f), -90, new Vector2(1.0f, 0.8f),
                 "물건을 두고 내렸을 땐\n<size=24>아! 차량 시간\n차! 내린 칸 위치\n내! 짐의 위치</size>", "#FFFFFF", "#0F4A6B", 30);
 
-            // ---- the gate line across the hall; only the lane at x = 0 opens, when the card is tapped
+            // ---- the gate line across the hall: any of its nine lanes takes the card
             float gz = 0.6f;
-            var cabinet = TextureKit.Surface("Gate_Cabinet", TextureKit.Metal(), C("#AEB4BA"), 0.7f, 0.8f, true);
-            GameObject[] myFlaps = null;
-            for (int i = 0; i < 12; i++)
-            {
-                float x = -5.5f + i * 1.0f;
-                Slab(root, "GateCabinet", new Vector3(x, 0.5f, gz), new Vector3(0.3f, 1.0f, 1.7f), cabinet);
-                Emissive(root, "GateReader", new Vector3(x - 0.08f, 1.02f, gz - 0.55f), new Vector3(0.14f, 0.02f, 0.14f), C("#3DDC84"), 1.3f);
-                if (i == 11) break;
-                // the flaps across the lane to its right
-                var flapL = Box(root, "Flap", new Vector3(x + 0.33f, 0.7f, gz), new Vector3(0.36f, 0.5f, 0.04f), C("#D8343B"), true);
-                var flapR = Box(root, "Flap", new Vector3(x + 0.67f, 0.7f, gz), new Vector3(0.36f, 0.5f, 0.04f), C("#D8343B"), true);
-                if (i == 5) myFlaps = new[] { flapL, flapR };
-            }
-            // glass railings close the rest of the line
-            foreach (var (x0, x1) in new[] { (-w / 2, -5.65f), (5.65f, w / 2) })
-            {
-                Glass(root, "GateRail", new Vector3((x0 + x1) / 2f, 0.55f, gz), new Vector3(x1 - x0, 1.1f, 0.03f));
-                Box(root, "GateRailTop", new Vector3((x0 + x1) / 2f, 1.11f, gz), new Vector3(x1 - x0, 0.04f, 0.06f), C("#9AA0A6"), false);
-            }
-            var gateWp = MakeWaypoint(root, "gate", new Vector3(0.0f, 1f, gz - 1.0f), new Vector3(0.8f, 1.6f, 0.6f), "wp_tap_card", "");
-            gateWp.opens = myFlaps;
+            var lanes = BuildGateLine(r, gz);
             HangingSign(r, "GateSign", new Vector3(0, 2.75f, gz - 0.2f), 180, new Vector2(3.2f, 0.42f), C("#2B2E33"), "타는 곳 · To Trains", Color.white, 50);
 
-            // ---- the paid side: two stairways down, one per direction
+            // ---- the paid side: two real stairways down through the north wall, one per direction
+            var wallN = root.Find("WallN");
+            if (wallN) Object.DestroyImmediate(wallN.gameObject);
+            WallWithOpenings(root, "WallN", new Vector3(0, 0, d / 2 + 0.1f), 0, w + 0.4f, h, 0.2f, r.WallMat, 2.5f, (-6f, 2.6f), (6f, 2.6f));
+            var tread = TextureKit.Surface("Passage_Floor", TextureKit.FloorStone(), C("#B9B4AA"));
+            var shaft = TextureKit.Surface("Wall_StairShaft", TextureKit.Plastic(), C("#E4E6E8"), 0.6f);
             foreach (var (x, label, id, dest) in new[]
             {
                 (-6f, "회현 · 사당 방면", "stairs_sadang", "Hoehyeon · Sadang"),
                 (6f, "충무로 방면", "stairs_jinjeop", "Chungmuro"),
             })
             {
-                var z = d / 2 - 0.15f;
-                Slab(root, "StairFrame", new Vector3(x, 1.25f, z - 0.05f), new Vector3(3.0f, 2.5f, 0.1f), steel, false);
-                Box(root, "StairDark", new Vector3(x, 1.15f, z - 0.1f), new Vector3(2.6f, 2.3f, 0.02f), C("#151719"), false);
-                // the flight going down, painted in perspective on the dark opening
-                for (int k = 0; k < 6; k++)
-                    Box(root, "StairNosing", new Vector3(x, 0.15f + k * 0.28f, z - 0.115f), new Vector3(2.4f - k * 0.18f, 0.03f, 0.01f), C("#F2C230"), false);
-                HangingSign(r, "DirectionSign", new Vector3(x, 2.85f, z - 0.6f), 180, new Vector2(3.4f, 0.6f), C("#2B2E33"),
+                var mid = Stairwell(root, $"Stairs_{id}", new Vector3(x, 0, d / 2), 0, 16, -0.16f, 2.6f, tread, shaft, C("#EAF2FF"),
+                    $"<color=#00A4E3>④</color> {label}");
+                Slab(root, "StairFrame", new Vector3(x, 2.55f, d / 2 - 0.02f), new Vector3(2.8f, 0.1f, 0.06f), steel, false);
+                // the warning strip at the top of the flight
+                Box(root, "StairTactile", new Vector3(x, 0.004f, d / 2 - 0.45f), new Vector3(2.4f, 0.008f, 0.5f), C("#F2C230"), false);
+                HangingSign(r, "DirectionSign", new Vector3(x, 2.85f, d / 2 - 0.6f), 180, new Vector2(3.4f, 0.6f), C("#2B2E33"),
                     $"<color=#00A4E3>④</color> ↓ {label}\n<size=26>{dest}</size>", Color.white, 46);
-                var wp = MakeWaypoint(root, id, new Vector3(x, 1f, z - 0.9f), new Vector3(2.6f, 2f, 1.2f), "wp_stairs", label);
-                if (id == "stairs_sadang") wp.moveTo = Anchor(r, "PlatformArrival", new Vector3(PlatformX - 9f, 0.05f, -1.2f), 0);
+                // walking down past the middle of the flight answers the step
+                var wp = MakeWaypoint(root, id, mid, new Vector3(2.4f, 2.4f, 1.2f), "wp_stairs", label, true);
+                if (id == "stairs_sadang") wp.moveTo = Anchor(r, "PlatformArrival", new Vector3(PlatformX - 17.6f, 0.05f, -1.0f), 90);
             }
-            for (int i = 0; i < 3; i++)
-                Extra(r, $"Commuter{i}", HumanLook.Random(rng, Crowd.Street), new Vector3(-9f + i * 7f, 0, 4.5f + (i % 2) * 1.6f), rng.Next(0, 360), phone: i != 1);
-            Extra(r, "Shopper", HumanLook.Random(rng, Crowd.Street), new Vector3(-w / 2 + 5.2f, 0, -6.2f), -90);
+            Extra(r, "Shopper", HumanLook.Random(rng, Crowd.Street), new Vector3(-12.75f, 0, -5.55f), -90);
 
             DressConcourse(r, w, d, h, line4);
+            BuildStationShops(r, rng);
+            BuildPaidSide(r, line4, rng);
+            BuildConcourseFlow(r, lanes);
 
             // ---- the platform, a second space to the east
             BuildPlatform(r, line4, steel, floor, ceiling, rng);
@@ -582,22 +541,52 @@ namespace SeoulFirstWeek.EditorTools
                 InteriorKit.LinearLight(p, p.TransformPoint(new Vector3(x, 0, 0)), h, 3f, 0, Mats.Emissive(Color.white, 1.4f));
             HallLights(p, Vector3.zero, len, pw, h, C("#F4F7FF"));
 
-            // the track bed beyond the screen doors, and the tunnel wall
-            // only as far as can be seen through the screen doors, and more up the tunnel the train comes from: a longer
-            // track ran on through the concourse 70 m to the west and walled off its stairs down
+            // the track bed beyond the screen doors, and the tunnel wall: only as far as can be seen through the
+            // screen doors, and more up the tunnel the train comes from (a longer track ran on through the concourse
+            // 70 m to the west and walled off its stairs down)
+            float z0 = pw / 2;
+            float tz = z0 + 0.15f + CarW / 2f;
             float tx0 = -len / 2 - 30f, tx1 = len / 2 + 4f, tlen = tx1 - tx0, tcx = (tx0 + tx1) / 2f;
-            Slab(p, "TrackBed", new Vector3(tcx, -1.1f, pw / 2 + 2.2f), new Vector3(tlen, 0.2f, 4.2f), TextureKit.Surface("Ballast", TextureKit.FloorStone(), C("#5A5752")), false);
-            Slab(p, "TunnelWall", new Vector3(tcx, 0.6f, pw / 2 + 4.3f), new Vector3(tlen, 4f, 0.2f), TextureKit.Surface("Tunnel", TextureKit.WallPaint(), C("#6E6C68")), false);
-            foreach (var z in new[] { pw / 2 + 1.5f, pw / 2 + 2.9f })
-                Box(p, "Rail", new Vector3(tcx, -0.95f, z), new Vector3(tlen, 0.12f, 0.08f), C("#8A8F96"), false);
+            var track = Group("Track", p);
+            Slab(track, "TrackBed", new Vector3(tcx, -1.1f, z0 + 2.15f), new Vector3(tlen, 0.2f, 4.3f), TextureKit.Surface("Ballast", TextureKit.FloorStone(), C("#5A5752")));
+            var tunnelMat = TextureKit.Surface("Tunnel", TextureKit.WallPaint(), C("#6E6C68"));
+            Slab(track, "TunnelWall", new Vector3(tcx, 0.95f, z0 + 4.3f), new Vector3(tlen, 4.7f, 0.2f), tunnelMat, false);
+            // the tunnel's roof over the whole track, and its near wall beyond both ends of the platform
+            Slab(track, "TunnelRoof", new Vector3(tcx, h + 0.05f, z0 + 2.2f), new Vector3(tlen, 0.1f, 4.6f), tunnelMat, false, false);
+            Slab(track, "TunnelNearW", new Vector3((tx0 - len / 2) / 2f, 0.95f, z0 - 0.1f), new Vector3(-len / 2 - tx0, 4.7f, 0.2f), tunnelMat, false);
+            Slab(track, "TunnelNearE", new Vector3((tx1 + len / 2) / 2f, 0.95f, z0 - 0.1f), new Vector3(tx1 - len / 2, 4.7f, 0.2f), tunnelMat, false);
+            // the platform's edge, down to the track
+            Slab(track, "PlatformEdge", new Vector3(0, -0.5f, z0 - 0.12f), new Vector3(len, 1.0f, 0.24f), TextureKit.Surface("Concrete_Edge", TextureKit.WallPaint(), C("#9A978F")), false);
+            var trackParts = Group("TrackParts", track);
+            foreach (var rz in new[] { tz - 0.72f, tz + 0.72f })
+            {
+                Box(trackParts, "Rail", new Vector3(tcx, -0.95f, rz), new Vector3(tlen, 0.12f, 0.07f), C("#8A8F96"), false);
+                Box(trackParts, "RailHead", new Vector3(tcx, -0.885f, rz), new Vector3(tlen, 0.012f, 0.075f), C("#C9CED4"), false);
+            }
+            for (float x = tx0 + 0.3f; x < tx1; x += 0.65f)
+                Box(trackParts, "Sleeper", new Vector3(x, -0.98f, tz), new Vector3(0.24f, 0.08f, 2.3f), C("#8E8B85"), false);
+            // on the tunnel wall: cable trays, lamps, the signal at the platform's end
+            for (int k = 0; k < 3; k++)
+                Box(trackParts, "CableTray", new Vector3(tcx, 0.9f + k * 0.18f, z0 + 4.17f), new Vector3(tlen, 0.05f, 0.08f), C("#3A3836"), false);
+            for (float x = tx0 + 4f; x < tx1; x += 8f)
+                Emissive(trackParts, "TunnelLamp", new Vector3(x, 2.1f, z0 + 4.15f), new Vector3(0.5f, 0.1f, 0.06f), C("#FFE9C2"), 1.6f)
+                    .GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.Off;
+            Box(trackParts, "SignalPost", new Vector3(len / 2 + 1.5f, 0.6f, z0 + 3.9f), new Vector3(0.12f, 2.6f, 0.12f), C("#2B2E33"), false);
+            Emissive(trackParts, "Signal", new Vector3(len / 2 + 1.5f, 1.95f, z0 + 3.82f), new Vector3(0.14f, 0.14f, 0.02f), C("#3DDC84"), 2f);
+            MergeByMaterial(trackParts, "Subway_Track");
 
             // full-height platform screen doors: fixed panels with a sliding pair at each car door, numbered car–door
             var psdLeft = new List<Transform>();
             var psdRight = new List<Transform>();
-            float z0 = pw / 2;
             var doorXs = new[] { -15f, -10f, -5f, 0f, 5f, 10f, 15f };
             string[] numbers = { "3-4", "4-1", "4-2", "4-3", "4-4", "5-1", "5-2" };
             Slab(p, "PsdHeader", new Vector3(0, 2.45f, z0), new Vector3(len, 0.5f, 0.15f), steel, false);
+            var psdFrame = Group("PsdFrame", p);
+            for (float x = -len / 2; x <= len / 2 + 0.01f; x += 1.25f)
+                if (!doorXs.Any(dx => Mathf.Abs(x - dx) < 0.66f))
+                    Box(psdFrame, "PsdPost", new Vector3(x, 1.1f, z0), new Vector3(0.06f, 2.2f, 0.09f), C("#7C8389"), false);
+            Box(psdFrame, "PsdKick", new Vector3(0, 0.04f, z0), new Vector3(len, 0.08f, 0.1f), C("#5A5F66"), false);
+            MergeByMaterial(psdFrame, "Subway_PsdFrame");
             for (float x = -len / 2; x < len / 2; x += 1.25f)
             {
                 if (doorXs.Any(dx => Mathf.Abs(x + 0.625f - dx) < 1.0f)) continue;
@@ -609,18 +598,41 @@ namespace SeoulFirstWeek.EditorTools
                 var l = Group("PsdLeafL", p);
                 l.localPosition = new Vector3(x - 0.32f, 0, z0);
                 Glass(l, "Glass", new Vector3(0, 1.1f, 0), new Vector3(0.64f, 2.2f, 0.04f));
+                Box(l, "Edge", new Vector3(-0.3f, 1.1f, 0), new Vector3(0.04f, 2.2f, 0.06f), C("#7C8389"), false);
                 var rr = Group("PsdLeafR", p);
                 rr.localPosition = new Vector3(x + 0.32f, 0, z0);
                 Glass(rr, "Glass", new Vector3(0, 1.1f, 0), new Vector3(0.64f, 2.2f, 0.04f));
+                Box(rr, "Edge", new Vector3(0.3f, 1.1f, 0), new Vector3(0.04f, 2.2f, 0.06f), C("#7C8389"), false);
                 psdLeft.Add(l);
                 psdRight.Add(rr);
                 // the car–door number on a sticker above the doors and painted on the floor in front of them
-                var label = Sign(p, "DoorNumber", new Vector3(x, 2.45f, z0 - 0.09f), new Vector2(0.6f, 0.32f), line4, numbers[i], Color.white, 180, 60, 0.02f);
+                Sign(p, "DoorNumber", new Vector3(x, 2.45f, z0 - 0.09f), new Vector2(0.6f, 0.32f), line4, numbers[i], Color.white, 180, 60, 0.02f);
                 var floorNum = Group("FloorNumber", p);
                 floorNum.localPosition = new Vector3(x, 0.006f, z0 - 1.0f);
                 Box(floorNum, "Plate", Vector3.zero, new Vector3(0.7f, 0.01f, 0.45f), C("#F2C230"), false);
                 WorldText.Create(floorNum, "Text", numbers[i], new Vector3(0, 0.008f, 0), new Vector2(0.6f, 0.36f), 60, C("#1E1E1E"), true, TextAnchor.MiddleCenter,
                     Quaternion.Euler(90, 0, 0));
+                // the queue lines either side of the door: wait here, let people off down the middle
+                foreach (var sx in new[] { -1f, 1f })
+                    Box(p, "QueueLine", new Vector3(x + sx * 0.7f, 0.005f, z0 - 1.1f), new Vector3(0.08f, 0.01f, 1.3f), C("#2F9E6E"), false);
+                // the gap filler at the door, so a foot never finds the gap
+                Box(p, "GapFiller", new Vector3(x, -0.012f, z0 + 0.09f), new Vector3(1.28f, 0.024f, 0.16f), C("#F2C230"), true);
+            }
+            // poems on a few of the fixed panels, as on Seoul's screen doors
+            string[] poems =
+            {
+                "스크린도어 시\n<size=22>바쁜 하루 끝\n창밖의 불빛이\n집으로 가는 길을\n밝혀 줍니다</size>",
+                "스크린도어 시\n<size=22>처음 타는 열차도\n두 번째부터는\n내 길이 됩니다</size>",
+                "스크린도어 시\n<size=22>내리는 사람 먼저\n그다음 우리가\n함께 갑니다</size>",
+            };
+            int poem = 0;
+            foreach (var px in new[] { -12.5f, -2.5f, 7.5f })
+            {
+                var sheet = Group("Poem", p);
+                sheet.localPosition = new Vector3(px, 1.45f, z0 - 0.03f);
+                Box(sheet, "Sheet", Vector3.zero, new Vector3(0.62f, 0.66f, 0.005f), C("#FBF6EC"), false);
+                WorldText.Create(sheet, "Text", poems[poem++ % poems.Length], new Vector3(0, 0, -0.006f), new Vector2(0.56f, 0.6f), 34, C("#2B2E33"), true, TextAnchor.MiddleCenter,
+                    Quaternion.identity);
             }
             // the direction board and the next-station sign
             HangingSign(r, "PlatformSign", p.TransformPoint(new Vector3(-6f, 2.85f, -0.4f)), 0, new Vector2(4.8f, 0.62f), C("#2B2E33"),
@@ -628,116 +640,59 @@ namespace SeoulFirstWeek.EditorTools
             Sign(p, "StationName", new Vector3(8f, 1.7f, -pw / 2 + 0.05f), new Vector2(3.6f, 0.9f), C("#FFFFFF"),
                 "<color=#00A4E3>●</color> 명동\n<size=30>Myeong-dong  424</size>", C("#1E1E1E"), 0, 70, 0.04f);
 
-            // the train: two cars, their doors in line with the screen doors at the stop
-            var train = Group("Train", p);
-            var trainBody = Group("Body", train);
-            var carMat = TextureKit.Surface("Car_Steel", TextureKit.Metal(), C("#D9DDE1"), 0.8f, 0.85f, true);
-            var carLeft = new List<Transform>();
-            var carRight = new List<Transform>();
-            float tz = z0 + 2.2f;
-            Slab(trainBody, "Cars", new Vector3(0, 1.2f, tz), new Vector3(len - 0.6f, 2.9f, 3.0f), carMat, false);
-            Box(trainBody, "Stripe", new Vector3(0, 1.75f, tz - 1.505f), new Vector3(len - 0.6f, 0.22f, 0.01f), line4, false);
+            // the train: three cars, their doors in line with the screen doors at the stop
+            var (trainSet, inside, _) = BuildPlatformTrain(p, z0, doorXs, line4, psdLeft, psdRight, rng);
+
+            // boarding: walking in through any open door; the ride is a space of its own
+            var ride = BuildCarRide(r, line4, rng);
             foreach (var x in doorXs)
             {
-                var l = Group("CarLeafL", trainBody);
-                l.localPosition = new Vector3(x - 0.32f, 0, tz - 1.52f);
-                Box(l, "Door", new Vector3(0, 1.0f, 0), new Vector3(0.64f, 1.9f, 0.03f), C("#C5CAD0"), false);
-                Emissive(l, "Window", new Vector3(0, 1.45f, -0.02f), new Vector3(0.44f, 0.7f, 0.01f), C("#FFF6E0"), 0.9f);
-                var rr = Group("CarLeafR", trainBody);
-                rr.localPosition = new Vector3(x + 0.32f, 0, tz - 1.52f);
-                Box(rr, "Door", new Vector3(0, 1.0f, 0), new Vector3(0.64f, 1.9f, 0.03f), C("#C5CAD0"), false);
-                Emissive(rr, "Window", new Vector3(0, 1.45f, -0.02f), new Vector3(0.44f, 0.7f, 0.01f), C("#FFF6E0"), 0.9f);
-                carLeft.Add(l);
-                carRight.Add(rr);
+                var board = MakeWaypoint(root, "train", p.TransformPoint(new Vector3(x, 1f, tz - CarW / 2f + 0.6f)), new Vector3(1.1f, 2f, 0.6f), "wp_board", "", true);
+                board.performer = trainSet;
+                board.moveTo = ride;
             }
-            for (float x = -len / 2 + 2.5f; x < len / 2 - 2f; x += 2.5f)
-                if (!doorXs.Any(dx => Mathf.Abs(x - dx) < 1.0f))
-                    Emissive(trainBody, "CarWindow", new Vector3(x, 1.5f, tz - 1.51f), new Vector3(1.6f, 0.7f, 0.01f), C("#FFF6E0"), 0.9f);
-            var trainSet = train.gameObject.AddComponent<StationTrain>();
-            trainSet.body = trainBody;
-            trainSet.stopPosition = Vector3.zero;
-            trainSet.runIn = 90f;
-            trainSet.leavesLeft = psdLeft.Concat(carLeft).ToArray();
-            trainSet.leavesRight = psdRight.Concat(carRight).ToArray();
-
-            // waypoints: board at 4-2, read the number at 4-2, the stairs up at the west end
-            var board = MakeWaypoint(root, "train", p.TransformPoint(new Vector3(-5f, 1f, z0 - 0.6f)), new Vector3(1.4f, 2f, 1.0f), "wp_board", "");
-            board.performer = trainSet;
-            board.moveTo = BuildCarInterior(r, line4, rng);
             MakeWaypoint(root, "door_number", p.TransformPoint(new Vector3(-5f, 0.6f, z0 - 1.0f)), new Vector3(1.0f, 1.2f, 0.8f), "wp_read", "4-2");
-            Slab(p, "StairFrame", new Vector3(-len / 2 + 0.15f, 1.25f, -1f), new Vector3(0.1f, 2.5f, 3.0f), steel, false);
-            Box(p, "StairDark", new Vector3(-len / 2 + 0.21f, 1.15f, -1f), new Vector3(0.02f, 2.3f, 2.6f), C("#151719"), false);
+            var westEnd = p.Find("WallEnd");
+            if (westEnd && westEnd.localPosition.x < 0) Object.DestroyImmediate(westEnd.gameObject);
+            WallWithOpenings(p, "WallEndW", p.TransformPoint(new Vector3(-(len / 2 + 0.1f), 0, 0)), 90, pw, h, 0.2f, wall, 2.5f, (1.0f, 2.8f));
+            var upMid = Stairwell(p, "StairsUp", p.TransformPoint(new Vector3(-len / 2, 0, -1f)), -90, 16, 0.16f, 2.8f,
+                TextureKit.Surface("Passage_Floor", TextureKit.FloorStone(), C("#B9B4AA")), TextureKit.Surface("Wall_StairShaft", TextureKit.Plastic(), C("#E4E6E8"), 0.6f),
+                C("#FFF1DC"), "↑ 나가는 곳 · 고객안전실 · Exit");
+            Box(p, "StairTactile", new Vector3(-len / 2 + 0.45f, 0.004f, -1f), new Vector3(0.5f, 0.008f, 2.6f), C("#F2C230"), false);
             HangingSign(r, "ExitSign", p.TransformPoint(new Vector3(-len / 2 + 0.8f, 2.8f, -1f)), 90, new Vector2(3.0f, 0.5f), C("#F2C230"), "↑ 나가는 곳 · 고객안전실", C("#1E1E1E"), 44);
-            var up = MakeWaypoint(root, "stairs_up", p.TransformPoint(new Vector3(-len / 2 + 1.0f, 1f, -1f)), new Vector3(1.2f, 2f, 2.6f), "wp_stairs_up", "고객안전실");
+            var up = MakeWaypoint(root, "stairs_up", upMid, new Vector3(1.2f, 2.4f, 2.6f), "wp_stairs_up", "고객안전실", true);
             up.moveTo = Anchor(r, "OfficeArrival", new Vector3(8f, 0.05f, -4.8f), 70);
             Anchor(r, "Start_platform", p.TransformPoint(new Vector3(-10.5f, 0.05f, -1.8f)), 62);
-            for (int i = 0; i < 3; i++)
-                Extra(r, $"Waiting{i}", HumanLook.Random(rng, Crowd.Street), p.TransformPoint(new Vector3(4f + i * 3.5f, 0, 1.2f)), 0, phone: i != 0);
-            DressPlatform(r, p, len, pw, h, line4);
-        }
 
-        /// <summary>
-        /// The inside of a Line 4 car, a third space further east: long side benches between four doors a side,
-        /// poles and straps, the dark tunnel in the windows, and the display over the door that shows the next stop.
-        /// Returns where the player stands once aboard.
-        /// </summary>
-        static Transform BuildCarInterior(Room r, Color line4, System.Random rng)
-        {
-            var car = Group("CarInterior", r.Root);
-            car.position = new Vector3(PlatformX + 70f, 0, 0);
-            float cl = 19.5f, cw = 3.1f, ch = 2.3f;
-            var shell = TextureKit.Surface("Car_Inside", TextureKit.Plastic(), C("#EEF0F2"), 0.7f);
-            var seat = TextureKit.Surface("Seat_Car", TextureKit.FabricWeave(), C("#3E6FB5"), 0.3f);
-            var steel = Mats.Lit(C("#C9CED4"), 0.6f, 0.8f);
-            Slab(car, "Floor", new Vector3(0, -0.05f, 0), new Vector3(cl, 0.1f, cw), TextureKit.Surface("Floor_Car", TextureKit.FloorVinyl(), C("#8E9399")));
-            Slab(car, "Ceiling", new Vector3(0, ch + 0.05f, 0), new Vector3(cl, 0.1f, cw), shell, true, false);
-            foreach (var sx in new[] { -1f, 1f })
-                Slab(car, "EndWall", new Vector3(sx * (cl / 2 + 0.05f), ch / 2, 0), new Vector3(0.1f, ch, cw), shell);
-            float[] doors = { -7.3f, -2.45f, 2.45f, 7.3f };
-            foreach (var sz in new[] { -1f, 1f })
+            // the people: waiting at the doors, getting off and on when the train opens, walking along the platform
+            var crowd = new GameObject("TrainCrowd").AddComponent<TrainCrowd>();
+            crowd.transform.SetParent(p, false);
+            crowd.train = trainSet;
+            crowd.doors = doorXs.Select(x =>
             {
-                float z = sz * (cw / 2 + 0.05f);
-                Slab(car, "SideWall", new Vector3(0, ch / 2, z), new Vector3(cl, ch, 0.1f), shell);
-                foreach (var dx in doors)
-                {
-                    Box(car, "Door", new Vector3(dx, 1.0f, z - sz * 0.06f), new Vector3(1.3f, 1.95f, 0.02f), C("#C5CAD0"), false);
-                    Emissive(car, "DoorWindow", new Vector3(dx, 1.4f, z - sz * 0.075f), new Vector3(0.9f, 0.6f, 0.01f), C("#1B2433"), 0.6f);
-                    Cylinder(car, "Pole", new Vector3(dx + 0.8f, ch / 2, z - sz * 0.35f), new Vector3(0.04f, ch / 2, 0.04f), C("#C9CED4"));
-                }
-                // seven-seat benches between the doors, the dark tunnel in the windows above them
-                for (int i = 0; i < doors.Length - 1; i++)
-                {
-                    float x0 = doors[i] + 0.75f, x1 = doors[i + 1] - 0.75f, cx = (x0 + x1) / 2f;
-                    Slab(car, "Bench", new Vector3(cx, 0.4f, z - sz * 0.32f), new Vector3(x1 - x0, 0.1f, 0.48f), seat, true);
-                    Slab(car, "BenchBack", new Vector3(cx, 0.72f, z - sz * 0.1f), new Vector3(x1 - x0, 0.55f, 0.08f), seat, false);
-                    Emissive(car, "Window", new Vector3(cx, 1.45f, z - sz * 0.06f), new Vector3(x1 - x0 - 0.2f, 0.62f, 0.01f), C("#141B26"), 0.5f);
-                    for (float sx = x0 + 0.2f; sx < x1; sx += 0.45f)
-                        Box(car, "Strap", new Vector3(sx, 1.85f, z - sz * 0.55f), new Vector3(0.1f, 0.14f, 0.02f), C("#F2C230"), false);
-                    Box(car, "Rack", new Vector3(cx, 1.95f, z - sz * 0.3f), new Vector3(x1 - x0, 0.03f, 0.35f), C("#B9BEC4"), false);
-                }
-                Box(car, "Rail", new Vector3(0, 1.98f, z - sz * 0.55f), new Vector3(cl - 0.4f, 0.03f, 0.03f), C("#C9CED4"), false);
-            }
-            Box(car, "LineStripe", new Vector3(0, ch - 0.12f, -cw / 2 + 0.02f), new Vector3(cl, 0.06f, 0.01f), line4, false);
-            for (float x = -cl / 2 + 2f; x < cl / 2; x += 4f)
-                Emissive(car, "CeilingLight", new Vector3(x, ch - 0.02f, 0), new Vector3(2.6f, 0.03f, 0.3f), C("#FFFFFF"), 1.5f)
-                    .GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.Off;
-            PointLight(car, new Vector3(-4f, ch - 0.3f, 0), 9f, 1.1f, C("#F4F7FF"));
-            PointLight(car, new Vector3(4f, ch - 0.3f, 0), 9f, 1.1f, C("#F4F7FF"));
-            // the display over the door: the next stop and the door side
-            var display = Group("Display", car);
-            display.SetPositionAndRotation(car.TransformPoint(new Vector3(2.45f, 2.12f, cw / 2 - 0.09f)), Quaternion.Euler(0, 180, 0));
-            Box(display, "Frame", Vector3.zero, new Vector3(1.1f, 0.24f, 0.05f), C("#1E1E1E"), false);
-            WorldText.Create(display, "Text", "이번 역  동작  Dongjak", new Vector3(0, 0, -0.03f), new Vector2(1.0f, 0.18f), 44, C("#FFB547"), true, TextAnchor.MiddleCenter,
-                Quaternion.identity);
-            // other passengers, seated and standing
-            for (int i = 0; i < 6; i++)
+                var t = Group("DoorSpot", crowd.transform);
+                t.SetPositionAndRotation(p.TransformPoint(new Vector3(x, 0, z0 - 0.45f)), Quaternion.identity);
+                return t;
+            }).ToArray();
+            crowd.inside = inside.ToArray();
+            crowd.toStairs = new[] { p.TransformPoint(new Vector3(-14f, 0, -0.9f)), p.TransformPoint(new Vector3(-20.0f, 0, -1.0f)), p.TransformPoint(new Vector3(-24.4f, 2.3f, -1.0f)) };
+            crowd.seed = 56;
+            var walkers = new GameObject("PlatformFlow").AddComponent<CrowdFlow>();
+            walkers.transform.SetParent(p, false);
+            walkers.count = 3;
+            walkers.seed = 57;
+            walkers.speed = 1.15f;
+            walkers.gap = new Vector2(4f, 14f);
+            Vector3 P(float x, float z) => p.TransformPoint(new Vector3(x, 0, z));
+            // up the flight at the west end, near its top
+            Vector3 Up(float z) => p.TransformPoint(new Vector3(-24.4f, 2.3f, z));
+            walkers.routes = new[]
             {
-                float sz = i % 2 == 0 ? -1f : 1f;
-                var pos = car.TransformPoint(new Vector3(-6f + i * 2.1f, 0, sz * (cw / 2 - 0.5f)));
-                Extra(r, $"Passenger{i}", HumanLook.Random(rng, Crowd.Street), pos, sz < 0 ? 0 : 180, sitting: true, phone: i % 3 != 1, seat: 0.45f);
-            }
-            Extra(r, "Standing", HumanLook.Random(rng, Crowd.Street), car.TransformPoint(new Vector3(-0.8f, 0, 0.3f)), 90, phone: true);
-            return Anchor(r, "InCar", car.TransformPoint(new Vector3(1.6f, 0.05f, -0.4f)), 20);
+                new CrowdFlow.Route { points = new[] { Up(-0.6f), P(-20.0f, -0.6f), P(-15f, -0.8f), P(-8f, -1.6f), P(-15f, -0.8f), P(-20.0f, -1.3f), Up(-1.3f) }, waits = new[] { 0f, 0f, 0f, 22f, 0f, 0f, 0f } },
+                new CrowdFlow.Route { points = new[] { Up(-1.4f), P(-20.0f, -1.4f), P(-10f, -1.8f), P(2f, -1.5f), P(-10f, -1.8f), P(-20.0f, -0.7f), Up(-0.7f) }, waits = new[] { 0f, 0f, 0f, 28f, 0f, 0f, 0f } },
+                new CrowdFlow.Route { points = new[] { Up(-1.0f), P(-20.0f, -1.0f), P(-6f, -1.0f), P(9f, -1.3f), P(16f, -1.6f), P(9f, -1.3f), P(-20.0f, -1.0f), Up(-1.0f) }, waits = new[] { 0f, 0f, 0f, 0f, 25f, 0f, 0f, 0f } },
+            };
+            DressPlatform(r, p, len, pw, h, line4);
         }
 
         // ------------------------------------------------------------------- 119 on the street

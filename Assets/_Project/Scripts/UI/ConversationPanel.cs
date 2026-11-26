@@ -48,6 +48,8 @@ namespace SeoulFirstWeek.UI
         Text speakLabel;
         InkShape speakRing;
         bool talking;
+        // answers are said, never clicked (owner, 2026-11-26): a click or a number key only asks for the answer
+        // out loud; an action in [brackets], which can't be said, is the one thing clicked
 
         /// <summary>Whether the last answer was said out loud, how well it came across, and what was heard.</summary>
         public bool LastPickSpoken { get; private set; }
@@ -122,7 +124,7 @@ namespace SeoulFirstWeek.UI
             again.Place(new Vector2(1, 1), new Vector2(-34, -30), new Vector2(190, 44));
             var ah = UIKit.HStack(again, 10, null, TextAnchor.MiddleRight);
             ah.childForceExpandHeight = false;
-            var rKey = UIKit.Keycap(again, "R", 18);
+            var rKey = UIKit.Keycap(again, Core.VRMode.Active ? "B" : "R", 18);
             rKey.gameObject.AddComponent<Button>().onClick.AddListener(() => ReplayRequested?.Invoke());
             rKey.GetComponentInChildren<InkShape>().raycastTarget = true;
             UIKit.Words(again, Loc.T("hear_again"), 22, Role.Paper, Face.ReadBold).Layout(130, 40);
@@ -133,7 +135,7 @@ namespace SeoulFirstWeek.UI
             speak.Place(new Vector2(1, 1), new Vector2(-34, -86), new Vector2(220, 48));
             var sh = UIKit.HStack(speak, 10, null, TextAnchor.MiddleRight);
             sh.childForceExpandHeight = false;
-            var spaceKey = UIKit.Keycap(speak, "SPACE", 18);
+            var spaceKey = UIKit.Keycap(speak, Core.VRMode.Active ? "A" : "SPACE", 18);
             spaceKey.GetComponentInChildren<InkShape>().raycastTarget = true;
             var hold = spaceKey.gameObject.AddComponent<HoldButton>();
             hold.Pressed += StartTalk;
@@ -267,11 +269,22 @@ namespace SeoulFirstWeek.UI
 
         // ---------------------------------------------------------------- answering by voice
 
-        bool CanSpeak => pendingChoice != null && Speech.Enabled && shown.Any(c => !c.Tried && KoreanMatch.Speakable(c.Korean));
+        /// <summary>An answer on screen that can be said (the SPACE control shows while there is one).</summary>
+        bool HasSpeakable => pendingChoice != null && shown.Any(c => !c.Tried && KoreanMatch.Speakable(c.Korean));
+
+        bool CanSpeak => HasSpeakable && Speech.Enabled;
+
+        static string TalkKey => Core.VRMode.Active ? "A" : "SPACE";
 
         void StartTalk()
         {
-            if (talking || !CanSpeak) return;
+            if (talking || !HasSpeakable) return;
+            // the microphone went away after the Home screen checked it: say so, there is no other way to answer
+            if (!Speech.Enabled)
+            {
+                ShowFeedback(Loc.T("say_no_mic", TalkKey));
+                return;
+            }
             if (!Speech.Begin()) return;
             talking = true;
             Music.DuckFor(8f);
@@ -309,7 +322,7 @@ namespace SeoulFirstWeek.UI
             if (pendingChoice == null) return;
             if (string.IsNullOrWhiteSpace(heard))
             {
-                ShowFeedback(Loc.T("say_nothing"));
+                ShowFeedback(Loc.T("say_nothing", TalkKey));
                 return;
             }
             var candidates = shown.Select(c => c.Tried ? null : c.Korean).ToList();
@@ -324,6 +337,23 @@ namespace SeoulFirstWeek.UI
             var missed = KoreanMatch.Missed(heard, shown[m.Index].Korean);
             SaidLine(answers[m.Index], heard, m.Score, missed);
             Resolve(m.Index, true, m.Score, heard);
+        }
+
+        /// <summary>Whether this answer has to be said rather than clicked (all but actions in [brackets]).</summary>
+        bool MustSay(int index) => index >= 0 && index < shown.Count && KoreanMatch.Speakable(shown[index].Korean);
+
+        /// <summary>A click on an answer or its number key: an action is done; anything else is asked for out loud.</summary>
+        void Clicked(int index)
+        {
+            if (pendingChoice == null || index < 0 || index >= shown.Count || shown[index].Tried) return;
+            if (!MustSay(index))
+            {
+                Pick(index);
+                return;
+            }
+            Sfx.Play(ProceduralAudio.Soft, 0.5f);
+            ShowFeedback(Loc.T(Speech.Enabled ? "say_required" : "say_no_mic", TalkKey));
+            if (speak && speak.gameObject.activeInHierarchy) _ = Motion.Shake(speak, 6f, 0.3f);
         }
 
         /// <summary>Under the answer that was said: what was heard, how well it came across, and what didn't.</summary>
@@ -390,10 +420,21 @@ namespace SeoulFirstWeek.UI
             UIKit.VStack(text, 3, null, TextAnchor.UpperLeft, false);
             text.Layout(0, -1, 1).minWidth = 0;
             a.Korean = UIKit.Words(text, c.Korean, 28, Role.Paper, Face.ReadBold);
-            var sub = string.Join("  ·  ", new[] { c.Romanization, c.Meaning }.Where(s => !string.IsNullOrEmpty(s)));
+            // an answer in [brackets] is something the player does, not a line to say, so it has no
+            // romanization: the tag says so in its place
+            bool action = c.Korean != null && c.Korean.TrimStart().StartsWith("[");
+            string tag = c.Tried ? $"▶ {Loc.T("answer_action")}" : $"<color={Theme.Html(Role.Glow)}>▶ {Loc.T("answer_action")}</color>";
+            // the level sets how much help the card gives: Easy romanization and translation, Medium the
+            // romanization only, Hard the Korean alone (an action keeps its tag, which is not a translation)
+            var level = Settings.Difficulty;
+            var pron = action ? tag : level == Difficulty.Hard ? null : c.Romanization;
+            var meaning = level == Difficulty.Easy ? c.Meaning : null;
+            var sub = string.Join("  ·  ", new[] { pron, meaning }.Where(s => !string.IsNullOrEmpty(s)));
             a.Sub = UIKit.Words(text, sub, 22, Role.Paper, Face.ReadBold);
             a.Sub.lineSpacing = 1.05f;
-            if (!string.IsNullOrEmpty(c.DocKorean)) DocChip(text, c.DocKorean, c.DocLocal, ChoicesWidth - 24f - 52f - 42f - 18f);
+            a.Sub.gameObject.SetActive(!string.IsNullOrEmpty(sub));
+            if (!string.IsNullOrEmpty(c.DocKorean))
+                DocChip(text, c.DocKorean, level == Difficulty.Easy ? c.DocLocal : null, ChoicesWidth - 24f - 52f - 42f - 18f);
 
             a.Stars = UIKit.Words(a.Body, "★ ★", 28, Role.Glow, Face.Display, TextAnchor.UpperRight);
             a.Stars.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
@@ -419,7 +460,7 @@ namespace SeoulFirstWeek.UI
             var btn = a.Root.gameObject.AddComponent<Button>();
             btn.transition = Selectable.Transition.None;
             btn.targetGraphic = a.Strip;
-            btn.onClick.AddListener(() => Pick(index));
+            btn.onClick.AddListener(() => Clicked(index));
             var hover = a.Root.gameObject.AddComponent<InkHover>();
             hover.visual = a.Body;
             hover.tilt = -0.8f;
@@ -516,7 +557,7 @@ namespace SeoulFirstWeek.UI
             }
         }
 
-        // Automation hooks for editor play-tests.
+        // Automation hooks for editor play-tests (Pick chooses an answer whether or not it has to be said).
         public bool IsWaiting => pendingChoice != null || pendingPin != null;
         public bool WaitingForPin => pendingPin != null;
         public string CurrentLine => $"{speakerText.text} | {npcText.text}";
@@ -543,9 +584,9 @@ namespace SeoulFirstWeek.UI
             if (replayAction.WasPressedThisFrame()) ReplayRequested?.Invoke();
 
             // say it: shown while there is an answer that can be said; held Space records, letting go hears it
-            bool canSpeak = CanSpeak;
-            if (speak.gameObject.activeSelf != (canSpeak || talking)) speak.gameObject.SetActive(canSpeak || talking);
-            if (canSpeak && !talking && talkAction.WasPressedThisFrame()) StartTalk();
+            bool hasSpeakable = HasSpeakable;
+            if (speak.gameObject.activeSelf != (hasSpeakable || talking)) speak.gameObject.SetActive(hasSpeakable || talking);
+            if (hasSpeakable && !talking && talkAction.WasPressedThisFrame()) StartTalk();
             if (Speech.Listening && talkAction.WasReleasedThisFrame()) _ = EndTalk();
             if (Speech.Listening)
             {
@@ -555,7 +596,7 @@ namespace SeoulFirstWeek.UI
 
             if (pendingChoice != null && pickAction.WasPressedThisFrame() && pickAction.activeControl != null &&
                 int.TryParse(pickAction.activeControl.name, out var n))
-                Pick(n - 1);
+                Clicked(n - 1);
 
             var kb = Keyboard.current;
             if (pendingPin == null || kb == null) return;

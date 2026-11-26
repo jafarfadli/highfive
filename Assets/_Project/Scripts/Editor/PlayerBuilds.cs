@@ -51,6 +51,9 @@ namespace SeoulFirstWeek.EditorTools
         {
             string folder = Prepare("ReadySetGo-Windows");
             Build(BuildTarget.StandaloneWindows64, Path.Combine(folder, AppName + ".exe"));
+            // the same player starts in a headset when launched with -vr (Core.VRMode)
+            File.WriteAllText(Path.Combine(folder, AppName + " (VR).bat"),
+                $"@echo off\r\nstart \"\" \"%~dp0{AppName}.exe\" -vr\r\n");
             Finish(folder, WindowsNote, appBundle: false);
         }
 
@@ -61,6 +64,10 @@ namespace SeoulFirstWeek.EditorTools
                 throw new InvalidOperationException($"{Secrets} would ship inside the build: move it out of the project, build, then put it back.");
             if (!File.Exists(WhisperModel))
                 Debug.LogWarning($"[Players] {WhisperModel} is missing (run Tools/whisper/get_model.sh), so this build can't hear answers said out loud.");
+            // OpenXR for the headset, never the Mock HMD a play-test may have left assigned
+            VRSetup.Configure();
+            if (VRSetup.MockHmdAssigned())
+                throw new InvalidOperationException("The Mock HMD loader is still assigned to Standalone: a build would start a fake headset.");
             string folder = Path.GetFullPath(Path.Combine(Root, name));
             if (Directory.Exists(folder)) Directory.Delete(folder, true);
             Directory.CreateDirectory(folder);
@@ -198,6 +205,28 @@ R untuk mendengar lagi, Esc untuk jeda.
    Microsoft Visual C++ Redistributable (x64) dari https://aka.ms/vs/17/release/vc_redist.x64.exe dan perbarui
    driver kartu grafis.
 
-" + Controls;
+" + Controls + @"
+Playing in VR (Meta Quest 2 or 3 over Quest Link, on a PC with a gaming graphics card):
+1. Install the Meta Quest Link app on this PC (https://www.meta.com/quest/setup/), sign in, and connect the
+   headset with a USB-C cable (or Air Link on 5 GHz Wi-Fi).
+2. In the Link app, Settings > General: turn on ""Unknown sources"" and set Meta Quest Link as the active
+   OpenXR runtime.
+3. Put the headset on and start Quest Link from its Quick Settings.
+4. Open ""Ready Set Go (VR).bat"". The game starts in the headset (without one it plays on the screen).
+VR controls: the left stick walks (click it to walk faster), the right stick turns 45 degrees, point with
+the right controller and pull its trigger to choose or to open a door, hold A and say the answer, B hears the
+line again, the left Menu button pauses.
+
+Main di VR (Meta Quest 2 atau 3 lewat Quest Link, di PC dengan kartu grafis gaming):
+1. Pasang aplikasi Meta Quest Link di PC ini (https://www.meta.com/quest/setup/), login, lalu sambungkan
+   headset dengan kabel USB-C (atau Air Link lewat Wi-Fi 5 GHz).
+2. Di aplikasi Link, Settings > General: nyalakan ""Unknown sources"" dan jadikan Meta Quest Link sebagai
+   OpenXR runtime yang aktif.
+3. Pakai headset, lalu mulai Quest Link dari Quick Settings.
+4. Buka ""Ready Set Go (VR).bat"". Game muncul di headset (tanpa headset, game jalan di layar).
+Kontrol VR: stik kiri untuk jalan (klik stiknya untuk lebih cepat), stik kanan untuk berbelok 45 derajat,
+tunjuk dengan controller kanan lalu tarik trigger untuk memilih atau membuka pintu, tahan A lalu ucapkan
+jawabannya, B untuk mendengar lagi, tombol Menu kiri untuk jeda.
+";
     }
 }

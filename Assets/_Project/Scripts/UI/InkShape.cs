@@ -67,6 +67,8 @@ namespace SeoulFirstWeek.UI
         [Range(0, 2)] public float grain = 1f;
         [Tooltip("Strips: how dry the brush runs at the ends.")]
         [Range(0, 1)] public float dry = 1f;
+        [Tooltip("Strips: a crisp rectangle (square ends, straight edges, no dry brush) instead of a brush stroke.")]
+        public bool square = true;
         [Tooltip("Missing ink in blotches (stamps).")]
         [Range(0, 1)] public float grunge;
         [Tooltip("0 = solid; above 0 the fill is printed as halftone dots of that density.")]
@@ -517,9 +519,9 @@ namespace SeoulFirstWeek.UI
             float length = r.width * reveal;
             if (length < 2f) return;
             float h = r.height;
-            int n = Mathf.Max(6, Mathf.CeilToInt(length / 9f));
-            float startCap = Mathf.Min(h * 0.45f, r.width * 0.2f);
-            float endTaper = Mathf.Min(h * 0.9f, r.width * 0.25f);
+            int n = square ? 1 : Mathf.Max(6, Mathf.CeilToInt(length / 9f));
+            float startCap = square ? 0f : Mathf.Min(h * 0.45f, r.width * 0.2f);
+            float endTaper = square ? 0f : Mathf.Min(h * 0.9f, r.width * 0.25f);
             float dryStart = Mathf.Min(70f, r.width * 0.12f), dryEnd = Mathf.Min(110f, r.width * 0.18f);
             int cells = Mathf.Max(2, Mathf.RoundToInt(r.width / 140f));
 
@@ -534,14 +536,14 @@ namespace SeoulFirstWeek.UI
                 if (x < startCap) profile = Mathf.Lerp(0.55f, 1f, Mathf.Sqrt(Mathf.Clamp01(x / startCap)));
                 float toEnd = length - x;
                 if (toEnd < endTaper) profile *= Mathf.Lerp(0.42f, 1f, Mathf.Pow(Mathf.Clamp01(toEnd / endTaper), 0.6f));
-                float wob = rough * Wobble, rag = tear * Ragged;
+                float wob = square ? 0f : rough * Wobble, rag = square ? 0f : tear * Ragged;
                 float mid = r.center.y + wob * 0.6f * Noise(u * cells, Salt + 3);
                 float half = h * 0.5f * profile;
                 float upper = half + wob * Noise(u * cells * 2.3f, Salt + 7) + rag * Noise(x / 5f, Salt + 9);
                 float lower = half + wob * Noise(u * cells * 2.1f, Salt + 13) + rag * Noise(x / 5f, Salt + 17);
                 top.Add(new Vector2(r.xMin + x, mid + upper));
                 bot.Add(new Vector2(r.xMin + x, mid - lower));
-                float d = Mathf.Max(1f - x / dryStart, 1f - toEnd / dryEnd);
+                float d = square ? 0f : Mathf.Max(1f - x / dryStart, 1f - toEnd / dryEnd);
                 dryness.Add(Mathf.Clamp01(d) * dry * DryScale);
             }
 

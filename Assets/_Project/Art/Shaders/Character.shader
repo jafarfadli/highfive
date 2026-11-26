@@ -40,6 +40,7 @@ Shader "SeoulFirstWeek/Character"
             #pragma target 3.5
             #pragma vertex Vert
             #pragma fragment Frag
+            #pragma multi_compile_instancing
 
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
             #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
@@ -70,6 +71,7 @@ Shader "SeoulFirstWeek/Character"
                 half4 color : COLOR;
                 float2 uv : TEXCOORD0;
                 float2 mat : TEXCOORD1;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct Varyings
@@ -81,11 +83,16 @@ Shader "SeoulFirstWeek/Character"
                 float2 uv : TEXCOORD3;
                 nointerpolation float2 mat : TEXCOORD4;
                 half fogFactor : TEXCOORD5;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+                UNITY_VERTEX_OUTPUT_STEREO
             };
 
             Varyings Vert(Attributes v)
             {
                 Varyings o = (Varyings)0;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_TRANSFER_INSTANCE_ID(v, o);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 VertexPositionInputs pos = GetVertexPositionInputs(v.positionOS.xyz);
                 o.positionCS = pos.positionCS;
                 o.positionWS = pos.positionWS;
@@ -128,6 +135,8 @@ Shader "SeoulFirstWeek/Character"
 
             half4 Frag(Varyings i) : SV_Target
             {
+                UNITY_SETUP_INSTANCE_ID(i);
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
                 uint slice = (uint)round(i.mat.x);
                 int type = (int)round(i.mat.y);
                 bool face = type == 2;

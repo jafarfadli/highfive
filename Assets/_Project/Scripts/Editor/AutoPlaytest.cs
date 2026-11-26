@@ -162,6 +162,12 @@ namespace SeoulFirstWeek.EditorTools
             if (!Camera.main) { Note("no camera for " + name); return; }
             PlaytestTools.Frames(2);
             PlaytestTools.Capture(Path.Combine(Out, name + ".png"));
+            if (Core.VRMode.Active)
+            {
+                // the game view shows what each eye gets, side by side (VRPlaytest)
+                ScreenCapture.CaptureScreenshot(Path.Combine(Out, name + "-eyes.png"));
+                PlaytestTools.Frames(3);
+            }
         }
 
         /// <summary>Stands the player a few metres from a waypoint, looking at it, for a photo of the place.</summary>
@@ -182,6 +188,9 @@ namespace SeoulFirstWeek.EditorTools
 
         static void Play()
         {
+            // in the pretend headset every shader needs its stereo variants, which the editor would otherwise draw
+            // as cyan placeholders while it compiles them in the background
+            if (Core.VRMode.Active) ShaderUtil.allowAsyncCompilation = false;
             // a run of only some parts keeps the other parts' photos
             if (!File.Exists(OnlyPath))
                 foreach (var f in Directory.GetFiles(Out, "*.png")) File.Delete(f);
@@ -199,6 +208,7 @@ namespace SeoulFirstWeek.EditorTools
                 EditorApplication.isPaused = true;
                 PlaytestTools.Frames(200);
                 Shot("home");
+                HomeMicCheck();
                 Core.SceneFlow.Load("Select");
                 PlaytestTools.WaitScene("Select");
                 PlaytestTools.Frames(60);
@@ -384,6 +394,69 @@ namespace SeoulFirstWeek.EditorTools
             Shot("after-logbook-er-insured");
         }
 
+        static bool voiceChecked;
+
+        /// <summary>
+        /// Answers are said, never clicked: a click on the answer the run means to give leaves the question open and
+        /// asks for it out loud (with a microphone, pretended) or says a microphone is needed (without one). Checked
+        /// once a run, on an answer that can be said; the run then gives the answer itself.
+        /// </summary>
+        static void VoiceRequiredCheck(ConversationPanel p, string plan, int pick)
+        {
+            var choice = p.CurrentChoices[pick];
+            if (choice.Tried || !Conversation.KoreanMatch.Speakable(choice.Korean)) return;
+            voiceChecked = true;
+            var button = p.GetComponentsInChildren<UnityEngine.UI.Button>()
+                .FirstOrDefault(b => b.name == "Answer" && b.GetComponentsInChildren<UnityEngine.UI.Text>().Any(t => t.text == choice.Korean));
+            if (!button)
+            {
+                Note($"FAIL voice-required: no button for '{choice.Korean}' in {plan}");
+                return;
+            }
+            string key = Core.VRMode.Active ? "A" : "SPACE";
+            bool pretended = Conversation.Speech.PretendMic, pretendedNone = Conversation.Speech.PretendNoMic;
+            try
+            {
+                foreach (var (mic, expect, label) in new[] { (true, "say_required", "with a microphone"), (false, "say_no_mic", "without a microphone") })
+                {
+                    Conversation.Speech.PretendMic = mic;
+                    Conversation.Speech.PretendNoMic = !mic;
+                    button.onClick.Invoke();
+                    PlaytestTools.Frames(10);
+                    bool stillOpen = p.IsWaiting;
+                    string asked = Core.Loc.T(expect, key);
+                    bool note = p.GetComponentsInChildren<UnityEngine.UI.Text>().Any(t => t.isActiveAndEnabled && t.text.Contains(asked));
+                    Shot($"{plan.Replace('#', '_')}-voice-required-{(mic ? "mic" : "nomic")}");
+                    Note(stillOpen && note ? $"voice-required: ok {label}, a click left the question open and said why ({plan})"
+                        : $"FAIL voice-required {label}: question open={stillOpen}, note shown={note} ({plan})");
+                }
+            }
+            finally
+            {
+                Conversation.Speech.PretendMic = pretended;
+                Conversation.Speech.PretendNoMic = pretendedNone;
+            }
+        }
+
+        /// <summary>Without a microphone the Home screen says so and its start stays locked.</summary>
+        static void HomeMicCheck()
+        {
+            Conversation.Speech.PretendNoMic = true;
+            try
+            {
+                PlaytestTools.Frames(70);
+                Shot("home-no-mic");
+                string title = Core.Loc.T(Conversation.Speech.ModelPresent ? "mic_needed_title" : "speech_missing_title");
+                bool shown = Object.FindObjectsByType<UnityEngine.UI.Text>(FindObjectsInactive.Exclude).Any(t => t.text.Contains(title));
+                Note(shown ? "home-mic: ok, without a microphone the note shows and the start is locked" : "FAIL home-mic: no note without a microphone");
+            }
+            finally
+            {
+                Conversation.Speech.PretendNoMic = false;
+                PlaytestTools.Frames(70);
+            }
+        }
+
         static void PlayLevel(string plan)
         {
             var parts = plan.Split('#');
@@ -507,6 +580,7 @@ namespace SeoulFirstWeek.EditorTools
                             if (pick < 0) pick = shown.FindIndex(c => c.result == want);
                         if (pick < 0) pick = 0;
                         PlaytestTools.Log.Add($"NPC> {p.CurrentLine}\n   YOU> {shown[pick].ko} ({shown[pick].result})");
+                        if (!voiceChecked) VoiceRequiredCheck(p, plan, pick);
                         p.Pick(pick);
                     }
                     PlaytestTools.Frames(3);

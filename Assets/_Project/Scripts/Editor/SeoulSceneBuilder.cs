@@ -104,7 +104,8 @@ namespace SeoulFirstWeek.EditorTools
         };
 
         // The playable stretch of 명동길; invisible barriers close everything outside it.
-        const float CorridorMinZ = -72f, CorridorMaxZ = 72f;
+        // the south end is where 명동길 opens onto the cross street, with 명동역's exit 6 at its mouth (2026-11-26; it was -72)
+        const float CorridorMinZ = -98.5f, CorridorMaxZ = 72f;
 
         // A level starts this far down the street from its building, so the walk there is part of it.
         const float ApproachDistance = 40f;
@@ -174,12 +175,18 @@ namespace SeoulFirstWeek.EditorTools
             RenderSettings.fogEndDistance = 340;
             LookKit.Street(root);
 
-            // pave the playable street first: everything placed below stands on it
+            // pave the playable street first: everything placed below stands on it; the subway exit's stairs go
+            // down through an opening cut out of the paving and the city model's ground
+            var station = StationFootprint();
+            stationSite = station;
             BuildPavement(root);
+            BuildJunctionPavement(root);
+            CutGroundOpening(station);
             Physics.SyncTransforms();
 
             // player
-            float spawnZ = -66f;
+            // just up the street from 명동역's exit 6, where a student off the subway comes up into 명동길
+            float spawnZ = -84f;
             var spawnPos = StreetPoint(spawnZ);
             spawnPos.y = GroundY(spawnPos) + 0.05f;
             var dir = StreetDir(spawnZ);
@@ -193,14 +200,14 @@ namespace SeoulFirstWeek.EditorTools
                 new EntranceSpec { Id = "clinic", Scene = "Clinic", NameKo = "튼튼내과의원", NameEn = "TEUNTEUN CLINIC · 내과", StreetZ = -26f, Side = -1, Color = C("#1FA37A") },
                 new EntranceSpec { Id = "immigration", Scene = "Immigration", NameKo = "출입국 민원센터", NameEn = "IMMIGRATION SERVICE CENTER", StreetZ = 6f, Side = 1, Color = C("#2F5FD0") },
                 new EntranceSpec { Id = "bank", Scene = "Bank", NameKo = "새싹은행", NameEn = "SAESSAK BANK", StreetZ = 58f, Side = 1, Color = C("#5BAA2E") },
-                // a station entrance in a building's ground floor, as many of Seoul's are
-                new EntranceSpec { Id = "subway", Scene = "Subway", NameKo = "명동역 · 4호선", NameEn = "MYEONGDONG STATION · LINE 4", StreetZ = 40f, Side = -1, Color = C("#00A4E3") },
+                // exit 6 of 명동역: stairs down from the pavement (see BuildStationEntrance)
+                new EntranceSpec { Id = "subway", Scene = "Subway", NameKo = "명동역 · 4호선", NameEn = "MYEONGDONG STATION · LINE 4", StreetZ = CorridorMinZ, Side = 0, Color = C("#00A4E3") },
             };
             var entrances = new List<BuildingEntrance>();
             var entranceSpots = new List<Vector3>();
             foreach (var s in specs)
             {
-                var e = BuildEntrance(root, s);
+                var e = s.Id == "subway" ? BuildStationEntrance(root, s, station) : BuildEntrance(root, s);
                 if (e)
                 {
                     entrances.Add(e);
@@ -209,6 +216,9 @@ namespace SeoulFirstWeek.EditorTools
             }
 
             var approaches = entrances.Select(e => e.approach.position).Append(spawnPos).ToList();
+            // the station exit's footprint keeps props off it at a close range of its own, so it doesn't push the
+            // food stalls (which keep 6 m from the spawn and the approaches) off the street
+            stationClear = StationKeepClear(station).ToList();
             var decor = Group("Decor", root);
             BuildStreetDressing(decor, entranceSpots, approaches, entrances.Select(e => e.transform).ToList());
             BuildBarriers(root, entranceSpots);
@@ -229,10 +239,10 @@ namespace SeoulFirstWeek.EditorTools
             AssetDatabase.CreateAsset(surface.navMeshData, navPath);
 
             var peds = Group("Pedestrians", root);
-            peds.position = new Vector3(0, 0.35f, 15);
+            peds.position = new Vector3(0, 0.35f, 2);
             var spawner = peds.gameObject.AddComponent<PedestrianSpawner>();
             spawner.count = 38;
-            spawner.radius = 105;
+            spawner.radius = 118;
             spawner.surface = root.Find("paths_Pavement").GetComponent<Collider>();
 
             var director = new GameObject("HubDirector").AddComponent<HubDirector>();
@@ -478,25 +488,11 @@ namespace SeoulFirstWeek.EditorTools
             Box(root, "PostL", new Vector3(-1.25f, 1.4f, 0.1f), new Vector3(0.22f, 2.8f, 0.3f), frame);
             Box(root, "PostR", new Vector3(1.25f, 1.4f, 0.1f), new Vector3(0.22f, 2.8f, 0.3f), frame);
             Box(root, "Lintel", new Vector3(0, 2.9f, 0.1f), new Vector3(2.72f, 0.24f, 0.3f), frame);
-            if (s.Id == "subway")
-            {
-                // a station entrance: no doors, a flight of stairs going down into the station's light
-                Box(root, "StairWell", new Vector3(0, 1.3f, 0.03f), new Vector3(2.3f, 2.5f, 0.02f), C("#1B1E23"), false);
-                for (int k = 0; k < 8; k++)
-                    Box(root, "StairNosing", new Vector3(0, 0.1f + k * 0.21f, 0.045f), new Vector3(2.2f - k * 0.13f, 0.03f, 0.01f), C("#F2C230"), false);
-                Emissive(root, "StairGlow", new Vector3(0, 1.95f, 0.042f), new Vector3(1.1f, 0.5f, 0.01f), C("#DDE8F5"), 0.7f);
-                Box(root, "LineBadge", new Vector3(-0.95f, 2.25f, 0.05f), new Vector3(0.34f, 0.34f, 0.02f), s.Color, false);
-                WorldText.Create(root, "LineNumber", "4", new Vector3(-0.95f, 2.25f, 0.065f), new Vector2(0.3f, 0.3f), 60, Color.white, true, TextAnchor.MiddleCenter,
-                    Quaternion.Euler(0, 180, 0));
-            }
-            else
-            {
-                Glass(root, "DoorL", new Vector3(-0.58f, 1.3f, 0.02f), new Vector3(1.1f, 2.5f, 0.05f));
-                Glass(root, "DoorR", new Vector3(0.58f, 1.3f, 0.02f), new Vector3(1.1f, 2.5f, 0.05f));
-                // the lit lobby seen through the glass doors (a pharmacy-white room for the clinic and the bank,
-                // a white-and-blue service hall for the immigration office)
-                FacadeDresser.GlassPane(root, $"Lobby_{s.Id}", -1.15f, 0.05f, 2.3f, 2.5f, -0.05f, s.Id == "immigration" ? 4 : 6, 5f);
-            }
+            Glass(root, "DoorL", new Vector3(-0.58f, 1.3f, 0.02f), new Vector3(1.1f, 2.5f, 0.05f));
+            Glass(root, "DoorR", new Vector3(0.58f, 1.3f, 0.02f), new Vector3(1.1f, 2.5f, 0.05f));
+            // the lit lobby seen through the glass doors (a pharmacy-white room for the clinic and the bank,
+            // a white-and-blue service hall for the immigration office)
+            FacadeDresser.GlassPane(root, $"Lobby_{s.Id}", -1.15f, 0.05f, 2.3f, 2.5f, -0.05f, s.Id == "immigration" ? 4 : 6, 5f);
             Box(root, "Mat", new Vector3(0, 0.02f, 0.9f), new Vector3(2.4f, 0.04f, 1.3f), C("#3A3A3A"), false);
             Box(root, "Awning", new Vector3(0, 3.25f, 0.8f), new Vector3(3.4f, 0.12f, 1.5f), s.Color, false);
             var sign = Sign(root, "Sign", new Vector3(0, 4.3f, 0.2f), new Vector2(5.6f, 1.3f), s.Color, $"{s.NameKo}\n<size=36>{s.NameEn}</size>", Color.white, 0, 70, 0.3f);
@@ -507,7 +503,7 @@ namespace SeoulFirstWeek.EditorTools
             trigger.center = new Vector3(0, 1.3f, 0.5f);
             trigger.size = new Vector3(2.6f, 2.6f, 1.2f);
 
-            float approachZ = Mathf.Max(CorridorMinZ + 6f, s.StreetZ - ApproachDistance);
+            float approachZ = Mathf.Max(CorridorMinZ + 14f, s.StreetZ - ApproachDistance);
             var approachPos = StreetPoint(approachZ);
             approachPos.y = GroundY(approachPos) + 0.05f;
             var approach = Group($"Approach_{s.Id}", parent);
@@ -668,7 +664,8 @@ namespace SeoulFirstWeek.EditorTools
         {
             var rng = new System.Random(2026);
             bool NearEntrance(Vector3 p, float r) => entrances.Any(e => (new Vector2(e.x, e.z) - new Vector2(p.x, p.z)).magnitude < r);
-            bool NearSpawn(Vector3 p, float r) => keepClear.Any(e => (new Vector2(e.x, e.z) - new Vector2(p.x, p.z)).magnitude < r);
+            bool NearSpawn(Vector3 p, float r) => keepClear.Any(e => (new Vector2(e.x, e.z) - new Vector2(p.x, p.z)).magnitude < r)
+                || stationClear.Any(e => (new Vector2(e.x, e.z) - new Vector2(p.x, p.z)).magnitude < 2.6f);
 
             RecolorCity(rng);
 
@@ -798,7 +795,7 @@ namespace SeoulFirstWeek.EditorTools
             {
                 var p = StreetPoint(z) + Vector3.Cross(Vector3.up, StreetDir(z)) * ((float)rng.NextDouble() * 2.4f - 1.2f);
                 p.y = GroundY(p);
-                if (!Crowded(p, 1.8f)) StreetProps.Manhole(decor, p);
+                if (!Crowded(p, 1.8f) && !NearSpawn(p, 1.5f)) StreetProps.Manhole(decor, p);
             }
 
             // windows everywhere and shop fronts along 명동길, last, so windows can steer clear of
@@ -842,11 +839,14 @@ namespace SeoulFirstWeek.EditorTools
         /// </summary>
         static void BuildPavement(Transform root)
         {
+            // cross-sections every metre along the street, 64 strips across it
             const float step = 1f, reach = 7.5f, under = 1.4f, lift = 0.02f;
+            const int across = 64;
             var verts = new List<Vector3>();
             var uvs = new List<Vector2>();
             var tris = new List<int>();
             float lastL = 4f, lastR = 4f, along = 0f;
+            float[] prevU = null;
             var prev = StreetPoint(CorridorMinZ - 8f);
             for (float z = CorridorMinZ - 8f; z <= CorridorMaxZ + 8.01f; z += step)
             {
@@ -857,20 +857,28 @@ namespace SeoulFirstWeek.EditorTools
                 c.y = top + 1.2f;
                 var right = Vector3.Cross(Vector3.up, StreetDir(z));
                 float dl = FacadeDistance(c, -right, reach, ref lastL) + under, dr = FacadeDistance(c, right, reach, ref lastR) + under;
-                var l = c - right * dl;
-                var r = c + right * dr;
-                l.y = r.y = top;
-                int i = verts.Count;
-                verts.Add(l);
-                verts.Add(r);
-                // UVs in metres across and along the street, so the pavers follow its bends
-                uvs.Add(new Vector2(-dl, along));
-                uvs.Add(new Vector2(dr, along));
-                if (i == 0) continue;
-                tris.AddRange(new[] { i - 2, i, i - 1, i - 1, i, i + 1 });
+                int i0 = verts.Count;
+                var us = new float[across + 1];
+                for (int j = 0; j <= across; j++)
+                {
+                    float u = -dl + (dl + dr) * j / across;
+                    us[j] = u;
+                    var v = c + right * u;
+                    v.y = top;
+                    verts.Add(v);
+                    // UVs in metres across and along the street, so the pavers follow its bends
+                    uvs.Add(new Vector2(u, along));
+                }
+                if (prevU != null)
+                {
+                    int a0 = i0 - (across + 1);
+                    for (int j = 0; j < across; j++)
+                        tris.AddRange(new[] { a0 + j, i0 + j, a0 + j + 1, a0 + j + 1, i0 + j, i0 + j + 1 });
+                }
+                prevU = us;
             }
 
-            var mesh = new Mesh { name = "Hub_Pavement" };
+            var mesh = new Mesh { name = "Hub_Pavement", indexFormat = IndexFormat.UInt32 };
             mesh.SetVertices(verts);
             mesh.SetUVs(0, uvs);
             mesh.SetTriangles(tris, 0);
@@ -889,8 +897,9 @@ namespace SeoulFirstWeek.EditorTools
             go.AddComponent<MeshRenderer>().sharedMaterial = TextureKit.LitUV("Pavement", TextureKit.Paving(), C("#F4F1EC"));
             go.AddComponent<MeshCollider>().sharedMesh = mesh;
             GameObjectUtility.SetStaticEditorFlags(go, StaticEditorFlags.BatchingStatic | StaticEditorFlags.OccludeeStatic);
-            Debug.Log($"[Builder] Pavement: {verts.Count / 2} cross-sections");
+            Debug.Log($"[Builder] Pavement: {verts.Count / (across + 1)} cross-sections");
         }
+
 
         /// <summary>
         /// Invisible walls that keep the player on the playable stretch of 명동길. A continuous, thick wall
@@ -940,6 +949,8 @@ namespace SeoulFirstWeek.EditorTools
                     var fwd = StreetDir(z);
                     var dir = Vector3.Cross(Vector3.up, fwd) * side;
                     float dist = FacadeDistance(c, dir, reach, ref lastDist, out bool facade);
+                    // at the south end the street opens onto the cross street, closed further on by BuildJunctionBarriers
+                    if (!facade && z < CorridorMinZ + 2f) continue;
                     if (!facade) Post(c + dir * (dist - 0.3f), 1.5f);
                     // keep the space in front of a door open: the wall steps back behind the door plane
                     foreach (var door in doors)
@@ -964,7 +975,10 @@ namespace SeoulFirstWeek.EditorTools
                 }
             }
 
-            foreach (var z in new[] { CorridorMinZ, CorridorMaxZ })
+            // the north end is closed across the street; the south end opens onto the cross street, where the
+            // station exit stands
+            BuildJunctionBarriers(Wall, Post);
+            foreach (var z in new[] { CorridorMaxZ })
             {
                 var c = StreetPoint(z);
                 c.y = GroundY(c) + height / 2f - 0.5f;
@@ -977,7 +991,8 @@ namespace SeoulFirstWeek.EditorTools
                 float l = 4f, r = 4f;
                 l = FacadeDistance(e, -right, reach, ref l);
                 r = FacadeDistance(e, right, reach, ref r);
-                for (float x = -l + 0.5f; x <= r - 0.5f; x += 1.3f) Post(e + right * x, 1f);
+                for (float x = -l + 0.5f; x <= r - 0.5f; x += 1.3f)
+                    Post(e + right * x, 1f);
             }
             Debug.Log($"[Builder] Barriers: {segments} segments, {posts} bollards");
         }
@@ -1713,9 +1728,9 @@ namespace SeoulFirstWeek.EditorTools
 
         /// <summary>A visitor who stays put (at the ATM, on the wall bench, at the form table) so the room never looks staged around the player.</summary>
         static HumanRig Extra(Room r, string name, HumanLook look, Vector3 pos, float yaw, bool sitting = false, bool phone = false, bool talking = false,
-            Transform lookAt = null, float seat = InteriorKit.ChairSeat)
+            Transform lookAt = null, float seat = InteriorKit.ChairSeat, Transform parent = null)
         {
-            var rig = HumanBuilder.Build(r.Root, name, look);
+            var rig = HumanBuilder.Build(parent ? parent : r.Root, name, look);
             rig.transform.SetPositionAndRotation(pos, Quaternion.Euler(0, yaw, 0));
             rig.sitting = sitting;
             rig.phone = phone;

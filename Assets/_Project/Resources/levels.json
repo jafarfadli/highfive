@@ -459,9 +459,9 @@
             "id": "Lewati imigrasi"
           },
           "story": {
-            "en": "You've just landed at Incheon on a D-4 visa, and you filed the e-Arrival Card online before the flight.\nNow get through immigration, collect your suitcase and walk out through customs.",
-            "vi": "Bạn vừa hạ cánh xuống Incheon với visa D-4, và đã khai thẻ nhập cảnh điện tử (e-Arrival Card) trên mạng trước chuyến bay.\nGiờ hãy làm thủ tục nhập cảnh, lấy vali và đi ra qua hải quan.",
-            "id": "Kamu baru mendarat di Incheon dengan visa D-4, dan sudah mengisi e-Arrival Card secara online sebelum terbang.\nSekarang lewati imigrasi, ambil kopermu, lalu keluar melalui bea cukai."
+            "en": "You've just landed at Incheon on a D-4 visa, and you filed the e-Arrival Card online before the flight.\nNow get through immigration, collect your yellow suitcase from the belt and walk out through customs.",
+            "vi": "Bạn vừa hạ cánh xuống Incheon với visa D-4, và đã khai thẻ nhập cảnh điện tử (e-Arrival Card) trên mạng trước chuyến bay.\nGiờ hãy làm thủ tục nhập cảnh, lấy chiếc vali màu vàng của bạn trên băng chuyền và đi ra qua hải quan.",
+            "id": "Kamu baru mendarat di Incheon dengan visa D-4, dan sudah mengisi e-Arrival Card secara online sebelum terbang.\nSekarang lewati imigrasi, ambil koper kuningmu dari ban berjalan, lalu keluar melalui bea cukai."
           },
           "situations": [
             {

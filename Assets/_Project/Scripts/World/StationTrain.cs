@@ -27,6 +27,9 @@ namespace SeoulFirstWeek.World
         Vector3[] closedLeft, closedRight;
         bool arrived;
 
+        /// <summary>The train has stopped and its doors are open (people get off and on).</summary>
+        public bool DoorsOpen => arrived;
+
         void Awake()
         {
             closedLeft = Positions(leavesLeft);

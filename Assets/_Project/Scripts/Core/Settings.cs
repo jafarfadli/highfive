@@ -3,7 +3,13 @@ using UnityEngine;
 
 namespace SeoulFirstWeek.Core
 {
-    /// <summary>Player settings stored in PlayerPrefs: music and SFX volume, look sensitivity, hint language.</summary>
+    /// <summary>
+    /// How much help the answer cards give: Easy shows each answer's romanization and translation, Medium the
+    /// romanization only, Hard the Korean only. The staff member's line keeps its translation at every level.
+    /// </summary>
+    public enum Difficulty { Easy, Medium, Hard }
+
+    /// <summary>Player settings stored in PlayerPrefs: music and SFX volume, look sensitivity, hint language, difficulty.</summary>
     public static class Settings
     {
         const string MusicKey = "sfw.music", SfxKey = "sfw.sfx", SensKey = "sfw.sensitivity", LangKey = "sfw.language",
@@ -43,14 +49,13 @@ namespace SeoulFirstWeek.Core
             set { PlayerPrefs.SetInt(MotionKey, value ? 1 : 0); Changed?.Invoke(); }
         }
 
-        /// <summary>Answering by voice: hold Space and say the line (needs a microphone and the Whisper model).</summary>
-        public static bool SpeakAnswers
+        public static Difficulty Difficulty
         {
-            get => PlayerPrefs.GetInt(SpeakKey, 1) == 1;
-            set { PlayerPrefs.SetInt(SpeakKey, value ? 1 : 0); Changed?.Invoke(); }
+            get => (Difficulty)Mathf.Clamp(PlayerPrefs.GetInt(DifficultyKey, 0), 0, 2);
+            set { PlayerPrefs.SetInt(DifficultyKey, (int)value); Changed?.Invoke(); }
         }
 
-        const string SpeakKey = "sfw.speak";
+        const string DifficultyKey = "sfw.difficulty";
 
         public static void Save() => PlayerPrefs.Save();
     }

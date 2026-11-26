@@ -183,7 +183,7 @@ namespace SeoulFirstWeek.Procedure
                         carried.Add(doc);
                     }
             UpdateProgress();
-            hud.ShowHelp(Loc.T("controls"), 12f);
+            hud.ShowHelp(Loc.T(VRMode.Active ? "controls_vr" : "controls"), 12f);
             hud.Banner(proc.titleKo, level.FullTitle, 2.6f);
             // everything brought from home for this visit: the procedure's and the case's (an empty card, the ARC)
             var brought = proc.carry
@@ -544,6 +544,9 @@ namespace SeoulFirstWeek.Procedure
 
         Waypoint FindWaypoint(string id) => waypoints?.FirstOrDefault(w => w && w.stationId == id);
 
+        // a target may be any of several places with one id: every lane of the gate line, every door of the train
+        Waypoint[] FindWaypoints(string id) => waypoints?.Where(w => w && w.stationId == id).ToArray() ?? new Waypoint[0];
+
         /// <summary>
         /// A world step: arm the target and the wrong turns, and wait for the player to use one. A wrong turn is a
         /// mistake with its lesson (and a line from the step's staff member); the target ends the step. A set piece
@@ -569,29 +572,39 @@ namespace SeoulFirstWeek.Procedure
                 return;
             }
             var wrongs = (step.wrong ?? new List<WrongTurnDef>()).Select(w => (def: w, wp: FindWaypoint(w.station))).Where(x => x.wp).ToList();
+            var targets = FindWaypoints(step.target);
             CurrentTarget = step.target;
             CurrentWrong = wrongs.Select(x => x.def.station).ToArray();
             var speaker = actors?.FirstOrDefault(a => a && a.staffId == step.staff);
+            // the way is marked unless the step tests a choice (reading the signs is the lesson then); of many
+            // identical targets (gate lanes, train doors) only the one nearest the player is marked
+            var nearest = player && targets.Length > 3
+                ? targets.OrderBy(t => (t.transform.position - player.transform.position).sqrMagnitude).First()
+                : null;
+            foreach (var t in targets) t.guide = wrongs.Count == 0 && (!nearest || t == nearest);
+            foreach (var x in wrongs) x.wp.guide = false;
             while (true)
             {
                 ct.ThrowIfCancellationRequested();
-                var waits = new List<Task> { target.WaitAsync(ct) };
+                var waits = targets.Select(t => t.WaitAsync(ct)).ToList();
                 foreach (var x in wrongs) waits.Add(x.wp.WaitAsync(ct));
                 var done = await Task.WhenAny(waits);
                 int k = waits.IndexOf(done);
-                target.Disarm();
+                foreach (var t in targets) t.Disarm();
                 foreach (var x in wrongs) x.wp.Disarm();
-                if (k == 0)
+                if (k < targets.Length)
                 {
+                    var used = targets[k];
                     CurrentTarget = null;
                     CurrentWrong = new string[0];
                     Sfx.Play(ProceduralAudio.Blip, 0.5f);
-                    foreach (var g in target.opens ?? new GameObject[0])
+                    if (used.gate) used.gate.Open(hold: true);
+                    foreach (var g in used.opens ?? new GameObject[0])
                         if (g) g.SetActive(false);
-                    if (target.moveTo)
+                    if (used.moveTo)
                     {
                         await Overlay.I.FadeTo(1, 0.35f);
-                        player.Teleport(target.moveTo.position, target.moveTo.eulerAngles.y);
+                        player.Teleport(used.moveTo.position, used.moveTo.eulerAngles.y);
                         await Overlay.I.FadeTo(0, 0.5f);
                     }
                     await AfterGo(step);
@@ -599,7 +612,7 @@ namespace SeoulFirstWeek.Procedure
                 }
 
                 // the wrong way: a real reaction, the lesson, and the step goes on
-                var wrong = wrongs[k - 1].def;
+                var wrong = wrongs[k - targets.Length].def;
                 mistakes++;
                 var note = wrong.note?.Get();
                 if (!string.IsNullOrEmpty(note) && !tips.Contains(note)) tips.Add(note);

@@ -25,13 +25,18 @@ namespace SeoulFirstWeek.Conversation
         static float startedAt;
 
         public static bool ModelPresent => File.Exists(Path.Combine(Application.streamingAssetsPath, ModelFile));
-        public static bool MicPresent => PretendMic || Microphone.devices.Length > 0;
+        public static bool MicPresent => !PretendNoMic && (PretendMic || Microphone.devices.Length > 0);
+
+        /// <summary>Play-tests: behave as if no microphone were connected (the Home screen's notice).</summary>
+        public static bool PretendNoMic;
 
         /// <summary>Play-tests on a machine without a microphone still show the control.</summary>
         public static bool PretendMic;
 
         /// <summary>The player may answer by voice: the setting is on, the model is there and a microphone is plugged in.</summary>
-        public static bool Enabled => Settings.SpeakAnswers && ModelPresent && MicPresent;
+        /// <summary>Whether the game can hear answers (a microphone and the model). Without that it can't be played:
+        /// the Home screen says so and keeps the start locked.</summary>
+        public static bool Enabled => ModelPresent && MicPresent;
 
         public static bool Listening => recording != null;
         public static bool Ready => manager && manager.IsLoaded;
@@ -53,11 +58,24 @@ namespace SeoulFirstWeek.Conversation
             go.SetActive(true);
         }
 
+        /// <summary>The first microphone, or in a headset the headset's own (Quest Link adds it to Windows as
+        /// "Headset Microphone (Oculus Virtual Audio Device)").</summary>
+        static string PickDevice()
+        {
+            if (Core.VRMode.Active)
+                foreach (var d in Microphone.devices)
+                    if (d.IndexOf("Oculus", System.StringComparison.OrdinalIgnoreCase) >= 0 ||
+                        d.IndexOf("Quest", System.StringComparison.OrdinalIgnoreCase) >= 0 ||
+                        d.IndexOf("Headset", System.StringComparison.OrdinalIgnoreCase) >= 0)
+                        return d;
+            return Microphone.devices[0];
+        }
+
         public static bool Begin()
         {
             if (Listening || Microphone.devices.Length == 0) return false;
             Warm();
-            device = Microphone.devices[0];
+            device = PickDevice();
             recording = Microphone.Start(device, false, MaxSeconds, Rate);
             startedAt = Time.unscaledTime;
             return recording != null;

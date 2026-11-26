@@ -10,7 +10,7 @@ namespace SeoulFirstWeek.Telemetry
     public static class TelemetryLogger
     {
         const string Header =
-            "timestamp,session_id,hint_language,level,outcome,progress_done,progress_total,mistakes,seconds,procedure_verified";
+            "timestamp,session_id,hint_language,level,outcome,progress_done,progress_total,mistakes,seconds,procedure_verified,difficulty";
 
         public static string Folder => Path.Combine(Application.persistentDataPath, "telemetry");
         public static string FilePath => Path.Combine(Folder, "levels.csv");
@@ -21,6 +21,16 @@ namespace SeoulFirstWeek.Telemetry
             {
                 Directory.CreateDirectory(Folder);
                 bool fresh = !File.Exists(FilePath);
+                // a log started before the difficulty column: its header gains the column (old rows leave it empty)
+                if (!fresh)
+                {
+                    var lines = File.ReadAllLines(FilePath);
+                    if (lines.Length > 0 && lines[0] != Header && Header.StartsWith(lines[0]))
+                    {
+                        lines[0] = Header;
+                        File.WriteAllLines(FilePath, lines);
+                    }
+                }
                 using var w = new StreamWriter(FilePath, true);
                 if (fresh) w.WriteLine(Header);
                 var s = GameSession.I;
@@ -35,7 +45,8 @@ namespace SeoulFirstWeek.Telemetry
                     r.StepsTotal,
                     r.Mistakes,
                     r.Seconds.ToString("0", inv),
-                    r.Verified ? "true" : "false"));
+                    r.Verified ? "true" : "false",
+                    Settings.Difficulty.ToString().ToLowerInvariant()));
                 Debug.Log($"[Telemetry] logged {r.ScenarioId} to {FilePath}");
             }
             catch (Exception e)

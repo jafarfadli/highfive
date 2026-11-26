@@ -6,6 +6,10 @@
 #ifndef SEOUL_INK_LIGHTING_INCLUDED
 #define SEOUL_INK_LIGHTING_INCLUDED
 
+// 1 in a headset (set by VRMode): patterns fixed to the screen would sit on the lens there, so the
+// halftone and the hatching are left out and the cel tones and ink lines carry the look
+float _SFW_VR;
+
 // Light amount (N·L × shadow, 0..1) → the direct light a cel-shaded surface receives: none in shadow,
 // 0.36 in the half tone, 0.8 when lit. The levels are the averages of the smooth N·L they replace, so a
 // scene keeps its overall brightness and colours; only the gradient turns into flat steps.
@@ -140,7 +144,7 @@ half4 InkFragment(InputData inputData, InkSurface s)
     // shade printed as dots: where the sun doesn't reach (counted only as far as the sun outshines the
     // ambient, so a weak indoor sun doesn't dot every wall) and on faces turned away from the ambient light;
     // only near the camera, where the dots read as print rather than noise
-    if (s.halftone > 0.001h)
+    if (s.halftone * (1.0h - _SFW_VR) > 0.001h)
     {
         half sunLum = dot(mainLight.color, half3(0.299h, 0.587h, 0.114h));
         half upLum = dot(SampleSH(half3(0, 1, 0)), half3(0.299h, 0.587h, 0.114h)) + 1e-3h;

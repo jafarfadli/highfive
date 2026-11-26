@@ -48,16 +48,26 @@ Shader "SeoulFirstWeek/Sky Toon"
                 float _CloudCover, _CloudScale, _CloudSpeed, _InkWidth;
             CBUFFER_END
 
-            struct Attributes { float4 positionOS : POSITION; };
+            struct Attributes
+            {
+                float4 positionOS : POSITION;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
             struct Varyings
             {
                 float4 positionCS : SV_POSITION;
                 float3 direction : TEXCOORD0;
+                UNITY_VERTEX_OUTPUT_STEREO
             };
+
+            // 1 in a headset (set by VRMode): the screen-fixed dots in the clouds' shade would sit on the lens
+            float _SFW_VR;
 
             Varyings Vert(Attributes v)
             {
-                Varyings o;
+                Varyings o = (Varyings)0;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 o.positionCS = TransformObjectToHClip(v.positionOS.xyz);
                 o.direction = v.positionOS.xyz;
                 return o;
@@ -109,6 +119,7 @@ Shader "SeoulFirstWeek/Sky Toon"
 
             half4 Frag(Varyings i) : SV_Target
             {
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
                 float3 d = normalize(i.direction);
                 float3 sun = normalize(_SunDirection.xyz);
                 float h = d.y;
@@ -141,7 +152,7 @@ Shader "SeoulFirstWeek/Sky Toon"
                     half rim = lit * (1.0 - smoothstep(threshold + 0.01, threshold + 0.05, dens));
                     half3 cloud = lerp(_CloudShade.rgb, _CloudLit.rgb, lit);
                     cloud = lerp(cloud, _CloudWarm.rgb, rim * saturate(cs * 0.5 + 0.7));
-                    cloud *= 1.0h - 0.12h * Dots(i.positionCS.xy, (1.0h - lit) * 0.5h);
+                    cloud *= 1.0h - 0.12h * (1.0h - _SFW_VR) * Dots(i.positionCS.xy, (1.0h - lit) * 0.5h);
 
                     float lineHalf = _InkWidth * 0.5 * px;
                     half edge = 1.0h - smoothstep(lineHalf - px * 0.5, lineHalf + px * 0.5, abs(dens - threshold));

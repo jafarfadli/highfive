@@ -29,14 +29,17 @@ namespace SeoulFirstWeek.Procedure
         public bool autoComplete;
         [Tooltip("Where the player is taken after using it, behind a short fade (down the stairs to the platform).")]
         public Transform moveTo;
-        [Tooltip("Switched off once it is used: the gate's flaps open, the suitcase is taken off the belt.")]
+        [Tooltip("Switched off once it is used: the suitcase is taken off the belt.")]
         public GameObject[] opens;
+        [Tooltip("A gate lane whose flaps fold back, and stay open, once it is used (a card reader).")]
+        public World.GateLane gate;
 
         public override string Prompt => Loc.T(promptKey, label);
         public override bool CanInteract => base.CanInteract && !walkThrough;
 
         BoxCollider box;
         Transform player;
+        bool wasInside;
 
         void Awake()
         {
@@ -46,16 +49,18 @@ namespace SeoulFirstWeek.Procedure
 
         void Update()
         {
-            if (!walkThrough || !Armed) return;
+            if (!walkThrough) return;
             if (!player)
             {
                 var fpc = FindAnyObjectByType<FirstPersonController>();
                 if (!fpc) return;
                 player = fpc.transform;
             }
-            // the player's feet inside the box (it may be taller than the player; the floor counts)
-            var p = player.position + Vector3.up * 0.5f;
-            if (box.bounds.Contains(p)) Fire();
+            // the player's feet inside the box (it may be taller than the player; the floor counts). It fires on
+            // the way in, so someone who took the wrong stairs and is turning round there isn't told off again.
+            bool inside = box.bounds.Contains(player.position + Vector3.up * 0.5f);
+            if (inside && !wasInside && Armed) Fire();
+            wasInside = inside;
         }
 
         /// <summary>Uses the waypoint as if the player had (editor play-tests).</summary>

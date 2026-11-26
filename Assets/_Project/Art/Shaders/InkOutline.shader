@@ -59,6 +59,9 @@ Shader "SeoulFirstWeek/Ink Outline"
                 half _Grain;
             CBUFFER_END
 
+            // 1 in a headset (set by VRMode)
+            float _SFW_VR;
+
             // inverse linear depth: linear in screen space on any plane (0 = sky)
             float InvDepth(float2 uv)
             {
@@ -77,7 +80,9 @@ Shader "SeoulFirstWeek/Ink Outline"
                 float2 uv = input.texcoord;
                 half4 scene = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, uv);
 
-                float res = max(_ScreenParams.y / 1080.0, 0.5);
+                // in a headset each eye's picture is ~1900 px tall but spans far more of the view than a
+                // 1080p screen, so the lines keep their desktop width in pixels there
+                float res = lerp(max(_ScreenParams.y / 1080.0, 0.5), 1.0, _SFW_VR);
                 float2 onePx = res / _ScreenParams.xy;
 
                 // the silhouette kernel widens up close: heavy outlines on what is near, lighter far away
@@ -115,7 +120,8 @@ Shader "SeoulFirstWeek/Ink Outline"
 
                 // paper grain, fixed to the screen like the paper the page is printed on
                 half grain = SAMPLE_TEXTURE2D(_GrainTex, sampler_GrainTex, input.positionCS.xy / 512.0).r;
-                col *= 1.0h - _Grain * (1.0h - grain) * 2.0h;
+                // (not in a headset, where anything fixed to the screen reads as a smudge on the lens)
+                col *= 1.0h - _Grain * (1.0h - _SFW_VR) * (1.0h - grain) * 2.0h;
                 return half4(col, scene.a);
             }
             ENDHLSL
