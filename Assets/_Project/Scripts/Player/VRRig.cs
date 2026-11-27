@@ -36,7 +36,7 @@ namespace SeoulFirstWeek.Player
 
         /// <summary>The right controller's aim (falls back to the eyes while it isn't tracked).</summary>
         public Ray PointerRay =>
-            RightTracked ? new Ray(rightAim.position, rightAim.forward) : new Ray(head.position, head.forward);
+            RightTracked ? new Ray(rightAim.position, rightAim.forward) : VRUI.ControllerRay ?? new Ray(head.position, head.forward);
 
         bool RightTracked => SimulatedHand || (rightTracked != null && rightTracked.IsPressed());
 

@@ -18,6 +18,7 @@ namespace SeoulFirstWeek.Player
         FirstPersonController fps;
         InputAction interact;
         Interactable current;
+        float lastAction = -10f;
 
         public bool Enabled { get; set; } = true;
         public FirstPersonController Controller => fps;
@@ -38,7 +39,13 @@ namespace SeoulFirstWeek.Player
                 // on a touch screen the dot shows what the middle of the view (and the prompt) points at
                 hud.SetCrosshair(Enabled && (TouchControls.Active || (fps.Dragging && Cursor.lockState == CursorLockMode.Locked)));
             }
-            if (current && (interact.WasPressedThisFrame() || fps.ClickedThisFrame || TouchControls.InteractPressed || VRUI.FallbackInteractPressed))
+            // in a headset the trigger arrives twice, through the Interact action and a frame later through the panels'
+            // pointer (VRUI): one pull is one use
+            bool action = interact.WasPressedThisFrame();
+            if (action) lastAction = Time.unscaledTime;
+            bool vrPull = VRUI.FallbackInteractPressed && Time.unscaledTime - lastAction > 0.3f;
+            // a pull aimed at a panel is the panel's (a button), never a use of what stands behind it
+            if (current && !VRUI.PointerOverUI && (action || fps.ClickedThisFrame || TouchControls.InteractPressed || vrPull))
                 current.Interact(this);
             // a tap on a door, a counter or a person uses it, wherever it is on the screen
             else if (Enabled && TouchControls.Tap is Vector2 tap && fps.Camera)
