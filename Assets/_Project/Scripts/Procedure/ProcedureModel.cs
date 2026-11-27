@@ -68,7 +68,10 @@ namespace SeoulFirstWeek.Procedure
         public string ko;
         public string rom;
         public LocText meaning;
-        public string result = "retry"; // advance | retry | block | fetch | ask (asks to repeat: not a mistake)
+        // advance | retry | block | fetch | ask (asks to repeat: not a mistake) | branch (a fair thing to say that
+        // isn't the expected answer: the staff member answers it, the answer leaves the list and the same question
+        // stays, so the talk turns aside and comes back; never a mistake)
+        public string result = "retry";
         public string reply;            // what the staff member says back
         public LocText replyMeaning;
         public LocText note;            // why this answer doesn't work (shown after a wrong pick)

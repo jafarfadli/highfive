@@ -376,17 +376,12 @@
             "vi": "Ngày 15 tháng 3.",
             "id": "15 Maret."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "몇 년생이세요?",
           "replyMeaning": {
             "en": "What year were you born?",
             "vi": "Bạn sinh năm nào?",
             "id": "Lahir tahun berapa?"
-          },
-          "note": {
-            "en": "Forms need the full date: year (년), month (월), day (일).",
-            "vi": "Giấy tờ cần đủ ngày: năm (년), tháng (월), ngày (일).",
-            "id": "Formulir butuh tanggal lengkap: tahun (년), bulan (월), tanggal (일)."
           }
         }
       ]
@@ -426,17 +421,12 @@
             "vi": "Tôi thấy không khỏe lắm.",
             "id": "Badan saya kurang enak."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "어디가 안 좋으세요? 머리가 아프세요, 목이 아프세요?",
           "replyMeaning": {
             "en": "Where does it feel bad? Your head, your throat?",
             "vi": "Chỗ nào không khỏe ạ? Đau đầu hay đau họng?",
             "id": "Bagian mana yang tidak enak? Kepala atau tenggorokan?"
-          },
-          "note": {
-            "en": "Too vague for registration. Name the symptom: 열 (fever), 목 (throat), 머리 (head), 배 (stomach).",
-            "vi": "Quá chung chung để đăng ký. Hãy nói triệu chứng: 열 (sốt), 목 (họng), 머리 (đầu), 배 (bụng).",
-            "id": "Terlalu umum untuk pendaftaran. Sebut gejalanya: 열 (demam), 목 (tenggorokan), 머리 (kepala), 배 (perut)."
           }
         },
         {
@@ -518,17 +508,12 @@
             "vi": "Tôi thấy không khỏe lắm.",
             "id": "Badan saya kurang enak."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "어디가 안 좋으세요? 머리가 아프세요, 배가 아프세요?",
           "replyMeaning": {
             "en": "Where does it feel bad? Your head, your stomach?",
             "vi": "Chỗ nào không khỏe ạ? Đau đầu hay đau bụng?",
             "id": "Bagian mana yang tidak enak? Kepala atau perut?"
-          },
-          "note": {
-            "en": "Too vague for registration. Say where it hurts: 배가 아파요 (my stomach hurts).",
-            "vi": "Quá chung chung để đăng ký. Hãy nói chỗ bị đau: 배가 아파요 (tôi đau bụng).",
-            "id": "Terlalu umum untuk pendaftaran. Sebut bagian yang sakit: 배가 아파요 (perut saya sakit)."
           }
         }
       ]
@@ -589,17 +574,12 @@
             "vi": "Cũng được một thời gian rồi.",
             "id": "Sudah agak lama."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "며칠 됐어요? 어제부터요, 그저께부터요?",
           "replyMeaning": {
             "en": "How many days? Since yesterday, or the day before?",
             "vi": "Mấy ngày rồi? Từ hôm qua hay hôm kia?",
             "id": "Berapa hari? Sejak kemarin atau kemarin lusa?"
-          },
-          "note": {
-            "en": "Give a specific time: 어제부터 (since yesterday), 이틀 전부터 (since two days ago).",
-            "vi": "Hãy nói thời gian cụ thể: 어제부터 (từ hôm qua), 이틀 전부터 (từ hai ngày trước).",
-            "id": "Sebut waktu yang jelas: 어제부터 (sejak kemarin), 이틀 전부터 (sejak dua hari lalu)."
           }
         }
       ],
@@ -666,17 +646,12 @@
             "vi": "Cũng được một thời gian rồi.",
             "id": "Sudah agak lama."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "언제부터요? 어젯밤부터요, 오늘 아침부터요?",
           "replyMeaning": {
             "en": "Since when? Since last night, or this morning?",
             "vi": "Từ khi nào ạ? Từ đêm qua hay từ sáng nay?",
             "id": "Sejak kapan? Sejak semalam atau tadi pagi?"
-          },
-          "note": {
-            "en": "Give a specific time: 어젯밤부터 (since last night), 오늘 아침부터 (since this morning).",
-            "vi": "Hãy nói thời gian cụ thể: 어젯밤부터 (từ đêm qua), 오늘 아침부터 (từ sáng nay).",
-            "id": "Sebut waktu yang jelas: 어젯밤부터 (sejak semalam), 오늘 아침부터 (sejak tadi pagi)."
           }
         }
       ],
@@ -977,17 +952,12 @@
             "vi": "Họng đau quá, tôi không há miệng được.",
             "id": "Tenggorokan terlalu sakit untuk membuka mulut."
           },
-          "result": "retry",
-          "reply": "금방 끝나요. 조금만 크게 벌려 보세요.",
+          "result": "branch",
+          "reply": "많이 아프시죠? 괜찮아요, 천천히 조금만 벌려 보세요.",
           "replyMeaning": {
-            "en": "It'll be over quickly. Open just a little wider.",
-            "vi": "Xong ngay thôi. Há to hơn một chút nhé.",
-            "id": "Sebentar saja. Buka sedikit lebih lebar."
-          },
-          "note": {
-            "en": "The doctor has to see your throat to prescribe the right medicine. It takes a second.",
-            "vi": "Bác sĩ cần xem họng để kê đúng thuốc. Chỉ mất một giây.",
-            "id": "Dokter perlu melihat tenggorokan untuk memberi obat yang tepat. Hanya sebentar."
+            "en": "It must really hurt. That's okay, open just a little, slowly.",
+            "vi": "Chắc đau lắm nhỉ. Không sao, cứ há từ từ một chút thôi.",
+            "id": "Pasti sakit sekali, ya. Tidak apa-apa, buka sedikit saja pelan-pelan."
           }
         },
         {

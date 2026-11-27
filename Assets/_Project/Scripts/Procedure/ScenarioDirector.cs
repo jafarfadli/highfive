@@ -183,7 +183,7 @@ namespace SeoulFirstWeek.Procedure
                         carried.Add(doc);
                     }
             UpdateProgress();
-            hud.ShowHelp(Loc.T(VRMode.Active ? "controls_vr" : "controls"), 12f);
+            hud.ShowHelp(Hud.ControlsHelp, 12f);
             hud.Banner(proc.titleKo, level.FullTitle, 2.6f);
             // everything brought from home for this visit: the procedure's and the case's (an empty card, the ARC)
             var brought = proc.carry
@@ -470,6 +470,16 @@ namespace SeoulFirstWeek.Procedure
                     case "ask":
                         // asking to repeat or explain is a good move, not a mistake
                         tried.Add(pick);
+                        await Say(Lines((pick.reply, pick.replyMeaning?.Get())));
+                        continue;
+
+                    case "branch":
+                        // a fair thing to say, just not what moves the visit on: the staff member answers it the way
+                        // real staff would, and the talk comes back to the same question. Not a mistake, nothing
+                        // crossed out: the answer simply leaves the list.
+                        choices.Remove(pick);
+                        tried.Remove(pick);
+                        Sfx.Play(ProceduralAudio.Blip, 0.35f);
                         await Say(Lines((pick.reply, pick.replyMeaning?.Get())));
                         continue;
 

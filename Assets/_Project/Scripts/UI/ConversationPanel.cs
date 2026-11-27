@@ -124,10 +124,18 @@ namespace SeoulFirstWeek.UI
             again.Place(new Vector2(1, 1), new Vector2(-34, -30), new Vector2(190, 44));
             var ah = UIKit.HStack(again, 10, null, TextAnchor.MiddleRight);
             ah.childForceExpandHeight = false;
+            bool touch = Player.TouchControls.Active;
             var rKey = UIKit.Keycap(again, Core.VRMode.Active ? "B" : "R", 18);
             rKey.gameObject.AddComponent<Button>().onClick.AddListener(() => ReplayRequested?.Invoke());
             rKey.GetComponentInChildren<InkShape>().raycastTarget = true;
-            UIKit.Words(again, Loc.T("hear_again"), 22, Role.Paper, Face.ReadBold).Layout(130, 40);
+            var againWords = UIKit.Words(again, Loc.T("hear_again"), 22, Role.Paper, Face.ReadBold);
+            againWords.Layout(130, 40);
+            if (touch)
+            {
+                // a fingertip needs more than the keycap: the words take the tap too
+                againWords.raycastTarget = true;
+                again.gameObject.AddComponent<Button>().onClick.AddListener(() => ReplayRequested?.Invoke());
+            }
 
             // say it: hold Space (or this keycap) and say the answer; a ring swells with the voice while listening
             speak = UIKit.Rect("Speak", dialog);
@@ -135,11 +143,19 @@ namespace SeoulFirstWeek.UI
             speak.Place(new Vector2(1, 1), new Vector2(-34, -86), new Vector2(220, 48));
             var sh = UIKit.HStack(speak, 10, null, TextAnchor.MiddleRight);
             sh.childForceExpandHeight = false;
-            var spaceKey = UIKit.Keycap(speak, Core.VRMode.Active ? "A" : "SPACE", 18);
+            var spaceKey = UIKit.Keycap(speak, TalkKey, 18);
             spaceKey.GetComponentInChildren<InkShape>().raycastTarget = true;
             var hold = spaceKey.gameObject.AddComponent<HoldButton>();
             hold.Pressed += StartTalk;
             hold.Released += () => { if (Speech.Listening) _ = EndTalk(); };
+            if (touch)
+            {
+                // on a touch screen the whole dialogue box is the "say it" control: hold it anywhere and speak
+                box.raycastTarget = true;
+                var holdBox = dialog.gameObject.AddComponent<HoldButton>();
+                holdBox.Pressed += StartTalk;
+                holdBox.Released += () => { if (Speech.Listening) _ = EndTalk(); };
+            }
             speakRing = UIKit.CircleMark(spaceKey, Role.Glow, 4f);
             speakRing.rectTransform.Stretch(-12, -12, -12, -12);
             speakRing.gameObject.SetActive(false);
@@ -274,7 +290,7 @@ namespace SeoulFirstWeek.UI
 
         bool CanSpeak => HasSpeakable && Speech.Enabled;
 
-        static string TalkKey => Core.VRMode.Active ? "A" : "SPACE";
+        static string TalkKey => Core.VRMode.Active ? "A" : Player.TouchControls.Active ? "MIC" : "SPACE";
 
         void StartTalk()
         {
@@ -586,8 +602,8 @@ namespace SeoulFirstWeek.UI
             // say it: shown while there is an answer that can be said; held Space records, letting go hears it
             bool hasSpeakable = HasSpeakable;
             if (speak.gameObject.activeSelf != (hasSpeakable || talking)) speak.gameObject.SetActive(hasSpeakable || talking);
-            if (hasSpeakable && !talking && talkAction.WasPressedThisFrame()) StartTalk();
-            if (Speech.Listening && talkAction.WasReleasedThisFrame()) _ = EndTalk();
+            if (hasSpeakable && !talking && (talkAction.WasPressedThisFrame() || VRUI.FallbackTalkPressed)) StartTalk();
+            if (Speech.Listening && (talkAction.WasReleasedThisFrame() || VRUI.FallbackTalkReleased)) _ = EndTalk();
             if (Speech.Listening)
             {
                 float k = 1f + Speech.Level() * 0.35f;

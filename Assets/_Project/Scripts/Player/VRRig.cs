@@ -38,7 +38,23 @@ namespace SeoulFirstWeek.Player
         public Ray PointerRay =>
             RightTracked ? new Ray(rightAim.position, rightAim.forward) : new Ray(head.position, head.forward);
 
-        bool RightTracked => rightTracked != null && rightTracked.IsPressed();
+        bool RightTracked => SimulatedHand || (rightTracked != null && rightTracked.IsPressed());
+
+        /// <summary>
+        /// Editor recordings in a simulated headset (<see cref="Core.VRMode.Simulated"/>): the recorder holds the
+        /// right controller up and poses it itself, so the laser and the pointer work as with a tracked controller.
+        /// <see cref="SimulatedLaserEnd"/> ends the laser on a point of a panel (the recorder knows what it points at).
+        /// </summary>
+        public static bool SimulatedHand;
+        public static Vector3? SimulatedLaserEnd;
+
+        /// <summary>True while the right controller is tracked through the Input System (its laser shows).</summary>
+        public bool HandTracked => RightTracked;
+
+        public Transform Pivot => pivot;
+        public Transform RightAim => rightAim;
+        public Transform RightGrip => rightGrip;
+        public Transform LeftGrip => leftGrip;
 
         /// <summary>The head's heading as a rotation about the vertical (walking goes this way).</summary>
         public Quaternion HeadYaw
@@ -95,6 +111,8 @@ namespace SeoulFirstWeek.Player
             tpd.rotationInput = new InputActionProperty(Pose("Head Rotation", "<XRHMD>/centerEyeRotation", "Quaternion"));
             tpd.trackingType = TrackedPoseDriver.TrackingType.RotationAndPosition;
             tpd.updateType = TrackedPoseDriver.UpdateType.UpdateAndBeforeRender;
+            // a simulated headset has no head to follow: the recorder turns the camera itself
+            if (Core.VRMode.Simulated) tpd.enabled = false;
             // near plane close enough for a hand held up to the face
             cam.nearClipPlane = 0.03f;
         }
@@ -139,6 +157,7 @@ namespace SeoulFirstWeek.Player
             tpd.rotationInput = new InputActionProperty(Pose($"{name} Rotation", $"<XRController>{{{side}}}/{pose}Rotation", "Quaternion"));
             tpd.trackingType = TrackedPoseDriver.TrackingType.RotationAndPosition;
             tpd.updateType = TrackedPoseDriver.UpdateType.UpdateAndBeforeRender;
+            if (Core.VRMode.Simulated) tpd.enabled = false;
             if (model)
             {
                 var dark = new Color(0.12f, 0.13f, 0.16f);
@@ -160,24 +179,7 @@ namespace SeoulFirstWeek.Player
 
         void BuildLaser()
         {
-            var go = new GameObject("Laser");
-            go.transform.SetParent(transform, false);
-            laser = go.AddComponent<LineRenderer>();
-            laser.useWorldSpace = true;
-            laser.positionCount = 2;
-            laser.widthMultiplier = 0.004f;
-            laser.numCapVertices = 2;
-            laser.shadowCastingMode = ShadowCastingMode.Off;
-            laser.receiveShadows = false;
-            laser.material = new Material(Shader.Find("Sprites/Default"));
-            var glow = Theme.Get(Role.Glow);
-            laser.startColor = new Color(glow.r, glow.g, glow.b, 0.9f);
-            laser.endColor = new Color(glow.r, glow.g, glow.b, 0.25f);
-            dot = Prims.Make(PrimitiveType.Sphere, go.transform, "Dot", Vector3.zero, Vector3.one * 0.014f, laser.material).transform;
-            var dc = dot.GetComponent<Collider>();
-            if (dc) Destroy(dc);
-            dot.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.Off;
-            dot.GetComponent<Renderer>().material.color = glow;
+            laser = VRUI.MakeLaser(transform, out dot);
         }
 
         /// <summary>Controller buttons for the game's own actions (added once to the shared actions asset).</summary>
@@ -246,7 +248,8 @@ namespace SeoulFirstWeek.Player
             if (!show) return;
             var ray = PointerRay;
             Vector3 end;
-            if (VRUI.PointerHit(out var ui)) end = ui;
+            if (SimulatedLaserEnd.HasValue) end = SimulatedLaserEnd.Value;
+            else if (VRUI.PointerHit(out var ui)) end = ui;
             else if (PlayerInteractor.CurrentHit.HasValue) end = PlayerInteractor.CurrentHit.Value;
             else end = ray.origin + ray.direction * 3f;
             laser.SetPosition(0, ray.origin);

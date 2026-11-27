@@ -85,6 +85,8 @@ namespace SeoulFirstWeek.UI
             // start, bottom left; the game is played by speaking, so without a microphone (or the speech model)
             // the start stays locked and a note says why (it unlocks by itself once one is connected)
             canHear = Conversation.Speech.Enabled;
+            // a phone asks for the microphone with its own dialog: put the question as the title comes up
+            if (!canHear) Conversation.Speech.AskForMic();
             if (!canHear) MicNotice();
             start = UIKit.Rect("Start", root);
             start.anchorMin = start.anchorMax = new Vector2(0, 0);
@@ -101,7 +103,18 @@ namespace SeoulFirstWeek.UI
             UIKit.HStack(startRow, 18, null, TextAnchor.MiddleCenter).childForceExpandHeight = false;
             var lettering = canHear ? Role.Ink : Role.InkSoft;
             UIKit.Words(startRow, "▶ 시작", 42, lettering, Face.DisplayKo, TextAnchor.MiddleCenter).Layout(170, 60);
-            UIKit.Words(startRow, Loc.T(canHear ? "click_to_start" : "start_locked"), canHear ? 26 : 24, lettering, Face.ReadBold, TextAnchor.MiddleLeft).Layout(340, 60);
+            UIKit.Words(startRow, Loc.T(canHear ? (Player.TouchControls.Active ? "tap_to_start" : "click_to_start") : (Application.isMobilePlatform ? "start_locked_mobile" : "start_locked")), canHear ? 26 : 24, lettering, Face.ReadBold, TextAnchor.MiddleLeft).Layout(340, 60);
+
+            // the street is built from OpenStreetMap data, whose licence (ODbL) asks for this credit where it is shown
+            var credit = UIKit.Rect("MapCredit", root);
+            credit.Place(new Vector2(1, 0), new Vector2(-24, 18), new Vector2(0, 40));
+            UIKit.HStack(credit, 0, new RectOffset(16, 16, 4, 4), TextAnchor.MiddleRight).childForceExpandHeight = false;
+            credit.gameObject.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            var plate = UIKit.BrushStrip(credit, "Plate", Role.Night);
+            plate.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+            plate.rectTransform.Stretch();
+            var creditText = UIKit.Words(credit, Loc.T("map_credit"), 22, Role.Paper, Face.ReadBold, TextAnchor.MiddleRight);
+            creditText.horizontalOverflow = HorizontalWrapMode.Overflow;
 
             // the nurse asks what the game is about: a real question at a real counter, with its translation
             var nurse = Balloon("Cast_Nurse", "어디가 불편하세요?", Loc.T("home_nurse"), 0.16f);
@@ -132,7 +145,7 @@ namespace SeoulFirstWeek.UI
             note.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
             note.rectTransform.Stretch();
             UIKit.Words(notice, "!  " + Loc.T(model ? "mic_needed_title" : "speech_missing_title"), 34, Role.Ink, Face.Display);
-            UIKit.Words(notice, Loc.T(model ? "mic_needed_body" : "speech_missing_body"), 23, Role.Ink, Face.ReadBold).lineSpacing = 1.1f;
+            UIKit.Words(notice, Loc.T(model ? (Application.isMobilePlatform ? "mic_needed_body_mobile" : "mic_needed_body") : "speech_missing_body"), 23, Role.Ink, Face.ReadBold).lineSpacing = 1.1f;
             notice.localRotation = Quaternion.Euler(0, 0, -1f);
             if (intro) _ = Motion.Slap(notice, -1f, 1.0f, -6f);
         }
@@ -337,6 +350,8 @@ namespace SeoulFirstWeek.UI
             {
                 Sfx.Play(ProceduralAudio.Soft, 0.6f);
                 if (notice) _ = Motion.Shake(notice, 8f, 0.3f);
+                // a tap on the locked start asks the phone for the microphone again (unless it was refused for good)
+                Conversation.Speech.AskForMic();
                 return;
             }
             leaving = true;

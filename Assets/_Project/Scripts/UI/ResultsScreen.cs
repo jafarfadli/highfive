@@ -144,7 +144,8 @@ namespace SeoulFirstWeek.UI
                 noteTexts.Add(t);
             }
             if (result.SpokenCount > 0)
-                UIKit.Words(card, Loc.T("spoken_summary", result.SpokenCount, Mathf.RoundToInt(result.SpokenAverage * 100)), 24, Role.Ink, Face.ReadBold)
+                UIKit.Words(card, Loc.T(result.SpokenCount == 1 ? "spoken_summary_one" : "spoken_summary", result.SpokenCount,
+                        Mathf.RoundToInt(result.SpokenAverage * 100)), 24, Role.Ink, Face.ReadBold)
                     .lineSpacing = 1.1f;
             foreach (var g in result.Granted.Where(g => g.StartsWith("doc:")))
             {

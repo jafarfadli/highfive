@@ -21,6 +21,10 @@ namespace SeoulFirstWeek.EditorTools
         const int Rate = 48000;
         public static int Width = 1920, Height = 1080;
 
+        /// <summary>When set, the overlay UI is laid over the finished frame the way the game draws it: after
+        /// post-processing, so its text gets no anti-aliasing blur, grading or vignette. Costs two more renders a frame.</summary>
+        public static bool UiAfterPost;
+
         struct Shot
         {
             public int frame, stopFrame, rate, channels;
@@ -51,6 +55,7 @@ namespace SeoulFirstWeek.EditorTools
             Time.captureFramerate = Fps;
             rt = new RenderTexture(Width, Height, 24);
             tex = new Texture2D(Width, Height, TextureFormat.RGB24, false);
+            emptyBlack = emptyWhite = null;
             AudioTap.Played -= OnPlayed;
             AudioTap.Stopped -= OnStopped;
             AudioTap.Played += OnPlayed;
@@ -168,7 +173,15 @@ namespace SeoulFirstWeek.EditorTools
             cam.targetTexture = rt;
             var dofs = ActiveDepthOfField();
             Color32[] frameColors;
-            if (dofs.Count == 0)
+            if (Core.VRMode.Simulated)
+            {
+                // a headset's panels are in the world and drawn after post-processing by the renderer's VR UI
+                // pass, so one plain render is the eye's view
+                frameColors = null;
+                Render(cam, true);
+            }
+            else if (UiAfterPost) frameColors = UiOverFrame(cam);
+            else if (dofs.Count == 0)
             {
                 frameColors = null;
                 Render(cam, true);
@@ -203,7 +216,7 @@ namespace SeoulFirstWeek.EditorTools
                 tex.SetPixels32(frameColors);
                 tex.Apply();
             }
-            File.WriteAllBytes(Path.Combine(folder, $"f_{frame:D5}.jpg"), tex.EncodeToJPG(92));
+            File.WriteAllBytes(Path.Combine(folder, $"f_{frame:D5}.jpg"), tex.EncodeToJPG(96));
             frame++;
             cam.targetTexture = prev;
             RenderTexture.active = null;
@@ -222,13 +235,29 @@ namespace SeoulFirstWeek.EditorTools
                     c.planeDistance = cam.nearClipPlane + 0.02f + (1000 - c.sortingOrder) * 0.0004f;
                     changed.Add(c);
                 }
+            // The canvas scalers worked out their scale for the screen (in batch mode a small virtual one), so the
+            // text would be drawn at that size and stretched to the frame: let them scale for the frame instead.
+            Rescale(changed);
             Canvas.ForceUpdateCanvases();
             cam.Render();
             RenderTexture.active = rt;
             tex.ReadPixels(new Rect(0, 0, Width, Height), 0, 0);
             tex.Apply();
             foreach (var c in changed) c.renderMode = RenderMode.ScreenSpaceOverlay;
+            Rescale(changed);
             return tex.GetPixels32();
+        }
+
+        static readonly System.Reflection.MethodInfo ScalerHandle =
+            typeof(UnityEngine.UI.CanvasScaler).GetMethod("Handle", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+
+        static void Rescale(List<Canvas> canvases)
+        {
+            foreach (var c in canvases)
+            {
+                var scaler = c ? c.GetComponent<UnityEngine.UI.CanvasScaler>() : null;
+                if (scaler && scaler.isActiveAndEnabled) ScalerHandle?.Invoke(scaler, null);
+            }
         }
 
         /// <summary>Renders only the screen-space UI (or nothing) over a solid background, post-processing on. The
@@ -254,6 +283,68 @@ namespace SeoulFirstWeek.EditorTools
                 foreach (var (c, layer) in moved) c.gameObject.layer = layer;
             }
         }
+
+        static Color32[] emptyBlack, emptyWhite;
+        static float[] toLinear;
+        static byte[] toGamma;
+
+        /// <summary>The world as the camera finishes it (post-processing and depth of field included) with the overlay
+        /// UI blended over it in linear light, as the game composites its overlay canvases. The UI's colour and coverage
+        /// come from rendering it alone without post-processing, over black and over white, each measured against the
+        /// same render with no UI (kept for the clip), so whatever the ink pass leaves on an empty frame cancels out.</summary>
+        static Color32[] UiOverFrame(Camera cam)
+        {
+            var world = Render(cam, false);
+            var data = cam.GetComponent<UnityEngine.Rendering.Universal.UniversalAdditionalCameraData>();
+            bool post = data && data.renderPostProcessing;
+            var aa = data ? data.antialiasing : UnityEngine.Rendering.Universal.AntialiasingMode.None;
+            if (data)
+            {
+                data.renderPostProcessing = false;
+                data.antialiasing = UnityEngine.Rendering.Universal.AntialiasingMode.None;
+            }
+            Color32[] onBlack, onWhite;
+            try
+            {
+                onBlack = RenderAlone(cam, true, Color.black);
+                onWhite = RenderAlone(cam, true, Color.white);
+                emptyBlack ??= RenderAlone(cam, false, Color.black);
+                emptyWhite ??= RenderAlone(cam, false, Color.white);
+            }
+            finally
+            {
+                if (data)
+                {
+                    data.renderPostProcessing = post;
+                    data.antialiasing = aa;
+                }
+            }
+            if (toLinear == null)
+            {
+                toLinear = new float[256];
+                for (int i = 0; i < 256; i++) toLinear[i] = Mathf.GammaToLinearSpace(i / 255f);
+                toGamma = new byte[4096];
+                for (int i = 0; i < 4096; i++) toGamma[i] = (byte)Mathf.Clamp(Mathf.RoundToInt(Mathf.LinearToGammaSpace(i / 4095f) * 255f), 0, 255);
+            }
+            var lin = toLinear;
+            for (int i = 0; i < world.Length; i++)
+            {
+                Color32 b1 = onBlack[i], w1 = onWhite[i], b0 = emptyBlack[i], w0 = emptyWhite[i];
+                float open = lin[w0.r] - lin[b0.r] + lin[w0.g] - lin[b0.g] + lin[w0.b] - lin[b0.b];
+                float through = lin[w1.r] - lin[b1.r] + lin[w1.g] - lin[b1.g] + lin[w1.b] - lin[b1.b];
+                // how much of the world shows through the UI here (1 where there is no UI)
+                float t = open > 0.3f ? Mathf.Clamp01(through / open) : 1f;
+                if (t > 0.999f) continue;
+                var w = world[i];
+                world[i] = new Color32(
+                    Gamma(lin[b1.r] + t * (lin[w.r] - lin[b0.r])),
+                    Gamma(lin[b1.g] + t * (lin[w.g] - lin[b0.g])),
+                    Gamma(lin[b1.b] + t * (lin[w.b] - lin[b0.b])), 255);
+            }
+            return world;
+        }
+
+        static byte Gamma(float linear) => toGamma[Mathf.Clamp((int)(linear * 4095f + 0.5f), 0, 4095)];
 
         static List<UnityEngine.Rendering.Universal.DepthOfField> ActiveDepthOfField()
         {

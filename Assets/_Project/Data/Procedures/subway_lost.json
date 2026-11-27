@@ -105,17 +105,12 @@
             "vi": "Tôi quên cái túi.",
             "id": "Saya lupa tas saya."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "가방을 어디에 두고 오셨어요? 열차 안에요?",
           "replyMeaning": {
             "en": "Where did you leave your bag? On the train?",
             "vi": "Bạn để quên túi ở đâu? Trên tàu à?",
             "id": "Tasnya ketinggalan di mana? Di dalam kereta?"
-          },
-          "note": {
-            "en": "잊어버리다 means to forget and 잃어버리다 means to lose. For something left on a train, say 두고 내렸어요: 열차에 가방을 두고 내렸어요.",
-            "vi": "잊어버리다 là quên, 잃어버리다 là làm mất. Đồ để quên trên tàu thì nói 두고 내렸어요: 열차에 가방을 두고 내렸어요.",
-            "id": "잊어버리다 artinya lupa, 잃어버리다 artinya kehilangan. Untuk barang yang tertinggal di kereta, katakan 두고 내렸어요: 열차에 가방을 두고 내렸어요."
           }
         },
         {
@@ -196,17 +191,12 @@
             "vi": "Tôi xuống lúc nãy.",
             "id": "Saya turun tadi."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "아까 언제쯤이요? 몇 분 전인지 알아야 열차를 찾을 수 있어요.",
           "replyMeaning": {
             "en": "A while ago, meaning when? We need to know how many minutes ago to find the train.",
             "vi": "Lúc nãy là khoảng khi nào? Phải biết mấy phút trước thì mới tìm được tàu.",
             "id": "Tadi itu kapan? Kami perlu tahu berapa menit lalu supaya bisa menemukan keretanya."
-          },
-          "note": {
-            "en": "아까 (a while ago) is too vague. Staff need the time and the direction to find the train: 5분쯤 전에 충무로 쪽으로 가는 열차에서 내렸어요.",
-            "vi": "아까 (lúc nãy) quá mơ hồ. Nhân viên cần thời gian và hướng tàu để tìm: 5분쯤 전에 충무로 쪽으로 가는 열차에서 내렸어요.",
-            "id": "아까 (tadi) terlalu tidak jelas. Petugas perlu waktu dan arah kereta untuk mencarinya: 5분쯤 전에 충무로 쪽으로 가는 열차에서 내렸어요."
           }
         },
         {
@@ -267,17 +257,12 @@
             "vi": "Khoảng phía đầu tàu.",
             "id": "Kira-kira di bagian depan."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "앞쪽은 범위가 넓어서 찾기 어려워요. 내리신 곳 승강장에 번호가 있어요.",
           "replyMeaning": {
             "en": "The front covers a lot, so it's hard to search. There's a number on the platform where you got off.",
             "vi": "Phía đầu tàu thì rộng quá, khó tìm. Trên sân ga chỗ bạn xuống có số đấy.",
             "id": "Bagian depan itu luas, jadi susah dicari. Di peron tempat kamu turun ada nomornya."
-          },
-          "note": {
-            "en": "대충 앞쪽 (roughly the front) is too vague for a search. Read the car and door number on the platform and say it: 4-2번 문에서 내렸어요.",
-            "vi": "대충 앞쪽 (khoảng phía đầu) quá mơ hồ để tìm. Hãy đọc số toa và số cửa trên sân ga rồi nói: 4-2번 문에서 내렸어요.",
-            "id": "대충 앞쪽 (kira-kira di depan) terlalu tidak jelas untuk pencarian. Baca nomor gerbong dan pintu di peron lalu sebutkan: 4-2번 문에서 내렸어요."
           }
         },
         {
@@ -332,17 +317,12 @@
             "vi": "Trong túi có máy tính xách tay.",
             "id": "Di dalam tasnya ada laptop."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "안에 든 것도 중요한데요, 먼저 어디에 두셨는지하고 가방 모양부터 알려 주세요.",
           "replyMeaning": {
             "en": "What's inside matters too, but first tell me where you put it and what it looks like.",
             "vi": "Đồ bên trong cũng quan trọng, nhưng trước hết cho tôi biết bạn để ở đâu và túi trông thế nào.",
             "id": "Isinya juga penting, tapi beri tahu dulu ditaruh di mana dan seperti apa tasnya."
-          },
-          "note": {
-            "en": "Answer what was asked: where it was (선반 위, on the rack; 좌석 아래, under a seat) and what it looks like (검은색 백팩, a black backpack).",
-            "vi": "Hãy trả lời đúng câu hỏi: để ở đâu (선반 위, trên giá; 좌석 아래, dưới ghế) và trông thế nào (검은색 백팩, ba lô đen).",
-            "id": "Jawab yang ditanya: di mana tasnya (선반 위, di rak; 좌석 아래, di bawah kursi) dan seperti apa (검은색 백팩, ransel hitam)."
           }
         },
         {
@@ -464,17 +444,12 @@
             "vi": "Tôi cho ID KakaoTalk nhé.",
             "id": "Saya kasih ID KakaoTalk ya."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "저희는 전화로 연락드려요. 휴대폰 번호 알려 주시겠어요?",
           "replyMeaning": {
             "en": "We contact people by phone. Could you give me your mobile number?",
             "vi": "Chúng tôi liên lạc qua điện thoại. Cho tôi số di động được không?",
             "id": "Kami menghubungi lewat telepon. Boleh minta nomor HP-mu?"
-          },
-          "note": {
-            "en": "Staff will call you, so give your Korean phone number: 010-1234-5678이에요.",
-            "vi": "Nhân viên sẽ gọi điện, nên hãy cho số điện thoại Hàn Quốc: 010-1234-5678이에요.",
-            "id": "Petugas akan menelepon, jadi berikan nomor HP Korea-mu: 010-1234-5678이에요."
           }
         },
         {

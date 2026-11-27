@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -15,6 +16,9 @@ namespace SeoulFirstWeek.EditorTools
     /// and Windows (64-bit), into Builds/ (git-ignored). Each lands in its own folder with a note on opening an
     /// unsigned build and, built on a Mac, is zipped for sharing. From a terminal:
     /// Unity -batchmode -quit -projectPath . -executeMethod SeoulFirstWeek.EditorTools.PlayerBuilds.BuildAll
+    /// An Android APK for phones and tablets (touch controls, see Player/TouchControls) needs the editor's Android
+    /// module and is built on its own, best with the editor started on that target:
+    /// Unity -batchmode -quit -projectPath . -buildTarget Android -executeMethod SeoulFirstWeek.EditorTools.PlayerBuilds.BuildAndroid
     /// The scenes are built as they are on disk, so run Build All Scenes first after changing the builder.
     /// </summary>
     public static class PlayerBuilds
@@ -57,6 +61,54 @@ namespace SeoulFirstWeek.EditorTools
             Finish(folder, WindowsNote, appBundle: false);
         }
 
+        [MenuItem("Seoul First Week/Build Players/Android (APK)")]
+        public static void BuildAndroid()
+        {
+            if (File.Exists(Secrets))
+                throw new InvalidOperationException($"{Secrets} would ship inside the build: move it out of the project, build, then put it back.");
+            // a phone can't be played without hearing the answers, and on Android the model can't be checked at run time
+            if (!File.Exists(WhisperModel))
+                throw new InvalidOperationException($"{WhisperModel} is missing (run Tools/whisper/get_model.sh): the Android build can't hear answers without it.");
+            string folder = Path.GetFullPath(Path.Combine(Root, "ReadySetGo-Android"));
+            if (Directory.Exists(folder)) Directory.Delete(folder, true);
+            Directory.CreateDirectory(folder);
+
+            // the launcher shows the product name; it is put back afterwards, because on the desktop "highfive"
+            // keeps this copy's PlayerPrefs apart from the original project's
+            string product = PlayerSettings.productName;
+            var orientation = PlayerSettings.defaultInterfaceOrientation;
+            bool portrait = PlayerSettings.allowedAutorotateToPortrait, upsideDown = PlayerSettings.allowedAutorotateToPortraitUpsideDown;
+            try
+            {
+                PlayerSettings.productName = "Ready Set Go!";
+                PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.highfive.readysetgo");
+                // the speech plugin is a static library, which only IL2CPP links; 64-bit ARM is every current phone
+                PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android, ScriptingImplementation.IL2CPP);
+                PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
+                // the game is laid out for a wide screen: landscape only, and never under a camera cut-out
+                PlayerSettings.defaultInterfaceOrientation = UIOrientation.AutoRotation;
+                PlayerSettings.allowedAutorotateToPortrait = false;
+                PlayerSettings.allowedAutorotateToPortraitUpsideDown = false;
+                PlayerSettings.allowedAutorotateToLandscapeLeft = true;
+                PlayerSettings.allowedAutorotateToLandscapeRight = true;
+                PlayerSettings.Android.renderOutsideSafeArea = false;
+                EditorUserBuildSettings.buildAppBundle = false;
+                string apk = Path.Combine(folder, "ReadySetGo.apk");
+                Build(BuildTarget.Android, apk, BuildTargetGroup.Android);
+                foreach (var dir in Directory.GetDirectories(folder, "*_DoNotShip")) Directory.Delete(dir, true);
+                File.WriteAllText(Path.Combine(folder, "How to install.txt"), AndroidNote.Replace("\r\n", "\n"));
+                Debug.Log($"[Players] ReadySetGo.apk: {new FileInfo(apk).Length / 1048576f:0} MB");
+            }
+            finally
+            {
+                PlayerSettings.productName = product;
+                PlayerSettings.defaultInterfaceOrientation = orientation;
+                PlayerSettings.allowedAutorotateToPortrait = portrait;
+                PlayerSettings.allowedAutorotateToPortraitUpsideDown = upsideDown;
+                AssetDatabase.SaveAssets();
+            }
+        }
+
         static string Prepare(string name)
         {
             // StreamingAssets ships as it is, so a local OpenAI key would go out with every copy of the build
@@ -74,7 +126,7 @@ namespace SeoulFirstWeek.EditorTools
             return folder;
         }
 
-        static void Build(BuildTarget target, string location)
+        static void Build(BuildTarget target, string location, BuildTargetGroup group = BuildTargetGroup.Standalone)
         {
             var scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray();
             if (scenes.Length == 0)
@@ -84,7 +136,7 @@ namespace SeoulFirstWeek.EditorTools
                 scenes = scenes,
                 locationPathName = location,
                 target = target,
-                targetGroup = BuildTargetGroup.Standalone,
+                targetGroup = group,
                 options = BuildOptions.CompressWithLz4HC,
             });
             var summary = report.summary;
@@ -193,40 +245,72 @@ R untuk mendengar lagi, Esc untuk jeda.
 1. Extract the whole folder first (right-click the zip > Extract All). The game doesn't run from inside the zip.
 2. Open ""Ready Set Go.exe"". The build isn't signed, so Windows may say ""Windows protected your PC"":
    click ""More info"", then ""Run anyway"".
-3. To answer by voice, let desktop apps use the microphone (Settings > Privacy & security > Microphone).
-   Without it, click an answer or press 1-4. If the game never hears you, install the Microsoft Visual C++
-   Redistributable (x64) from https://aka.ms/vs/17/release/vc_redist.x64.exe and update the graphics driver.
+3. The game is played by saying the answers in Korean: let desktop apps use the microphone (Settings >
+   Privacy & security > Microphone); without one, Start stays locked. If the game never hears you, install the
+   Microsoft Visual C++ Redistributable (x64) from https://aka.ms/vs/17/release/vc_redist.x64.exe and update the
+   graphics driver.
 
 1. Ekstrak dulu seluruh folder (klik kanan zip > Extract All). Game tidak bisa jalan dari dalam zip.
 2. Buka ""Ready Set Go.exe"". Build ini tidak ditandatangani, jadi Windows bisa menampilkan
    ""Windows protected your PC"": klik ""More info"", lalu ""Run anyway"".
-3. Untuk menjawab dengan suara, izinkan aplikasi desktop memakai mikrofon (Settings > Privacy & security >
-   Microphone). Tanpa mikrofon, klik jawaban atau tekan 1-4. Kalau game tidak pernah mendengar suaramu, pasang
-   Microsoft Visual C++ Redistributable (x64) dari https://aka.ms/vs/17/release/vc_redist.x64.exe dan perbarui
-   driver kartu grafis.
+3. Game ini dimainkan dengan mengucapkan jawaban dalam bahasa Korea: izinkan aplikasi desktop memakai mikrofon
+   (Settings > Privacy & security > Microphone); tanpa mikrofon, tombol mulai terkunci. Kalau game tidak pernah
+   mendengar suaramu, pasang Microsoft Visual C++ Redistributable (x64) dari
+   https://aka.ms/vs/17/release/vc_redist.x64.exe dan perbarui driver kartu grafis.
 
 " + Controls + @"
 Playing in VR (Meta Quest 2 or 3 over Quest Link, on a PC with a gaming graphics card):
-1. Install the Meta Quest Link app on this PC (https://www.meta.com/quest/setup/), sign in, and connect the
-   headset with a USB-C cable (or Air Link on 5 GHz Wi-Fi).
-2. In the Link app, Settings > General: turn on ""Unknown sources"" and set Meta Quest Link as the active
-   OpenXR runtime.
-3. Put the headset on and start Quest Link from its Quick Settings.
-4. Open ""Ready Set Go (VR).bat"". The game starts in the headset (without one it plays on the screen).
+1. Install the Meta Horizon Link app (earlier called Meta Quest Link) on this PC (https://www.meta.com/quest/setup/),
+   sign in, and connect the headset with a USB-C cable (or Air Link on 5 GHz Wi-Fi).
+2. In the Link app, Settings > General: turn on ""Unknown sources"" and set Meta Horizon Link as the active
+   OpenXR runtime (a grey button means it already is).
+3. Put the headset on, press the Meta button, open Quick Settings (the clock on the left of the menu bar) > Link
+   and launch it.
+4. Open ""Ready Set Go (VR).bat"", then press the Meta button once to close Meta's menu so the game gets the
+   controllers. If the controllers still do nothing, a mouse click on the game's window on the PC also picks on
+   the panels, and the keyboard works (WASD walk, E use, hold Space to answer).
 VR controls: the left stick walks (click it to walk faster), the right stick turns 45 degrees, point with
 the right controller and pull its trigger to choose or to open a door, hold A and say the answer, B hears the
 line again, the left Menu button pauses.
 
 Main di VR (Meta Quest 2 atau 3 lewat Quest Link, di PC dengan kartu grafis gaming):
-1. Pasang aplikasi Meta Quest Link di PC ini (https://www.meta.com/quest/setup/), login, lalu sambungkan
-   headset dengan kabel USB-C (atau Air Link lewat Wi-Fi 5 GHz).
-2. Di aplikasi Link, Settings > General: nyalakan ""Unknown sources"" dan jadikan Meta Quest Link sebagai
-   OpenXR runtime yang aktif.
-3. Pakai headset, lalu mulai Quest Link dari Quick Settings.
-4. Buka ""Ready Set Go (VR).bat"". Game muncul di headset (tanpa headset, game jalan di layar).
+1. Pasang aplikasi Meta Horizon Link (dulu Meta Quest Link) di PC ini (https://www.meta.com/quest/setup/),
+   login, lalu sambungkan headset dengan kabel USB-C (atau Air Link lewat Wi-Fi 5 GHz).
+2. Di aplikasi Link, Settings > General: nyalakan ""Unknown sources"" dan jadikan Meta Horizon Link sebagai
+   OpenXR runtime yang aktif (tombol abu-abu berarti sudah aktif).
+3. Pakai headset, tekan tombol Meta, buka Quick Settings (jam di kiri bar menu) > Link, lalu jalankan.
+4. Buka ""Ready Set Go (VR).bat"", lalu tekan tombol Meta sekali untuk menutup menu Meta supaya controller masuk
+   ke game. Kalau controller tetap tidak bereaksi, klik mouse di jendela game di PC juga bisa memilih di panel,
+   dan keyboard tetap jalan (WASD jalan, E pakai, tahan Space untuk menjawab).
 Kontrol VR: stik kiri untuk jalan (klik stiknya untuk lebih cepat), stik kanan untuk berbelok 45 derajat,
 tunjuk dengan controller kanan lalu tarik trigger untuk memilih atau membuka pintu, tahan A lalu ucapkan
 jawabannya, B untuk mendengar lagi, tombol Menu kiri untuk jeda.
+";
+
+        const string AndroidNote =
+@"Ready Set Go! for Android (Android 7.1 or later, 64-bit; a recent phone or tablet plays best)
+
+1. Open ReadySetGo.apk on the phone (from the chat, Files or a USB cable) and tap it.
+2. Android asks to allow installing apps from that app (the chat, Files or the browser): allow it, go back
+   and tap Install. If Play Protect calls the app unknown, tap ""More details"", then ""Install anyway"".
+3. Open Ready Set Go! and allow the microphone: the game is played by saying the answers in Korean.
+   Hold the phone sideways. Use earphones with a microphone in a noisy room.
+
+Controls: put your left thumb on the screen to walk, drag anywhere else to look around, tap a door, a counter
+or a person to use it (or tap the prompt), hold the dialogue box (or the MIC key) and say the answer, then let
+go. Tap an action in [brackets]. The II key top right (or the Back button) pauses.
+
+1. Buka ReadySetGo.apk di HP (dari chat, Files, atau kabel USB) lalu ketuk.
+2. Android meminta izin memasang aplikasi dari aplikasi itu (chat, Files, atau browser): izinkan, kembali,
+   lalu ketuk Install. Kalau Play Protect bilang aplikasinya tidak dikenal, ketuk ""More details"", lalu
+   ""Install anyway"".
+3. Buka Ready Set Go! dan izinkan mikrofon: game ini dimainkan dengan mengucapkan jawaban dalam bahasa Korea.
+   Pegang HP mendatar. Di ruangan ramai, pakai earphone yang ada mikrofonnya.
+
+Kontrol: taruh jempol kiri di layar untuk jalan, geser di bagian lain layar untuk melihat sekeliling, ketuk
+pintu, loket, atau orang untuk memakainya (atau ketuk tulisan petunjuknya), tahan kotak dialog (atau tombol
+MIC) sambil mengucapkan jawaban, lalu lepas. Ketuk aksi dalam [kurung]. Tombol II di kanan atas (atau tombol
+Back) untuk jeda.
 ";
     }
 }

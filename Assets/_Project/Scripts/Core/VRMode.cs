@@ -18,6 +18,13 @@ namespace SeoulFirstWeek.Core
         /// <summary>True while a headset shows the game.</summary>
         public static bool Active { get; private set; }
 
+        /// <summary>
+        /// Editor recordings only (SFW_VR_SIM=1): the game runs as it does in a headset (panels, the laser, the
+        /// controller's button names, no screen-fixed patterns), but no XR runtime starts and the recorder poses the
+        /// head and the hands itself. Never true in a build.
+        /// </summary>
+        public static bool Simulated { get; private set; }
+
         /// <summary>Raised once VR has started (before the first scene loads).</summary>
         public static event System.Action Started;
 
@@ -28,8 +35,19 @@ namespace SeoulFirstWeek.Core
         static void Boot()
         {
             Active = false;
+            Simulated = false;
             // shaders leave out patterns fixed to the screen in a headset (InkLighting, Sky Toon, Ink Outline)
             Shader.SetGlobalFloat(GlobalFlag, 0f);
+#if UNITY_EDITOR
+            if (System.Environment.GetEnvironmentVariable("SFW_VR_SIM") == "1")
+            {
+                Active = Simulated = true;
+                Shader.SetGlobalFloat(GlobalFlag, 1f);
+                Debug.Log("[VR] simulated headset for a recording (no XR runtime)");
+                Started?.Invoke();
+                return;
+            }
+#endif
             if (!Wanted) return;
             var general = XRGeneralSettings.Instance;
             var manager = general ? general.Manager : null;
@@ -53,6 +71,12 @@ namespace SeoulFirstWeek.Core
             foreach (var s in inputs) s.TrySetTrackingOriginMode(TrackingOriginModeFlags.Device);
             Active = true;
             Shader.SetGlobalFloat(GlobalFlag, 1f);
+#if !UNITY_EDITOR
+            // in a headset the desktop window is often not the focused one (the Link dashboard takes the focus), and
+            // by default the Input System stops reading devices then: keep reading the controllers whatever has focus
+            UnityEngine.InputSystem.InputSystem.settings.backgroundBehavior =
+                UnityEngine.InputSystem.InputSettings.BackgroundBehavior.IgnoreFocus;
+#endif
             // -vr-scale 0.8 renders each eye smaller, for a slower graphics card
             float scale = ArgFloat("-vr-scale", 1f);
             if (scale > 0.3f && scale <= 2f) XRSettings.eyeTextureResolutionScale = scale;
