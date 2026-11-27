@@ -440,17 +440,12 @@
             "vi": "Bạn tôi đến lấy thay có được không?",
             "id": "Boleh teman saya yang ambilkan?"
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "진단서는 본인이나 가족만 받을 수 있어요. 지금 오셨으니까 신분증만 주시면 돼요.",
           "replyMeaning": {
             "en": "Only the patient or their family can receive a medical certificate. You're here now, so just your ID, please.",
             "vi": "Giấy chẩn đoán chỉ bệnh nhân hoặc người nhà mới nhận được. Bạn đang ở đây rồi, chỉ cần đưa giấy tờ tùy thân thôi ạ.",
             "id": "Surat keterangan dokter hanya bisa diambil pasien sendiri atau keluarganya. Kamu sudah di sini, jadi cukup tunjukkan identitasmu."
-          },
-          "note": {
-            "en": "Medical documents are private: clinics issue them to the patient, or to family with proof and a signed consent. Bring your own ID and collect it yourself.",
-            "vi": "Giấy tờ y tế là thông tin riêng tư: phòng khám chỉ cấp cho chính bệnh nhân, hoặc người nhà có giấy tờ chứng minh và giấy đồng ý. Hãy tự mang giấy tờ tùy thân và tự đến nhận.",
-            "id": "Dokumen medis bersifat pribadi: klinik memberikannya kepada pasien, atau keluarga dengan bukti dan surat persetujuan. Bawa identitasmu sendiri dan ambil sendiri."
           }
         }
       ]
@@ -560,17 +555,12 @@
             "vi": "Chị viết giúp tôi được không ạ?",
             "id": "Tidak bisa Suster saja yang menulis?"
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "진단서는 의사만 쓸 수 있어요. 오래 안 걸리니까 조금만 기다려 주세요.",
           "replyMeaning": {
             "en": "Only a doctor can write a medical certificate. It won't take long, so please wait a little.",
             "vi": "Chỉ bác sĩ mới được viết giấy chẩn đoán. Không lâu đâu, bạn chờ một chút nhé.",
             "id": "Hanya dokter yang boleh menulis surat keterangan dokter. Tidak lama kok, tunggu sebentar ya."
-          },
-          "note": {
-            "en": "By law only a doctor can issue a 진단서, after checking your record. A short wait for the consulting room is part of it.",
-            "vi": "Theo luật, chỉ bác sĩ mới được cấp 진단서 sau khi xem hồ sơ của bạn. Chờ vào phòng khám một chút là bình thường.",
-            "id": "Menurut hukum, hanya dokter yang boleh menerbitkan 진단서 setelah memeriksa catatanmu. Menunggu sebentar untuk ruang periksa itu bagian dari prosesnya."
           }
         },
         {
@@ -775,17 +765,12 @@
             "vi": "Bác sĩ viết bằng tiếng Việt được không ạ?",
             "id": "Bisa ditulis dalam bahasa Vietnam?"
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "베트남어로는 안 돼요. 한글이나 영문으로만 발급할 수 있어요.",
           "replyMeaning": {
             "en": "Not in Vietnamese. We can only issue it in Korean or English.",
             "vi": "Tiếng Việt thì không được. Chúng tôi chỉ cấp bằng tiếng Hàn hoặc tiếng Anh.",
             "id": "Bahasa Vietnam tidak bisa. Kami hanya bisa menerbitkan dalam bahasa Korea atau Inggris."
-          },
-          "note": {
-            "en": "Korean clinics issue certificates in Korean or English. A Korean school reads the Korean one; an English one (영문 진단서) is for use abroad and can cost more.",
-            "vi": "Phòng khám ở Hàn chỉ cấp giấy bằng tiếng Hàn hoặc tiếng Anh. Trường ở Hàn đọc bản tiếng Hàn; bản tiếng Anh (영문 진단서) dùng ở nước ngoài và có thể đắt hơn.",
-            "id": "Klinik di Korea menerbitkan surat dalam bahasa Korea atau Inggris. Sekolah di Korea membaca versi Korea; versi Inggris (영문 진단서) untuk luar negeri dan bisa lebih mahal."
           }
         },
         {
@@ -883,17 +868,12 @@
             "vi": "Có được bảo hiểm chi trả không?",
             "id": "Bisa ditanggung asuransi?"
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "진단서 같은 서류 발급비는 보험이 안 돼요. 전액 내셔야 해요.",
           "replyMeaning": {
             "en": "Insurance doesn't cover document fees like this. You pay the full amount.",
             "vi": "Phí cấp giấy tờ như giấy chẩn đoán không được bảo hiểm chi trả. Bạn phải trả toàn bộ.",
             "id": "Biaya dokumen seperti ini tidak ditanggung asuransi. Harus bayar penuh."
-          },
-          "note": {
-            "en": "Health insurance pays for treatment, not for paperwork. Certificate fees (제증명 수수료) are paid in full; a clinic may charge up to 20,000 won for a 진단서.",
-            "vi": "Bảo hiểm y tế trả cho việc chữa bệnh, không trả cho giấy tờ. Phí cấp giấy (제증명 수수료) phải trả đủ; phòng khám có thể thu tối đa 20.000 won cho 진단서.",
-            "id": "Asuransi kesehatan membayar pengobatan, bukan dokumen. Biaya surat (제증명 수수료) dibayar penuh; klinik boleh menarik sampai 20.000 won untuk 진단서."
           }
         }
       ]
@@ -949,17 +929,12 @@
             "vi": "Gửi thẳng đến trường giúp tôi.",
             "id": "Tolong kirim langsung ke sekolah saya."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "병원에서 학교로 직접 보내 드리지는 않아요. 본인이 제출하셔야 해요.",
           "replyMeaning": {
             "en": "We don't send documents to schools. You need to hand it in yourself.",
             "vi": "Phòng khám không gửi giấy trực tiếp đến trường. Bạn phải tự nộp.",
             "id": "Klinik tidak mengirim dokumen langsung ke sekolah. Kamu harus menyerahkannya sendiri."
-          },
-          "note": {
-            "en": "Clinics give medical documents only to you. Take it to your school office (행정실) yourself, and keep a photo of it.",
-            "vi": "Phòng khám chỉ đưa giấy tờ y tế cho chính bạn. Hãy tự mang đến văn phòng trường (행정실) và chụp lại một bản để giữ.",
-            "id": "Klinik hanya memberikan dokumen medis kepadamu. Bawa sendiri ke kantor administrasi sekolah (행정실) dan simpan fotonya."
           }
         }
       ]

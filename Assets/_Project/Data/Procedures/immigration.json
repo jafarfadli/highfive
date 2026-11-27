@@ -297,17 +297,12 @@
             "vi": "Ảnh trong điện thoại được không?",
             "id": "Foto di HP boleh?"
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "아니요, 인쇄된 증명사진이 필요해요.",
           "replyMeaning": {
             "en": "No, it has to be a printed ID photo.",
             "vi": "Không, phải là ảnh thẻ đã in.",
             "id": "Tidak, harus pas foto cetak."
-          },
-          "note": {
-            "en": "Bring a printed 3.5 × 4.5 cm photo. Photo booths near the office make them.",
-            "vi": "Mang ảnh in 3,5 × 4,5 cm. Gần văn phòng có máy chụp ảnh.",
-            "id": "Bawa foto cetak 3,5 × 4,5 cm. Ada photo booth di dekat kantor."
           }
         },
         {
@@ -433,17 +428,12 @@
             "vi": "Tôi nói địa chỉ ở nước tôi nhé?",
             "id": "Perlu alamat di negara saya?"
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "아니요, 한국에서 사시는 주소요.",
           "replyMeaning": {
             "en": "No, the address where you live in Korea.",
             "vi": "Không, địa chỉ bạn đang sống ở Hàn Quốc.",
             "id": "Bukan, alamat tempat tinggalmu di Korea."
-          },
-          "note": {
-            "en": "The card needs your Korean address. Report it within 14 days if you move.",
-            "vi": "Thẻ cần địa chỉ ở Hàn. Nếu chuyển nhà phải khai báo trong 14 ngày.",
-            "id": "Kartu butuh alamat di Korea. Kalau pindah, lapor dalam 14 hari."
           }
         },
         {
@@ -750,17 +740,12 @@
             "vi": "Hôm nay nhận được không?",
             "id": "Bisa diambil hari ini?"
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "오늘은 안 되고, 3주 정도 걸려요.",
           "replyMeaning": {
             "en": "Not today. It takes about 3 weeks.",
             "vi": "Hôm nay không được, mất khoảng 3 tuần.",
             "id": "Tidak hari ini, sekitar 3 minggu."
-          },
-          "note": {
-            "en": "Cards are made centrally and take about 3 weeks. Plan bank visits after that.",
-            "vi": "Thẻ được làm tập trung, mất khoảng 3 tuần. Hãy tính việc đi ngân hàng sau đó.",
-            "id": "Kartu dibuat terpusat, sekitar 3 minggu. Rencanakan ke bank setelahnya."
           }
         }
       ],

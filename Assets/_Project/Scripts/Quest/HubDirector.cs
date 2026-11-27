@@ -45,7 +45,7 @@ namespace SeoulFirstWeek.Quest
 
             void Begin()
             {
-                hud.ShowHelp(Loc.T(VRMode.Active ? "controls_vr" : "controls"), 15f);
+                hud.ShowHelp(Hud.ControlsHelp, 15f);
                 if (!string.IsNullOrEmpty(level.needs) && !session.Has(level.needs))
                     Toasts.Warn(Loc.T("needs_doc", Documents.LocalName(level.needs.Replace("doc:", ""))), null, 7f);
             }

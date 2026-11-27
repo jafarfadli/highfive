@@ -491,17 +491,12 @@
             "vi": "Tôi thấy không khỏe.",
             "id": "Badan saya tidak enak."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "어디가 제일 아프세요? 머리가 아프세요, 배가 아프세요?",
           "replyMeaning": {
             "en": "Where does it hurt most? Your head, your stomach?",
             "vi": "Bạn đau chỗ nào nhất? Đau đầu hay đau bụng?",
             "id": "Bagian mana yang paling sakit? Kepala atau perut?"
-          },
-          "note": {
-            "en": "Too vague for the nurse. Say where it hurts: 배가 많이 아파요.",
-            "vi": "Quá chung chung. Hãy nói chỗ đau: 배가 많이 아파요.",
-            "id": "Terlalu umum. Sebut bagian yang sakit: 배가 많이 아파요."
           }
         }
       ],
@@ -612,17 +607,12 @@
             "vi": "Đau lắm.",
             "id": "Sakit sekali."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "숫자로 말씀해 주시겠어요? 10이 제일 아픈 거예요.",
           "replyMeaning": {
             "en": "Could you give me a number? 10 is the worst pain.",
             "vi": "Bạn nói bằng số được không? 10 là đau nhất.",
             "id": "Bisa sebut angkanya? 10 itu paling sakit."
-          },
-          "note": {
-            "en": "The nurse wants a number from 0 to 10. Say 칠 점쯤이요 (about 7).",
-            "vi": "Y tá cần một con số từ 0 đến 10. Hãy nói 칠 점쯤이요 (khoảng 7).",
-            "id": "Perawat butuh angka dari 0 sampai 10. Katakan 칠 점쯤이요 (sekitar 7)."
           }
         },
         {
@@ -751,17 +741,12 @@
             "vi": "Lúc nãy tôi đăng ký rồi mà?",
             "id": "Tadi saya sudah daftar, kan?"
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "네, 접수는 하셨고요. 지금은 수납, 진료비 내시는 거예요.",
           "replyMeaning": {
             "en": "Yes, you registered. Now it's 수납: paying the bill.",
             "vi": "Vâng, bạn đã đăng ký rồi. Giờ là 수납, tức là trả viện phí.",
             "id": "Ya, tadi itu pendaftaran. Sekarang 수납, membayar biaya berobat."
-          },
-          "note": {
-            "en": "접수 is registering when you arrive; 수납 is paying the bill before you leave. Say 카드로 할게요.",
-            "vi": "접수 là đăng ký lúc đến, 수납 là trả viện phí trước khi về. Hãy nói 카드로 할게요.",
-            "id": "접수 itu mendaftar saat datang; 수납 itu membayar sebelum pulang. Katakan 카드로 할게요."
           }
         },
         {
@@ -822,17 +807,12 @@
             "vi": "Không, bỏ đi giúp tôi.",
             "id": "Tidak, buang saja."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "병원 영수증은 챙겨 두시는 게 좋아요. 나중에 필요할 수 있어요.",
           "replyMeaning": {
             "en": "It's better to keep hospital receipts. You may need it later.",
             "vi": "Biên lai bệnh viện nên giữ lại. Sau này có thể cần đến.",
             "id": "Kuitansi rumah sakit sebaiknya disimpan. Nanti mungkin diperlukan."
-          },
-          "note": {
-            "en": "Keep hospital receipts (영수증): if you have private insurance, you need them to claim. Say 영수증 주세요.",
-            "vi": "Hãy giữ biên lai bệnh viện (영수증): nếu có bảo hiểm tư nhân, bạn cần nó để yêu cầu chi trả. Hãy nói 영수증 주세요.",
-            "id": "Simpan kuitansi rumah sakit (영수증): kalau punya asuransi swasta, kuitansi diperlukan untuk klaim. Katakan 영수증 주세요."
           }
         },
         {

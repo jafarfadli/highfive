@@ -750,17 +750,12 @@
             "vi": "Nhưng địa chỉ của tôi không thay đổi mà.",
             "id": "Alamat saya tidak berubah, kok."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "주소가 그대로여도 연장하실 때 다시 내셔야 돼요.",
           "replyMeaning": {
             "en": "Even if it hasn't changed, you hand it in again for an extension.",
             "vi": "Dù địa chỉ không đổi, khi gia hạn vẫn phải nộp lại.",
             "id": "Meski tidak berubah, saat perpanjangan tetap harus diserahkan lagi."
-          },
-          "note": {
-            "en": "An extension needs proof of address (체류지 입증서류) again, even if you still live in the same dormitory.",
-            "vi": "Gia hạn cần nộp lại giấy chứng minh nơi ở (체류지 입증서류), dù bạn vẫn ở ký túc xá cũ.",
-            "id": "Perpanjangan butuh bukti tempat tinggal (체류지 입증서류) lagi, walau kamu masih di asrama yang sama."
           }
         },
         {
@@ -873,17 +868,12 @@
             "vi": "Không phải 35.000 won như lần trước sao?",
             "id": "Bukannya 35.000 won seperti waktu itu?"
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "등록은 3만 5천 원이었고요, 연장은 6만 원이에요.",
           "replyMeaning": {
             "en": "Registration was 35,000 won; an extension is 60,000.",
             "vi": "Đăng ký là 35.000 won, còn gia hạn là 60.000 won.",
             "id": "Registrasi 35.000 won; perpanjangan 60.000 won."
-          },
-          "note": {
-            "en": "Fees depend on the application: registering is 35,000 won, extending your stay is 60,000 won. The fee table is on HiKorea.",
-            "vi": "Lệ phí tùy loại hồ sơ: đăng ký 35.000 won, gia hạn lưu trú 60.000 won. Bảng lệ phí có trên HiKorea.",
-            "id": "Biaya tergantung jenis permohonan: registrasi 35.000 won, perpanjangan masa tinggal 60.000 won. Daftar biayanya ada di HiKorea."
           }
         }
       ]
@@ -928,17 +918,12 @@
             "vi": "Gửi đến số điện thoại ở nước tôi giúp tôi.",
             "id": "Tolong kirim ke nomor di negara asal saya."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "문자는 한국 번호로만 보내 드릴 수 있어요.",
           "replyMeaning": {
             "en": "We can only text Korean numbers.",
             "vi": "Chúng tôi chỉ nhắn được đến số Hàn Quốc.",
             "id": "Kami hanya bisa mengirim SMS ke nomor Korea."
-          },
-          "note": {
-            "en": "Immigration texts results to Korean numbers, so keep your Korean phone number up to date on your record.",
-            "vi": "Cục xuất nhập cảnh chỉ nhắn kết quả đến số Hàn Quốc, nên hãy cập nhật số điện thoại Hàn của bạn trong hồ sơ.",
-            "id": "Imigrasi mengirim hasil ke nomor Korea, jadi pastikan nomor ponsel Korea-mu di data selalu terbaru."
           }
         },
         {

@@ -213,17 +213,12 @@
             "vi": "Không cần đâu ạ.",
             "id": "Tidak usah."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "새 카드는 보통 잔액이 없어요. 충전하셔야 개찰구를 지나갈 수 있어요.",
           "replyMeaning": {
             "en": "A new card usually has no balance. You need to charge it to get through the gate.",
             "vi": "Thẻ mới thường không có số dư. Phải nạp tiền thì mới qua được cổng soát vé.",
             "id": "Kartu baru biasanya belum ada saldonya. Harus diisi dulu supaya bisa lewat gerbang tiket."
-          },
-          "note": {
-            "en": "A new card usually has no money on it, and the gate won't open without a balance (잔액). Charge it: 네, 만 원 충전해 주세요.",
-            "vi": "Thẻ mới thường chưa có tiền, mà không có số dư (잔액) thì cổng không mở. Hãy nạp tiền: 네, 만 원 충전해 주세요.",
-            "id": "Kartu baru biasanya belum ada isinya, dan gerbang tidak terbuka tanpa saldo (잔액). Isi saldonya: 네, 만 원 충전해 주세요."
           }
         },
         {
@@ -280,17 +275,12 @@
             "vi": "Tôi trả bằng thẻ.",
             "id": "Saya bayar pakai kartu."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "죄송한데 충전은 현금만 돼요. 현금 있으세요?",
           "replyMeaning": {
             "en": "Sorry, charging is cash only. Do you have cash?",
             "vi": "Xin lỗi, nạp tiền chỉ nhận tiền mặt thôi. Bạn có tiền mặt không?",
             "id": "Maaf, isi saldo hanya bisa tunai. Ada uang tunai?"
-          },
-          "note": {
-            "en": "Transport cards are charged in cash, at a store or a station machine. Keep some won notes with you: 현금으로 할게요.",
-            "vi": "Thẻ giao thông được nạp bằng tiền mặt, ở cửa hàng hoặc máy trong ga. Hãy mang theo ít tiền won: 현금으로 할게요.",
-            "id": "Kartu transportasi diisi dengan uang tunai, di minimarket atau mesin di stasiun. Selalu bawa uang won: 현금으로 할게요."
           },
           "give": "card"
         },
@@ -357,17 +347,12 @@
             "vi": "Tôi muốn mua một thẻ giao thông.",
             "id": "Saya mau beli satu kartu transportasi."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "새로 사시게요? 쓰시던 카드가 있으면 충전만 하셔도 돼요.",
           "replyMeaning": {
             "en": "A new one? If you already have a card, you can just charge it.",
             "vi": "Bạn mua thẻ mới ạ? Nếu đã có thẻ đang dùng thì chỉ cần nạp tiền thôi.",
             "id": "Mau beli yang baru? Kalau sudah punya kartu, cukup diisi saldonya."
-          },
-          "note": {
-            "en": "You already have a card: it's only out of money. Charge it (충전하다) instead of buying a new one (사다): 교통카드 충전해 주세요.",
-            "vi": "Bạn đã có thẻ rồi, chỉ là thẻ hết tiền thôi. Hãy nạp tiền (충전하다) thay vì mua thẻ mới (사다): 교통카드 충전해 주세요.",
-            "id": "Kamu sudah punya kartu, hanya saldonya habis. Isi saldonya (충전하다), jangan beli yang baru (사다): 교통카드 충전해 주세요."
           }
         },
         {
@@ -516,17 +501,12 @@
             "vi": "Tôi trả bằng thẻ.",
             "id": "Saya bayar pakai kartu."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "죄송한데 충전은 현금만 돼요. 현금 있으세요?",
           "replyMeaning": {
             "en": "Sorry, charging is cash only. Do you have cash?",
             "vi": "Xin lỗi, nạp tiền chỉ nhận tiền mặt thôi. Bạn có tiền mặt không?",
             "id": "Maaf, isi saldo hanya bisa tunai. Ada uang tunai?"
-          },
-          "note": {
-            "en": "Transport cards are charged in cash, at a store or a station machine. Keep some won notes with you: 현금으로 할게요.",
-            "vi": "Thẻ giao thông được nạp bằng tiền mặt, ở cửa hàng hoặc máy trong ga. Hãy mang theo ít tiền won: 현금으로 할게요.",
-            "id": "Kartu transportasi diisi dengan uang tunai, di minimarket atau mesin di stasiun. Selalu bawa uang won: 현금으로 할게요."
           },
           "give": "card"
         },

@@ -105,7 +105,7 @@ namespace SeoulFirstWeek.UI
             var strip = UIKit.BrushStrip(prompt, "Strip", Role.Brush);
             strip.rectTransform.Stretch();
             strip.boil = true;
-            UIKit.Words(prompt, "▶  " + Loc.T("click_to_start"), 30, Role.OnBrush, Face.ReadBold, TextAnchor.MiddleCenter).rectTransform.Stretch(20, 20, 0, 0);
+            UIKit.Words(prompt, "▶  " + Loc.T(Player.TouchControls.Active ? "tap_to_start" : "click_to_start"), 30, Role.OnBrush, Face.ReadBold, TextAnchor.MiddleCenter).rectTransform.Stretch(20, 20, 0, 0);
 
             this.level = level;
             baseStory = story;

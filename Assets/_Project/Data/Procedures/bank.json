@@ -102,17 +102,12 @@
             "vi": "Tôi đến làm thẻ ghi nợ.",
             "id": "Saya mau bikin kartu debit."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "체크카드는 계좌가 먼저 있어야 해요. 통장부터 만드시겠어요?",
           "replyMeaning": {
             "en": "A debit card needs an account first. Shall we open the account?",
             "vi": "Thẻ ghi nợ cần có tài khoản trước. Mở tài khoản trước nhé?",
             "id": "Kartu debit butuh rekening dulu. Buka rekening dulu ya?"
-          },
-          "note": {
-            "en": "The account (통장) comes first; the debit card is linked to it. Ask for 통장 or 계좌 개설.",
-            "vi": "Tài khoản (통장) có trước, thẻ ghi nợ gắn với tài khoản. Hãy nói 통장 hoặc 계좌 개설.",
-            "id": "Rekening (통장) dulu, kartu debit terhubung ke rekening. Minta 통장 atau 계좌 개설."
           }
         }
       ],
@@ -230,17 +225,12 @@
             "vi": "Tôi không rõ. Chỉ là cần thôi.",
             "id": "Tidak tahu. Pokoknya perlu saja."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "용도를 꼭 확인해야 해서요. 생활비예요, 월급 받으실 거예요?",
           "replyMeaning": {
             "en": "I have to record a purpose. Living costs, or a salary?",
             "vi": "Tôi phải ghi mục đích. Chi tiêu sinh hoạt hay nhận lương?",
             "id": "Saya harus mencatat tujuannya. Biaya hidup atau terima gaji?"
-          },
-          "note": {
-            "en": "Banks must record why you open an account (금융거래 목적), or they may limit it. Name a real use.",
-            "vi": "Ngân hàng phải ghi mục đích mở tài khoản (금융거래 목적), nếu không có thể bị hạn chế. Hãy nói mục đích thật.",
-            "id": "Bank wajib mencatat tujuan rekening (금융거래 목적), kalau tidak bisa dibatasi. Sebutkan tujuan yang nyata."
           }
         },
         {
@@ -470,17 +460,12 @@
             "vi": "Cho tôi thẻ tín dụng.",
             "id": "Kartu kredit saja."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "신용카드는 소득 확인이 필요해서 어려워요. 체크카드는 바로 돼요.",
           "replyMeaning": {
             "en": "A credit card needs proof of income. A debit card is available now.",
             "vi": "Thẻ tín dụng cần chứng minh thu nhập. Thẻ ghi nợ thì làm ngay được.",
             "id": "Kartu kredit butuh bukti penghasilan. Kartu debit bisa langsung."
-          },
-          "note": {
-            "en": "Credit cards need income history; a debit card (체크카드) works right away.",
-            "vi": "Thẻ tín dụng cần lịch sử thu nhập; thẻ ghi nợ (체크카드) dùng được ngay.",
-            "id": "Kartu kredit butuh riwayat penghasilan; kartu debit (체크카드) langsung bisa."
           }
         }
       ],

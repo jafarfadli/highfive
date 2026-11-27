@@ -530,17 +530,12 @@
             "vi": "Tôi sẽ ở lâu.",
             "id": "Saya akan tinggal lama."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "얼마나요? 몇 개월이에요, 몇 년이에요?",
           "replyMeaning": {
             "en": "How long? How many months, or years?",
             "vi": "Bao lâu ạ? Mấy tháng hay mấy năm?",
             "id": "Berapa lama? Berapa bulan, atau berapa tahun?"
-          },
-          "note": {
-            "en": "Give a specific length, not just 'a long time'. Your course is one year: 일 년이요.",
-            "vi": "Hãy nói thời gian cụ thể, không chỉ là 'lâu'. Khóa học của bạn là một năm: 일 년이요.",
-            "id": "Sebutkan berapa lama dengan jelas, bukan cuma 'lama'. Kursusmu satu tahun: 일 년이요."
           }
         }
       ],

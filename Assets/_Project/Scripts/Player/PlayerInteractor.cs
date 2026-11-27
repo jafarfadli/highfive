@@ -35,9 +35,17 @@ namespace SeoulFirstWeek.Player
             if (hud)
             {
                 hud.SetPrompt(current ? current.Prompt : null);
-                hud.SetCrosshair(Enabled && fps.Dragging && Cursor.lockState == CursorLockMode.Locked);
+                // on a touch screen the dot shows what the middle of the view (and the prompt) points at
+                hud.SetCrosshair(Enabled && (TouchControls.Active || (fps.Dragging && Cursor.lockState == CursorLockMode.Locked)));
             }
-            if (current && (interact.WasPressedThisFrame() || fps.ClickedThisFrame)) current.Interact(this);
+            if (current && (interact.WasPressedThisFrame() || fps.ClickedThisFrame || TouchControls.InteractPressed || VRUI.FallbackInteractPressed))
+                current.Interact(this);
+            // a tap on a door, a counter or a person uses it, wherever it is on the screen
+            else if (Enabled && TouchControls.Tap is Vector2 tap && fps.Camera)
+            {
+                var tapped = Find(fps.Camera.ScreenPointToRay(tap));
+                if (tapped) tapped.Interact(this);
+            }
         }
 
         static readonly RaycastHit[] Hits = new RaycastHit[32];
@@ -62,13 +70,18 @@ namespace SeoulFirstWeek.Player
                 if (UI.VRUI.PointerOverUI) return null;
                 ray = fps.VR.PointerRay;
             }
-            else if (Cursor.lockState == CursorLockMode.Locked || Mouse.current == null)
+            else if (TouchControls.Active || Cursor.lockState == CursorLockMode.Locked || Mouse.current == null)
                 ray = new Ray(cam.transform.position, cam.transform.forward);
             else
             {
                 if (EventSystem.current && EventSystem.current.IsPointerOverGameObject()) return null;
                 ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
             }
+            return Find(ray);
+        }
+
+        Interactable Find(Ray ray)
+        {
             // the invisible street barriers and walk-through boxes sit on Ignore Raycast
             int n = Physics.SphereCastNonAlloc(ray, 0.2f, Hits, reach, ~(1 << 2), QueryTriggerInteraction.Collide);
             System.Array.Sort(Hits, 0, n, ByDistance);

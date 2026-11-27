@@ -31,6 +31,8 @@ namespace SeoulFirstWeek.Player
         // Frames of mouse movement ignored after the cursor is locked or freed. Locking moves the cursor to
         // the middle of the window, and the OS reports that jump as movement, which swung the camera back.
         const int SettleFrames = 2;
+        // degrees turned by a finger dragged across the full width of a touch screen
+        const float TouchTurn = 180f;
 
         CharacterController controller;
         InputActionMap map;
@@ -115,6 +117,14 @@ namespace SeoulFirstWeek.Player
                     yaw += delta.x * scale;
                     pitch = Mathf.Clamp(pitch - delta.y * scale, -80f, 80f);
                 }
+                // a finger dragged on a phone or tablet: a swipe across the whole screen turns about half way round
+                var swipe = TouchControls.LookDelta;
+                if (swipe != Vector2.zero)
+                {
+                    var scale = TouchTurn / Mathf.Max(1, Screen.width) * Core.Settings.Sensitivity;
+                    yaw += swipe.x * scale;
+                    pitch = Mathf.Clamp(pitch - swipe.y * scale, -80f, 80f);
+                }
             }
 
             // FocusOn eases on its own, so the view follows it exactly; Teleport sets both
@@ -133,7 +143,7 @@ namespace SeoulFirstWeek.Player
             }
             transform.rotation = Quaternion.Euler(0, viewYaw, 0);
 
-            var input = MovementEnabled ? move.ReadValue<Vector2>() : Vector2.zero;
+            var input = MovementEnabled ? Vector2.ClampMagnitude(move.ReadValue<Vector2>() + TouchControls.Move, 1f) : Vector2.zero;
             var speed = sprint.IsPressed() ? sprintSpeed : walkSpeed;
             var planar = (transform.right * input.x + transform.forward * input.y) * speed;
             verticalVelocity = controller.isGrounded ? -2f : verticalVelocity + gravity * dt;

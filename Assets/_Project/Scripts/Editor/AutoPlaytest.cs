@@ -574,7 +574,12 @@ namespace SeoulFirstWeek.EditorTools
                     {
                         var shown = d.ShownChoices;
                         int pick = -1;
-                        if (p.CurrentLine != lastLine) pick = shown.FindIndex(c => c.result == "retry");
+                        // on a new line: first the fair answer that turns the talk aside (branch), then one mistake
+                        if (p.CurrentLine != lastLine)
+                        {
+                            pick = shown.FindIndex(c => c.result == "branch");
+                            if (pick < 0) pick = shown.FindIndex(c => c.result == "retry");
+                        }
                         lastLine = p.CurrentLine;
                         foreach (var want in new[] { "advance", "fetch", "block" })
                             if (pick < 0) pick = shown.FindIndex(c => c.result == want);

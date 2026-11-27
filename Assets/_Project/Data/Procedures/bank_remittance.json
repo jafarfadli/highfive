@@ -502,17 +502,12 @@
             "vi": "Gửi theo số điện thoại người nhận không được ạ?",
             "id": "Tidak bisa dikirim ke nomor telepon penerima?"
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "앱에서는 되는 경우도 있지만, 창구 송금은 받는 분 계좌로 보내 드려요.",
           "replyMeaning": {
             "en": "Some apps can do that, but a remittance at the counter goes to the recipient's account.",
             "vi": "Một số ứng dụng làm được, nhưng chuyển tiền tại quầy thì gửi vào tài khoản người nhận.",
             "id": "Beberapa aplikasi bisa, tapi kiriman di loket masuk ke rekening penerima."
-          },
-          "note": {
-            "en": "At the counter, a remittance goes to an account: the name exactly as on it, the account number and the bank's SWIFT code. Ask your family for them before you go.",
-            "vi": "Tại quầy, tiền được gửi vào tài khoản: tên đúng như trên tài khoản, số tài khoản và mã SWIFT của ngân hàng. Hãy hỏi gia đình trước khi đi.",
-            "id": "Di loket, kiriman masuk ke rekening: nama persis seperti di rekening, nomor rekening, dan kode SWIFT bank. Tanyakan ke keluarga sebelum berangkat."
           }
         },
         {
@@ -632,17 +627,12 @@
             "vi": "Không có lý do gì ạ.",
             "id": "Tidak ada alasan khusus."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "송금 사유는 꼭 적어야 해서요. 누구한테, 무슨 돈인지만 말씀해 주세요.",
           "replyMeaning": {
             "en": "We have to record a purpose. Just tell me who it's for and what it's for.",
             "vi": "Lý do chuyển tiền bắt buộc phải ghi. Bạn chỉ cần nói gửi cho ai và để làm gì.",
             "id": "Tujuannya wajib dicatat. Cukup sebutkan untuk siapa dan untuk apa."
-          },
-          "note": {
-            "en": "Banks must record why money leaves Korea. A short answer is enough: 가족 생활비 (family living costs), 학비 (school fees).",
-            "vi": "Ngân hàng phải ghi lý do tiền được gửi ra khỏi Hàn Quốc. Trả lời ngắn là đủ: 가족 생활비 (sinh hoạt phí gia đình), 학비 (học phí).",
-            "id": "Bank wajib mencatat alasan uang keluar dari Korea. Jawaban singkat sudah cukup: 가족 생활비 (biaya hidup keluarga), 학비 (biaya sekolah)."
           }
         },
         {
@@ -774,17 +764,12 @@
             "vi": "Hôm nay tiền đến luôn phải không?",
             "id": "Hari ini langsung masuk, kan?"
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "해외송금은 중간 은행을 거쳐서 가니까 하루에서 사흘 정도 걸려요.",
           "replyMeaning": {
             "en": "Overseas transfers pass through intermediary banks, so they take one to three days.",
             "vi": "Chuyển tiền quốc tế phải qua ngân hàng trung gian nên mất khoảng một đến ba ngày.",
             "id": "Kiriman ke luar negeri melewati bank perantara, jadi butuh satu sampai tiga hari."
-          },
-          "note": {
-            "en": "International transfers pass through correspondent banks and usually take 1–3 business days. Tell your family when to expect it.",
-            "vi": "Chuyển tiền quốc tế đi qua ngân hàng đại lý và thường mất 1–3 ngày làm việc. Hãy báo gia đình khi nào tiền đến.",
-            "id": "Transfer internasional melewati bank koresponden dan biasanya butuh 1–3 hari kerja. Beri tahu keluarga kapan uangnya sampai."
           }
         },
         {

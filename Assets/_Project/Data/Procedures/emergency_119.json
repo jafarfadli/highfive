@@ -128,17 +128,12 @@
             "vi": "Giúp tôi với!",
             "id": "Tolong!"
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "네, 도와드릴게요. 무슨 일이세요? 환자가 있어요?",
           "replyMeaning": {
             "en": "Yes, we'll help. What's happening? Is there a patient?",
             "vi": "Vâng, chúng tôi sẽ giúp. Có chuyện gì vậy? Có bệnh nhân không?",
             "id": "Ya, kami bantu. Ada apa? Ada pasien?"
-          },
-          "note": {
-            "en": "도와주세요 alone doesn't tell them what happened. Say that first: 사람이 쓰러졌어요 or 환자가 있어요.",
-            "vi": "Chỉ nói 도와주세요 thì họ không biết chuyện gì xảy ra. Hãy nói điều đó trước: 사람이 쓰러졌어요 hoặc 환자가 있어요.",
-            "id": "도와주세요 saja tidak memberi tahu apa yang terjadi. Katakan itu dulu: 사람이 쓰러졌어요 atau 환자가 있어요."
           }
         }
       ],
@@ -183,17 +178,12 @@
             "vi": "Ở Myeongdong.",
             "id": "Di Myeongdong."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "명동 어디쯤이에요? 근처에 보이는 가게나 건물 이름을 말씀해 주세요.",
           "replyMeaning": {
             "en": "Where in Myeongdong? Tell me the name of a shop or building you can see.",
             "vi": "Chỗ nào ở Myeongdong? Hãy nói tên cửa hàng hay tòa nhà bạn thấy gần đó.",
             "id": "Myeongdong sebelah mana? Sebutkan nama toko atau gedung yang kamu lihat di dekatmu."
-          },
-          "note": {
-            "en": "Myeongdong is a whole district. Give the street and a shop you can see: 명동길 별빛화장품 앞이에요.",
-            "vi": "Myeongdong là cả một khu. Hãy nói tên đường và một cửa hàng bạn thấy: 명동길 별빛화장품 앞이에요.",
-            "id": "Myeongdong itu satu kawasan luas. Sebut nama jalan dan toko yang kamu lihat: 명동길 별빛화장품 앞이에요."
           }
         },
         {
@@ -402,17 +392,12 @@
             "vi": "Tôi là Minh.",
             "id": "Saya Minh."
           },
-          "result": "retry",
+          "result": "branch",
           "reply": "연락처도 알려 주세요. 휴대폰 번호요.",
           "replyMeaning": {
             "en": "Your contact number too, please. Your mobile number.",
             "vi": "Cho tôi cả số liên lạc nữa. Số điện thoại di động ấy.",
             "id": "Nomor kontaknya juga. Nomor HP-mu."
-          },
-          "note": {
-            "en": "연락처 means a number to reach you. They asked for both: 민이에요. 010-1234-5678이에요.",
-            "vi": "연락처 là số để liên lạc với bạn. Họ hỏi cả hai: 민이에요. 010-1234-5678이에요.",
-            "id": "연락처 artinya nomor untuk menghubungimu. Mereka minta keduanya: 민이에요. 010-1234-5678이에요."
           }
         },
         {

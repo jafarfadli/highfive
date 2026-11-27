@@ -641,6 +641,7 @@ namespace SeoulFirstWeek.UI
                 }
             }
             foreach (var c in choices.Where(c => c.Advances)) Choice(block, c);
+            foreach (var c in choices.Where(c => c.result == "branch")) Choice(block, c);
             foreach (var c in choices.Where(c => c.result == "ask")) Choice(block, c);
             foreach (var c in choices.Where(c => c.result == "retry" || c.result == "block")) Choice(block, c);
 
@@ -660,9 +661,10 @@ namespace SeoulFirstWeek.UI
                 if (!string.IsNullOrEmpty(c.give))
                     UIKit.Words(text, Loc.T("hand_over", $"{Documents.Korean(c.give)} · {Documents.LocalName(c.give)}"), 23, Role.BrushDeep, Face.ReadBold);
             }
-            else if (c.result == "ask")
+            else if (c.result == "ask" || c.result == "branch")
             {
-                var text = Answer(parent, Kind.Ask, c.ko, sub, Clip("player", c.ko));
+                // a branch is fine to say too (✓), shown with what the staff member says back
+                var text = Answer(parent, c.result == "ask" ? Kind.Ask : Kind.Right, c.ko, sub, Clip("player", c.ko));
                 if (string.IsNullOrEmpty(c.reply)) return;
                 UIKit.Rect("Gap", text).Layout(-1, 4);
                 UIKit.Words(text, "→  " + c.reply, 22, Role.Ink, Face.Read);

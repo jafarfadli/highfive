@@ -24,8 +24,25 @@ namespace SeoulFirstWeek.Conversation
         static string device;
         static float startedAt;
 
+#if UNITY_ANDROID && !UNITY_EDITOR
+        // on Android StreamingAssets stay packed inside the APK, where File.Exists can't see them (Whisper reads the
+        // model through a web request); the Android build refuses to go without it
+        public static bool ModelPresent => true;
+        static bool MicAllowed => UnityEngine.Android.Permission.HasUserAuthorizedPermission(UnityEngine.Android.Permission.Microphone);
+#else
         public static bool ModelPresent => File.Exists(Path.Combine(Application.streamingAssetsPath, ModelFile));
-        public static bool MicPresent => !PretendNoMic && (PretendMic || Microphone.devices.Length > 0);
+        static bool MicAllowed => true;
+#endif
+        public static bool MicPresent => !PretendNoMic && (PretendMic || (MicAllowed && Microphone.devices.Length > 0));
+
+        /// <summary>On a phone: shows the system's question for the microphone unless it is already allowed.
+        /// (Desktop systems ask by themselves when a microphone is first opened.)</summary>
+        public static void AskForMic()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            if (!MicAllowed) UnityEngine.Android.Permission.RequestUserPermission(UnityEngine.Android.Permission.Microphone);
+#endif
+        }
 
         /// <summary>Play-tests: behave as if no microphone were connected (the Home screen's notice).</summary>
         public static bool PretendNoMic;
@@ -73,7 +90,7 @@ namespace SeoulFirstWeek.Conversation
 
         public static bool Begin()
         {
-            if (Listening || Microphone.devices.Length == 0) return false;
+            if (Listening || !MicAllowed || Microphone.devices.Length == 0) return false;
             Warm();
             device = PickDevice();
             recording = Microphone.Start(device, false, MaxSeconds, Rate);

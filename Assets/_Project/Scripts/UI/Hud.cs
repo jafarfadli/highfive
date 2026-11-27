@@ -51,9 +51,14 @@ namespace SeoulFirstWeek.UI
             var hud = canvas.gameObject.AddComponent<Hud>();
             hud.Canvas = canvas;
             hud.Build();
+            if (Player.TouchControls.Active) Player.TouchControls.Create(hud);
             Current = hud;
             return hud;
         }
+
+        /// <summary>The controls help for this way of playing: keyboard and mouse, headset, or touch screen.</summary>
+        public static string ControlsHelp =>
+            Loc.T(VRMode.Active ? "controls_vr" : Player.TouchControls.Active ? "controls_touch" : "controls");
 
         void OnDestroy()
         {
@@ -74,7 +79,9 @@ namespace SeoulFirstWeek.UI
 
             // controls help on a dark plate, bottom left; drops away when its time is up
             helpBox = UIKit.Rect("Help", root);
-            helpBox.Place(new Vector2(0, 0), new Vector2(Margin, Margin), new Vector2(0, 48));
+            // on a touch screen the thumb stick has the bottom-left corner, so the help goes up top, mid-screen
+            if (Player.TouchControls.Active) helpBox.Place(new Vector2(0.5f, 1), new Vector2(0, -Margin), new Vector2(0, 48));
+            else helpBox.Place(new Vector2(0, 0), new Vector2(Margin, Margin), new Vector2(0, 48));
             var hh = UIKit.HStack(helpBox, 0, new RectOffset(24, 30, 0, 0), TextAnchor.MiddleLeft);
             hh.childForceExpandHeight = false;
             helpBox.gameObject.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
@@ -117,9 +124,16 @@ namespace SeoulFirstWeek.UI
             strip.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
             strip.rectTransform.Stretch(-10, -16, 0, 0);
             strip.dry = 0.6f;
-            UIKit.Keycap(promptBox, Core.VRMode.Active ? "TRIGGER" : "E", Core.VRMode.Active ? 18 : 24);
+            bool touch = Player.TouchControls.Active;
+            UIKit.Keycap(promptBox, Core.VRMode.Active ? "TRIGGER" : touch ? "TAP" : "E", Core.VRMode.Active || touch ? 18 : 24);
             promptText = UIKit.Words(promptBox, "", 26, Role.Paper, Face.ReadBold);
             promptText.horizontalOverflow = HorizontalWrapMode.Overflow;
+            if (touch)
+            {
+                // on a touch screen the prompt is a button: tapping it uses what it names
+                strip.raycastTarget = true;
+                promptBox.gameObject.AddComponent<Button>().onClick.AddListener(Player.TouchControls.PressInteract);
+            }
             promptBox.gameObject.SetActive(false);
         }
 
