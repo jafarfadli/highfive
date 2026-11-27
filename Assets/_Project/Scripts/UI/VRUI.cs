@@ -71,25 +71,13 @@ namespace SeoulFirstWeek.UI
         public static bool PointerHit(out Vector3 point)
         {
             point = default;
-            if (!instance || !instance.module) return false;
-            var device = InputSystem.GetDevice<XRController>(CommonUsages.RightHand);
-            if (device == null) return false;
-            var hit = instance.module.GetLastRaycastResult(device.deviceId);
-            if (!hit.isValid || !hit.gameObject) return false;
-            point = hit.worldPosition;
+            if (!instance || !instance.fbHit.HasValue) return false;
+            point = instance.fbHit.Value;
             return true;
         }
 
         /// <summary>True while the right controller points at a panel's button or card.</summary>
-        public static bool PointerOverUI
-        {
-            get
-            {
-                if (!instance || !instance.module) return false;
-                var device = InputSystem.GetDevice<XRController>(CommonUsages.RightHand);
-                return device != null && instance.module.IsPointerOverGameObject(device.deviceId);
-            }
-        }
+        public static bool PointerOverUI => instance && instance.fbHit.HasValue;
 
         /// <summary>
         /// The pointer's laser and the dot where it lands, in the controller's glow. They live on the panels' layer,
@@ -174,29 +162,30 @@ namespace SeoulFirstWeek.UI
             menuDot.position = end;
         }
 
-        // ---------------------------------------------------------------- a second way to point and click
-        // The controller is read twice: through the Input System (as the UI module does) and through UnityEngine.XR
-        // (a separate path). This pointer raycasts the panels itself and sends the UI events straight to what it
-        // hits, so the panels answer even when the UI module's tracked pointer doesn't. It only acts while the
-        // module's own pointer isn't over the UI, so the two never both click. The trigger on nothing uses what the
-        // pointer looks at (a door, a counter), and A held answers by voice, when the Input System has no controller.
+        // ---------------------------------------------------------------- the panels' pointer
+        // The UI module's own tracked-device pointer clicked nothing on a real Quest over Link (2026-11-27), so the
+        // panels get a pointer of their own and the module keeps only the mouse. The controller is read through the
+        // Input System and through UnityEngine.XR (pose from the first that has one; trigger and A pressed on either,
+        // under several control names). The pointer raycasts the panels itself and sends the UI events straight to
+        // what it hits. The trigger on nothing uses what the pointer looks at (a door, a counter) and A held answers
+        // by voice; the actions do the same, and the listeners ignore a second press.
 
         static readonly List<UnityEngine.XR.InputDevice> xrDevices = new();
         static readonly List<UnityEngine.XR.InputFeatureUsage> xrUsages = new();
         static readonly List<Canvas> nestedCanvases = new();
 
-        /// <summary>A held: pressed or released this frame, from the second path (read by the conversation).</summary>
+        /// <summary>A held: pressed or released this frame, as the panels' pointer read it (read by the conversation).</summary>
         public static bool FallbackTalkPressed { get; private set; }
         public static bool FallbackTalkReleased { get; private set; }
 
-        /// <summary>The trigger pulled on nothing (no panel), from the second path: the interactor uses its target.</summary>
+        /// <summary>The trigger pulled on no panel: the interactor uses what the pointer is aimed at.</summary>
         public static bool FallbackInteractPressed { get; private set; }
 
         /// <summary>Editor tests: the simulated controller's trigger.</summary>
         public static bool SimulatedTrigger;
 
         PointerEventData fbData;
-        GameObject fbHover, fbDown, fbPress;
+        GameObject fbHover, fbDown;
         bool fbTrigger, fbTalk;
         Vector3? fbHit;
         string fbSource;
@@ -222,28 +211,33 @@ namespace SeoulFirstWeek.UI
                 return true;
             }
             var space = head ? head.transform.parent : null;
+            bool posed = false;
             var dev = RightIS;
             if (dev != null && dev.enabled)
             {
-                var p = dev.TryGetChildControl<UnityEngine.InputSystem.Controls.Vector3Control>("pointerPosition") ?? dev.devicePosition;
-                var q = dev.TryGetChildControl<UnityEngine.InputSystem.Controls.QuaternionControl>("pointerRotation") ?? dev.deviceRotation;
+                var p = Child<UnityEngine.InputSystem.Controls.Vector3Control>(dev, "pointerPosition", "aimPosition") ?? dev.devicePosition;
+                var q = Child<UnityEngine.InputSystem.Controls.QuaternionControl>(dev, "pointerRotation", "aimRotation") ?? dev.deviceRotation;
                 if (p != null && q != null && (p.ReadValue() != Vector3.zero || q.ReadValue() != Quaternion.identity))
                 {
                     origin = space ? space.TransformPoint(p.ReadValue()) : p.ReadValue();
                     rotation = space ? space.rotation * q.ReadValue() : q.ReadValue();
-                    var t = dev.TryGetChildControl<UnityEngine.InputSystem.Controls.ButtonControl>("{TriggerButton}");
-                    var a = dev.TryGetChildControl<UnityEngine.InputSystem.Controls.ButtonControl>("{PrimaryButton}");
-                    trigger = t != null && t.isPressed;
-                    primary = a != null && a.isPressed;
                     fbSource = "InputSystem " + dev.layout;
-                    return true;
+                    posed = true;
                 }
+                trigger |= Pressed(dev, "{TriggerButton}", "triggerPressed", "triggerButton", "triggerbutton");
+                var axis = Child<UnityEngine.InputSystem.Controls.AxisControl>(dev, "trigger");
+                if (axis != null && axis.ReadValue() > 0.55f) trigger = true;
+                primary |= Pressed(dev, "{PrimaryButton}", "primaryButton", "buttonA", "A");
             }
             UnityEngine.XR.InputDevices.GetDevicesWithCharacteristics(
                 UnityEngine.XR.InputDeviceCharacteristics.Right | UnityEngine.XR.InputDeviceCharacteristics.Controller, xrDevices);
             foreach (var d in xrDevices)
             {
                 if (!d.isValid) continue;
+                if (d.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out bool tb) && tb) trigger = true;
+                if (d.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out float tv) && tv > 0.55f) trigger = true;
+                if (d.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out bool pb) && pb) primary = true;
+                if (posed) continue;
                 // the aim pose if the device names one ("pointer…" or "aim…"), else the grip pose tipped down
                 Vector3 pos = default;
                 Quaternion rot = Quaternion.identity;
@@ -262,23 +256,52 @@ namespace SeoulFirstWeek.UI
                         !d.TryGetFeatureValue(UnityEngine.XR.CommonUsages.deviceRotation, out rot)) continue;
                     rot *= Quaternion.Euler(35f, 0, 0);
                 }
-                d.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out trigger);
-                if (!trigger && d.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out float tv)) trigger = tv > 0.6f;
-                d.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out primary);
                 origin = space ? space.TransformPoint(pos) : pos;
                 rotation = space ? space.rotation * rot : rot;
                 fbSource = "XR " + d.name;
-                return true;
+                posed = true;
+            }
+            return posed;
+        }
+
+        static T Child<T>(UnityEngine.InputSystem.InputDevice dev, params string[] paths) where T : UnityEngine.InputSystem.InputControl
+        {
+            foreach (var path in paths)
+            {
+                try
+                {
+                    var c = dev.TryGetChildControl<T>(path);
+                    if (c != null) return c;
+                }
+                catch (System.Exception) { /* a name this device doesn't know */ }
+            }
+            return null;
+        }
+
+        static bool Pressed(UnityEngine.InputSystem.InputDevice dev, params string[] paths)
+        {
+            foreach (var path in paths)
+            {
+                var c = Child<UnityEngine.InputSystem.Controls.ButtonControl>(dev, path);
+                if (c != null && c.isPressed) return true;
             }
             return false;
         }
 
-        /// <summary>The topmost raycastable graphic of a panel under <paramref name="ray"/>.</summary>
-        Graphic RaycastPanels(Ray ray, out Vector3 point)
+        readonly List<(Graphic g, int order, int depth, Vector3 point, float share)> panelHits = new();
+
+        /// <summary>
+        /// What the pointer meets on the panels: the topmost graphic that takes a click (or whose parent does),
+        /// looking past small decorations (the quest card, the controls help, the prompt bar, labels: the HUD is a
+        /// panel as wide as the view, and its decorations must not catch a laser aimed at a door behind them). A
+        /// large graphic with nothing to click (a modal's backing, a full page) stops the pointer there
+        /// (<paramref name="blocked"/>). Null and not blocked: the pointer goes on to the world.
+        /// </summary>
+        GameObject RaycastPanels(Ray ray, out Vector3 point, out bool blocked)
         {
             point = default;
-            Graphic best = null;
-            int bestOrder = int.MinValue, bestDepth = int.MinValue;
+            blocked = false;
+            panelHits.Clear();
             foreach (var c in canvases)
             {
                 if (!c || !c.isActiveAndEnabled || headLocked.Contains(c)) continue;
@@ -286,6 +309,8 @@ namespace SeoulFirstWeek.UI
                 if (!plane.Raycast(ray, out float dist) || dist <= 0f) continue;
                 var hit = ray.GetPoint(dist);
                 var screen = head ? (Vector2)head.WorldToScreenPoint(hit) : Vector2.zero;
+                var root = (RectTransform)c.transform;
+                float panelArea = Mathf.Max(1e-6f, root.rect.width * root.lossyScale.x * root.rect.height * root.lossyScale.y);
                 c.GetComponentsInChildren(false, nestedCanvases);
                 foreach (var nc in nestedCanvases)
                 {
@@ -298,39 +323,54 @@ namespace SeoulFirstWeek.UI
                         var local = rt.InverseTransformPoint(hit);
                         if (!rt.rect.Contains(new Vector2(local.x, local.y))) continue;
                         if (!g.Raycast(screen, head)) continue;
-                        int order = nc.sortingOrder;
-                        if (order < bestOrder || (order == bestOrder && g.depth <= bestDepth)) continue;
-                        best = g;
-                        bestOrder = order;
-                        bestDepth = g.depth;
-                        point = hit;
+                        float share = rt.rect.width * rt.lossyScale.x * rt.rect.height * rt.lossyScale.y / panelArea;
+                        panelHits.Add((g, nc.sortingOrder, g.depth, hit, share));
                     }
                 }
             }
-            return best;
+            panelHits.Sort((a, b) => a.order != b.order ? b.order.CompareTo(a.order) : b.depth.CompareTo(a.depth));
+            foreach (var h in panelHits)
+            {
+                var go = h.g.gameObject;
+                if (ExecuteEvents.GetEventHandler<IPointerClickHandler>(go) || ExecuteEvents.GetEventHandler<IPointerDownHandler>(go))
+                {
+                    point = h.point;
+                    return go;
+                }
+                if (h.share > 0.35f)
+                {
+                    point = h.point;
+                    blocked = true;
+                    return null;
+                }
+            }
+            return null;
         }
+
+        /// <summary>The right controller's pointing ray this frame (world space), whichever path read it.</summary>
+        public static Ray? ControllerRay { get; private set; }
 
         void UpdateFallbackPointer()
         {
             FallbackTalkPressed = FallbackTalkReleased = FallbackInteractPressed = false;
             fbHit = null;
             bool read = ReadRightController(out var origin, out var rotation, out bool trigger, out bool primary);
-            // A for answering by voice, only when the Input System has no controller (else the action has it)
-            bool talk = read && primary && RightIS == null;
+            // A held answers by voice (the PushToTalk action may say so as well: the panel ignores a second press)
+            bool talk = primary;
             FallbackTalkPressed = talk && !fbTalk;
             FallbackTalkReleased = !talk && fbTalk;
             fbTalk = talk;
             var es = EventSystem.current;
-            if (!read || !es || (!Core.VRMode.Simulated && PointerOverUI))
+            ControllerRay = read ? new Ray(origin, rotation * Vector3.forward) : (Ray?)null;
+            if (!read || !es)
             {
                 ReleaseFallback();
                 fbTrigger = trigger;
                 return;
             }
             var ray = new Ray(origin, rotation * Vector3.forward);
-            var g = RaycastPanels(ray, out var point);
-            var target = g ? g.gameObject : null;
-            if (target) fbHit = point;
+            var target = RaycastPanels(ray, out var point, out bool blocked);
+            if (target || blocked) fbHit = point;
             fbData ??= new PointerEventData(es);
             fbData.button = PointerEventData.InputButton.Left;
             fbData.position = head ? (Vector2)head.WorldToScreenPoint(point) : Vector2.zero;
@@ -348,19 +388,20 @@ namespace SeoulFirstWeek.UI
                 if (target)
                 {
                     fbDown = ExecuteEvents.GetEventHandler<IPointerDownHandler>(target);
-                    fbPress = ExecuteEvents.GetEventHandler<IPointerClickHandler>(target);
                     if (fbDown) ExecuteEvents.Execute(fbDown, fbData, ExecuteEvents.pointerDownHandler);
+                    // click as the trigger goes down: the hand moves a little while it is pulled, and a click on
+                    // release could land beside the button it was meant for
+                    var click = ExecuteEvents.GetEventHandler<IPointerClickHandler>(target);
+                    if (click) ExecuteEvents.Execute(click, fbData, ExecuteEvents.pointerClickHandler);
                 }
-                else if (RightIS == null && Player.VRRig.Current)
-                    // the trigger on nothing: use what the pointer looks at, as the Interact action would
+                else if (!blocked && Player.VRRig.Current)
+                    // the trigger on nothing: use what the pointer is aimed at, as the Interact action does
                     FallbackInteractPressed = true;
             }
             else if (!trigger && fbTrigger)
             {
                 if (fbDown) ExecuteEvents.Execute(fbDown, fbData, ExecuteEvents.pointerUpHandler);
-                var click = target ? ExecuteEvents.GetEventHandler<IPointerClickHandler>(target) : null;
-                if (click && click == fbPress) ExecuteEvents.Execute(click, fbData, ExecuteEvents.pointerClickHandler);
-                fbDown = fbPress = null;
+                fbDown = null;
             }
             fbTrigger = trigger;
         }
@@ -368,7 +409,7 @@ namespace SeoulFirstWeek.UI
         void ReleaseFallback()
         {
             if (fbHover && fbData != null) ExecuteEvents.Execute(fbHover, fbData, ExecuteEvents.pointerExitHandler);
-            fbHover = fbDown = fbPress = null;
+            fbHover = fbDown = null;
         }
 
         /// <summary>Every 5 s in the Player.log: which controllers the game sees, by which path, and the pointer.</summary>
@@ -442,13 +483,9 @@ namespace SeoulFirstWeek.UI
             rt.localScale = Vector3.one * (Width / 1920f);
             canvas.gameObject.layer = Layer;
             foreach (var nested in canvas.GetComponentsInChildren<Canvas>(true)) nested.gameObject.layer = Layer;
-            // the GraphicRaycaster stays: with the head as the event camera, a mouse click on the laptop's mirror
-            // window still reaches the panels (a way out if the controllers fail)
-            var tr = canvas.GetComponent<TrackedDeviceRaycaster>();
-            if (!tr) tr = canvas.gameObject.AddComponent<TrackedDeviceRaycaster>();
-            tr.checkFor3DOcclusion = false;
-            tr.checkFor2DOcclusion = false;
-            tr.ignoreReversedGraphics = true;
+            // the controller's pointer raycasts the panels itself (UpdateFallbackPointer); the GraphicRaycaster stays
+            // so that, with the head as the event camera, a mouse click on the laptop's mirror window still reaches
+            // the panels (a way out if the controllers fail)
             canvases.Add(canvas);
             if (head) canvas.worldCamera = head;
             Place(canvas);
@@ -525,15 +562,14 @@ namespace SeoulFirstWeek.UI
             {
                 pointerActions = ScriptableObject.CreateInstance<InputActionAsset>();
                 var map = pointerActions.AddActionMap("VR Pointer");
-                map.AddAction("Position", InputActionType.PassThrough, "<XRController>{RightHand}/pointerPosition", expectedControlLayout: "Vector3");
-                map.AddAction("Orientation", InputActionType.PassThrough, "<XRController>{RightHand}/pointerRotation", expectedControlLayout: "Quaternion");
-                var click = map.AddAction("Click", InputActionType.PassThrough, "<XRController>{RightHand}/{TriggerButton}", expectedControlLayout: "Button");
-                click.AddBinding("<Mouse>/leftButton");
+                map.AddAction("Click", InputActionType.PassThrough, "<Mouse>/leftButton", expectedControlLayout: "Button");
                 pointerActions.Enable();
             }
             var vr = pointerActions.FindActionMap("VR Pointer");
-            module.trackedDevicePosition = InputActionReference.Create(vr.FindAction("Position"));
-            module.trackedDeviceOrientation = InputActionReference.Create(vr.FindAction("Orientation"));
+            // the panels have their own pointer (UpdateFallbackPointer): the module keeps only the mouse, so a
+            // trigger never clicks twice and its tracked pointer never lights a button the laser isn't on
+            module.trackedDevicePosition = null;
+            module.trackedDeviceOrientation = null;
             module.leftClick = InputActionReference.Create(vr.FindAction("Click"));
             module.xrTrackingOrigin = head ? head.transform.parent : null;
         }

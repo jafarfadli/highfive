@@ -224,6 +224,11 @@ namespace SeoulFirstWeek.EditorTools
                     ? File.ReadAllLines(OnlyPath).Select(l => l.Trim()).Where(l => l.Length > 0 && !l.StartsWith("#")).ToList()
                     : null;
                 if (only != null) Note("only: " + string.Join(", ", only));
+                if (only == null || only.Contains("mic"))
+                {
+                    try { MicPathCheck(); }
+                    catch (System.Exception e) { Note($"FAIL mic: {e.GetType().Name}: {e.Message}\n{e.StackTrace}"); }
+                }
                 if (only == null || only.Contains("speech"))
                 {
                     try { SpeechTest(); }
@@ -231,7 +236,7 @@ namespace SeoulFirstWeek.EditorTools
                     try { VoicePickShot(); }
                     catch (System.Exception e) { Note($"FAIL voiceshot: {e.GetType().Name}: {e.Message}\n{e.StackTrace}"); }
                 }
-                foreach (var id in only?.Where(l => l != "speech") ?? LevelsToPlay)
+                foreach (var id in only?.Where(l => l != "speech" && l != "mic") ?? LevelsToPlay)
                 {
                     try { PlayLevel(id); }
                     catch (System.Exception e) { Note($"FAIL {id}: {e.GetType().Name}: {e.Message}\n{e.StackTrace}"); }
@@ -302,6 +307,75 @@ namespace SeoulFirstWeek.EditorTools
             }
             Note($"speech: {right}/{total} picked right ({(total > 0 ? 100f * right / total : 0):0.0}%), average score {(right > 0 ? scoreSum / right : 0):0.00}, {missingClip} answers not baked yet, {sw.Elapsed.TotalSeconds:0}s");
             File.WriteAllText(Path.Combine(Out, "speech-report.txt"), report.ToString());
+        }
+
+        /// <summary>
+        /// The real microphone path, which the other voice checks skip (they hand Whisper the baked clip): holds the
+        /// talk key on the first microphone while a baked answer plays, lets go, and checks that the recording came
+        /// out of the ring buffer and through Whisper, and that off a headset the microphone is closed again. Whether
+        /// the answer is also heard depends on the machine (a loopback device hears it, a quiet room doesn't), so
+        /// that part is only reported. Skipped where there is no microphone.
+        /// </summary>
+        static void MicPathCheck()
+        {
+            Note("== mic");
+            var devices = Microphone.devices;
+            if (devices.Length == 0) { Note("mic: skipped, no microphone on this machine"); return; }
+            foreach (var dev in devices)
+            {
+                Microphone.GetDeviceCaps(dev, out int lo, out int hi);
+                Note($"mic: device '{dev}', rates {lo}-{hi} Hz");
+            }
+            var proc = Procedure.ProcedureDef.Parse(File.ReadAllText("Assets/_Project/Data/Procedures/clinic.json"));
+            var step = proc.steps.First(s => s.choices.Any(c => c.result == "advance" && Conversation.KoreanMatch.Speakable(c.ko)));
+            var answers = step.choices.Select(c => c.ko).Where(Conversation.KoreanMatch.Speakable).Distinct().ToList();
+            var said = step.choices.First(c => c.result == "advance" && Conversation.KoreanMatch.Speakable(c.ko)).ko;
+            var clip = Conversation.BakedVoice.Load("player", said, false);
+            var lines = new List<string>();
+            void Log(string msg, string trace, LogType type) { if (msg.StartsWith("[Speech]")) lines.Add(msg); }
+            bool pretended = Conversation.Speech.PretendMic, pretendedNone = Conversation.Speech.PretendNoMic;
+            Conversation.Speech.PretendMic = Conversation.Speech.PretendNoMic = false;
+            Application.logMessageReceived += Log;
+            GameObject speaker = null;
+            try
+            {
+                if (!Conversation.Speech.Begin()) { Note("FAIL mic: Begin() refused although a microphone is there"); return; }
+                bool open = Conversation.Speech.Listening && devices.Any(d => Microphone.IsRecording(d));
+                if (clip)
+                {
+                    speaker = new GameObject("[MicCheck]");
+                    var a = speaker.AddComponent<AudioSource>();
+                    a.clip = clip;
+                    a.spatialBlend = 0;
+                    a.Play();
+                }
+                var held = System.Diagnostics.Stopwatch.StartNew();
+                double hold = clip ? clip.length + 0.6 : 1.5;
+                while (held.Elapsed.TotalSeconds < hold) PlaytestTools.Frames(1);
+                var t = Conversation.Speech.EndAsync(string.Join(" ", answers));
+                for (int i = 0; i < 4000 && !t.IsCompleted; i++) PlaytestTools.Frames(1);
+                bool closed = !Conversation.Speech.Listening && !devices.Any(d => Microphone.IsRecording(d));
+                foreach (var l in lines) Note("mic: " + l);
+                if (!t.IsCompleted || t.IsFaulted)
+                {
+                    Note($"FAIL mic: the transcription {(t.IsFaulted ? "threw " + t.Exception?.GetBaseException().Message : "never finished")}");
+                    return;
+                }
+                var m = Conversation.KoreanMatch.Pick(t.Result ?? "", answers);
+                string heard = m.Index >= 0 && answers[m.Index] == said ? "heard the answer" : "the answer didn't reach the microphone (no loopback here)";
+                bool recorded = lines.Any(l => l.StartsWith("[Speech] answer:"));
+                Note(open && closed && recorded
+                    ? $"mic: ok, open while held, closed after, the recording went through ({(t.Result == null ? "nothing heard" : "Whisper heard '" + t.Result + "'")}; {heard})"
+                    : $"FAIL mic: open while held={open}, closed after={closed}, recording logged={recorded}");
+            }
+            finally
+            {
+                Application.logMessageReceived -= Log;
+                if (speaker) Object.Destroy(speaker);
+                if (Conversation.Speech.Listening) Conversation.Speech.Cancel();
+                Conversation.Speech.PretendMic = pretended;
+                Conversation.Speech.PretendNoMic = pretendedNone;
+            }
         }
 
         /// <summary>The conversation after an answer was said out loud: the pick, what was heard and how well.</summary>

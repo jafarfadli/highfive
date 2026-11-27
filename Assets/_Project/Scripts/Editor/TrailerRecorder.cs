@@ -109,7 +109,7 @@ namespace SeoulFirstWeek.EditorTools
                     ("home", HomeTake), ("select", SelectTake), ("clinic", ClinicChain), ("immigration", ImmigrationTake),
                     ("bank", BankTake), ("airport", AirportTake), ("subway", SubwayTake), ("emergency", EmergencyTake),
                     ("er", ErTake), ("logbook", LogbookTake), ("street", StreetShowTake), ("exit6", Exit6ShowTake),
-                    ("phone", PhoneTake), ("subway2", SubwayFixTake), ("levels", LevelsTake), ("vr", VrTake),
+                    ("phone", PhoneTake), ("subway2", SubwayFixTake), ("levels", LevelsTake), ("vr", VrTake), ("vrclick", VrClickTest),
                 };
                 foreach (var (id, act) in takes)
                 {
@@ -1047,6 +1047,49 @@ namespace SeoulFirstWeek.EditorTools
             AimDown();
             VRRig.SimulatedHand = false;
             VRRig.SimulatedLaserEnd = null;
+        }
+
+        /// <summary>Checks the panels' pointer in a simulated headset: a trigger pull on Home starts, one on a part card opens it.</summary>
+        static void VrClickTest()
+        {
+            if (!VR)
+            {
+                Note("  vrclick: start the recorder with SFW_VR_SIM=1");
+                return;
+            }
+            void Pull(Vector3 at)
+            {
+                var head = VRUI.Head ? VRUI.Head.transform.position : Vector3.zero;
+                var from = head + Vector3.down * 0.25f + Vector3.right * 0.1f;
+                VRUI.SimulatedPointer = new Ray(from, (at - from).normalized);
+                VRUI.SimulatedTrigger = false;
+                Fast(6);
+                VRUI.SimulatedTrigger = true;
+                Fast(4);
+                VRUI.SimulatedTrigger = false;
+                Fast(4);
+            }
+            Load(SceneFlow.Home);
+            Fast(90);
+            var p = PanelPoint(0.5f, 0.45f);
+            Note($"  vrclick: home panel point {(p.HasValue ? "found" : "missing")}, over UI before pull {VRUI.PointerOverUI}");
+            if (p.HasValue) Pull(p.Value);
+            for (int i = 0; i < 300 && SceneManager.GetActiveScene().name != SceneFlow.Select; i++) Fast(1);
+            Note($"  vrclick: after the pull on Home the scene is {SceneManager.GetActiveScene().name}");
+            Fast(90);
+            Vector3? card = null;
+            foreach (var t in Object.FindObjectsByType<UnityEngine.UI.Text>(FindObjectsInactive.Exclude))
+                if (t.text != null && t.text.Contains("See a doctor") && t.canvas && t.canvas.renderMode == RenderMode.WorldSpace)
+                {
+                    var r = t.rectTransform;
+                    card = r.TransformPoint(r.rect.center);
+                    break;
+                }
+            Note($"  vrclick: part card {(card.HasValue ? "found" : "missing")}");
+            if (card.HasValue) Pull(card.Value);
+            for (int i = 0; i < 400 && SceneManager.GetActiveScene().name == SceneFlow.Select; i++) Fast(1);
+            Note($"  vrclick: after the pull on the card the scene is {SceneManager.GetActiveScene().name}, story card {(StoryCard.Current ? "up" : "none")}");
+            VRUI.SimulatedPointer = null;
         }
 
         // ------------------------------------------------------------------ takes
